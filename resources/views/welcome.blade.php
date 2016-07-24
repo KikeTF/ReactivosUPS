@@ -40,7 +40,7 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">mi Fatima Villalva</div>
+                <div class="title">Te Amo Fatima Villalva Cabrera</div>
                 <div class="quote">{{ Inspiring::quote() }}</div>
             </div>
         </div>
