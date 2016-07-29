@@ -4,9 +4,6 @@
 
 @section('contenido')
     <div>
-        <div><h1>Te Amo FMVC</h1></div>
-        <div>por siempre</div>
-        <a href="" class="btn btn-success">Boton Prueba</a>
+        <img src="{{ asset('image/logo-ups.png') }}" alt="Universidad Polit&eacute;cnica Salesiana" style="width: 90%; display: block; margin: auto;" >
     </div>
 @endsection
-

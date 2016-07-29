@@ -24,7 +24,8 @@ function btnLogin_onClick() {
         },
         success: function (result) {
             if (result.valid) {
-                window.location.replace("http://localhost:8000/reactivos-ups/index");
+                window.location.replace("http://localhost:8000/");
+                console.log("Login OK!!!");
             }
             else {
                 $("#alerta #text").html(result.message);

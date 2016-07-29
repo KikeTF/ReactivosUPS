@@ -13,12 +13,16 @@
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@authenticate');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 // Registration routes...
 //Route::get('auth/register', 'Auth\AuthController@getRegister');
 //Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+Route::get('/', function () {
+    return view('index');
+});
 
 /*
 Route::get('/', [
@@ -34,6 +38,3 @@ Route::post('login/valida-login', [
     'uses'  => 'LoginController@ValidaLogin'
 ]);
 */
-Route::get('reactivos-ups/index', function () {
-    return view('index');
-});
