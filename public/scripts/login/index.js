@@ -7,26 +7,28 @@ function btnLogin_onClick() {
     };
 
     $.ajax({
-        url: 'Login/ValidateLogin',
-        type: 'post',
+        type: 'POST',
+        url: 'http://localhost:8000/auth/login',
         data: userData,
+        dataType: "json",
         async: true,
         cache: false,
+        beforeSend: function (xhr) {
+            var token = $('meta[name="csrf_token"]').attr('content');
+            if (token) {
+                return xhr.setRequestHeader('X-CSRF-TOKEN', token);
+            }
+        },
         error: function (e) {
             console.log(e);
         },
         success: function (result) {
-            console.log(result);
             if (result.valid) {
-                //$("#btn_login").html('Validado');
-                //$("#btn_login").jqxButton({ disabled: true });
-                //showNotification(result.Message, 'success');
-                window.location.href = "/";
+                window.location.replace("http://localhost:8000/reactivos-ups/index");
             }
             else {
                 $("#alerta #text").html(result.message);
                 $("#alerta").css("display", "");
-                //showNotification(result.Message, 'error');
             }
         }
     });

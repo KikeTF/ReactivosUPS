@@ -11,7 +11,29 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login.index');
-});
+// Authentication routes...
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@authenticate');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
+// Registration routes...
+//Route::get('auth/register', 'Auth\AuthController@getRegister');
+//Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+/*
+Route::get('/', [
+    'as' => 'login', 'uses' => 'LoginController@index'
+]);
+
+Route::get('login/index', [
+    'as' => 'login', 'uses' => 'LoginController@index'
+]);
+
+Route::post('login/valida-login', [
+    'as'    => 'login/valida-login',
+    'uses'  => 'LoginController@ValidaLogin'
+]);
+*/
+Route::get('reactivos-ups/index', function () {
+    return view('index');
+});

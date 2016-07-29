@@ -5,6 +5,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf_token" content="{{ csrf_token() }}" />
+
     <title>Inicio de Sesi&oacute;n - Reactivos UPS</title>
 
     <meta name="description" content="User login page" />
@@ -96,7 +98,7 @@
                                                         <span class="lbl">Recu&eacute;rdame</span>
                                                     </label>
 
-                                                    <button id="btnLogin" type="button" class="width-45 pull-right btn btn-sm btn-primary">
+                                                    <button id="btnLogin" type="button" class="width-45 pull-right btn btn-sm btn-primary" >
                                                         <i class="ace-icon fa fa-key"></i>
                                                         <span class="bigger-110">Iniciar Sesi&oacute;n</span>
                                                     </button>

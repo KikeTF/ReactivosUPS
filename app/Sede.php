@@ -11,6 +11,6 @@ class Sede extends Model
     protected $fillable = ['DESC_SEDE', 'ESTADO'];
 
     public function campus(){
-        return $this->$this->hasMany('ReactivosUPS\Sede');
+        return $this->$this->hasMany('ReactivosUPS\Campus');
     }
 }
