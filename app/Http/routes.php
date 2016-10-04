@@ -12,29 +12,45 @@
 */
 
 // Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+Route::get('auth/login', [
+    'uses'  => 'Auth\AuthController@getLogin',
+    'as'    => 'auth.login'
+]);
 
-// Registration routes...
-//Route::get('auth/register', 'Auth\AuthController@getRegister');
-//Route::post('auth/register', 'Auth\AuthController@postRegister');
+Route::post('auth/login', [
+    'uses'  => 'Auth\AuthController@postLogin',
+    'as'    => 'auth.login'
+]);
 
-Route::get('/', function () {
-    return view('index');
+Route::get('auth/logout', [
+    'uses'  => 'Auth\AuthController@getLogout',
+    'as'    => 'auth.logout'
+]);
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/', function () {
+        return view('index');
+    });
+
+    Route::get('home', ['as' => 'home', function () {
+        return view('index');
+    }]);
+
 });
 
-/*
-Route::get('/', [
-    'as' => 'login', 'uses' => 'LoginController@index'
-]);
+Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
 
-Route::get('login/index', [
-    'as' => 'login', 'uses' => 'LoginController@index'
-]);
+    Route::resource('users','UsersController');
 
-Route::post('login/valida-login', [
-    'as'    => 'login/valida-login',
-    'uses'  => 'LoginController@ValidaLogin'
-]);
-*/
+});
+
+
+
+Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
+
+    Route::get('fields/data', 'FieldsController@data');
+
+    Route::resource('fields','FieldsController');
+
+});

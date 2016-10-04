@@ -1,6 +1,7 @@
 @extends('shared.template.index')
 
-@section('titulo', 'Welcome')
+@section('titulo', 'Reactivos UPS')
+@section('subtitulo', 'Home')
 
 @section('contenido')
     <div>

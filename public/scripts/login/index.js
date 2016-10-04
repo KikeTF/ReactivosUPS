@@ -24,7 +24,7 @@ function btnLogin_onClick() {
         },
         success: function (result) {
             if (result.valid) {
-                window.location.replace("http://localhost:8000/");
+                window.location.replace("http://localhost:8000/home");
                 console.log("Login OK!!!");
             }
             else {

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf_token" content="{{ csrf_token() }}" />
 
-    <title>@yield('titulo', 'Inicio') - Reactivos UPS</title>
+    <title>Reactivos UPS</title>
 
     <!-- bootstrap & fontawesome -->
     <link rel="stylesheet" href="{{ asset('ace/css/bootstrap.min.css') }}" />
@@ -105,31 +105,12 @@
 
                                     <li>
                                         <a href="#">
-                                            <i class="btn btn-xs btn-primary fa fa-user"></i>
-                                            Bob just signed up as an editor ...
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
                                             <div class="clearfix">
                                                         <span class="pull-left">
                                                             <i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
                                                             New Orders
                                                         </span>
                                                 <span class="pull-right badge badge-success">+8</span>
-                                            </div>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <div class="clearfix">
-                                                        <span class="pull-left">
-                                                            <i class="btn btn-xs no-hover btn-info fa fa-twitter"></i>
-                                                            Followers
-                                                        </span>
-                                                <span class="pull-right badge badge-info">+11</span>
                                             </div>
                                         </a>
                                     </li>
@@ -149,7 +130,7 @@
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <span class="user-info">
                                         <small>Bienvenido,</small>
-                                        Neptali Enrique
+                                        {{ Auth::user()->NOMBRES }}
                                     </span>
 
                             <i class="ace-icon fa fa-caret-down"></i>
@@ -157,23 +138,7 @@
 
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
-                                <a href="#">
-                                    <i class="ace-icon fa fa-cog"></i>
-                                    Settings
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="profile.html">
-                                    <i class="ace-icon fa fa-user"></i>
-                                    Profile
-                                </a>
-                            </li>
-
-                            <li class="divider"></li>
-
-                            <li>
-                                <a id="btnLogout" href="#">
+                                <a href="{{ route('auth.logout') }}">
                                     <i class="ace-icon fa fa-power-off"></i>
                                     Logout
                                 </a>
@@ -204,6 +169,60 @@
                     </a>
 
                     <b class="arrow"></b>
+                </li>
+
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-lock"></i>
+                        <span class="menu-text"> Seguridad </span>
+
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="{{ route('security.users.create') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Usuarios
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="">
+                            <a href="#">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Perfiles
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-lock"></i>
+                        <span class="menu-text"> Reactivos </span>
+
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="{{ route('reagent.fields.create') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Campos de Conocimiento
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+
+                    </ul>
                 </li>
 
                 <li class="">
@@ -247,42 +266,6 @@
 
                                     <b class="arrow"></b>
                                 </li>
-
-                                <li class="">
-                                    <a href="two-menu-2.html">
-                                        <i class="menu-icon fa fa-caret-right"></i>
-                                        Two Menus 2
-                                    </a>
-
-                                    <b class="arrow"></b>
-                                </li>
-
-                                <li class="">
-                                    <a href="mobile-menu-1.html">
-                                        <i class="menu-icon fa fa-caret-right"></i>
-                                        Default Mobile Menu
-                                    </a>
-
-                                    <b class="arrow"></b>
-                                </li>
-
-                                <li class="">
-                                    <a href="mobile-menu-2.html">
-                                        <i class="menu-icon fa fa-caret-right"></i>
-                                        Mobile Menu 2
-                                    </a>
-
-                                    <b class="arrow"></b>
-                                </li>
-
-                                <li class="">
-                                    <a href="mobile-menu-3.html">
-                                        <i class="menu-icon fa fa-caret-right"></i>
-                                        Mobile Menu 3
-                                    </a>
-
-                                    <b class="arrow"></b>
-                                </li>
                             </ul>
                         </li>
 
@@ -299,51 +282,6 @@
                             <a href="elements.html">
                                 <i class="menu-icon fa fa-caret-right"></i>
                                 Elements
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="buttons.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Buttons &amp; Icons
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="content-slider.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Content Sliders
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="treeview.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Treeview
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="jquery-ui.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                jQuery UI
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="nestable-list.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Nestable Lists
                             </a>
 
                             <b class="arrow"></b>
@@ -403,268 +341,6 @@
                         </li>
                     </ul>
                 </li>
-
-                <li class="">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="menu-icon fa fa-list"></i>
-                        <span class="menu-text"> Tables </span>
-
-                        <b class="arrow fa fa-angle-down"></b>
-                    </a>
-
-                    <b class="arrow"></b>
-
-                    <ul class="submenu">
-                        <li class="">
-                            <a href="tables.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Simple &amp; Dynamic
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="jqgrid.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                jqGrid plugin
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="menu-icon fa fa-pencil-square-o"></i>
-                        <span class="menu-text"> Forms </span>
-
-                        <b class="arrow fa fa-angle-down"></b>
-                    </a>
-
-                    <b class="arrow"></b>
-
-                    <ul class="submenu">
-                        <li class="">
-                            <a href="form-elements.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Form Elements
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="form-elements-2.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Form Elements 2
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="form-wizard.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Wizard &amp; Validation
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="wysiwyg.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Wysiwyg &amp; Markdown
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="dropzone.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Dropzone File Upload
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="">
-                    <a href="widgets.html">
-                        <i class="menu-icon fa fa-list-alt"></i>
-                        <span class="menu-text"> Widgets </span>
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="calendar.html">
-                        <i class="menu-icon fa fa-calendar"></i>
-
-                        <span class="menu-text">
-                                    Calendar
-
-                                    <span class="badge badge-transparent tooltip-error" title="2 Important Events">
-                                        <i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i>
-                                    </span>
-                                </span>
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="gallery.html">
-                        <i class="menu-icon fa fa-picture-o"></i>
-                        <span class="menu-text"> Gallery </span>
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="menu-icon fa fa-tag"></i>
-                        <span class="menu-text"> More Pages </span>
-
-                        <b class="arrow fa fa-angle-down"></b>
-                    </a>
-
-                    <b class="arrow"></b>
-
-                    <ul class="submenu">
-                        <li class="">
-                            <a href="profile.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                User Profile
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="inbox.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Inbox
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="pricing.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Pricing Tables
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="invoice.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Invoice
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="timeline.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Timeline
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="email.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Email Templates
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="login.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Login &amp; Register
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="menu-icon fa fa-file-o"></i>
-
-                        <span class="menu-text">
-                                    Other Pages
-
-                                    <span class="badge badge-primary">5</span>
-                                </span>
-
-                        <b class="arrow fa fa-angle-down"></b>
-                    </a>
-
-                    <b class="arrow"></b>
-
-                    <ul class="submenu">
-                        <li class="">
-                            <a href="faq.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                FAQ
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="error-404.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Error 404
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="error-500.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Error 500
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="grid.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Grid
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-
-                        <li class="">
-                            <a href="blank.html">
-                                <i class="menu-icon fa fa-caret-right"></i>
-                                Blank Page
-                            </a>
-
-                            <b class="arrow"></b>
-                        </li>
-                    </ul>
-                </li>
             </ul><!-- /.nav-list -->
 
             <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -682,18 +358,18 @@
                 <div class="page-content">
                     <div class="page-header">
                         <h1>
-                            Reactivos UPS
                             <small>
+                                @yield('titulo', 'Reactivos UPS')
                                 <i class="ace-icon fa fa-angle-double-right"></i>
-                                Home
                             </small>
+                            @yield('subtitulo', 'Reactivos UPS')
                         </h1>
                     </div><!-- /.page-header -->
 
                     <div class="row">
                         <div class="col-xs-12">
                             <!-- PAGE CONTENT BEGINS -->
-                            <div class="row">
+                            <div class="col-sm-12">
 
                                 <section>
                                     @yield('contenido')
@@ -770,6 +446,13 @@
     <script src="{{ asset('ace/js/jquery.flot.pie.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.flot.resize.min.js') }}"></script>
 
+    <!-- datatable scripts -->
+    <script src="{{ asset('ace/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('ace/js/jquery.dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('ace/js/dataTables.tableTools.min.js') }}"></script>
+    <script src="{{ asset('ace/js/dataTables.colVis.min.js') }}"></script>
+
+    @stack('scripts')
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
     <script src="{{ asset('ace/js/ace.min.js') }}"></script>
