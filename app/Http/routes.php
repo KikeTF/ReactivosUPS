@@ -49,7 +49,11 @@ Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 
-    Route::get('fields/data', 'FieldsController@data');
+    //Route::get('fields/data', 'FieldsController@data');
+    Route::get('fields/data', [
+        'uses'  => 'FieldsController@data',
+        'as'    => 'reagent.fields.data'
+    ]);
 
     Route::resource('fields','FieldsController');
 

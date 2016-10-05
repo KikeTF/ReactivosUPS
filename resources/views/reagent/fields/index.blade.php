@@ -4,18 +4,15 @@
 @section('subtitulo', 'Campos de Conocimiento')
 
 @section('contenido')
+    <?php
+        $usetable = 1;
+        $columnas = array("NOMBRE", "DESCRIPCION", "ACTIVO");
+    ?>
+    <input hidden type="text" id="url" value="{{ route('reagent.fields.data') }}">
     <div class="table-responsive" style="border: none">
-        <table id="fields-table" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
+        <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
                 <tr>
-                    <!--
-                    <th class="center">
-                        <label class="pos-rel">
-                            <input type="checkbox" class="ace" />
-                            <span class="lbl"></span>
-                        </label>
-                    </th>
-                    -->
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>¿Activo?</th>
@@ -25,23 +22,25 @@
         </table>
     </div>
 @endsection
+{{--
 
-@push('scripts')
+@push('table-script')
     <script>
         $(function() {
-            $('#fields-table').DataTable({
+            var url = $('#url').val();
+            $('#_dataTable').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: 'http://localhost:8000/reagent/fields/data',
+                ajax: url,
                 columns: [
-                    { data: 'NOMBRE', name: 'NOMBRE' },
-                    { data: 'DESCRIPCION', name: 'DESCRIPCION' },
-                    { data: 'ACTIVO', name: 'ACTIVO' },
+                    @foreach ($columnas as $col)
+                        { data: '{{ $col }}', name: '{{ $col }}' },
+                    @endforeach
                     { data: 'ACTION', name: 'ACTION', orderable: false, searchable: false }
                 ],
                 sorting: [[1, 'asc']],
-                dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                dom: '<"clearfix"<"pull-left tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                 tableTools: {
                     sSwfPath: "{{ asset('ace/swf/copy_csv_xls_pdf.swf') }}",
                     sSelectedClass: "success",
@@ -50,13 +49,7 @@
                             sExtends: "copy",
                             sToolTip: "Copiar al Portapapeles",
                             sButtonClass: "btn btn-white btn-primary btn-bold",
-                            sButtonText: "<i class='fa fa-copy bigger-110 pink'></i>",
-                            fnComplete: function() {
-                                this.fnInfo( '<h3 class="no-margin-top smaller">Table copied</h3>\
-									<p>Copied '+(oTable1.fnSettings().fnRecordsTotal())+' row(s) to the clipboard.</p>',
-                                        1500
-                                );
-                            }
+                            sButtonText: "<i class='fa fa-copy bigger-110 pink'></i>"
                         },
                         {
                             sExtends: "xls",
@@ -92,8 +85,33 @@
 									  <br />Oprima <b>esc</b> cuando finalize.</p>",
                         }
                     ]
+                },
+                language: {
+                    sProcessing:     "Procesando...",
+                    sLengthMenu:     "Mostrar _MENU_ registros",
+                    sZeroRecords:    "No se encontraron resultados",
+                    sEmptyTable:     "Ningún dato disponible en esta tabla",
+                    sInfo:           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    sInfoEmpty:      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    sInfoFiltered:   "(filtrado de un total de _MAX_ registros)",
+                    sInfoPostFix:    "",
+                    sSearch:         "Buscar:",
+                    sUrl:            "",
+                    sInfoThousands:  ",",
+                    sLoadingRecords: "Cargando...",
+                    oPaginate: {
+                        sFirst:    "Primero",
+                        sLast:     "Último",
+                        sNext:     "Siguiente",
+                        sPrevious: "Anterior"
+                    },
+                    oAria: {
+                        sSortAscending:  ": Activar para ordenar la columna de manera ascendente",
+                        sSortDescending: ": Activar para ordenar la columna de manera descendente"
+                    }
                 }
             });
         });
     </script>
 @endpush
+--}}
