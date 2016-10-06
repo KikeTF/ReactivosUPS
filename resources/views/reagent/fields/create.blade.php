@@ -1,7 +1,7 @@
 @extends('shared.template.index')
 
 @section('titulo', 'Reactivos')
-@section('subtitulo', 'Campos de Conocimiento')
+@section('subtitulo', 'Nuevo campo de conocimiento')
 
 @section('contenido')
     <?php

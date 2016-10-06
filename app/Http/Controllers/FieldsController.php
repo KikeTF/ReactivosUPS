@@ -28,11 +28,11 @@ class FieldsController extends Controller
         return Datatables::of($fields)
             ->addColumn('ACTION', function ($field) {
                 return '<div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="#search-'.$field->COD_CAMPO.'">
+                            <a class="blue" href="#">
                                 <i class="ace-icon fa fa-search-plus bigger-130"></i>
                             </a>
 
-                            <a class="green" href="#edit-'.$field->COD_CAMPO.'">
+                            <a class="green" href="'.route('reagent.fields.edit', ['id' => $field->COD_CAMPO]).'">
                                 <i class="ace-icon fa fa-pencil bigger-130"></i>
                             </a>
 
@@ -76,7 +76,6 @@ class FieldsController extends Controller
                         </div>';
             })
             ->make(true);
-        //dd('ok');
     }
     /**
      * Show the form for creating a new resource.
@@ -100,6 +99,8 @@ class FieldsController extends Controller
         $field->creado_por = 'admin';
         $field->fecha_creacion = date('Y-m-d h:i:s');
         $field->save();
+
+        return redirect()->route('reagent.fields.index');
     }
 
     /**
@@ -121,7 +122,8 @@ class FieldsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $field = Field::find($id);
+        return view('reagent.fields.edit')->with('field', $field);
     }
 
     /**
@@ -133,7 +135,32 @@ class FieldsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //dd($request->all());
+        $field = Field::find($id);
+
+        if( !isset( $request['activo'] ) )
+            $field->ACTIVO = 0;
+        else
+            $field->ACTIVO = 1;
+
+        $field->NOMBRE = $request->nombre;
+        $field->DESCRIPCION = $request->descripcion;
+        $field->MODIFICADO_POR = 'admin';
+        $field->FECHA_MODIFICACION = date('Y-m-d h:i:s');
+
+        try{
+            $field->save();
+            dd($field);
+        }
+        catch(Exception $e){
+            // do task when error
+            dd($e->getMessage());
+        }
+        //dd($field);
+
+        //$field->save();
+
+        //return redirect()->route('reagent.fields.index');
     }
 
     /**
