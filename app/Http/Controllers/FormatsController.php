@@ -4,13 +4,13 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use ReactivosUPS\Field;
+use ReactivosUPS\Format;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use App;
 use Datatables;
 
-class FieldsController extends Controller
+class FormatsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,32 +19,32 @@ class FieldsController extends Controller
      */
     public function index()
     {
-        return view('reagent.fields.index');
+        return view('reagent.formats.index');
     }
 
     public function data()
     {
-        $fields = Field::query();
-        return Datatables::of($fields)
-            ->addColumn('estado', function ($field) {
-                if($field->estado == 'I')
+        $formats = Format::query();
+        return Datatables::of($formats)
+            ->addColumn('estado', function ($format) {
+                if($format->estado == 'I')
                     $estado = 'Inactivo';
-                elseif ($field->estado == 'A')
+                elseif ($format->estado == 'A')
                     $estado = 'Activo';
                 else
                     $estado = '';
 
                 return $estado;
             })
-            ->addColumn('action', function ($field) {
+            ->addColumn('action', function ($format) {
                 return '<div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="'.route('reagent.fields.show', ['id' => $field->cod_campo]).'">
+                            <a class="blue" href="'.route('reagent.formats.show', ['id' => $format->cod_formato]).'">
                                 <i class="ace-icon fa fa-search-plus bigger-130"></i>
                             </a>
-                            <a class="green" href="'.route('reagent.fields.edit', ['id' => $field->cod_campo]).'">
+                            <a class="green" href="'.route('reagent.formats.edit', ['id' => $format->cod_formato]).'">
                                 <i class="ace-icon fa fa-pencil bigger-130"></i>
                             </a>
-                            <a class="red" href="'.route('reagent.fields.destroy', ['id' => $field->cod_campo]).'">
+                            <a class="red" href="'.route('reagent.formats.destroy', ['id' => $format->cod_formato]).'">
                                 <i class="ace-icon fa fa-trash-o bigger-130"></i>
                             </a>
                         </div>
@@ -55,17 +55,17 @@ class FieldsController extends Controller
                                 </button>
                                 <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
                                     <li>
-                                        <a href="'.route('reagent.fields.show', ['id' => $field->cod_campo]).'" class="tooltip-info" data-rel="tooltip" title="View">
+                                        <a href="'.route('reagent.formats.show', ['id' => $format->cod_formato]).'" class="tooltip-info" data-rel="tooltip" title="View">
                                             <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="'.route('reagent.fields.edit', ['id' => $field->cod_campo]).'" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                        <a href="'.route('reagent.formats.edit', ['id' => $format->cod_formato]).'" class="tooltip-success" data-rel="tooltip" title="Edit">
                                             <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="'.route('reagent.fields.destroy', ['id' => $field->cod_campo]).'" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                        <a href="'.route('reagent.formats.destroy', ['id' => $format->cod_formato]).'" class="tooltip-error" data-rel="tooltip" title="Delete">
                                             <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
                                         </a>
                                     </li>
@@ -75,6 +75,7 @@ class FieldsController extends Controller
             })
             ->make(true);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -82,7 +83,7 @@ class FieldsController extends Controller
      */
     public function create()
     {
-        return view('reagent.fields.create');
+        return view('reagent.formats.create');
     }
 
     /**
@@ -93,16 +94,16 @@ class FieldsController extends Controller
      */
     public function store(Request $request)
     {
-        $field = new Field($request->all());
+        $format = new Format($request->all());
 
         if( !isset( $request['estado'] ) )
-            $field->estado = 'I';
+            $format->estado = '0';
 
-        $field->creado_por = 'admin';
-        $field->fecha_creacion = date('Y-m-d h:i:s');
-        $field->save();
+        $format->creado_por = 'admin';
+        $format->fecha_creacion = date('Y-m-d h:i:s');
+        $format->save();
 
-        return redirect()->route('reagent.fields.index');
+        return redirect()->route('reagent.formats.index');
     }
 
     /**
@@ -113,8 +114,8 @@ class FieldsController extends Controller
      */
     public function show($id)
     {
-        $field = Field::find($id);
-        return view('reagent.fields.show')->with('field', $field);
+        $format = Format::find($id);
+        return view('reagent.formats.show')->with('format', $format);
     }
 
     /**
@@ -125,8 +126,8 @@ class FieldsController extends Controller
      */
     public function edit($id)
     {
-        $field = Field::find($id);
-        return view('reagent.fields.edit')->with('field', $field);
+        $format = Format::find($id);
+        return view('reagent.formats.edit')->with('format', $format);
     }
 
     /**
@@ -138,20 +139,20 @@ class FieldsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $field = Field::find($id);
+        $format = Format::find($id);
 
         if( !isset( $request['estado'] ) )
-            $field->estado = 'I';
+            $format->estado = 'I';
         else
-            $field->estado = 'A';
+            $format->estado = 'A';
 
-        $field->nombre = $request->nombre;
-        $field->descripcion = $request->descripcion;
-        $field->modificado_por = 'admin';
-        $field->fecha_modificacion = date('Y-m-d h:i:s');
-        $field->save();
+        $format->nombre = $request->nombre;
+        $format->descripcion = $request->descripcion;
+        $format->modificado_por = 'admin';
+        $format->fecha_modificacion = date('Y-m-d h:i:s');
+        $format->save();
 
-        return redirect()->route('reagent.fields.index');
+        return redirect()->route('reagent.formats.index');
     }
 
     /**
@@ -162,13 +163,13 @@ class FieldsController extends Controller
      */
     public function destroy($id)
     {
-        $field = Field::find($id);
+        $format = Format::find($id);
 
-        $field->estado = 'E';
-        $field->modificado_por = 'admin';
-        $field->fecha_modificacion = date('Y-m-d h:i:s');
-        $field->save();
+        $format->estado = 'E';
+        $format->modificado_por = 'admin';
+        $format->fecha_modificacion = date('Y-m-d h:i:s');
+        $format->save();
 
-        return redirect()->route('reagent.fields.index');
+        return redirect()->route('reagent.formats.index');
     }
 }

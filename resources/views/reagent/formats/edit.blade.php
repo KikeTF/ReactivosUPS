@@ -1,13 +1,13 @@
 @extends('shared.template.index')
 
 @section('titulo', 'Reactivos')
-@section('subtitulo', 'Editar campo de conocimiento: '.$field->nombre)
+@section('subtitulo', 'Editar campo de conocimiento: '.$format->nombre)
 
 @section('contenido')
     <?php
     $usetable = 0;
     ?>
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.fields.update',$field->cod_campo],'method' => 'PUT']) !!}
+    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.formats.update',$format->cod_formato],'method' => 'PUT']) !!}
 
     <div class="form-group">
         <div class="btn btn-white btn-primary btn-bold">
@@ -16,7 +16,7 @@
             </a>
         </div>
         <div class="btn btn-white btn-primary btn-bold">
-            <a class="red" href="{{ route('reagent.fields.index') }}">
+            <a class="red" href="{{ route('reagent.formats.index') }}">
                 <i class='ace-icon fa fa-close bigger-110 red'></i>
             </a>
         </div>
@@ -25,14 +25,14 @@
     <div class="form-group">
         {!! Form::label('nombre', 'Nombre:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('nombre', $field->nombre, ['class' => 'form-control', 'placeholder' => 'Campo de conocimiento','required']) !!}
+            {!! Form::text('nombre', $format->nombre, ['class' => 'form-control', 'placeholder' => 'Formato de reactivo','required']) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('descripcion', 'Descripcion:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('descripcion', $field->descripcion, ['class' => 'form-control', 'placeholder' => 'Descripción']) !!}
+            {!! Form::text('descripcion', $format->descripcion, ['class' => 'form-control', 'placeholder' => 'Descripción']) !!}
         </div>
     </div>
 
@@ -41,10 +41,10 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($field->estado == 'A')
-                        {!! Form::checkbox('estado', $field->estado, true) !!}
+                    @if($format->estado == 'A')
+                        {!! Form::checkbox('estado', $format->estado, true) !!}
                     @else
-                        {!! Form::checkbox('estado', $field->estado) !!}
+                        {!! Form::checkbox('estado', $format->estado) !!}
                     @endif
                 </label>
             </div>

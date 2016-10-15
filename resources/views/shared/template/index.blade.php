@@ -21,6 +21,10 @@
     <!-- ace styles -->
     <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
 
+    <!-- datatable styles -->
+    {{--<link rel="stylesheet" href="{{ asset('ace/css/jquery.dataTables.min.css') }}" />--}}
+    <link rel="stylesheet" href="{{ asset('ace/css/buttons.dataTables.min.css') }}" />
+
     <!--[if lte IE 9]>
     <!--
     <link rel="stylesheet" href="ace/css/ace-part2.min.css" class="ace-main-stylesheet" />
@@ -130,7 +134,7 @@
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <span class="user-info">
                                         <small>Bienvenido,</small>
-                                        {{ Auth::user()->NOMBRES }}
+                                        {{ Auth::user()->nombres }}
                                     </span>
 
                             <i class="ace-icon fa fa-caret-down"></i>
@@ -204,7 +208,7 @@
 
                 <li class="">
                     <a href="#" class="dropdown-toggle">
-                        <i class="menu-icon fa fa-lock"></i>
+                        <i class="menu-icon fa fa-check-square-o"></i>
                         <span class="menu-text"> Reactivos </span>
 
                         <b class="arrow fa fa-angle-down"></b>
@@ -214,14 +218,21 @@
 
                     <ul class="submenu">
                         <li class="">
-                            <a href="{{ route('reagent.fields.create') }}">
+                            <a href="{{ route('reagent.fields.index') }}">
                                 <i class="menu-icon fa fa-caret-right"></i>
                                 Campos de Conocimiento
                             </a>
 
                             <b class="arrow"></b>
                         </li>
+                        <li class="">
+                            <a href="{{ route('reagent.formats.index') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Formatos
+                            </a>
 
+                            <b class="arrow"></b>
+                        </li>
                     </ul>
                 </li>
 
@@ -447,10 +458,13 @@
     <script src="{{ asset('ace/js/jquery.flot.resize.min.js') }}"></script>
 
     <!-- datatable scripts -->
+    {{--<script src="{{ asset('ace/js/jquery-1.12.3.js') }}"></script>--}}
     <script src="{{ asset('ace/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('ace/js/dataTables.tableTools.min.js') }}"></script>
     <script src="{{ asset('ace/js/dataTables.colVis.min.js') }}"></script>
+    <script src="{{ asset('ace/js/dataTables.buttons.min.js') }}"></script>
+
 
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
@@ -468,13 +482,22 @@
                     responsive: true,
                     ajax: url,
                     columns: [
-                            @foreach ($columnas as $col)
-                        { data: '{{ $col }}', name: '{{ $col }}' },
-                            @endforeach
-                        { data: 'ACTION', name: 'ACTION', orderable: false, searchable: false }
+                        @foreach ($columnas as $col)
+                            { data: '{{ $col }}', name: '{{ $col }}' },
+                        @endforeach
+                            { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
-                    sorting: [[1, 'asc']],
-                    dom: '<"clearfix"<"pull-left tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                    sorting: [[0, 'asc']],
+                    dom: '<"clearfix"<"col-xs-6"<"pull-left tableTools-container"<"btn-group btn-overlap"B>>><"col-xs-6"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                    buttons: [
+                        {
+                            text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
+                            class: "btn btn-white btn-primary btn-bold",
+                            action: function ( e, dt, node, config ) {
+                                alert( 'Button activated' );
+                            }
+                        }
+                    ],
                     tableTools: {
                         sSwfPath: "{{ asset('ace/swf/copy_csv_xls_pdf.swf') }}",
                         sSelectedClass: "success",

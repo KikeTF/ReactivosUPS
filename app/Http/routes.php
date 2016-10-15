@@ -49,12 +49,28 @@ Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 
-    //Route::get('fields/data', 'FieldsController@data');
     Route::get('fields/data', [
         'uses'  => 'FieldsController@data',
         'as'    => 'reagent.fields.data'
     ]);
 
     Route::resource('fields','FieldsController');
+
+    Route::get('fields/{id}/destroy', [
+        'uses'  => 'FieldsController@destroy',
+        'as'    => 'reagent.fields.destroy'
+    ]);
+
+    Route::get('formats/data', [
+        'uses'  => 'FormatsController@data',
+        'as'    => 'reagent.formats.data'
+    ]);
+
+    Route::resource('formats','FormatsController');
+
+    Route::get('formats/{id}/destroy', [
+        'uses'  => 'FormatsController@destroy',
+        'as'    => 'reagent.formats.destroy'
+    ]);
 
 });
