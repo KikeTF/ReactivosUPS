@@ -4,9 +4,7 @@
 @section('subtitulo', 'Detalle de campo de conocimiento: '.$field->nombre)
 
 @section('contenido')
-    <?php
-    $usetable = 0;
-    ?>
+
     <form class="form-horizontal" role="form">
 
         <div class="form-group">

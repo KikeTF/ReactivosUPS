@@ -4,9 +4,7 @@
 @section('subtitulo', 'Nuevo formato de reactivo')
 
 @section('contenido')
-    <?php
-    $usetable = 0;
-    ?>
+
     {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.formats.store','method' => 'POST']) !!}
 
     <div class="form-group">

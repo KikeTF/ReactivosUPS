@@ -4,9 +4,7 @@
 @section('subtitulo', 'Editar campo de conocimiento: '.$field->nombre)
 
 @section('contenido')
-    <?php
-    $usetable = 0;
-    ?>
+
     {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.fields.update',$field->cod_campo],'method' => 'PUT']) !!}
 
     <div class="form-group">

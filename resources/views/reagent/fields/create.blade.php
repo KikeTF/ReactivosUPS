@@ -4,9 +4,7 @@
 @section('subtitulo', 'Nuevo campo de conocimiento')
 
 @section('contenido')
-    <?php
-    $usetable = 0;
-    ?>
+
     {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.fields.store','method' => 'POST']) !!}
 
         <div class="form-group">

@@ -472,15 +472,14 @@
 
 
     {{--@stack('table-script')--}}
-    @if($usetable == 1)
+    @if(isset($usetable))
         <script>
             $(function() {
-                var url = $('#url').val();
                 $('#_dataTable').DataTable({
                     processing: true,
                     serverSide: true,
                     responsive: true,
-                    ajax: url,
+                    ajax: $('#dataurl').val(),
                     columns: [
                         @foreach ($columnas as $col)
                             { data: '{{ $col }}', name: '{{ $col }}' },
@@ -488,16 +487,29 @@
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
                     sorting: [[0, 'asc']],
-                    dom: '<"clearfix"<"col-xs-6"<"pull-left tableTools-container"<"btn-group btn-overlap"B>>><"col-xs-6"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
-                    buttons: [
-                        {
-                            text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
-                            class: "btn btn-white btn-primary btn-bold",
-                            action: function ( e, dt, node, config ) {
-                                alert( 'Button activated' );
+                    dom: '<"clearfix"<"dataTableButtons"<"pull-left tableTools-container"<"btn-group btn-overlap"B>>><"dataTableButtons"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                    buttons: {
+                        dom: {
+                            container: {
+                                tag: 'div'
+                            },
+                            buttonContainer: {
+                                tag: 'div',
+                                className: 'btn btn-white btn-primary btn-bold'
+                            },
+                            button: {
+                                tag: 'a',
+                                className: 'blue'
                             }
-                        }
-                    ],
+                        },
+                        buttons: [{
+                            text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
+                            titleAttr: "Nuevo",
+                            action: function ( e, dt, node, config ) {
+                                window.location.href = $('#newurl').val();
+                            }
+                        }]
+                    },
                     tableTools: {
                         sSwfPath: "{{ asset('ace/swf/copy_csv_xls_pdf.swf') }}",
                         sSelectedClass: "success",
