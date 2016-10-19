@@ -9,5 +9,5 @@ class Format extends Model
     protected $table = 'rea_formatos';
     public $timestamps = false;
 
-    protected $fillable = ['nombre','descripcion','activo','creado_por','fecha_creacion','modificado_por','fecha_modificacion'];
+    protected $fillable = ['nombre','descripcion','estado','creado_por','fecha_creacion','modificado_por','fecha_modificacion'];
 }
