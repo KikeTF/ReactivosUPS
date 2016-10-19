@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use ReactivosUPS\Format;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
-use App;
 use Datatables;
 
 class FormatsController extends Controller
@@ -38,13 +37,13 @@ class FormatsController extends Controller
             })
             ->addColumn('action', function ($format) {
                 return '<div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="'.route('reagent.formats.show', ['id' => $format->cod_formato]).'">
+                            <a class="blue" href="'.route('reagent.formats.show', $format->id).'">
                                 <i class="ace-icon fa fa-search-plus bigger-130"></i>
                             </a>
-                            <a class="green" href="'.route('reagent.formats.edit', ['id' => $format->cod_formato]).'">
+                            <a class="green" href="'.route('reagent.formats.edit', $format->id).'">
                                 <i class="ace-icon fa fa-pencil bigger-130"></i>
                             </a>
-                            <a class="red" href="'.route('reagent.formats.destroy', ['id' => $format->cod_formato]).'">
+                            <a class="red" href="'.route('reagent.formats.destroy', $format->id).'">
                                 <i class="ace-icon fa fa-trash-o bigger-130"></i>
                             </a>
                         </div>
@@ -55,17 +54,17 @@ class FormatsController extends Controller
                                 </button>
                                 <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
                                     <li>
-                                        <a href="'.route('reagent.formats.show', ['id' => $format->cod_formato]).'" class="tooltip-info" data-rel="tooltip" title="View">
+                                        <a href="'.route('reagent.formats.show', $format->id).'" class="tooltip-info" data-rel="tooltip" title="View">
                                             <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="'.route('reagent.formats.edit', ['id' => $format->cod_formato]).'" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                        <a href="'.route('reagent.formats.edit', $format->id).'" class="tooltip-success" data-rel="tooltip" title="Edit">
                                             <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="'.route('reagent.formats.destroy', ['id' => $format->cod_formato]).'" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                        <a href="'.route('reagent.formats.destroy', $format->id).'" class="tooltip-error" data-rel="tooltip" title="Delete">
                                             <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
                                         </a>
                                     </li>
@@ -97,9 +96,9 @@ class FormatsController extends Controller
         $format = new Format($request->all());
 
         if( !isset( $request['estado'] ) )
-            $format->estado = '0';
+            $format->estado = 'I';
 
-        $format->creado_por = 'admin';
+        $format->creado_por = \Auth::id();
         $format->fecha_creacion = date('Y-m-d h:i:s');
         $format->save();
 
@@ -148,7 +147,7 @@ class FormatsController extends Controller
 
         $format->nombre = $request->nombre;
         $format->descripcion = $request->descripcion;
-        $format->modificado_por = 'admin';
+        $format->modificado_por = \Auth::id();
         $format->fecha_modificacion = date('Y-m-d h:i:s');
         $format->save();
 
@@ -166,7 +165,7 @@ class FormatsController extends Controller
         $format = Format::find($id);
 
         $format->estado = 'E';
-        $format->modificado_por = 'admin';
+        $format->modificado_por = \Auth::id();
         $format->fecha_modificacion = date('Y-m-d h:i:s');
         $format->save();
 

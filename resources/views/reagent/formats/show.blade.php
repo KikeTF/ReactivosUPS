@@ -9,7 +9,7 @@
 
         <div class="form-group">
             <div class="btn btn-white btn-primary btn-bold">
-                <a class="green" href="{{ route('reagent.formats.edit', ['id' => $format->cod_formato]) }}">
+                <a class="green" href="{{ route('reagent.formats.edit', $format->id) }}">
                     <i class='ace-icon fa fa-pencil bigger-110 green'></i>
                 </a>
             </div>
@@ -23,7 +23,7 @@
         <table class="table table-hover">
             <tr>
                 <td><strong>Código:</strong></td>
-                <td colspan="3">{{ $format->cod_formato }}</td>
+                <td colspan="3">{{ $format->id }}</td>
             </tr>
             <tr>
                 <td><strong>Nombre:</strong></td>

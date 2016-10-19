@@ -7,12 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     protected $table = "gen_sedes";
-    protected $primaryKey = 'cod_sede';
     public $timestamps = false;
-    public $incrementing = false;
 
-    protected $guarded = ['cod_sede'];
-    protected $fillable =["descripcion", "estado"];
+    protected $fillable =["cod_sede","descripcion", "estado"];
 
     public function periods(){
         return $this->hasMany('ReactivosUPS\Location');

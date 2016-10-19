@@ -5,7 +5,7 @@
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.formats.update',$format->cod_formato],'method' => 'PUT']) !!}
+    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.formats.update',$format->id],'method' => 'PUT']) !!}
 
     <div class="form-group">
         <div class="btn btn-white btn-primary btn-bold">

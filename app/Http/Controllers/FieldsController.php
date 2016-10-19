@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use ReactivosUPS\Field;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
-use App;
 use Datatables;
 
 class FieldsController extends Controller
@@ -38,13 +37,13 @@ class FieldsController extends Controller
             })
             ->addColumn('action', function ($field) {
                 return '<div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="'.route('reagent.fields.show', ['id' => $field->cod_campo]).'">
+                            <a class="blue" href="'.route('reagent.fields.show', $field->id).'">
                                 <i class="ace-icon fa fa-search-plus bigger-130"></i>
                             </a>
-                            <a class="green" href="'.route('reagent.fields.edit', ['id' => $field->cod_campo]).'">
+                            <a class="green" href="'.route('reagent.fields.edit', $field->id).'">
                                 <i class="ace-icon fa fa-pencil bigger-130"></i>
                             </a>
-                            <a class="red" href="'.route('reagent.fields.destroy', ['id' => $field->cod_campo]).'">
+                            <a class="red" href="'.route('reagent.fields.destroy', $field->id).'">
                                 <i class="ace-icon fa fa-trash-o bigger-130"></i>
                             </a>
                         </div>
@@ -55,17 +54,17 @@ class FieldsController extends Controller
                                 </button>
                                 <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
                                     <li>
-                                        <a href="'.route('reagent.fields.show', ['id' => $field->cod_campo]).'" class="tooltip-info" data-rel="tooltip" title="View">
+                                        <a href="'.route('reagent.fields.show', $field->id).'" class="tooltip-info" data-rel="tooltip" title="View">
                                             <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="'.route('reagent.fields.edit', ['id' => $field->cod_campo]).'" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                        <a href="'.route('reagent.fields.edit', $field->id).'" class="tooltip-success" data-rel="tooltip" title="Edit">
                                             <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="'.route('reagent.fields.destroy', ['id' => $field->cod_campo]).'" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                        <a href="'.route('reagent.fields.destroy', $field->id).'" class="tooltip-error" data-rel="tooltip" title="Delete">
                                             <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
                                         </a>
                                     </li>
@@ -98,7 +97,7 @@ class FieldsController extends Controller
         if( !isset( $request['estado'] ) )
             $field->estado = 'I';
 
-        $field->creado_por = 'admin';
+        $field->creado_por = \Auth::id();
         $field->fecha_creacion = date('Y-m-d h:i:s');
         $field->save();
 
@@ -147,7 +146,7 @@ class FieldsController extends Controller
 
         $field->nombre = $request->nombre;
         $field->descripcion = $request->descripcion;
-        $field->modificado_por = 'admin';
+        $field->modificado_por = \Auth::id();
         $field->fecha_modificacion = date('Y-m-d h:i:s');
         $field->save();
 
@@ -165,7 +164,7 @@ class FieldsController extends Controller
         $field = Field::find($id);
 
         $field->estado = 'E';
-        $field->modificado_por = 'admin';
+        $field->modificado_por = \Auth::id();
         $field->fecha_modificacion = date('Y-m-d h:i:s');
         $field->save();
 

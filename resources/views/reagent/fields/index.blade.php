@@ -11,7 +11,7 @@
     <input hidden type="text" id="dataurl" value="{{ route('reagent.fields.data') }}">
     <input hidden type="text" id="newurl" value="{{ route('reagent.fields.create') }}">
 
-    <div class="table-responsive" style="padding-top: 1px;">
+    <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
                 <tr>
