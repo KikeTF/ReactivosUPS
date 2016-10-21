@@ -28,4 +28,12 @@ class MatterCareer extends Model
     public function mention(){
         return $this->belongsTo('ReactivosUPS\Mention');
     }
+
+    public function contentsHeaders(){
+        return $this->hasMany('ReactivosUPS\ContentHeader');
+    }
+
+    public function distributives(){
+        return $this->hasMany('ReactivosUPS\Distributive');
+    }
 }

@@ -18,4 +18,8 @@ class PeriodLocation extends Model
     public function location(){
         return $this->belongsTo('ReactivosUPS\Location');
     }
+
+    public function distributives(){
+        return $this->hasMany('ReactivosUPS\Distributive');
+    }
 }

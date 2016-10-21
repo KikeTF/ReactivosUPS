@@ -22,4 +22,8 @@ class ProfileUser extends Model
     public function optionsUsers(){
         return $this->hasMany('ReactivosUPS\OptionUser');
     }
+
+    public function distributives(){
+        return $this->hasMany('ReactivosUPS\Distributive');
+    }
 }

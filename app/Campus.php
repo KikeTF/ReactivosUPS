@@ -18,4 +18,8 @@ class Campus extends Model
     public function careersCampus(){
         return $this->hasMany('ReactivosUPS\CareerCampus');
     }
+
+    public function reagents(){
+        return $this->hasMany('ReactivosUPS\Reagent');
+    }
 }
