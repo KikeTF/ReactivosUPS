@@ -15,7 +15,7 @@ class Campus extends Model
         return $this->belongsTo('ReactivosUPS\Location');
     }
 
-    public function careersCampus(){
+    public function careersCampuses(){
         return $this->hasMany('ReactivosUPS\CareerCampus');
     }
 

@@ -15,7 +15,7 @@ class Career extends Model
         return $this->hasMany('ReactivosUPS\Mention');
     }
 
-    public function careersCampus(){
+    public function careersCampuses(){
         return $this->hasMany('ReactivosUPS\CareerCampus');
     }
 }

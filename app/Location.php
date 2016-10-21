@@ -15,7 +15,7 @@ class Location extends Model
         return $this->hasMany('ReactivosUPS\Period');
     }
 
-    public function campus(){
+    public function campuses(){
         return $this->hasMany('ReactivosUPS\Campus');
     }
 
