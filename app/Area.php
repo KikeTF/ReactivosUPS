@@ -10,4 +10,8 @@ class Area extends Model
     public $timestamps = false;
 
     protected $fillable =["cod_area", "descripcion", "estado"];
+
+    public function mattersCareers(){
+        return $this->hasMany('ReactivosUPS\MatterCareer');
+    }
 }

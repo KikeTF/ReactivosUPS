@@ -44,7 +44,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $fillable = ['username', 'password', 'email', 'cod_usuario', 'nombres', 'apellidos', 'tipo', 'estado'];
 
-    public function profilesusers(){
-        return $this->hasMany('ReactivosUPS\Profileuser');
+    public function profilesUsers(){
+        return $this->hasMany('ReactivosUPS\ProfileUser');
     }
 }

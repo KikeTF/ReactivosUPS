@@ -14,4 +14,8 @@ class Period extends Model
     public function location(){
         return $this->belongsTo('ReactivosUPS\Period');
     }
+
+    public function periodsLocations(){
+        return $this->hasMany('ReactivosUPS\PeriodLocation');
+    }
 }

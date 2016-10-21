@@ -4,7 +4,7 @@ namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Optionuser extends Model
+class OptionUser extends Model
 {
     protected $table = "seg_opciones_usuarios";
     public $timestamps = false;
@@ -15,7 +15,7 @@ class Optionuser extends Model
         return $this->belongsTo('ReactivosUPS\Option');
     }
 
-    public function profileuser(){
-        return $this->belongsTo('ReactivosUPS\Profileuser');
+    public function profileUser(){
+        return $this->belongsTo('ReactivosUPS\ProfileUser');
     }
 }

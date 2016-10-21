@@ -23,7 +23,7 @@ class FormatsController extends Controller
 
     public function data()
     {
-        $formats = Format::query();
+        $formats = Format::query()->where('estado','!=','E');
         return Datatables::of($formats)
             ->addColumn('estado', function ($format) {
                 if($format->estado == 'I')
@@ -114,6 +114,9 @@ class FormatsController extends Controller
     public function show($id)
     {
         $format = Format::find($id);
+        $format->creado_por = $this->getUserName($format->creado_por);
+        $format->modificado_por = $this->getUserName($format->modificado_por);
+
         return view('reagent.formats.show')->with('format', $format);
     }
 

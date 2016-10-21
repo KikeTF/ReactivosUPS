@@ -4,7 +4,7 @@ namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Optionprofile extends Model
+class OptionProfile extends Model
 {
     protected $table = "seg_opciones_perfiles";
     public $timestamps = false;

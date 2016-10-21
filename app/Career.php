@@ -12,6 +12,10 @@ class Career extends Model
     protected $fillable =["cod_carrera", "descripcion", "estado"];
 
     public function mentions(){
-        return $this->hasMany('ReactivosUPS\Career');
+        return $this->hasMany('ReactivosUPS\Mention');
+    }
+
+    public function careersCampus(){
+        return $this->hasMany('ReactivosUPS\CareerCampus');
     }
 }

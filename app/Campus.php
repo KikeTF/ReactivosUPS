@@ -9,9 +9,13 @@ class Campus extends Model
     protected $table = "gen_campus";
     public $timestamps = false;
 
-    protected $fillable =["cod_campus", "cod_sede", "descripcion", "estado"];
+    protected $fillable =["cod_campus", "id_sede", "descripcion", "estado"];
 
     public function location(){
-        return $this->belongsTo('ReactivosUPS\Campus');
+        return $this->belongsTo('ReactivosUPS\Location');
+    }
+
+    public function careersCampus(){
+        return $this->hasMany('ReactivosUPS\CareerCampus');
     }
 }

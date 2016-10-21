@@ -1,0 +1,31 @@
+<?php
+
+namespace ReactivosUPS;
+
+use Illuminate\Database\Eloquent\Model;
+
+class MatterCareer extends Model
+{
+    protected $table = "gen_materias_carreras";
+    public $timestamps = false;
+
+    protected $fillable =["id_carrera_campus", "id_materia", "id_area", "id_mencion", "nivel", "tipo",
+                        "nro_reactivos_mat", "aplica_examen", "nro_reactivos_exam", "id_usr_responsable",
+                        "estado", "creado_por", "fecha_creacion", "modificado_por", "fecha_modificacion"];
+
+    public function careerCampus(){
+        return $this->belongsTo('ReactivosUPS\CareerCampus');
+    }
+
+    public function matter(){
+        return $this->belongsTo('ReactivosUPS\Matter');
+    }
+
+    public function area(){
+        return $this->belongsTo('ReactivosUPS\Area');
+    }
+
+    public function mention(){
+        return $this->belongsTo('ReactivosUPS\Mention');
+    }
+}

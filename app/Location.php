@@ -12,10 +12,14 @@ class Location extends Model
     protected $fillable =["cod_sede","descripcion", "estado"];
 
     public function periods(){
-        return $this->hasMany('ReactivosUPS\Location');
+        return $this->hasMany('ReactivosUPS\Period');
     }
 
     public function campus(){
-        return $this->hasMany('ReactivosUPS\Location');
+        return $this->hasMany('ReactivosUPS\Campus');
+    }
+
+    public function periodsLocations(){
+        return $this->hasMany('ReactivosUPS\PeriodLocation');
     }
 }

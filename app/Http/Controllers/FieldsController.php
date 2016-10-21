@@ -23,7 +23,7 @@ class FieldsController extends Controller
 
     public function data()
     {
-        $fields = Field::query();
+        $fields = Field::query()->where('estado','!=','E');;
         return Datatables::of($fields)
             ->addColumn('estado', function ($field) {
                 if($field->estado == 'I')
@@ -113,6 +113,9 @@ class FieldsController extends Controller
     public function show($id)
     {
         $field = Field::find($id);
+        $field->creado_por = $this->getUserName($field->creado_por);
+        $field->modificado_por = $this->getUserName($field->modificado_por);
+
         return view('reagent.fields.show')->with('field', $field);
     }
 

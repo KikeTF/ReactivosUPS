@@ -11,4 +11,7 @@ class Matter extends Model
 
     protected $fillable =["cod_materia", "descripcion", "abreviatura", "estado"];
 
+    public function mattersCareers(){
+        return $this->hasMany('ReactivosUPS\MatterCareer');
+    }
 }

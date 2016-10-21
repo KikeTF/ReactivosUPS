@@ -11,12 +11,12 @@ class Option extends Model
 
     protected $fillable =["descripcion", "id_padre", "ruta", "estado"];
 
-    public function optionsusers(){
-        return $this->hasMany('ReactivosUPS\Optionuser');
+    public function optionsUsers(){
+        return $this->hasMany('ReactivosUPS\OptionUser');
     }
 
-    public function optionsprofiles(){
-        return $this->hasMany('ReactivosUPS\Optionprofile');
+    public function optionsProfiles(){
+        return $this->hasMany('ReactivosUPS\OptionProfile');
     }
 
 

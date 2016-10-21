@@ -35,11 +35,13 @@
             </tr>
             <tr>
                 <td><strong>Estado:</strong></td>
-                @if($format->estado = 'A')
-                    <td colspan="3">Activo</td>
-                @else
-                    <td colspan="3">Inactivo</td>
-                @endif
+                <td colspan="3">
+                    @if($format->estado == 'A')
+                        Activo
+                    @elseif($format->estado == 'I')
+                        Inactivo
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td><strong>Creado por:</strong></td>
