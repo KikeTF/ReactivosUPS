@@ -80,3 +80,9 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
     Route::resource('matterscareers','MattersCareersController');
 
 });
+
+Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
+
+    Route::resource('parameters','ExamParametersController');
+
+});

@@ -72,7 +72,7 @@
             <div class="navbar-header pull-left">
                 <a href="/" class="navbar-brand">
                     <small>
-                        <i class="fa fa-book"></i>
+                        <i class="fa fa-graduation-cap"></i>
                         Reactivos UPS
                     </small>
                 </a>
@@ -229,6 +229,36 @@
                             <a href="{{ route('reagent.formats.index') }}">
                                 <i class="menu-icon fa fa-caret-right"></i>
                                 Formatos
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-book"></i>
+                        <span class="menu-text"> Examen </span>
+
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="{{ route('exam.parameters.index') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Par&aacute;metros
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="#">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Examen
                             </a>
 
                             <b class="arrow"></b>
