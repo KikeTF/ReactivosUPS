@@ -4,22 +4,19 @@ namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ExamDetail extends Model
+class AnswerHeader extends Model
 {
-    protected $table = "exc_examen_det";
+    protected $table = "exc_resultados_cab";
     public $timestamps = false;
 
-    protected $fillable =["id_examen_cab", "id_reactivo", "estado"];
+    protected $fillable =["id_examen_cab", "id_usr_estudiante", "reactivos_acertados", "reactivos_errados", "estado"];
 
     public function examHeader(){
         return $this->belongsTo('ReactivosUPS\ExamHeader');
     }
 
-    public function reagent(){
-        return $this->belongsTo('ReactivosUPS\Reagent');
-    }
-
     public function answersDetails(){
         return $this->hasMany('ReactivosUPS\AnswerDetail');
     }
+
 }
