@@ -27,4 +27,16 @@ class Reagent extends Model
     public function campus(){
         return $this->belongsTo('ReactivosUPS\Campus');
     }
+
+    public function reagentsQuestions(){
+        return $this->hasMany('ReactivosUPS\ReagentQuestion');
+    }
+
+    public function reagentsAnswers(){
+        return $this->hasMany('ReactivosUPS\ReagentAnswer');
+    }
+
+    public function ExamsDetails(){
+        return $this->hasMany('ReactivosUPS\ExamDetail');
+    }
 }

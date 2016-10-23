@@ -18,4 +18,8 @@ class Mention extends Model
     public function mattersCareers(){
         return $this->hasMany('ReactivosUPS\MatterCareer');
     }
+
+    public function ExamsHeaders(){
+        return $this->hasMany('ReactivosUPS\ExamHeader');
+    }
 }

@@ -22,4 +22,8 @@ class PeriodLocation extends Model
     public function distributives(){
         return $this->hasMany('ReactivosUPS\Distributive');
     }
+
+    public function ExamsHeaders(){
+        return $this->hasMany('ReactivosUPS\ExamHeader');
+    }
 }
