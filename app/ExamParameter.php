@@ -4,7 +4,7 @@ namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Parameter extends Model
+class ExamParameter extends Model
 {
     protected $table = "exc_parametros";
     public $timestamps = false;
