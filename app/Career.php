@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Career extends Model
 {
-    protected $table = "gen_carrera";
+    protected $table = "gen_carreras";
     public $timestamps = false;
 
     protected $fillable =["cod_carrera", "descripcion", "estado"];
@@ -16,6 +16,6 @@ class Career extends Model
     }
 
     public function careersCampuses(){
-        return $this->hasMany('ReactivosUPS\CareerCampus');
+        return $this->hasMany('ReactivosUPS\CareerCampus', 'id_carrera');
     }
 }

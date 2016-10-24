@@ -1,11 +1,11 @@
 @extends('shared.template.index')
 
 @section('titulo', 'Examen')
-@section('subtitulo', 'Editar parametros')
+@section('subtitulo', 'Nueva parametrización para examenes')
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'exam.parameters.store', 'method' => 'POST']) !!}
+    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'exam.parameters.store','method' => 'POST']) !!}
 
     <div class="form-group">
         <div class="btn btn-white btn-primary btn-bold">
@@ -23,20 +23,20 @@
     <div class="form-group">
         {!! Form::label('nro_preguntas', 'Numero de reguntas:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('nro_preguntas', $parameter->nro_preguntas, ['class' => 'form-control', 'placeholder' => 'Ingrese numero de preguntas para examen','required']) !!}
+            {!! Form::text('nro_preguntas', null, ['class' => 'form-control', 'placeholder' => 'Ingrese numero de preguntas para examen','required']) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('duracion_examen', 'Duracion de examen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('duracion_examen', $parameter->duracion_examen, ['class' => 'form-control', 'placeholder' => 'Ingrese duracion del examen']) !!}
+            {!! Form::text('duracion_examen', null, ['class' => 'form-control', 'placeholder' => 'Ingrese duracion del examen']) !!}
         </div>
     </div>
     <div class="form-group">
         {!! Form::label('id_examen_act', 'Codigo de examen actual:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('id_examen_act', $parameter->id_examen_act, ['class' => 'form-control', 'placeholder' => 'Ingrese codigo de examen actual']) !!}
+            {!! Form::text('id_examen_act', null, ['class' => 'form-control', 'placeholder' => 'Ingrese codigo de examen actual']) !!}
         </div>
     </div>
     <div class="form-group">
@@ -51,11 +51,7 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($parameter->estado == 'A')
-                        {!! Form::checkbox('estado', $parameter->estado, true) !!}
-                    @else
-                        {!! Form::checkbox('estado', $parameter->estado) !!}
-                    @endif
+                    {!! Form::checkbox('estado', 'A', true) !!}
                 </label>
             </div>
 

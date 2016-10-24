@@ -5,6 +5,7 @@ namespace ReactivosUPS\Http\Controllers;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use ReactivosUPS\Area;
 use ReactivosUPS\CareerCampus;
 use ReactivosUPS\User;
 use ReactivosUPS\Campus;
@@ -26,12 +27,26 @@ abstract class Controller extends BaseController
     }
 
     public function getCampuses(){
-        $campus = Campus::query()->where('estado','A')->get();;
+        $campus = Campus::query()->where('estado','A')->get();
         return $campus;
     }
 
+    public function getAreas(){
+        $areas = Area::query()->where('estado','A')->get();
+        return $areas;
+    }
+
+    public function getCareers(){
+        $careers = Career::query()->where('estado','A')->get();
+        return $careers;
+    }
+
     public function getCareersByCampus($id_campus){
-        $career = Career::query()->where('estado','A')->careersCampuses()->where('id_campus',$id_campus)->get();
+        $careerByCampus = CareerCampus::query()->where('id_campus',$id_campus)->get();
+        $career = new Career();
+        foreach($careerByCampus as $carByCamp){
+            $career = Career::find($carByCamp->id_carrera)->where('estado','A')->get();
+        }
         return $career;
     }
 

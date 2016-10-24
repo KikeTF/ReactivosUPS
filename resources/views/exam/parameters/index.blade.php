@@ -14,8 +14,8 @@
                 </a>
             </div>
             <div class="btn btn-white btn-primary btn-bold">
-                <a class="red" href="{{ route('exam.parameters.index') }}">
-                    <i class='ace-icon fa fa-close bigger-110 red'></i>
+                <a class="blue" href="{{ route('exam.parameters.index') }}">
+                    <i class='ace-icon fa fa-history bigger-110 blue'></i>
                 </a>
             </div>
         </div>
@@ -39,7 +39,13 @@
             </tr>
             <tr>
                 <td><strong>Editar respuesta:</strong></td>
-                <td colspan="3">{{ $parameter->editar_respuestas }}</td>
+                <td colspan="3">
+                    @if($parameter->editar_respuestas == 'S')
+                        Si
+                    @elseif($parameter->editar_respuestas == 'N')
+                        No
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td><strong>Estado:</strong></td>

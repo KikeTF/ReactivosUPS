@@ -18,7 +18,12 @@ class ExamParametersController extends Controller
     public function index()
     {
         $parameter = ExamParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
-        return view('exam.parameters.index')->with('parameter', $parameter);
+
+        if( is_null($parameter) ){
+            return view('exam.parameters.create');
+        }else{
+            return view('exam.parameters.index')->with('parameter', $parameter);
+        }
     }
 
     /**
@@ -39,18 +44,17 @@ class ExamParametersController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-        /*$parameter = new ExamParameter($request->all());
+        $parameter = new ExamParameter($request->all());
 
         if( !isset( $request['estado'] ) )
             $parameter->estado = 'I';
 
         $parameter->creado_por = \Auth::id();
-        $parameter->fecha_creacion = date('Y-m-d h:i:s');*/
-       // $parameter->save();
+        $parameter->fecha_creacion = date('Y-m-d h:i:s');
+        $parameter->save();
 
 
-        //return redirect()->route('exam.parameters.index');
+        return redirect()->route('exam.parameters.index');
     }
 
     /**
@@ -85,7 +89,7 @@ class ExamParametersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request->all());
     }
 
     /**

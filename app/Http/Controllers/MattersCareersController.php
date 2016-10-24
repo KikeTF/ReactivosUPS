@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\MatterCareer;
+use Datatables;
 
 class MattersCareersController extends Controller
 {
@@ -16,10 +18,68 @@ class MattersCareersController extends Controller
      */
     public function index()
     {
-        $campus = $this->getCampuses();
-        //$careers = $this->getCareersByCampus(1);
-        //dd($careers);
-        return view('general.mattercareer.index')->with('campus', $campus);
+        $campuses = $this->getCampuses();
+        $careers = $this->getCareers();
+        $areas = $this->getAreas();
+        return view('general.matterscareers.index')
+            ->with('campuses', $campuses)
+            ->with('careers', $careers)
+            ->with('areas', $areas);
+    }
+
+    public function data()
+    {
+        $mattersCareers = MatterCareer::query()->where('estado','!=','E')->get();
+        //dd($mattersCareers);
+        return Datatables::of($mattersCareers)
+            ->addColumn('estado', function ($matterCareer) {
+                if($matterCareer->estado == 'I')
+                    $estado = 'Inactivo';
+                elseif ($matterCareer->estado == 'A')
+                    $estado = 'Activo';
+                else
+                    $estado = '';
+
+                return $estado;
+            })
+            ->addColumn('action', function ($matterCareer) {
+                return '<div class="hidden-sm hidden-xs action-buttons">
+                            <a class="blue" href="'.route('general.matterscareers.show', $matterCareer->id).'">
+                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                            </a>
+                            <a class="green" href="'.route('general.matterscareers.edit', $matterCareer->id).'">
+                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                            </a>
+                            <a class="red" href="'.route('general.matterscareers.destroy', $matterCareer->id).'">
+                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                            </a>
+                        </div>
+                        <div class="hidden-md hidden-lg">
+                            <div class="inline pos-rel">
+                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                    <li>
+                                        <a href="'.route('general.matterscareers.show', $matterCareer->id).'" class="tooltip-info" data-rel="tooltip" title="View">
+                                            <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="'.route('general.matterscareers.edit', $matterCareer->id).'" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                            <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="'.route('general.matterscareers.destroy', $matterCareer->id).'" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                            <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>';
+            })
+            ->make(true);
     }
 
     /**
