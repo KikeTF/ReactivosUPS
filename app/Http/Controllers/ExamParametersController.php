@@ -39,7 +39,18 @@ class ExamParametersController extends Controller
      */
     public function store(Request $request)
     {
-        //si
+        dd($request);
+        /*$parameter = new ExamParameter($request->all());
+
+        if( !isset( $request['estado'] ) )
+            $parameter->estado = 'I';
+
+        $parameter->creado_por = \Auth::id();
+        $parameter->fecha_creacion = date('Y-m-d h:i:s');*/
+       // $parameter->save();
+
+
+        //return redirect()->route('exam.parameters.index');
     }
 
     /**
@@ -61,7 +72,8 @@ class ExamParametersController extends Controller
      */
     public function edit($id)
     {
-        //si
+        $parameter = ExamParameter::find($id);
+        return view('exam.parameters.edit')->with('parameter', $parameter);
     }
 
     /**
