@@ -450,8 +450,8 @@
             <div class="footer-inner">
                 <div class="footer-content">
                     <span class="bigger-120">
-                        <span class="blue bolder">Ace</span>
-                        Application &copy; 2016
+                        <span class="blue bolder">Universidad Polit&eacute;cnica Salesiana</span>
+                        &copy; 2016
                     </span>
                 </div>
             </div>
@@ -552,7 +552,11 @@
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
                     sorting: [[0, 'asc']],
-                    dom: '<"clearfix"<"dataTableButtons"<"pull-left tableTools-container"<"btn-group btn-overlap"B>>><"dataTableButtons"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                    @if($usetable == 0) // 0 Sin botones adicionales
+                        dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                    @elseif($usetable == 1) // 1 Con boton de agregar nuevo
+                        dom: '<"clearfix"<"dataTableButtons"<"pull-left tableTools-container"<"btn-group btn-overlap"B>>><"dataTableButtons"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                    @endif
                     buttons: {
                         dom: {
                             container: {

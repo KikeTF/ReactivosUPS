@@ -88,6 +88,16 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
 
+    Route::get('parameters/history', [
+        'uses'  => 'ExamParametersController@history',
+        'as'    => 'exam.parameters.history'
+    ]);
+
+    Route::get('parameters/data', [
+        'uses'  => 'ExamParametersController@data',
+        'as'    => 'exam.parameters.data'
+    ]);
+
     Route::resource('parameters','ExamParametersController');
 
 });

@@ -23,7 +23,7 @@ class FieldsController extends Controller
 
     public function data()
     {
-        $fields = Field::query()->where('estado','!=','E');;
+        $fields = Field::query()->where('estado','!=','E');
         return Datatables::of($fields)
             ->addColumn('estado', function ($field) {
                 if($field->estado == 'I')

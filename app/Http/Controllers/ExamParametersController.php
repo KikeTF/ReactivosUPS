@@ -26,6 +26,20 @@ class ExamParametersController extends Controller
         }
     }
 
+    public function history()
+    {
+        $parameter = ExamParameter::query()->where('estado', 'A')->get();
+        return view('exam.parameters.history')->with('parameter', $parameter);
+    }
+
+    public function data()
+    {
+        $parameters = ExamParameter::query()->where('estado','A')->get();
+        //dd($mattersCareers);
+        return Datatables::of($parameters)
+            ->make(true);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

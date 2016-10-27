@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use ReactivosUPS\Area;
 use ReactivosUPS\CareerCampus;
+use ReactivosUPS\Mention;
 use ReactivosUPS\User;
 use ReactivosUPS\Campus;
 use ReactivosUPS\Career;
@@ -39,6 +40,11 @@ abstract class Controller extends BaseController
     public function getCareers(){
         $careers = Career::query()->where('estado','A')->get();
         return $careers;
+    }
+
+    public function getMentions(){
+        $mentions = Mention::query()->where('estado','A')->get();
+        return $mentions;
     }
 
     public function getCareersByCampus($id_campus){

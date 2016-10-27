@@ -21,16 +21,42 @@ class MattersCareersController extends Controller
         $campuses = $this->getCampuses();
         $careers = $this->getCareers();
         $areas = $this->getAreas();
+        $mentions = $this->getMentions();
         return view('general.matterscareers.index')
             ->with('campuses', $campuses)
             ->with('careers', $careers)
-            ->with('areas', $areas);
+            ->with('areas', $areas)
+            ->with('mentions', $mentions);
     }
+
+    public function filter()
+    {
+        $campuses = $this->getCampuses();
+        $careers = $this->getCareers();
+        $areas = $this->getAreas();
+        $mentions = $this->getMentions();
+        return view('general.matterscareers.index')
+            ->with('campuses', $campuses)
+            ->with('careers', $careers)
+            ->with('areas', $areas)
+            ->with('mentions', $mentions);
+    }
+
+    public $filterCampus = 0;
+    public $filterCareer = 0;
+    public $filterArea = 0;
+    public $filterMention = 0;
 
     public function data()
     {
-        $mattersCareers = MatterCareer::query()->where('estado','!=','E')->get();
+        //if($filterCampus = 0)
+
+        $mattersCareers = MatterCareer::query()->where('estado','!=','E');
+
+
+        $mattersCareers = $mattersCareers->where('aplica_examen','N');
         //dd($mattersCareers);
+
         return Datatables::of($mattersCareers)
             ->addColumn('estado', function ($matterCareer) {
                 if($matterCareer->estado == 'I')
@@ -80,6 +106,7 @@ class MattersCareersController extends Controller
                         </div>';
             })
             ->make(true);
+
     }
 
     /**
