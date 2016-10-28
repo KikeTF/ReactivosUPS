@@ -11,6 +11,10 @@ use Datatables;
 
 class MattersCareersController extends Controller
 {
+    var $filterCampus = 1;
+    var $filterCareer = 1;
+    var $filterMention = 0;
+    var $filterArea = 0;
     /**
      * Display a listing of the resource.
      *
@@ -22,41 +26,57 @@ class MattersCareersController extends Controller
         $careers = $this->getCareers();
         $areas = $this->getAreas();
         $mentions = $this->getMentions();
+        $filters = array($this->filterCampus, $this->filterCareer, $this->filterMention, $this->filterArea);
         return view('general.matterscareers.index')
             ->with('campuses', $campuses)
             ->with('careers', $careers)
             ->with('areas', $areas)
-            ->with('mentions', $mentions);
+            ->with('mentions', $mentions)
+            ->with('filters', $filters);
     }
 
-    public function filter()
+    public function filter(Request $request)
     {
+        $this->filterCampus = $request->id_campus;
+        $this->filterCareer = $request->id_carrera;
+        $this->filterMention = $request->id_mencion;
+        $this->filterArea = $request->id_area;
+
         $campuses = $this->getCampuses();
         $careers = $this->getCareers();
         $areas = $this->getAreas();
         $mentions = $this->getMentions();
+        $filters = array($this->filterCampus, $this->filterCareer, $this->filterMention, $this->filterArea);
         return view('general.matterscareers.index')
             ->with('campuses', $campuses)
             ->with('careers', $careers)
             ->with('areas', $areas)
-            ->with('mentions', $mentions);
+            ->with('mentions', $mentions)
+            ->with('filters', $filters);
     }
-
-    public $filterCampus = 0;
-    public $filterCareer = 0;
-    public $filterArea = 0;
-    public $filterMention = 0;
 
     public function data()
     {
-        //if($filterCampus = 0)
-
         $mattersCareers = MatterCareer::query()->where('estado','!=','E');
 
+        if($this->filterCareer != 0 && $this->filterCampus != 0){
+            $careersCampuses = $this->getCareersCampuses();
+            $id_careerCampus = $careersCampuses
+                ->where('id_carrera',$this->filterCareer)
+                ->where('id_campus',$this->filterCampus)
+                ->first()->id;
+            $mattersCareers = $mattersCareers->where('id_carrera_campus',$id_careerCampus);
+        }
 
-        $mattersCareers = $mattersCareers->where('aplica_examen','N');
+        if($this->filterMention != 0){
+            $mattersCareers = $mattersCareers->where('id_mencion',$this->filterMention);
+        }
+
+        if($this->filterArea != 0){
+            $mattersCareers = $mattersCareers->where('id_area',$this->filterArea);
+        }
+
         //dd($mattersCareers);
-
         return Datatables::of($mattersCareers)
             ->addColumn('estado', function ($matterCareer) {
                 if($matterCareer->estado == 'I')

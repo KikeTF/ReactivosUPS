@@ -9,7 +9,7 @@
     $columnas = array("id_materia", "nivel", "tipo", "nro_reactivos_mat", "aplica_examen", "nro_reactivos_exam", "estado");
     ?>
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'general.matterscareers.index','method' => 'POST']) !!}
+    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'general.matterscareers.filter','method' => 'POST']) !!}
 
     <input hidden type="text" id="dataurl" value="{{ route('general.matterscareers.data') }}">
     <input hidden type="text" id="newurl" value="{{ route('general.matterscareers.create') }}">
@@ -35,44 +35,44 @@
                     <div class="col-sm-11">
                         <div class="col-sm-3">
                             <label for="id_campus" style="font-size: 12px">Seleccione Campus</label>
-                            <select id="id_campus" class="form-control">
+                            <select id="id_campus" name="id_campus" class="form-control">
                                 @foreach($campuses as $camp)
-                                    <option value="{{ $camp->id }}">{{ $camp->descripcion }}</option>
+                                    <option value="{{ $camp->id }}" {{ $camp->id == $filters[0] ? 'selected="selected"' : '' }}>{{ $camp->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-sm-3">
                             <label for="id_carrera" style="font-size: 12px">Seleccione Carrera</label>
-                            <select id="id_carrera" class="form-control">
+                            <select id="id_carrera" name="id_carrera" class="form-control">
                                 @foreach($careers as $career)
-                                    <option value="{{ $career->id }}">{{ $career->descripcion }}</option>
+                                    <option value="{{ $career->id }}" {{ $career->id == $filters[1] ? 'selected="selected"' : '' }}>{{ $career->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-sm-3">
                             <label for="id_mencion" style="font-size: 12px">Seleccione Menci&oacute;n</label>
-                            <select id="id_mencion" class="form-control">
+                            <select id="id_mencion" name="id_mencion" class="form-control">
                                 @foreach($mentions as $mention)
-                                    <option value="{{ $mention->id }}">{{ $mention->descripcion }}</option>
+                                    <option value="{{ $mention->id }}" {{ $mention->id == $filters[2] ? 'selected="selected"' : '' }}>{{ $mention->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-sm-3">
                             <label for="id_mencion" style="font-size: 12px">Seleccione Area</label>
-                            <select id="id_area" class="form-control">
+                            <select id="id_area" name="id_area" class="form-control">
                                 <option value="0">-- Todas las Areas --</option>
                                 @foreach($areas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->descripcion }}</option>
+                                    <option value="{{ $area->id }}" {{ $area->id == $filters[3] ? 'selected="selected"' : '' }}>{{ $area->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-1" align="right">
                         <div class="btn btn-white btn-primary btn-bold">
-                            <a class="blue" href="{{ route('general.matterscareers.index') }}">
+                            <a class="blue" href="#" onclick="document.forms[0].submit();">
                                 <i class='ace-icon fa fa-filter bigger-110 blue'></i>
                             </a>
                         </div>

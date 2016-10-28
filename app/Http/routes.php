@@ -82,6 +82,11 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
         'as'    => 'general.matterscareers.data'
     ]);
 
+    Route::post('matterscareers/filter', [
+        'uses'  => 'MattersCareersController@filter',
+        'as'    => 'general.matterscareers.filter'
+    ]);
+
     Route::resource('matterscareers','MattersCareersController');
 
 });

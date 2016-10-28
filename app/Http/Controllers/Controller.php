@@ -28,23 +28,28 @@ abstract class Controller extends BaseController
     }
 
     public function getCampuses(){
-        $campus = Campus::query()->where('estado','A')->get();
+        $campus = Campus::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
         return $campus;
     }
 
     public function getAreas(){
-        $areas = Area::query()->where('estado','A')->get();
+        $areas = Area::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
         return $areas;
     }
 
     public function getCareers(){
-        $careers = Career::query()->where('estado','A')->get();
+        $careers = Career::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
         return $careers;
     }
 
     public function getMentions(){
-        $mentions = Mention::query()->where('estado','A')->get();
+        $mentions = Mention::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
         return $mentions;
+    }
+
+    public function getCareersCampuses(){
+        $careersCampuses = CareerCampus::query()->where('estado','A')->orderBy('id', 'asc')->get();
+        return $careersCampuses;
     }
 
     public function getCareersByCampus($id_campus){

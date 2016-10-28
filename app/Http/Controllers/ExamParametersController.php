@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use Datatables;
 
 class ExamParametersController extends Controller
 {

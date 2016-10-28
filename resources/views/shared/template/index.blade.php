@@ -536,6 +536,8 @@
                         type: 'GET',
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
                         dataType: 'JSON',
+                        cache: false,
+                        async: false,
                         beforeSend: function (xhr) {
                             xhr.setRequestHeader('Authorization');
                         },
