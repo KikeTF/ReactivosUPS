@@ -532,11 +532,11 @@
                     serverSide: true,
                     responsive: true,
                     ajax: {
-                        url: $('#dataurl').val(),
+                        url: $('#dataurl').val()+"?"+$('#formdata').serialize(),
                         type: 'GET',
                         //headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
-                        dataType: 'JSON',
-                        data: $('#formdata').serialize(),
+                        //dataType: 'JSON',
+                        //data: $('#formdata').serialize(),
                         cache: false,
                         async: false,
 
