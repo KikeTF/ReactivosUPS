@@ -11,8 +11,8 @@ use Datatables;
 
 class MattersCareersController extends Controller
 {
-    var $filterCampus = 1;
-    var $filterCareer = 1;
+    var $filterCampus = 0;
+    var $filterCareer = 0;
     var $filterMention = 0;
     var $filterArea = 0;
     /**
@@ -20,8 +20,14 @@ class MattersCareersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if( isset( $request['id_campus'] ) ){
+            $this->filterCampus = (int)$request->id_campus;
+            $this->filterCareer = (int)$request->id_carrera;
+            $this->filterMention = (int)$request->id_mencion;
+            $this->filterArea = (int)$request->id_area;
+        }
         $campuses = $this->getCampuses();
         $careers = $this->getCareers();
         $areas = $this->getAreas();
@@ -35,28 +41,16 @@ class MattersCareersController extends Controller
             ->with('filters', $filters);
     }
 
-    public function filter(Request $request)
+    public function data(Request $request)
     {
-        $this->filterCampus = $request->id_campus;
-        $this->filterCareer = $request->id_carrera;
-        $this->filterMention = $request->id_mencion;
-        $this->filterArea = $request->id_area;
 
-        $campuses = $this->getCampuses();
-        $careers = $this->getCareers();
-        $areas = $this->getAreas();
-        $mentions = $this->getMentions();
-        $filters = array($this->filterCampus, $this->filterCareer, $this->filterMention, $this->filterArea);
-        return view('general.matterscareers.index')
-            ->with('campuses', $campuses)
-            ->with('careers', $careers)
-            ->with('areas', $areas)
-            ->with('mentions', $mentions)
-            ->with('filters', $filters);
-    }
+        if( isset( $request['id_campus'] ) ){
+            $this->filterCampus = (int)$request->id_campus;
+            $this->filterCareer = (int)$request->id_carrera;
+            $this->filterMention = (int)$request->id_mencion;
+            $this->filterArea = (int)$request->id_area;
+        }
 
-    public function data()
-    {
         $mattersCareers = MatterCareer::query()->where('estado','!=','E');
 
         if($this->filterCareer != 0 && $this->filterCampus != 0){
@@ -65,18 +59,17 @@ class MattersCareersController extends Controller
                 ->where('id_carrera',$this->filterCareer)
                 ->where('id_campus',$this->filterCampus)
                 ->first()->id;
-            $mattersCareers = $mattersCareers->where('id_carrera_campus',$id_careerCampus);
+            $mattersCareers->where('id_carrera_campus',$id_careerCampus);
         }
 
         if($this->filterMention != 0){
-            $mattersCareers = $mattersCareers->where('id_mencion',$this->filterMention);
+            $mattersCareers->where('id_mencion',$this->filterMention);
         }
 
         if($this->filterArea != 0){
-            $mattersCareers = $mattersCareers->where('id_area',$this->filterArea);
+            $mattersCareers->where('id_area',$this->filterArea);
         }
 
-        //dd($mattersCareers);
         return Datatables::of($mattersCareers)
             ->addColumn('estado', function ($matterCareer) {
                 if($matterCareer->estado == 'I')
@@ -126,7 +119,6 @@ class MattersCareersController extends Controller
                         </div>';
             })
             ->make(true);
-
     }
 
     /**

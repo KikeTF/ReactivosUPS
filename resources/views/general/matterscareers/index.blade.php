@@ -9,10 +9,10 @@
     $columnas = array("id_materia", "nivel", "tipo", "nro_reactivos_mat", "aplica_examen", "nro_reactivos_exam", "estado");
     ?>
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'general.matterscareers.filter','method' => 'POST']) !!}
-
     <input hidden type="text" id="dataurl" value="{{ route('general.matterscareers.data') }}">
     <input hidden type="text" id="newurl" value="{{ route('general.matterscareers.create') }}">
+
+    {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'general.matterscareers.index','method' => 'GET']) !!}
 
     <div class="widget-box">
         <div class="widget-header">
@@ -82,6 +82,8 @@
         </div>
     </div>
 
+    {!! Form::close() !!}
+
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
@@ -99,6 +101,6 @@
         </table>
     </div>
 
-    {!! Form::close() !!}
+
 
 @endsection
