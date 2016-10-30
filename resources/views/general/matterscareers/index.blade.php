@@ -91,9 +91,9 @@
                 <th>Materia</th>
                 <th>Nivel</th>
                 <th>Tipo</th>
-                <th>Reactivos x Materia</th>
+                <th>No. Reactivos Entregables</th>
                 <th>Aplica Examen</th>
-                <th>Reactivos x Examen</th>
+                <th>No. Reactivos en Examen</th>
                 <th>Estado</th>
                 <th></th>
             </tr>
