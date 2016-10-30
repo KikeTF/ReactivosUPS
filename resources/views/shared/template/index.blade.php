@@ -532,15 +532,13 @@
                     serverSide: true,
                     responsive: true,
                     ajax: {
-                        url: $('#dataurl').val()+"?"+$('#formdata').serialize(),
+                        url: "{{ $dataurl }}"+"?"+$('#formdata').serialize(),
                         type: 'GET',
                         //headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
                         //dataType: 'JSON',
                         //data: $('#formdata').serialize(),
                         cache: false,
-                        async: false,
-
-
+                        //async: false,
                         /*beforeSend: function (xhr) {
                             xhr.setRequestHeader('Authorization');
                         },*/
@@ -557,33 +555,33 @@
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
                     sorting: [[0, 'asc']],
-                    @if($usetable == 0) // 0 Sin botones adicionales
+                    @if( !isset($newurl) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
-                    @elseif($usetable == 1) // 1 Con boton de agregar nuevo
+                    @else // Con boton de agregar nuevo
                         dom: '<"clearfix"<"dataTableButtons"<"pull-left tableTools-container"<"btn-group btn-overlap"B>>><"dataTableButtons"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
-                    @endif
-                    buttons: {
-                        dom: {
-                            container: {
-                                tag: 'div'
+                        buttons: {
+                            dom: {
+                                container: {
+                                    tag: 'div'
+                                },
+                                buttonContainer: {
+                                    tag: 'div',
+                                    className: 'btn btn-white btn-primary btn-bold'
+                                },
+                                button: {
+                                    tag: 'a',
+                                    className: 'blue'
+                                }
                             },
-                            buttonContainer: {
-                                tag: 'div',
-                                className: 'btn btn-white btn-primary btn-bold'
-                            },
-                            button: {
-                                tag: 'a',
-                                className: 'blue'
-                            }
+                            buttons: [{
+                                text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
+                                titleAttr: "Nuevo",
+                                action: function ( e, dt, node, config ) {
+                                    window.location.href = "{{ $newurl }}";
+                                }
+                            }]
                         },
-                        buttons: [{
-                            text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
-                            titleAttr: "Nuevo",
-                            action: function ( e, dt, node, config ) {
-                                window.location.href = $('#newurl').val();
-                            }
-                        }]
-                    },
+                    @endif
                     tableTools: {
                         sSwfPath: "{{ asset('ace/swf/copy_csv_xls_pdf.swf') }}",
                         sSelectedClass: "success",

@@ -6,10 +6,10 @@
 @section('contenido')
     <?php
     $usetable = 1;
+    $dataurl = route('reagent.formats.data');
+    $newurl = route('reagent.formats.create');
     $columnas = array("nombre", "descripcion", "estado");
     ?>
-    <input hidden type="text" id="dataurl" value="{{ route('reagent.formats.data') }}">
-    <input hidden type="text" id="newurl" value="{{ route('reagent.formats.create') }}">
 
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">

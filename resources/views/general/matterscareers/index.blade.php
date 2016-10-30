@@ -5,12 +5,11 @@
 
 @section('contenido')
     <?php
-    $usetable = 0;
+    $usetable = 1;
+    $dataurl = route('general.matterscareers.data');
+    //$newurl = route('general.matterscareers.create');
     $columnas = array("id_materia", "nivel", "tipo", "nro_reactivos_mat", "aplica_examen", "nro_reactivos_exam", "estado");
     ?>
-
-    <input hidden type="text" id="dataurl" value="{{ route('general.matterscareers.data') }}">
-    <input hidden type="text" id="newurl" value="{{ route('general.matterscareers.create') }}">
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'general.matterscareers.index','method' => 'GET']) !!}
 
