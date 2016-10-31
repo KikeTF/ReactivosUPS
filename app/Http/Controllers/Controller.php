@@ -7,10 +7,15 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use ReactivosUPS\Area;
 use ReactivosUPS\CareerCampus;
+use ReactivosUPS\ContentDetail;
+use ReactivosUPS\Field;
 use ReactivosUPS\Mention;
 use ReactivosUPS\User;
 use ReactivosUPS\Campus;
 use ReactivosUPS\Career;
+use ReactivosUPS\Matter;
+use ReactivosUPS\Format;
+
 
 abstract class Controller extends BaseController
 {
@@ -32,6 +37,21 @@ abstract class Controller extends BaseController
         return $campus;
     }
 
+    public function getFormats(){
+        $formats = Format::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+        return $formats;
+    }
+
+    public function getFields(){
+        $fields = Field::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+        return $fields;
+    }
+
+    public function getMatters(){
+        $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        return $matters;
+    }
+
     public function getAreas(){
         $areas = Area::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
         return $areas;
@@ -45,6 +65,11 @@ abstract class Controller extends BaseController
     public function getMentions(){
         $mentions = Mention::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
         return $mentions;
+    }
+
+    public function getContents(){
+        $contents = ContentDetail::query()->where('estado','A')->orderBy('capitulo', 'asc')->get();
+        return $contents;
     }
 
     public function getCareersCampuses(){

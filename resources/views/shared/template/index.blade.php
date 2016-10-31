@@ -255,6 +255,14 @@
 
                             <b class="arrow"></b>
                         </li>
+                        <li class="">
+                            <a href="{{ route('reagent.reagents.index') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Registro
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
                     </ul>
                 </li>
 

@@ -73,6 +73,18 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
         'as'    => 'reagent.formats.destroy'
     ]);
 
+    Route::get('reagents/data', [
+        'uses'  => 'ReagentsController@data',
+        'as'    => 'reagent.reagents.data'
+    ]);
+
+    Route::resource('reagents','ReagentsController');
+
+    Route::get('reagents/{id}/destroy', [
+        'uses'  => 'ReagentsController@destroy',
+        'as'    => 'reagent.reagents.destroy'
+    ]);
+
 });
 
 Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
