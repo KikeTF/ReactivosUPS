@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="id_mencion" style="font-size: 12px">Seleccione Area</label>
+                            <label for="id_area" style="font-size: 12px">Seleccione Area</label>
                             <select id="id_area" name="id_area" class="form-control">
                                 <option value="0">-- Todas las Areas --</option>
                                 @foreach($areas as $area)

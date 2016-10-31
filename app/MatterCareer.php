@@ -37,7 +37,17 @@ class MatterCareer extends Model
         return $this->hasMany('ReactivosUPS\Distributive');
     }
 
-    public function scopeFilter($query, $id_area){
-        return $query->where('id_area',$id_area);
+    public function scopeFilter($query, $id_carrera_campus, $id_mencion, $id_area){
+        return $query
+            ->where('id_carrera_campus', $id_carrera_campus)
+            ->where('id_mencion', $id_mencion)
+            ->where('id_area', $id_area);
     }
+
+    public function scopeFilter2($query, $id_carrera_campus, $id_mencion){
+        return $query
+            ->where('id_carrera_campus', $id_carrera_campus)
+            ->where('id_mencion', $id_mencion);
+    }
+
 }

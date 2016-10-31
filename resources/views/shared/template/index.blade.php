@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('ace/font-awesome/4.2.0/css/font-awesome.min.css') }}" />
 
     <!-- page specific plugin styles -->
+    @stack('specific-styles')
 
     <!-- text fonts -->
     <link rel="stylesheet" href="{{ asset('ace/fonts/fonts.googleapis.com.css') }}" />
@@ -517,7 +518,7 @@
     <script src="{{ asset('ace/js/jquery.flot.pie.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.flot.resize.min.js') }}"></script>
 
-    <!-- datatable scripts -->
+    {{--@stack('datatable-script')--}}
     {{--<script src="{{ asset('ace/js/jquery-1.12.3.js') }}"></script>--}}
     <script src="{{ asset('ace/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.dataTables.bootstrap.min.js') }}"></script>
@@ -525,13 +526,14 @@
     <script src="{{ asset('ace/js/dataTables.colVis.min.js') }}"></script>
     <script src="{{ asset('ace/js/dataTables.buttons.min.js') }}"></script>
 
+    @stack('specific-script')
 
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
     <script src="{{ asset('ace/js/ace.min.js') }}"></script>
 
 
-    {{--@stack('table-script')--}}
+
     @if(isset($usetable))
         <script>
             $(function() {

@@ -5,7 +5,7 @@
 
 @section('contenido')
     <?php
-    //$usetable = 1;
+    $usetable = 1;
     $dataurl = route('reagent.reagents.data');
     $newurl = route('reagent.reagents.create');
     $columnas = array("id","capitulo", "tema", "planteamiento", "estado");
