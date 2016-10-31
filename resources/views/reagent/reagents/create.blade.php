@@ -166,55 +166,53 @@
                                     {!! Form::label('id_opcion_resp', 'Opciones de Respuesta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
                                         <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
-                                            <table id="id_opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
+                                            <table id="opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
                                                 <tr>
-                                                    <td>{!! Form::text('id_opcion_resp', null, ['class' => 'form-control', 'placeholder' => 'Ingrese una opción de respuesta.']) !!}</td>
-                                                    <td width="40px">
-                                                        <div class="btn btn-white btn-primary btn-bold">
-                                                            <a class="green" href="#">
-                                                                <i class='ace-icon fa fa-plus bigger-110 green'></i>
-                                                            </a>
-                                                        </div>
+                                                    <td>{!! Form::text('desc_op_resp_1', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'style' => 'height: 25px;']) !!}</td>
+                                                    <td>{!! Form::text('arg_op_resp_1', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'style' => 'height: 25px;']) !!}</td>
+                                                    <td>
+                                                        <a class="blue" href="#">
+                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
+                                                        </a>
+                                                        <a class="green" href="#">
+                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{!! Form::text(null, 'Opción A', ['class' => 'form-control', 'disabled' => 'true']) !!}</td>
+                                                    <td>{!! Form::text('desc_op_resp_2', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
+                                                    <td>{!! Form::text('arg_op_resp_2', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
                                                     <td>
-                                                        <div class="btn btn-white btn-primary btn-bold">
-                                                            <a class="red" href="#">
-                                                                <i class='ace-icon fa fa-trash-o bigger-110 red'></i>
-                                                            </a>
-                                                        </div>
+                                                        <a class="blue" href="#">
+                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
+                                                        </a>
+                                                        <a class="green" href="#">
+                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{!! Form::text(null, 'Opción B', ['class' => 'form-control', 'disabled' => 'true']) !!}</td>
+                                                    <td>{!! Form::text('desc_op_resp_3', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
+                                                    <td>{!! Form::text('arg_op_resp_3', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
                                                     <td>
-                                                        <div class="btn btn-white btn-primary btn-bold">
-                                                            <a class="red" href="#">
-                                                                <i class='ace-icon fa fa-trash-o bigger-110 red'></i>
-                                                            </a>
-                                                        </div>
+                                                        <a class="blue" href="#">
+                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
+                                                        </a>
+                                                        <a class="green" href="#">
+                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{!! Form::text(null, 'Opción C', ['class' => 'form-control', 'disabled' => 'true']) !!}</td>
+                                                    <td>{!! Form::text('desc_op_resp_4', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
+                                                    <td>{!! Form::text('arg_op_resp_4', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
                                                     <td>
-                                                        <div class="btn btn-white btn-primary btn-bold">
-                                                            <a class="red" href="#">
-                                                                <i class='ace-icon fa fa-trash-o bigger-110 red'></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{!! Form::text(null, '...', ['class' => 'form-control', 'disabled' => 'true']) !!}</td>
-                                                    <td>
-                                                        <div class="btn btn-white btn-primary btn-bold">
-                                                            <a class="red" href="#">
-                                                                <i class='ace-icon fa fa-trash-o bigger-110 red'></i>
-                                                            </a>
-                                                        </div>
+                                                        <a class="blue" href="#">
+                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
+                                                        </a>
+                                                        <a class="green" href="#">
+                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             </table>
