@@ -38,7 +38,6 @@ class ReagentsController extends Controller
             ->with('matters', $matters)
             ->with('mentions', $mentions)
             ->with('filters', $filters);
-
     }
 
     /**
@@ -55,6 +54,7 @@ class ReagentsController extends Controller
         $fields = $this->getFields();
         $formats = $this->getFormats();
         $contents = $this->getContents();
+        $parameters = $this->getReagentParameters();
         return view('reagent.reagents.create')
             ->with('campuses', $campuses)
             ->with('careers', $careers)
@@ -62,7 +62,8 @@ class ReagentsController extends Controller
             ->with('mentions', $mentions)
             ->with('contents', $contents)
             ->with('fields', $fields)
-            ->with('formats', $formats);
+            ->with('formats', $formats)
+            ->with('parameters', $parameters);
     }
 
     /**

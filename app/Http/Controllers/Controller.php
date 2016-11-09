@@ -10,6 +10,7 @@ use ReactivosUPS\CareerCampus;
 use ReactivosUPS\ContentDetail;
 use ReactivosUPS\Field;
 use ReactivosUPS\Mention;
+use ReactivosUPS\ReagentParameter;
 use ReactivosUPS\User;
 use ReactivosUPS\Campus;
 use ReactivosUPS\Career;
@@ -85,5 +86,11 @@ abstract class Controller extends BaseController
         }
         return $career;
     }
+
+    public function getReagentParameters(){
+        $parameters = ReagentParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
+        return $parameters;
+    }
+
 
 }

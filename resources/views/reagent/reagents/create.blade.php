@@ -167,54 +167,57 @@
                                     <div class="col-sm-8">
                                         <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
                                             <table id="opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
-                                                <tr>
-                                                    <td>{!! Form::text('desc_op_resp_1', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>{!! Form::text('arg_op_resp_1', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>
-                                                        <a class="blue" href="#">
-                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
-                                                        </a>
-                                                        <a class="green" href="#">
-                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{!! Form::text('desc_op_resp_2', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>{!! Form::text('arg_op_resp_2', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>
-                                                        <a class="blue" href="#">
-                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
-                                                        </a>
-                                                        <a class="green" href="#">
-                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{!! Form::text('desc_op_resp_3', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>{!! Form::text('arg_op_resp_3', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>
-                                                        <a class="blue" href="#">
-                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
-                                                        </a>
-                                                        <a class="green" href="#">
-                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{!! Form::text('desc_op_resp_4', null, ['class' => 'form-control', 'placeholder' => 'Descripción de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>{!! Form::text('arg_op_resp_4', null, ['class' => 'form-control', 'placeholder' => 'Argumento de respuesta.', 'readonly' => 'readonly', 'style' => 'height: 25px;']) !!}</td>
-                                                    <td>
-                                                        <a class="blue" href="#">
-                                                            <i class="ace-icon fa fa-pencil bigger-150"></i>
-                                                        </a>
-                                                        <a class="green" href="#">
-                                                            <i class="ace-icon fa fa-eraser bigger-150"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                @for ($i = 1; $i <= $parameters->nro_opciones_resp_max; $i++)
+                                                    <tr>
+                                                        <td>
+                                                            {!! Form::text('desc_op_resp_'.$i, null, [
+                                                                    'id' => 'desc_op_resp_'.$i,
+                                                                    'class' => 'form-control',
+                                                                    'placeholder' => 'Descripción de respuesta.',
+                                                                    'style' => 'height: 25px;',
+                                                                    ($i > $parameters->nro_opciones_resp_min) ? 'disabled' : ''
+                                                            ]) !!}
+                                                        </td>
+                                                        <td>
+                                                            {!! Form::text('arg_op_resp_'.$i, null, [
+                                                                    'id' => 'arg_op_resp_'.$i,
+                                                                    'class' => 'form-control',
+                                                                    'placeholder' => 'Argumento de respuesta.',
+                                                                    'style' => 'height: 25px;',
+                                                                     ($i > $parameters->nro_opciones_resp_min) ? 'disabled' : ''
+                                                            ]) !!}
+                                                        </td>
+                                                        <td>
+                                                            <div class="hidden-sm hidden-xs action-buttons">
+                                                                <a class="green" href="#" title="Editar">
+                                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                                </a>
+                                                                <a class="blue" href="#" title="Borrar">
+                                                                    <i class="ace-icon fa fa-eraser bigger-120"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="hidden-md hidden-lg">
+                                                                <div class="inline pos-rel">
+                                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                                        <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                                        <li>
+                                                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Editar">
+                                                                                <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Borrar">
+                                                                                <span class="blue"><i class="ace-icon fa fa-eraser bigger-120"></i></span>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endfor
                                             </table>
                                         </div>
                                     </div>
@@ -275,11 +278,11 @@
                 <div id="actions-bottons" class="wizard-actions">
                     <button class="btn btn-prev">
                         <i class="ace-icon fa fa-arrow-left"></i>
-                        Prev
+                        Anterior
                     </button>
 
                     <button class="btn btn-success btn-next" data-last="Finish">
-                        Next
+                        Siguiente
                         <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                     </button>
                 </div>
