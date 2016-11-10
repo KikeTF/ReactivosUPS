@@ -1,7 +1,7 @@
 @extends('shared.template.index')
 
 @section('titulo', 'Examen')
-@section('subtitulo', 'Editar parametros')
+@section('subtitulo', 'Editar par&aacute;metros')
 
 @section('contenido')
 
@@ -21,22 +21,22 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('nro_preguntas', 'Numero de reguntas:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('nro_preguntas', 'N&uacute;mero de reguntas:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('nro_preguntas', $parameter->nro_preguntas, ['class' => 'form-control', 'placeholder' => 'Ingrese numero de preguntas para examen','required']) !!}
+            {!! Form::text('nro_preguntas', $parameter->nro_preguntas, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de preguntas para examen','required']) !!}
         </div>
     </div>
 
     <div class="form-group">
-        {!! Form::label('duracion_examen', 'Duracion de examen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('duracion_examen', 'Duraci&oacute;n de examen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('duracion_examen', $parameter->duracion_examen, ['class' => 'form-control', 'placeholder' => 'Ingrese duracion del examen']) !!}
+            {!! Form::text('duracion_examen', $parameter->duracion_examen, ['class' => 'form-control', 'placeholder' => 'Ingrese duraci&oacute;n del examen']) !!}
         </div>
     </div>
     <div class="form-group">
-        {!! Form::label('id_examen_act', 'Codigo de examen actual:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('id_examen_act', 'C&oacute;digo de examen actual:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('id_examen_act', $parameter->id_examen_act, ['class' => 'form-control', 'placeholder' => 'Ingrese codigo de examen actual']) !!}
+            {!! Form::text('id_examen_act', $parameter->id_examen_act, ['class' => 'form-control', 'placeholder' => 'Ingrese c&oacute;digo de examen actual']) !!}
         </div>
     </div>
     <div class="form-group">

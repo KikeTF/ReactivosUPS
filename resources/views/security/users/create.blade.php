@@ -23,7 +23,7 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('correo', 'Correo Electronico:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                {!! Form::label('correo', 'Correo Electr&oacute;nico:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                 <div class="col-sm-10">
                     {!! Form::text('correo', null, ['class' => 'form-control', 'placeholder' => 'ejemplo@ups.edu.ec', 'required']) !!}
                 </div>

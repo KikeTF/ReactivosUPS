@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="id_mencion" style="font-size: 12px">Seleccione Menci&oacute;n</label>
+                            <label for="id_mencion" style="font-size: 12px">Seleccione Menci&oacuten</label>
                             <select id="id_mencion" name="id_mencion" class="form-control">
                                 @foreach($mentions as $mention)
                                     <option value="{{ $mention->id }}" {{ $mention->id == $filters[2] ? 'selected="selected"' : '' }}>{{ $mention->descripcion }}</option>
@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="id_area" style="font-size: 12px">Seleccione Area</label>
+                            <label for="id_area" style="font-size: 12px">Seleccione &Aacute;rea</label>
                             <select id="id_area" name="id_area" class="form-control">
                                 <option value="0">-- Todas las Areas --</option>
                                 @foreach($areas as $area)

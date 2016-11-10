@@ -26,15 +26,15 @@
                 <td colspan="3">{{ $parameter->id }}</td>
             </tr>
             <tr>
-                <td><strong>Numero de preguntas:</strong></td>
+                <td><strong>N&uacute;mero de preguntas:</strong></td>
                 <td colspan="3">{{ $parameter->nro_preguntas }}</td>
             </tr>
             <tr>
-                <td><strong>Duracion de examen:</strong></td>
+                <td><strong>Duraci&oacute;n de examen:</strong></td>
                 <td colspan="3">{{ $parameter->duracion_examen }}</td>
             </tr>
             <tr>
-                <td><strong>Codigo de examen actual:</strong></td>
+                <td><strong>C&oacute;digo de examen actual:</strong></td>
                 <td colspan="3">{{ $parameter->id_examen_act }}</td>
             </tr>
             <tr>

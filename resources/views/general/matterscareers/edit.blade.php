@@ -36,14 +36,14 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('desc_mencion', 'Mencion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('desc_mencion', 'Menci&oacute;n:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
             {!! Form::text('desc_mencion', $mattercareer->desc_mencion, ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 
     <div class="form-group">
-        {!! Form::label('desc_area', 'Area:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('desc_area', '&Aacute;rea:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
             {!! Form::text('desc_area', $mattercareer->desc_area, ['class' => 'form-control', 'readonly']) !!}
         </div>

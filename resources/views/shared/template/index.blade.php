@@ -170,7 +170,7 @@
                     <a href="/">
                         <i class="menu-icon fa fa-home home-icon"></i>
 
-                        <span class="menu-text"> Home </span>
+                        <span class="menu-text"> Inicio </span>
                     </a>
 
                     <b class="arrow"></b>

@@ -1,7 +1,7 @@
 @extends('shared.template.index')
 
 @section('titulo', 'General')
-@section('subtitulo', 'Detalle de parametros de materia')
+@section('subtitulo', 'Detalle de par&aacute;metros de materia')
 
 @section('contenido')
 
@@ -22,7 +22,7 @@
 
         <table class="table table-hover">
             <tr>
-                <td><strong>Código:</strong></td>
+                <td><strong>C&oacute;digo:</strong></td>
                 <td colspan="3">{{ $mattercareer->id }}</td>
             </tr>
             <tr>
@@ -34,11 +34,11 @@
                 <td colspan="3">{{ $mattercareer->desc_carrera }}</td>
             </tr>
             <tr>
-                <td><strong>Mencion:</strong></td>
+                <td><strong>Menci&oacute;n:</strong></td>
                 <td colspan="3">{{ $mattercareer->desc_mencion }}</td>
             </tr>
             <tr>
-                <td><strong>Area:</strong></td>
+                <td><strong>&Aacute;rea:</strong></td>
                 <td colspan="3">{{ $mattercareer->desc_area }}</td>
             </tr>
             <tr>

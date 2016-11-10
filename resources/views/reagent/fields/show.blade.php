@@ -30,7 +30,7 @@
                 <td colspan="3">{{ $field->nombre }}</td>
             </tr>
             <tr>
-                <td><strong>Descripción:</strong></td>
+                <td><strong>Descripci&oacute;n:</strong></td>
                 <td colspan="3">{{ $field->descripcion }}</td>
             </tr>
             <tr>

@@ -16,7 +16,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Descripción</th>
+                    <th>Descripci&oacute;n</th>
                     <th>Estado</th>
                     <th></th>
                 </tr>

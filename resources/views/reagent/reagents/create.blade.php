@@ -31,7 +31,7 @@
 
     <div class="widget-box">
         <div class="widget-header widget-header-blue widget-header-flat">
-            <h4 class="widget-title lighter">Pasos para la creaci&oacute;n de ractivos</h4>
+            <h4 class="widget-title lighter">Pasos para la creaci&oacute;n de reactivos</h4>
         </div>
 
         <div class="widget-body">
@@ -65,7 +65,7 @@
 
                     <div class="step-content pos-rel">
                         <div class="step-pane active" data-step="1">
-                            <h3 class="lighter block green">Enter the following information</h3>
+                            <h3 class="lighter block green">Ingrese la siguiente informaci&oacute;n</h3>
                             <div>
                                 <div class="form-group">
                                     {!! Form::label('id_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
@@ -250,14 +250,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('descripcion', 'Operacion Cognitiva:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                    {!! Form::label('descripcion', 'Operaci&oacute;n Cognitiva:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
                                         {!! Form::textarea('descripcion', null, ['class' => 'form-control', 'size' => '100%x5'])!!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('referencia', 'Referencia Bibliográfica:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                    {!! Form::label('referencia', 'Referencia Bibliogr&aacute;fica:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
                                         {!! Form::textarea('referencia', null, ['class' => 'form-control', 'size' => '100%x5'])!!}
                                     </div>
@@ -267,8 +267,8 @@
 
                         <div class="step-pane" data-step="4">
                             <div class="center">
-                                <h3 class="green">Congrats!</h3>
-                                Your product is ready to ship! Click finish to continue!
+                                <h3 class="green">Registro Exitoso!</h3>
+                                De clic en finalizar para solicitar la aprobaci&oacute;n
                             </div>
                         </div>
                     </div>
@@ -281,7 +281,7 @@
                         Anterior
                     </button>
 
-                    <button class="btn btn-success btn-next" data-last="Finish">
+                    <button class="btn btn-success btn-next" data-last="Finalizar">
                         Siguiente
                         <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                     </button>
