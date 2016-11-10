@@ -14,19 +14,19 @@ class MatterCareer extends Model
                         "estado", "creado_por", "fecha_creacion", "modificado_por", "fecha_modificacion"];
 
     public function careerCampus(){
-        return $this->belongsTo('ReactivosUPS\CareerCampus');
+        return $this->belongsTo('ReactivosUPS\CareerCampus', 'id_carrera_campus');
     }
 
     public function matter(){
-        return $this->belongsTo('ReactivosUPS\Matter');
+        return $this->belongsTo('ReactivosUPS\Matter', 'id_materia');
     }
 
     public function area(){
-        return $this->belongsTo('ReactivosUPS\Area');
+        return $this->belongsTo('ReactivosUPS\Area', 'id_area');
     }
 
     public function mention(){
-        return $this->belongsTo('ReactivosUPS\Mention');
+        return $this->belongsTo('ReactivosUPS\Mention', 'id_mencion');
     }
 
     public function contentsHeaders(){

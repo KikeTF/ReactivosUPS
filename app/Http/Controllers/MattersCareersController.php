@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\Matter;
+use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
 use Datatables;
 
@@ -59,6 +61,21 @@ class MattersCareersController extends Controller
             $mattersCareers = MatterCareer::filter2($id_careerCampus, $id_mencion)->where('estado', '!=', 'E');
 
         return Datatables::of($mattersCareers)
+            ->addColumn('id_materia', function ($matterCareer) {
+                return Matter::find($matterCareer->id_materia)->descripcion;
+            })
+            ->addColumn('aplica_examen', function ($matterCareer) {
+                if($matterCareer->aplica_examen == 'S')
+                    $aplica = '<a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                                    <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                                </a>';
+                else
+                    $aplica = '<a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                                    <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                                </a>';
+
+                return $aplica;
+            })
             ->addColumn('estado', function ($matterCareer) {
                 if($matterCareer->estado == 'I')
                     $estado = 'Inactivo';
@@ -116,7 +133,7 @@ class MattersCareersController extends Controller
      */
     public function create()
     {
-        //
+        dd("No disponible!");
     }
 
     /**
@@ -127,7 +144,7 @@ class MattersCareersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd("No disponible!");
     }
 
     /**
@@ -138,7 +155,19 @@ class MattersCareersController extends Controller
      */
     public function show($id)
     {
-        //
+        $mattercareer = MatterCareer::find($id);
+        $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
+        $mattercareer->desc_carrera = Matter::find($mattercareer->careerCampus->id_carrera)->descripcion;
+        $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
+        $mattercareer->desc_area = $mattercareer->area->descripcion;
+        $mattercareer->desc_materia = $mattercareer->matter->descripcion;
+        $mattercareer->usr_responsable = $this->getUserName($mattercareer->id_usr_responsable);
+        $mattercareer->estado = ($mattercareer->estado == 'A') ? 'Activo' : 'Inactivo';
+        $mattercareer->aplica_examen = ($mattercareer->aplica_examen == 'S') ? 'Si' : 'No';
+        $mattercareer->creado_por = $this->getUserName($mattercareer->creado_por);
+        $mattercareer->modificado_por = $this->getUserName($mattercareer->modificado_por);
+
+        return view('general.matterscareers.show')->with('mattercareer', $mattercareer);
     }
 
     /**
@@ -149,7 +178,14 @@ class MattersCareersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $mattercareer = MatterCareer::find($id);
+        $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
+        $mattercareer->desc_carrera = Matter::find($mattercareer->careerCampus->id_carrera)->descripcion;
+        $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
+        $mattercareer->desc_area = $mattercareer->area->descripcion;
+        $mattercareer->desc_materia = $mattercareer->matter->descripcion;
+
+        return view('general.matterscareers.edit')->with('mattercareer', $mattercareer);
     }
 
     /**
@@ -161,7 +197,17 @@ class MattersCareersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $matterCareer = MatterCareer::find($id);
+
+        $matterCareer->nro_reactivos_mat = $request->nro_reactivos_mat;
+        $matterCareer->nro_reactivos_exam = $request->nro_reactivos_exam;
+        $matterCareer->aplica_examen = !isset( $request['aplica_examen'] ) ? 'N' : 'S';
+        $matterCareer->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+        $matterCareer->modificado_por = \Auth::id();
+        $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
+        $matterCareer->save();
+
+        return redirect()->route('general.matterscareers.index');
     }
 
     /**
@@ -172,6 +218,13 @@ class MattersCareersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $matterCareer = MatterCareer::find($id);
+
+        $matterCareer->estado = 'E';
+        $matterCareer->modificado_por = \Auth::id();
+        $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
+        $matterCareer->save();
+
+        return redirect()->route('reagent.formats.index');
     }
 }

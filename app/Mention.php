@@ -16,7 +16,7 @@ class Mention extends Model
     }
 
     public function mattersCareers(){
-        return $this->hasMany('ReactivosUPS\MatterCareer');
+        return $this->hasMany('ReactivosUPS\MatterCareer', 'id_mencion');
     }
 
     public function ExamsHeaders(){

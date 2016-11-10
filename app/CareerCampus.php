@@ -12,14 +12,14 @@ class CareerCampus extends Model
     protected $fillable =["id_carrera", "id_campus", "id_usr_responsable", "estado"];
 
     public function career(){
-        return $this->belongsTo('ReactivosUPS\Career');
+        return $this->belongsTo('ReactivosUPS\Career', 'id_carrera');
     }
 
     public function campus(){
-        return $this->belongsTo('ReactivosUPS\Campus');
+        return $this->belongsTo('ReactivosUPS\Campus', 'id_campus');
     }
 
     public function mattersCareers(){
-        return $this->hasMany('ReactivosUPS\MatterCareer');
+        return $this->hasMany('ReactivosUPS\MatterCareer', 'id_carrera_campus');
     }
 }

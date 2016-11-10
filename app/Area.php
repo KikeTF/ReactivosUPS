@@ -12,6 +12,6 @@ class Area extends Model
     protected $fillable =["cod_area", "descripcion", "estado"];
 
     public function mattersCareers(){
-        return $this->hasMany('ReactivosUPS\MatterCareer');
+        return $this->hasMany('ReactivosUPS\MatterCareer', 'id_area');
     }
 }
