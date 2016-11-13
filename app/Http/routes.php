@@ -85,6 +85,13 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
         'as'    => 'reagent.reagents.destroy'
     ]);
 
+    Route::get('reagents/data', [
+        'uses'  => 'ReagentsApprovalsController@data',
+        'as'    => 'reagent.approvals.data'
+    ]);
+
+    Route::resource('approvals','ReagentsApprovalsController');
+
 });
 
 Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
@@ -118,3 +125,4 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
     Route::resource('parameters','ExamParametersController');
 
 });
+

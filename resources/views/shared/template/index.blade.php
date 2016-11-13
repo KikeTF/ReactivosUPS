@@ -264,6 +264,14 @@
 
                             <b class="arrow"></b>
                         </li>
+                        <li class="">
+                            <a href="{{ route('reagent.approvals.index') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Revisi&oacute;n y Aprobaciones
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
                     </ul>
                 </li>
 

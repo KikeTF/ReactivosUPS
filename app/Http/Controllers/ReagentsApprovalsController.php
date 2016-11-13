@@ -6,15 +6,13 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\Matter;
+use ReactivosUPS\Campus;
+use ReactivosUPS\MatterCareer;
+use Datatables;
 
-
-class ReagentsController extends Controller
+class ReagentsApprovalsController extends Controller
 {
-    var $filterCampus = 0;
-    var $filterCareer = 0;
-    var $filterMention = 0;
-    var $filterMatter = 0;
-
     /**
      * Display a listing of the resource.
      *
@@ -22,21 +20,21 @@ class ReagentsController extends Controller
      */
     public function index(Request $request)
     {
-        if( isset( $request['id_campus'] ) ){
-            $this->filterCampus = (int)$request->id_campus;
-            $this->filterCareer = (int)$request->id_carrera;
-            $this->filterMention = (int)$request->id_mencion;
-            $this->filterMatter = (int)$request->id_materia;
-        }
+        $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+        $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+        $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+        $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+
         $campuses = $this->getCampuses();
         $careers = $this->getCareers();
+        $areas = $this->getAreas();
         $mentions = $this->getMentions();
-        $matters = $this->getMatters();
-        $filters = array($this->filterCampus, $this->filterCareer, $this->filterMention, $this->filterMatter);
-        return view('reagent.reagents.index')
+        $filters = array($id_campus, $id_carrera, $id_mencion, $id_area);
+
+        return view('reagent.approvals.index')
             ->with('campuses', $campuses)
             ->with('careers', $careers)
-            ->with('matters', $matters)
+            ->with('areas', $areas)
             ->with('mentions', $mentions)
             ->with('filters', $filters);
     }
@@ -48,23 +46,7 @@ class ReagentsController extends Controller
      */
     public function create()
     {
-        $campuses = $this->getCampuses();
-        $careers = $this->getCareers();
-        $mentions = $this->getMentions();
-        $matters = $this->getMatters();
-        $fields = $this->getFields();
-        $formats = $this->getFormats();
-        $contents = $this->getContents();
-        $parameters = $this->getReagentParameters();
-        return view('reagent.reagents.create')
-            ->with('campuses', $campuses)
-            ->with('careers', $careers)
-            ->with('matters', $matters)
-            ->with('mentions', $mentions)
-            ->with('contents', $contents)
-            ->with('fields', $fields)
-            ->with('formats', $formats)
-            ->with('parameters', $parameters);
+        //
     }
 
     /**
@@ -97,7 +79,7 @@ class ReagentsController extends Controller
      */
     public function edit($id)
     {
-
+        //
     }
 
     /**
