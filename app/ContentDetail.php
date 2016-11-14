@@ -16,6 +16,6 @@ class ContentDetail extends Model
     }
 
     public function reagents(){
-        return $this->hasMany('ReactivosUPS\Reagent');
+        return $this->hasMany('ReactivosUPS\Reagent', 'id_contenido_det');
     }
 }

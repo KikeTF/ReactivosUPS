@@ -23,18 +23,18 @@ class ReagentsApprovalsController extends Controller
         $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
         $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
         $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
-        $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+        $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
 
         $campuses = $this->getCampuses();
         $careers = $this->getCareers();
-        $areas = $this->getAreas();
+        $matters = $this->getMatters();
         $mentions = $this->getMentions();
-        $filters = array($id_campus, $id_carrera, $id_mencion, $id_area);
+        $filters = array($id_campus, $id_carrera, $id_mencion, $id_materia);
 
         return view('reagent.approvals.index')
             ->with('campuses', $campuses)
             ->with('careers', $careers)
-            ->with('areas', $areas)
+            ->with('matters', $matters)
             ->with('mentions', $mentions)
             ->with('filters', $filters);
     }

@@ -145,13 +145,6 @@
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
-                                        {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5'])!!}
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
                                     {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
                                         <select id="id_formato" name="id_formato" class="form-control">
@@ -161,6 +154,15 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                    <div class="col-sm-8">
+                                        {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5'])!!}
+                                    </div>
+                                </div>
+
+
 
                                 <div class="form-group">
                                     {!! Form::label('id_opcion_resp', 'Opciones de Respuesta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
@@ -268,7 +270,7 @@
                         <div class="step-pane" data-step="4">
                             <div class="center">
                                 <h3 class="green">Registro Exitoso!</h3>
-                                De clic en finalizar para solicitar la aprobaci&oacute;n
+                                De clic en finalizar para solicitar aprobaci&oacute;n
                             </div>
                         </div>
                     </div>

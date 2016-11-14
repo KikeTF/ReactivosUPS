@@ -24,6 +24,6 @@ class Distributive extends Model
     }
 
     public function reagents(){
-        return $this->hasMany('ReactivosUPS\Reagent');
+        return $this->hasMany('ReactivosUPS\Reagent', 'id_distributivo');
     }
 }

@@ -59,11 +59,10 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="id_area" style="font-size: 12px">Seleccione &Aacute;rea</label>
-                            <select id="id_area" name="id_area" class="form-control">
-                                <option value="0">-- Todas las Areas --</option>
-                                @foreach($areas as $area)
-                                    <option value="{{ $area->id }}" {{ $area->id == $filters[3] ? 'selected="selected"' : '' }}>{{ $area->descripcion }}</option>
+                            <label for="id_materia" style="font-size: 12px">Seleccione Materia</label>
+                            <select id="id_materia" name="id_materia" class="form-control">
+                                @foreach($matters as $matter)
+                                    <option value="{{ $matter->id }}" {{ $matter->id == $filters[3] ? 'selected="selected"' : '' }}>{{ $matter->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>

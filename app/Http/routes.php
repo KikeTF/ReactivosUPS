@@ -85,7 +85,7 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
         'as'    => 'reagent.reagents.destroy'
     ]);
 
-    Route::get('reagents/data', [
+    Route::get('approvals/data', [
         'uses'  => 'ReagentsApprovalsController@data',
         'as'    => 'reagent.approvals.data'
     ]);

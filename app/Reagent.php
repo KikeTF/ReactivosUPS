@@ -13,19 +13,19 @@ class Reagent extends Model
         "pregunta_opciones", "id_opcion_correcta", "dificultad", "puntaje", "referencia", "estado"];
 
     public function distributive(){
-        return $this->belongsTo('ReactivosUPS\Distributive');
+        return $this->belongsTo('ReactivosUPS\Distributive', 'id_distributivo');
     }
 
     public function contentDetail(){
-        return $this->belongsTo('ReactivosUPS\ContentDetail');
+        return $this->belongsTo('ReactivosUPS\ContentDetail', 'id_contenido_det');
     }
 
     public function format(){
-        return $this->belongsTo('ReactivosUPS\Format');
+        return $this->belongsTo('ReactivosUPS\Format', 'id_formato');
     }
 
     public function campus(){
-        return $this->belongsTo('ReactivosUPS\Campus');
+        return $this->belongsTo('ReactivosUPS\Campus', 'id_campo');
     }
 
     public function reagentsQuestions(){
