@@ -1,3 +1,23 @@
+
+function activa_op_resp(id) {
+    $("#activa_op_resp_"+id).attr("hidden", true);
+    $("#desactiva_op_resp_"+id).attr("hidden", false);
+    $("#id_opcion_correcta_"+id).attr("disabled", false);
+    $("#desc_op_resp_"+id).attr("disabled", false);
+    $("#arg_op_resp_"+id).attr("disabled", false);
+
+}
+
+function desactiva_op_resp(id) {
+    $("#desactiva_op_resp_"+id).attr("hidden", true);
+    $("#activa_op_resp_"+id).attr("hidden", false)
+    $("#desc_op_resp_"+id).val("");
+    $("#arg_op_resp_"+id).val("");
+    $("#id_opcion_correcta_"+id).attr("disabled", true);
+    $("#desc_op_resp_"+id).attr("disabled", true);
+    $("#arg_op_resp_"+id).attr("disabled", true);
+}
+
 jQuery(function($) {
 
     $('[data-rel=tooltip]').tooltip();

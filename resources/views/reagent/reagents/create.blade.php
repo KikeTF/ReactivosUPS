@@ -65,7 +65,6 @@
 
                     <div class="step-content pos-rel">
                         <div class="step-pane active" data-step="1">
-                            <h3 class="lighter block green">Ingrese la siguiente informaci&oacute;n</h3>
                             <div>
                                 <div class="form-group">
                                     {!! Form::label('id_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
@@ -111,23 +110,6 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    {!! Form::label('nivel', 'Nivel:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
-                                        {!! Form::text('nivel', null, ['class' => 'form-control', 'placeholder' => 'Descripción']) !!}
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    {!! Form::label('estado', '¿Activo?', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
-                                        <div class="checkbox">
-                                            <label>
-                                                {!! Form::checkbox('estado', 'A', true) !!}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -172,6 +154,9 @@
                                                 @for ($i = 1; $i <= $parameters->nro_opciones_resp_max; $i++)
                                                     <tr>
                                                         <td>
+                                                            <input type="radio" name="id_opcion_correcta" id="id_opcion_correcta_{{ $i }}" value="{{ $i }}" {{($i == 1) ? 'checked' : ''}} {{($i > $parameters->nro_opciones_resp_min) ? 'disabled' : ''}}>
+                                                        </td>
+                                                        <td>
                                                             {!! Form::text('desc_op_resp_'.$i, null, [
                                                                     'id' => 'desc_op_resp_'.$i,
                                                                     'class' => 'form-control',
@@ -190,33 +175,20 @@
                                                             ]) !!}
                                                         </td>
                                                         <td>
-                                                            <div class="hidden-sm hidden-xs action-buttons">
-                                                                <a class="green" href="#" title="Editar">
-                                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                                </a>
-                                                                <a class="blue" href="#" title="Borrar">
-                                                                    <i class="ace-icon fa fa-eraser bigger-120"></i>
-                                                                </a>
-                                                            </div>
-                                                            <div class="hidden-md hidden-lg">
-                                                                <div class="inline pos-rel">
-                                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                                                        <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                                        <li>
-                                                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Editar">
-                                                                                <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Borrar">
-                                                                                <span class="blue"><i class="ace-icon fa fa-eraser bigger-120"></i></span>
-                                                                            </a>
-                                                                        </li>
-                                                                    </ul>
+                                                            @if($i > $parameters->nro_opciones_resp_min)
+                                                            <div class="action-buttons">
+                                                                <div id="activa_op_resp_{{ $i }}">
+                                                                    <a class="green" onclick="activa_op_resp({{ $i }})" title="Activar">
+                                                                        <i class="ace-icon fa fa-check bigger-120"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div id="desactiva_op_resp_{{ $i }}" hidden>
+                                                                    <a class="red" onclick="desactiva_op_resp({{ $i }})" title="Desactivar">
+                                                                        <i class="ace-icon fa fa-times bigger-120"></i>
+                                                                    </a>
                                                                 </div>
                                                             </div>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endfor

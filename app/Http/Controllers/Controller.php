@@ -2,20 +2,25 @@
 
 namespace ReactivosUPS\Http\Controllers;
 
+use Session;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use ReactivosUPS\Area;
 use ReactivosUPS\CareerCampus;
 use ReactivosUPS\ContentDetail;
+use ReactivosUPS\Distributive;
 use ReactivosUPS\Field;
+use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Mention;
+use ReactivosUPS\ProfileUser;
 use ReactivosUPS\ReagentParameter;
 use ReactivosUPS\User;
 use ReactivosUPS\Campus;
 use ReactivosUPS\Career;
 use ReactivosUPS\Matter;
 use ReactivosUPS\Format;
+
 
 
 abstract class Controller extends BaseController
@@ -76,6 +81,40 @@ abstract class Controller extends BaseController
     public function getCareersCampuses(){
         $careersCampuses = CareerCampus::query()->where('estado','A')->orderBy('id', 'asc')->get();
         return $careersCampuses;
+    }
+
+    public function getMattersCareers(){
+        $mattersCareers = MatterCareer::query()->where('estado','A')->orderBy('id', 'asc')->get();
+        return $mattersCareers;
+    }
+
+    public function getProfilesUsers(){
+        $profilesUsers = ProfileUser::query()->where('estado','A')->orderBy('id', 'asc')->get();
+        return $profilesUsers;
+    }
+
+    public function getDistributive($id_materia, $id_carrera, $id_campus){
+        $id_profileUser = (int)Session::get('id_perfil_usuario');
+        $id_periodLocation = (int)Session::get('id_periodo_sede');
+
+        $id_careerCampus = $this->getCareersCampuses()
+            ->where('id_carrera', $id_carrera)
+            ->where('id_campus', $id_campus)
+            ->first()->id;
+
+        $id_matterCareer = $this->getMattersCareers()
+            ->where('id_materia', $id_materia)
+            ->where('id_carrera_campus', $id_careerCampus)
+            ->first()->id;
+
+        $distributives = Distributive::query()->where('estado','A')->orderBy('id', 'asc')->get();
+        $distributive = $distributives
+            ->where('id_periodo_sede', $id_periodLocation)
+            ->where('id_materia_carrera', $id_matterCareer)
+            ->where('id_perfil_usuario', $id_profileUser)
+            ->first();
+
+        return $distributive;
     }
 
     public function getCareersByCampus($id_campus){

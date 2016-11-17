@@ -39,4 +39,9 @@ class Reagent extends Model
     public function ExamsDetails(){
         return $this->hasMany('ReactivosUPS\ExamDetail');
     }
+
+    public function scopeFilter($query, $id_distributivo){
+        return $query
+            ->where('id_distributivo', $id_distributivo);
+    }
 }

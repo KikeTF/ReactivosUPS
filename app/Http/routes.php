@@ -49,21 +49,11 @@ Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 
-    Route::get('fields/data', [
-        'uses'  => 'FieldsController@data',
-        'as'    => 'reagent.fields.data'
-    ]);
-
     Route::resource('fields','FieldsController');
 
     Route::get('fields/{id}/destroy', [
         'uses'  => 'FieldsController@destroy',
         'as'    => 'reagent.fields.destroy'
-    ]);
-
-    Route::get('formats/data', [
-        'uses'  => 'FormatsController@data',
-        'as'    => 'reagent.formats.data'
     ]);
 
     Route::resource('formats','FormatsController');
@@ -73,21 +63,11 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
         'as'    => 'reagent.formats.destroy'
     ]);
 
-    Route::get('reagents/data', [
-        'uses'  => 'ReagentsController@data',
-        'as'    => 'reagent.reagents.data'
-    ]);
-
     Route::resource('reagents','ReagentsController');
 
     Route::get('reagents/{id}/destroy', [
         'uses'  => 'ReagentsController@destroy',
         'as'    => 'reagent.reagents.destroy'
-    ]);
-
-    Route::get('approvals/data', [
-        'uses'  => 'ReagentsApprovalsController@data',
-        'as'    => 'reagent.approvals.data'
     ]);
 
     Route::resource('approvals','ReagentsApprovalsController');
@@ -96,14 +76,9 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
 
-    Route::get('matterscareers/data', [
+    Route::post('matterscareers/data', [
         'uses'  => 'MattersCareersController@data',
         'as'    => 'general.matterscareers.data'
-    ]);
-
-    Route::post('matterscareers/filter', [
-        'uses'  => 'MattersCareersController@filter',
-        'as'    => 'general.matterscareers.filter'
     ]);
 
     Route::resource('matterscareers','MattersCareersController');
@@ -115,11 +90,6 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
     Route::get('parameters/history', [
         'uses'  => 'ExamParametersController@history',
         'as'    => 'exam.parameters.history'
-    ]);
-
-    Route::get('parameters/data', [
-        'uses'  => 'ExamParametersController@data',
-        'as'    => 'exam.parameters.data'
     ]);
 
     Route::resource('parameters','ExamParametersController');

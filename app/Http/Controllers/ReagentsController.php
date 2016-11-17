@@ -6,16 +6,14 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
+use ReactivosUPS\ReagentAnswer;
+use Session;
 
 
 class ReagentsController extends Controller
 {
-    var $filterCampus = 0;
-    var $filterCareer = 0;
-    var $filterMention = 0;
-    var $filterMatter = 0;
-
     /**
      * Display a listing of the resource.
      *
@@ -23,18 +21,21 @@ class ReagentsController extends Controller
      */
     public function index(Request $request)
     {
-        if( isset( $request['id_campus'] ) ){
-            $this->filterCampus = (int)$request->id_campus;
-            $this->filterCareer = (int)$request->id_carrera;
-            $this->filterMention = (int)$request->id_mencion;
-            $this->filterMatter = (int)$request->id_materia;
-        }
+        $id_campus = (int)$request->id_campus;
+        $id_carrera = (int)$request->id_carrera;
+        $id_mencion = (int)$request->id_mencion;
+        $id_materia = (int)$request->id_materia;
+
         $campuses = $this->getCampuses();
         $careers = $this->getCareers();
         $mentions = $this->getMentions();
         $matters = $this->getMatters();
-        $filters = array($this->filterCampus, $this->filterCareer, $this->filterMention, $this->filterMatter);
+
+        $filters = array($id_campus, $id_carrera, $id_mencion, $id_materia);
+        $reagents = Reagent::query()->get();
+
         return view('reagent.reagents.index')
+            ->with('reagents', $reagents)
             ->with('campuses', $campuses)
             ->with('careers', $careers)
             ->with('matters', $matters)
@@ -42,6 +43,62 @@ class ReagentsController extends Controller
             ->with('filters', $filters);
     }
 
+    public function data(Request $request)
+    {
+        $id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
+
+        $reagents = Reagent::filter($id_distributivo)->where('estado', '!=', 'E');
+
+        return Datatables::of($reagents)
+            ->addColumn('estado', function ($reagent) {
+                if($matterCareer->estado == 'I')
+                    $estado = 'Inactivo';
+                elseif ($matterCareer->estado == 'A')
+                    $estado = 'Activo';
+                else
+                    $estado = '';
+
+                return $estado;
+            })
+            ->addColumn('action', function ($reagent) {
+                return '<div class="hidden-sm hidden-xs action-buttons">
+                            <a class="blue" href="'.route('reagent.reagents.show', $reagent->id).'">
+                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                            </a>
+                            <a class="green" href="'.route('reagent.reagents.edit', $reagent->id).'">
+                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                            </a>
+                            <a class="red" href="'.route('reagent.reagents.destroy', $reagent->id).'">
+                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                            </a>
+                        </div>
+                        <div class="hidden-md hidden-lg">
+                            <div class="inline pos-rel">
+                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                    <li>
+                                        <a href="'.route('reagent.reagents.show', $reagent->id).'" class="tooltip-info" data-rel="tooltip" title="View">
+                                            <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="'.route('reagent.reagents.edit', $reagent->id).'" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                            <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="'.route('reagent.reagents.destroy', $reagent->id).'" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                            <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>';
+            })
+            ->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -76,17 +133,6 @@ class ReagentsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
-
-        $id_campus = (int)$request->id_campus;
-        $id_carrera = (int)$request->id_carrera;
-        $id_mencion = (int)$request->id_mencion;
-        $id_materia = (int)$request->id_materia;
-
-        $request->id_contenido_det;
-        $request->id_formato;
-        $request->planteamiento;
-
         /*
         $request->desc_op_resp_1;
         $request->arg_op_resp_1;
@@ -97,31 +143,45 @@ class ReagentsController extends Controller
         $request->desc_op_resp_4;
         $request->arg_op_resp_4;
         */
-        /*
+
+        $parameters = $this->getReagentParameters();
+        $answers = array();
+
+        for($i = 1; $i <= $parameters->nro_opciones_resp_max; $i++){
+            if( isset( $request['desc_op_resp_'.$i] ) ){
+                $answer['id_opcion_resp'] = $i;
+                $answer['descripcion'] = $request->input('desc_op_resp_'.$i);
+                $answer['argumento'] = $request->input('arg_op_resp_'.$i);
+                $answer['estado'] = 'A';
+                $answer['creado_por'] = \Auth::id();
+                $answer['fecha_creacion'] = date('Y-m-d h:i:s');
+                $answers[] = new ReagentAnswer($answer);
+            }
+            //id
+            //id_reactivo,
+        }
+
         $reagent = new Reagent($request->all());
 
-        $reagent->id_distributivo = 1;
+        $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
 
-        //$reagent->id_contenido_det = 1;
-        //$reagent->id_formato = 1;
-        //$reagent->id_campo = 1;
-        //$reagent->descripcion = "Prueba";
         //$reagent->planteamiento= "Prueba";
         //$reagent->pregunta_opciones= "Prueba";
         $reagent->id_opcion_correcta= 1;
-        //$reagent->dificultad= "B";
         //$reagent->puntaje = 9 ;
         //$reagent->referencia= "Prueba";
 
         $reagent->estado = !isset( $request['estado'] ) ? "I" : "A";
         $reagent->creado_por = \Auth::id();
         $reagent->fecha_creacion = date('Y-m-d h:i:s');
+        $reagent->reagentsAnswers($answers);
 
-        $reagent->save();
+        dd($reagent);
+
+        //$reagent->save();
 
         return redirect()->route('reagent.reagents.index');
 
-        */
     }
 
     /**

@@ -6,9 +6,8 @@
 @section('contenido')
     <?php
     $usetable = 1;
-    $dataurl = route('reagent.reagents.data');
     $newurl = route('reagent.reagents.create');
-    $columnas = array("id","capitulo", "tema", "planteamiento", "estado");
+    $columnas = array("id",  "planteamiento", "estado"); // "capitulo", "tema",
     ?>
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.index','method' => 'GET']) !!}
@@ -88,13 +87,23 @@
             <thead>
             <tr>
                 <th>C&oacute;digo</th>
-                <th>Cap&iacute;tulo</th>
-                <th>Tema</th>
+                {{--<th>Cap&iacute;tulo</th>
+                <th>Tema</th>--}}
                 <th>Planteamiento</th>
                 <th>Estado</th>
                 <th></th>
             </tr>
             </thead>
+            <tbody>
+                @foreach($reagents as $reagent)
+                    <tr>
+                        <td>{{ $reagent->id }}</td>
+                        <td>{{ $reagent->planteamiento }}</td>
+                        <td>{{ $reagent->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                        <td></td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
     </div>
 @endsection

@@ -3,6 +3,7 @@
 namespace ReactivosUPS\Http\Controllers\Auth;
 
 use Auth;
+use Session;
 use ReactivosUPS\User;
 use Validator;
 use ReactivosUPS\Http\Controllers\Controller;
@@ -54,6 +55,11 @@ class AuthController extends Controller
         if (Auth::attempt(['username' => $username, 'password' => $password], $rememberMe)) {
             $valid = true;
             $errMessage = "";
+            Session::put('id_sede', 1);
+            Session::put('id_periodo', 1);
+            Session::put('id_periodo_sede', 1);
+            Session::put('id_perfil', 1);
+            Session::put('id_perfil_usuario', 1);
         }
 
         $result = array("valid"=>$valid, "message"=>$errMessage);
