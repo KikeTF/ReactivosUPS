@@ -43,62 +43,6 @@ class ReagentsController extends Controller
             ->with('filters', $filters);
     }
 
-    public function data(Request $request)
-    {
-        $id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
-
-        $reagents = Reagent::filter($id_distributivo)->where('estado', '!=', 'E');
-
-        return Datatables::of($reagents)
-            ->addColumn('estado', function ($reagent) {
-                if($matterCareer->estado == 'I')
-                    $estado = 'Inactivo';
-                elseif ($matterCareer->estado == 'A')
-                    $estado = 'Activo';
-                else
-                    $estado = '';
-
-                return $estado;
-            })
-            ->addColumn('action', function ($reagent) {
-                return '<div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="'.route('reagent.reagents.show', $reagent->id).'">
-                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                            </a>
-                            <a class="green" href="'.route('reagent.reagents.edit', $reagent->id).'">
-                                <i class="ace-icon fa fa-pencil bigger-130"></i>
-                            </a>
-                            <a class="red" href="'.route('reagent.reagents.destroy', $reagent->id).'">
-                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                            </a>
-                        </div>
-                        <div class="hidden-md hidden-lg">
-                            <div class="inline pos-rel">
-                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                    <li>
-                                        <a href="'.route('reagent.reagents.show', $reagent->id).'" class="tooltip-info" data-rel="tooltip" title="View">
-                                            <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="'.route('reagent.reagents.edit', $reagent->id).'" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                            <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="'.route('reagent.reagents.destroy', $reagent->id).'" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                            <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>';
-            })
-            ->make(true);
-    }
     /**
      * Show the form for creating a new resource.
      *
@@ -176,7 +120,7 @@ class ReagentsController extends Controller
         $reagent->fecha_creacion = date('Y-m-d h:i:s');
         $reagent->reagentsAnswers($answers);
 
-        dd($reagent);
+        //dd($reagent);
 
         //$reagent->save();
 

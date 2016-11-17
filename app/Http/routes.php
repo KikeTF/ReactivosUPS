@@ -76,11 +76,6 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
 
-    Route::post('matterscareers/data', [
-        'uses'  => 'MattersCareersController@data',
-        'as'    => 'general.matterscareers.data'
-    ]);
-
     Route::resource('matterscareers','MattersCareersController');
 
 });
