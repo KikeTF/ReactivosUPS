@@ -145,6 +145,11 @@ return [
         ReactivosUPS\Providers\EventServiceProvider::class,
         ReactivosUPS\Providers\RouteServiceProvider::class,
 
+        ReactivosUPS\Providers\ComposerServiceProvider::class,
+
+        /*
+         * Plugins...
+         */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
 

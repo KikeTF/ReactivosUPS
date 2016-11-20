@@ -39,12 +39,12 @@ abstract class Controller extends BaseController
     }
 
     public function getCampuses(){
-        $campus = Campus::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        $campus = Campus::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $campus;
     }
 
     public function getFormats(){
-        $formats = Format::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+        $formats = Format::query()->where('estado','A')->orderBy('id', 'asc')->lists('nombre','id');
         return $formats;
     }
 
@@ -126,8 +126,8 @@ abstract class Controller extends BaseController
         return $career;
     }
 
-    public function getReagentParameters(){
-        $parameters = ReagentParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
+    public function getFormatParameters($id_formato){
+        $parameters = Format::find($id_formato)->where('estado', 'A')->get();
         return $parameters;
     }
 

@@ -8,6 +8,10 @@
 @endpush
 
 @section('contenido')
+    <?php
+    $formato = 0;
+    $formaturl = route('reagent.reagents.format');
+    ?>
 
     {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.store','method' => 'POST']) !!}
 
@@ -69,11 +73,7 @@
                                 <div class="form-group">
                                     {!! Form::label('id_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        <select id="id_campus" name="id_campus" class="form-control">
-                                            @foreach($campuses as $camp)
-                                                <option value="{{ $camp->id }}">{{ $camp->descripcion }}</option>
-                                            @endforeach
-                                        </select>
+                                        {!! Form::select('id_campus', $campuses, null, ['class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
@@ -129,73 +129,12 @@
                                 <div class="form-group">
                                     {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        <select id="id_formato" name="id_formato" class="form-control">
-                                            @foreach($formats as $format)
-                                                <option value="{{ $format->id }}">{{ $format->nombre}}</option>
-                                            @endforeach
-                                        </select>
+                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => 'Selecione Formato'] ) !!}
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
-                                        {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5'])!!}
-                                    </div>
-                                </div>
+                                @include('reagent.reagents.partials.format')
 
-
-
-                                <div class="form-group">
-                                    {!! Form::label('id_opcion_resp', 'Opciones de Respuesta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
-                                        <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
-                                            <table id="opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
-                                                @for ($i = 1; $i <= $parameters->nro_opciones_resp_max; $i++)
-                                                    <tr>
-                                                        <td>
-                                                            <input type="radio" name="id_opcion_correcta" id="id_opcion_correcta_{{ $i }}" value="{{ $i }}" {{($i == 1) ? 'checked' : ''}} {{($i > $parameters->nro_opciones_resp_min) ? 'disabled' : ''}}>
-                                                        </td>
-                                                        <td>
-                                                            {!! Form::text('desc_op_resp_'.$i, null, [
-                                                                    'id' => 'desc_op_resp_'.$i,
-                                                                    'class' => 'form-control',
-                                                                    'placeholder' => 'Descripción de respuesta.',
-                                                                    'style' => 'height: 25px;',
-                                                                    ($i > $parameters->nro_opciones_resp_min) ? 'disabled' : ''
-                                                            ]) !!}
-                                                        </td>
-                                                        <td>
-                                                            {!! Form::text('arg_op_resp_'.$i, null, [
-                                                                    'id' => 'arg_op_resp_'.$i,
-                                                                    'class' => 'form-control',
-                                                                    'placeholder' => 'Argumento de respuesta.',
-                                                                    'style' => 'height: 25px;',
-                                                                     ($i > $parameters->nro_opciones_resp_min) ? 'disabled' : ''
-                                                            ]) !!}
-                                                        </td>
-                                                        <td>
-                                                            @if($i > $parameters->nro_opciones_resp_min)
-                                                            <div class="action-buttons">
-                                                                <div id="activa_op_resp_{{ $i }}">
-                                                                    <a class="green" onclick="activa_op_resp({{ $i }})" title="Activar">
-                                                                        <i class="ace-icon fa fa-check bigger-120"></i>
-                                                                    </a>
-                                                                </div>
-                                                                <div id="desactiva_op_resp_{{ $i }}" hidden>
-                                                                    <a class="red" onclick="desactiva_op_resp({{ $i }})" title="Desactivar">
-                                                                        <i class="ace-icon fa fa-times bigger-120"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endfor
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -274,4 +213,33 @@
     <script src="{{ asset('ace/js/select2.min.js') }}"></script>
 
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
+
+    <script type="text/javascript">
+        $('#id_formato').on('change', function() {
+            var data = {
+                id_formato: $("#id_formato").val()
+            };
+            alert("{{ $formaturl }}");
+            $.ajax({
+                type: 'POST',
+                url: '{{ $formaturl }}',
+                data: data,
+                dataType: "json",
+                async: true,
+                cache: false,
+                beforeSend: function (xhr) {
+                    var token = $('meta[name="csrf_token"]').attr('content');
+                    if (token) {
+                        return xhr.setRequestHeader('X-CSRF-TOKEN', token);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                },
+                success: function (result) {
+                    console.log(result);
+                }
+            });
+        });
+    </script>
 @endpush

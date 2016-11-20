@@ -10,7 +10,7 @@ class Reagent extends Model
     public $timestamps = false;
 
     protected $fillable =["id_distributivo", "id_contenido_det", "id_formato", "id_campo", "descripcion", "planteamiento",
-        "pregunta_opciones", "id_opcion_correcta", "dificultad", "puntaje", "referencia", "estado"];
+                            "id_opcion_correcta", "dificultad", "puntaje", "referencia", "estado"];
 
     public function distributive(){
         return $this->belongsTo('ReactivosUPS\Distributive', 'id_distributivo');
@@ -29,11 +29,11 @@ class Reagent extends Model
     }
 
     public function reagentsQuestions(){
-        return $this->hasMany('ReactivosUPS\ReagentQuestion');
+        return $this->hasMany('ReactivosUPS\ReagentQuestion', 'id_reactivo');
     }
 
     public function reagentsAnswers(){
-        return $this->hasMany('ReactivosUPS\ReagentAnswer');
+        return $this->hasMany('ReactivosUPS\ReagentAnswer', 'id_reactivo');
     }
 
     public function ExamsDetails(){

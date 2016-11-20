@@ -32,12 +32,8 @@
                 <div class="row">
                     <div class="col-sm-11">
                         <div class="col-sm-3">
-                            <label for="id_campus" style="font-size: 12px">Seleccione Campus</label>
-                            <select id="id_campus" name="id_campus" class="form-control">
-                                @foreach($campuses as $camp)
-                                    <option value="{{ $camp->id }}" {{ $camp->id == $filters[0] ? 'selected="selected"' : '' }}>{{ $camp->descripcion }}</option>
-                                @endforeach
-                            </select>
+                            {!! Form::label('id_campus', 'Seleccione Campus:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_campus', $campuses, null, ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">

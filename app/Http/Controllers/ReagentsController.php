@@ -43,6 +43,13 @@ class ReagentsController extends Controller
             ->with('filters', $filters);
     }
 
+    public function format()
+    {
+        dd("ok");
+        //return json_encode("ok");
+        //$this->layout->content = View::make('home.user')->with('id', $id);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -57,7 +64,6 @@ class ReagentsController extends Controller
         $fields = $this->getFields();
         $formats = $this->getFormats();
         $contents = $this->getContents();
-        $parameters = $this->getReagentParameters();
         return view('reagent.reagents.create')
             ->with('campuses', $campuses)
             ->with('careers', $careers)
@@ -65,8 +71,7 @@ class ReagentsController extends Controller
             ->with('mentions', $mentions)
             ->with('contents', $contents)
             ->with('fields', $fields)
-            ->with('formats', $formats)
-            ->with('parameters', $parameters);
+            ->with('formats', $formats);
     }
 
     /**
@@ -77,23 +82,31 @@ class ReagentsController extends Controller
      */
     public function store(Request $request)
     {
-        /*
-        $request->desc_op_resp_1;
-        $request->arg_op_resp_1;
-        $request->desc_op_resp_2;
-        $request->arg_op_resp_2;
-        $request->desc_op_resp_3;
-        $request->arg_op_resp_3;
-        $request->desc_op_resp_4;
-        $request->arg_op_resp_4;
-        */
+        $reagent = new Reagent($request->all());
 
-        $parameters = $this->getReagentParameters();
+        $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
+
+        //$reagent->planteamiento= "Prueba";
+        //$reagent->pregunta_opciones= "Prueba";
+        //$reagent->id_opcion_correcta= 1;
+        //$reagent->puntaje = 9 ;
+        //$reagent->referencia= "Prueba";
+
+        $reagent->estado = !isset( $request['estado'] ) ? "I" : "A";
+        $reagent->creado_por = \Auth::id();
+        $reagent->fecha_creacion = date('Y-m-d h:i:s');
+        //$reagent->reagentsAnswers($answers);
+
+        //dd($reagent);
+
+        $nroOpRespMax = $this->getFormatParameters($reagent->id_formato)->nro_opciones_resp_max;
         $answers = array();
 
-        for($i = 1; $i <= $parameters->nro_opciones_resp_max; $i++){
-            if( isset( $request['desc_op_resp_'.$i] ) ){
-                $answer['id_opcion_resp'] = $i;
+        for($i = 1; $i <= $nroOpRespMax; $i++)
+        {
+            if( isset( $request['desc_op_resp_'.$i] ) )
+            {
+                $answer['secuencia'] = $i;
                 $answer['descripcion'] = $request->input('desc_op_resp_'.$i);
                 $answer['argumento'] = $request->input('arg_op_resp_'.$i);
                 $answer['estado'] = 'A';
@@ -105,24 +118,21 @@ class ReagentsController extends Controller
             //id_reactivo,
         }
 
-        $reagent = new Reagent($request->all());
+        \DB::beginTransaction(); //Start transaction!
 
-        $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
+        try
+        {
+            $reagent->save();
+            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answers);
+        }
+        catch(\Exception $e)
+        {
+            //failed logic here
+            \DB::rollback();
+            dd($e);
+        }
 
-        //$reagent->planteamiento= "Prueba";
-        //$reagent->pregunta_opciones= "Prueba";
-        $reagent->id_opcion_correcta= 1;
-        //$reagent->puntaje = 9 ;
-        //$reagent->referencia= "Prueba";
-
-        $reagent->estado = !isset( $request['estado'] ) ? "I" : "A";
-        $reagent->creado_por = \Auth::id();
-        $reagent->fecha_creacion = date('Y-m-d h:i:s');
-        $reagent->reagentsAnswers($answers);
-
-        //dd($reagent);
-
-        //$reagent->save();
+        \DB::commit();
 
         return redirect()->route('reagent.reagents.index');
 

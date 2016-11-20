@@ -12,6 +12,6 @@ class ReagentQuestion extends Model
     protected $fillable =["id_reactivo", "secuencia", "concepto", "propiedad", "estado"];
 
     public function reagent(){
-        return $this->belongsTo('ReactivosUPS\Reagent');
+        return $this->belongsTo('ReactivosUPS\Reagent', 'id_reactivo');
     }
 }
