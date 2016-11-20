@@ -8,10 +8,6 @@
 @endpush
 
 @section('contenido')
-    <?php
-    $formato = 0;
-    $formaturl = route('reagent.reagents.format');
-    ?>
 
     {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.store','method' => 'POST']) !!}
 
@@ -213,33 +209,4 @@
     <script src="{{ asset('ace/js/select2.min.js') }}"></script>
 
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
-
-    <script type="text/javascript">
-        $('#id_formato').on('change', function() {
-            var data = {
-                id_formato: $("#id_formato").val()
-            };
-            alert("{{ $formaturl }}");
-            $.ajax({
-                type: 'POST',
-                url: '{{ $formaturl }}',
-                data: data,
-                dataType: "json",
-                async: true,
-                cache: false,
-                beforeSend: function (xhr) {
-                    var token = $('meta[name="csrf_token"]').attr('content');
-                    if (token) {
-                        return xhr.setRequestHeader('X-CSRF-TOKEN', token);
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
-                },
-                success: function (result) {
-                    console.log(result);
-                }
-            });
-        });
-    </script>
 @endpush

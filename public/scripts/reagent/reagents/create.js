@@ -1,3 +1,65 @@
+$('#id_formato').on('change', function() {
+    var id = "f"+this.value+"_";
+    for(i = 1; i <= $("#format_count").val(); i++){
+        document.getElementById("reagent_format_"+i).style.display = 'none';
+        $("#reagent_format_"+i).find('input, textarea, button, select').attr('disabled','disabled');
+    }
+    document.getElementById("reagent_format_"+this.value).style.display = 'block';
+    $("#reagent_format_"+this.value).find('input, textarea, button, select').prop('disabled', false);
+
+    for(i = 1; i <= $("#"+id+"format_resp_max").val(); i++){
+        if(i > $("#"+id+"format_resp_min").val()){
+            $("#"+id+"desc_op_resp_"+i).attr('disabled','disabled');
+            $("#"+id+"arg_op_resp_"+i).attr('disabled','disabled');
+        }
+    }
+
+    for(i = 1; i <= $("#"+id+"format_preg_max").val(); i++){
+        if(i > $("#"+id+"format_preg_min").val()){
+            $("#"+id+"conc_op_preg_"+i).attr('disabled','disabled');
+            $("#"+id+"prop_op_preg_"+i).attr('disabled','disabled');
+        }
+    }
+});
+
+function activa_op_resp(ind) {
+    var id = "f"+$('#id_formato').val()+"_";
+    $("#"+id+"activa_op_resp_"+ind).attr("hidden", true);
+    $("#"+id+"desactiva_op_resp_"+ind).attr("hidden", false);
+    $("#"+id+"id_opcion_correcta_"+ind).attr("disabled", false);
+    $("#"+id+"desc_op_resp_"+ind).attr("disabled", false);
+    $("#"+id+"arg_op_resp_"+ind).attr("disabled", false);
+}
+
+function desactiva_op_resp(ind) {
+    var id = "f"+$('#id_formato').val()+"_";
+    $("#"+id+"desactiva_op_resp_"+ind).attr("hidden", true);
+    $("#"+id+"activa_op_resp_"+ind).attr("hidden", false)
+    $("#"+id+"desc_op_resp_"+ind).val("");
+    $("#"+id+"arg_op_resp_"+ind).val("");
+    $("#"+id+"id_opcion_correcta_"+ind).attr("disabled", true);
+    $("#"+id+"desc_op_resp_"+ind).attr("disabled", true);
+    $("#"+id+"arg_op_resp_"+ind).attr("disabled", true);
+}
+
+function activa_op_preg(ind) {
+    var id = "f"+$('#id_formato').val()+"_";
+    $("#"+id+"activa_op_preg_"+ind).attr("hidden", true);
+    $("#"+id+"desactiva_op_preg_"+ind).attr("hidden", false);
+    $("#"+id+"conc_op_preg_"+ind).attr("disabled", false);
+    $("#"+id+"prop_op_preg_"+ind).attr("disabled", false);
+}
+
+function desactiva_op_preg(ind) {
+    var id = "f"+$('#id_formato').val()+"_";
+    $("#"+id+"desactiva_op_preg_"+ind).attr("hidden", true);
+    $("#"+id+"activa_op_preg_"+ind).attr("hidden", false)
+    $("#"+id+"conc_op_preg_"+ind).val("");
+    $("#"+id+"prop_op_preg_"+ind).val("");
+    $("#"+id+"conc_op_preg_"+ind).attr("disabled", true);
+    $("#"+id+"prop_op_preg_"+ind).attr("disabled", true);
+}
+
 jQuery(function($) {
 
     $('[data-rel=tooltip]').tooltip();
@@ -83,38 +145,3 @@ jQuery(function($) {
     */
 })
 
-function activa_op_resp(id) {
-    $("#activa_op_resp_"+id).attr("hidden", true);
-    $("#desactiva_op_resp_"+id).attr("hidden", false);
-    $("#id_opcion_correcta_"+id).attr("disabled", false);
-    $("#desc_op_resp_"+id).attr("disabled", false);
-    $("#arg_op_resp_"+id).attr("disabled", false);
-
-}
-
-function desactiva_op_resp(id) {
-    $("#desactiva_op_resp_"+id).attr("hidden", true);
-    $("#activa_op_resp_"+id).attr("hidden", false)
-    $("#desc_op_resp_"+id).val("");
-    $("#arg_op_resp_"+id).val("");
-    $("#id_opcion_correcta_"+id).attr("disabled", true);
-    $("#desc_op_resp_"+id).attr("disabled", true);
-    $("#arg_op_resp_"+id).attr("disabled", true);
-}
-
-function activa_op_preg(id) {
-    $("#activa_op_preg_"+id).attr("hidden", true);
-    $("#desactiva_op_preg_"+id).attr("hidden", false);
-    $("#conc_op_preg_"+id).attr("disabled", false);
-    $("#prop_op_preg_"+id).attr("disabled", false);
-
-}
-
-function desactiva_op_preg(id) {
-    $("#desactiva_op_preg_"+id).attr("hidden", true);
-    $("#activa_op_preg_"+id).attr("hidden", false)
-    $("#conc_op_preg_"+id).val("");
-    $("#prop_op_preg_"+id).val("");
-    $("#conc_op_preg_"+id).attr("disabled", true);
-    $("#prop_op_preg_"+id).attr("disabled", true);
-}

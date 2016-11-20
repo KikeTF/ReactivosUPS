@@ -43,13 +43,6 @@ class ReagentsController extends Controller
             ->with('filters', $filters);
     }
 
-    public function format()
-    {
-        dd("ok");
-        //return json_encode("ok");
-        //$this->layout->content = View::make('home.user')->with('id', $id);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -82,48 +75,53 @@ class ReagentsController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
+
         $reagent = new Reagent($request->all());
-
         $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
-
-        //$reagent->planteamiento= "Prueba";
-        //$reagent->pregunta_opciones= "Prueba";
-        //$reagent->id_opcion_correcta= 1;
-        //$reagent->puntaje = 9 ;
-        //$reagent->referencia= "Prueba";
-
         $reagent->estado = !isset( $request['estado'] ) ? "I" : "A";
         $reagent->creado_por = \Auth::id();
         $reagent->fecha_creacion = date('Y-m-d h:i:s');
-        //$reagent->reagentsAnswers($answers);
 
-        //dd($reagent);
+        $prefix = "f".$request->id_formato."_";
 
-        $nroOpRespMax = $this->getFormatParameters($reagent->id_formato)->nro_opciones_resp_max;
-        $answers = array();
+        $reagent->imagen = $request->file($prefix.'imagen');
 
+        $nroOpRespMax = $request->input($prefix.'format_resp_max');
+        $answersArray = array();
         for($i = 1; $i <= $nroOpRespMax; $i++)
-        {
-            if( isset( $request['desc_op_resp_'.$i] ) )
+            if( isset( $request[$prefix.'desc_op_resp_'.$i] ) )
             {
                 $answer['secuencia'] = $i;
-                $answer['descripcion'] = $request->input('desc_op_resp_'.$i);
-                $answer['argumento'] = $request->input('arg_op_resp_'.$i);
+                $answer['descripcion'] = $request->input($prefix.'desc_op_resp_'.$i);
+                $answer['argumento'] = $request->input($prefix.'arg_op_resp_'.$i);
                 $answer['estado'] = 'A';
                 $answer['creado_por'] = \Auth::id();
                 $answer['fecha_creacion'] = date('Y-m-d h:i:s');
-                $answers[] = new ReagentAnswer($answer);
+                $answersArray[] = new ReagentAnswer($answer);
             }
-            //id
-            //id_reactivo,
-        }
+
+        $nroOpPregMax = $request->input($prefix.'format_preg_max');
+        $questionsArray = array();
+        for($i = 1; $i <= $nroOpPregMax; $i++)
+            if( isset( $request[$prefix.'desc_op_preg_'.$i] ) )
+            {
+                $question['secuencia'] = $i;
+                $question['concepto'] = $request->input($prefix.'conc_op_resp_'.$i);
+                $question['propiedad'] = $request->input($prefix.'prop_op_resp_'.$i);
+                $question['estado'] = 'A';
+                $question['creado_por'] = \Auth::id();
+                $question['fecha_creacion'] = date('Y-m-d h:i:s');
+                $questionsArray[] = new ReagentAnswer($question);
+            }
 
         \DB::beginTransaction(); //Start transaction!
 
         try
         {
             $reagent->save();
-            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answers);
+            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answersArray);
+            Reagent::find($reagent->id)->reagentsQuestions()->saveMany($questionsArray);
         }
         catch(\Exception $e)
         {
