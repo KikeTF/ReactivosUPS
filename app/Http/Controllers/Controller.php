@@ -54,22 +54,22 @@ abstract class Controller extends BaseController
     }
 
     public function getMatters(){
-        $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $matters;
     }
 
     public function getAreas(){
-        $areas = Area::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        $areas = Area::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $areas;
     }
 
     public function getCareers(){
-        $careers = Career::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        $careers = Career::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $careers;
     }
 
     public function getMentions(){
-        $mentions = Mention::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        $mentions = Mention::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $mentions;
     }
 
@@ -94,8 +94,8 @@ abstract class Controller extends BaseController
     }
 
     public function getDistributive($id_materia, $id_carrera, $id_campus){
-        $id_profileUser = (int)Session::get('id_perfil_usuario');
-        $id_periodLocation = (int)Session::get('id_periodo_sede');
+        $id_profileUser = 1;//(int)Session::get('id_perfil_usuario');
+        $id_periodLocation = 1;//(int)Session::get('id_periodo_sede');
 
         $id_careerCampus = $this->getCareersCampuses()
             ->where('id_carrera', $id_carrera)

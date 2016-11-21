@@ -9,6 +9,7 @@ use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\ReagentAnswer;
+use ReactivosUPS\ReagentQuestion;
 use Session;
 
 
@@ -75,16 +76,16 @@ class ReagentsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
-
+        dd($request->f1_imagen);
         $reagent = new Reagent($request->all());
         $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
-        $reagent->estado = !isset( $request['estado'] ) ? "I" : "A";
+        $reagent->estado = "A";
         $reagent->creado_por = \Auth::id();
         $reagent->fecha_creacion = date('Y-m-d h:i:s');
 
         $prefix = "f".$request->id_formato."_";
 
+        $reagent->id_opcion_correcta = $request->input($prefix.'id_opcion_correcta');
         $reagent->imagen = $request->file($prefix.'imagen');
 
         $nroOpRespMax = $request->input($prefix.'format_resp_max');
@@ -104,15 +105,15 @@ class ReagentsController extends Controller
         $nroOpPregMax = $request->input($prefix.'format_preg_max');
         $questionsArray = array();
         for($i = 1; $i <= $nroOpPregMax; $i++)
-            if( isset( $request[$prefix.'desc_op_preg_'.$i] ) )
+            if( isset( $request[$prefix.'conc_op_preg_'.$i] ) or isset( $request[$prefix.'prop_op_preg_'.$i] ) )
             {
                 $question['secuencia'] = $i;
-                $question['concepto'] = $request->input($prefix.'conc_op_resp_'.$i);
-                $question['propiedad'] = $request->input($prefix.'prop_op_resp_'.$i);
+                $question['concepto'] = is_null($request->input($prefix.'conc_op_preg_'.$i)) ? "" : $request->input($prefix.'conc_op_preg_'.$i);
+                $question['propiedad'] = is_null($request->input($prefix.'prop_op_preg_'.$i)) ? "" : $request->input($prefix.'prop_op_preg_'.$i);
                 $question['estado'] = 'A';
                 $question['creado_por'] = \Auth::id();
                 $question['fecha_creacion'] = date('Y-m-d h:i:s');
-                $questionsArray[] = new ReagentAnswer($question);
+                $questionsArray[] = new ReagentQuestion($question);
             }
 
         \DB::beginTransaction(); //Start transaction!

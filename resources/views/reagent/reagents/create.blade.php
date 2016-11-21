@@ -129,7 +129,7 @@
                                     </div>
                                 </div>
 
-                                @include('reagent.reagents.partials.format')
+                                @include('reagent.reagents._format')
 
                             </div>
                         </div>
