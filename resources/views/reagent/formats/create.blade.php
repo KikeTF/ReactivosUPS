@@ -40,6 +40,68 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('opciones_resp_min', 'No. de respuesta m&iacute;nimo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            {!! Form::input('number','opciones_resp_min', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de respuestas m&iacute;nimo','required']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('opciones_resp_max', 'No. de respuesta m&aacute;ximo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            {!! Form::input('number','opciones_resp_max', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de respuestas m&aacute;ximo','required']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('opciones_pregunta', '¿Opciones de Pregunta?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('opciones_pregunta', 'S', true) !!}
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('concepto_propiedad', '¿Opciones Concepto/Propiedad?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('concepto_propiedad', 'S', true) !!}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('opciones_preg_min', 'No. de preguntas m&iacute;nimo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            {!! Form::input('number','opciones_preg_min', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de preguntas m&iacute;nimo','required']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('opciones_preg_max', 'No. de preguntas m&aacute;ximo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            {!! Form::input('number','opciones_preg_max', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de respuestas m&aacute;ximo','required']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('imagenes', '¿Im&aacute;genes?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('imagenes', 'S', true) !!}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
         {!! Form::label('estado', '¿Activo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="checkbox">

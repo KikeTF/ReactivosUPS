@@ -42,10 +42,10 @@ class FormatsController extends Controller
     public function store(Request $request)
     {
         $format = new Format($request->all());
-
-        if( !isset( $request['estado'] ) )
-            $format->estado = 'I';
-
+        $format->opciones_pregunta = !isset( $request['opciones_pregunta'] ) ? 'N' : 'S';
+        $format->concepto_propiedad = !isset( $request['concepto_propiedad'] ) ? 'N' : 'S';
+        $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
+        $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
         $format->creado_por = \Auth::id();
         $format->fecha_creacion = date('Y-m-d h:i:s');
         $format->save();
@@ -89,15 +89,20 @@ class FormatsController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $format = Format::find($id);
 
-        if( !isset( $request['estado'] ) )
-            $format->estado = 'I';
-        else
-            $format->estado = 'A';
 
         $format->nombre = $request->nombre;
         $format->descripcion = $request->descripcion;
+        $format->opciones_resp_min = $request->opciones_resp_min;
+        $format->opciones_resp_max = $request->opciones_resp_max;
+        $format->opciones_pregunta = !isset( $request['opciones_pregunta'] ) ? 'N' : 'S';
+        $format->concepto_propiedad = !isset( $request['concepto_propiedad'] ) ? 'N' : 'S';
+        $format->opciones_preg_min = $request->opciones_preg_min;
+        $format->opciones_preg_max = $request->opciones_preg_max;
+        $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
+        $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
         $format->modificado_por = \Auth::id();
         $format->fecha_modificacion = date('Y-m-d h:i:s');
         $format->save();

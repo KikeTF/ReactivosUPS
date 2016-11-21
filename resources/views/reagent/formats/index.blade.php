@@ -7,7 +7,7 @@
     <?php
     $usetable = 1;
     $newurl = route('reagent.formats.create');
-    $columnas = array("nombre", "descripcion", "estado");
+    $columnas = array("nombre", "opciones_resp_min", "opciones_resp_max", "opciones_pregunta", "concepto_propiedad", "opciones_preg_min", "opciones_preg_max",  "imagenes", "estado");
     ?>
 
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
@@ -15,7 +15,13 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Descripción</th>
+                    <th>No. respuestas m&iacute;nimo</th>
+                    <th>No. respuestas m&aacute;ximo</th>
+                    <th>Opci&oacuten pregunta</th>
+                    <th>Concepto propiedad</th>
+                    <th>No. preguntas m&iacute;nimo</th>
+                    <th>No. preguntas m&aacute;ximo</th>
+                    <th>Im&aacute;genes</th>
                     <th>Estado</th>
                     <th></th>
                 </tr>
@@ -24,7 +30,13 @@
             @foreach($formats as $format)
                 <tr>
                     <td>{{ $format->nombre }}</td>
-                    <td>{{ $format->descripcion }}</td>
+                    <td>{{ $format->opciones_resp_min }}</td>
+                    <td>{{ $format->opciones_resp_max }}</td>
+                    <td>{{ $format->opciones_pregunta == 'S' ? 'Si' : 'No'  }}</td>
+                    <td>{{ $format->concepto_propiedad == 'S' ? 'Si' : 'No'  }}</td>
+                    <td>{{ $format->opciones_preg_min }}</td>
+                    <td>{{ $format->opciones_preg_max }}</td>
+                    <td>{{ $format->imagenes == 'S' ? 'Si' : 'No' }}</td>
                     <td>{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
                         <div class="hidden-sm hidden-xs action-buttons">
