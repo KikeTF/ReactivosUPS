@@ -69,40 +69,28 @@
                                 <div class="form-group">
                                     {!! Form::label('id_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        {!! Form::select('id_campus', $campuses, null, ['class' => 'form-control']) !!}
+                                        {!! Form::select('id_campus', $campuses, null, ['id' => 'id_campus', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_carrera', 'Carrera:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        <select id="id_carrera" name="id_carrera" class="form-control">
-                                            @foreach($careers as $career)
-                                                <option value="{{ $career->id }}">{{ $career->descripcion }}</option>
-                                            @endforeach
-                                        </select>
+                                        {!! Form::select('id_carrera', $careers, null, ['id' => 'id_carrera', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_mencion', 'Mención:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        <select id="id_mencion" name="id_mencion" class="form-control">
-                                            @foreach($mentions as $mention)
-                                                <option value="{{ $mention->id }}">{{ $mention->descripcion }}</option>
-                                            @endforeach
-                                        </select>
+                                        {!! Form::select('id_mencion', $mentions, null, ['id' => 'id_mencion', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_materia', 'Materia:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        <select id="id_materia" name="id_materia" class="form-control">
-                                            @foreach($matters as $matter)
-                                                <option value="{{ $matter->id }}">{{ $matter->descripcion }}</option>
-                                            @endforeach
-                                        </select>
+                                        {!! Form::select('id_materia', $matters, null, ['id' => 'id_materia', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
