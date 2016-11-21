@@ -71,7 +71,6 @@ class ReagentsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->f1_imagen);
         $reagent = new Reagent($request->all());
         $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
         $reagent->estado = "A";
@@ -210,7 +209,7 @@ class ReagentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd("update");
     }
 
     /**
@@ -221,6 +220,6 @@ class ReagentsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        dd("destroy");
     }
 }

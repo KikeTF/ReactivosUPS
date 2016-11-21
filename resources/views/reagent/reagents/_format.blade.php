@@ -81,7 +81,7 @@
                             @for ($i = 1; $i <= $param->opciones_resp_max; $i++)
                                 <tr>
                                     <td>
-                                        <input type="radio" name="f{{ $param->id }}_id_opcion_correcta" id="f{{ $param->id }}_id_opcion_correcta" value="{{ $i }}" {{($i == 1) ? 'checked' : ''}} {{($i > $param->opciones_resp_min) ? 'disabled' : ''}}>
+                                        {!! Form::radio('f'.$param->id.'_id_opcion_correcta', $i, false, ['id' => 'f'.$param->id.'_id_opcion_correcta_'.$i, ($i > $param->opciones_resp_min) ? 'disabled' : '']) !!}
                                     </td>
                                     <td>
                                         {!! Form::text('f'.$param->id.'_desc_op_resp_'.$i, null, [

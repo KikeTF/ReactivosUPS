@@ -547,27 +547,7 @@
             $(function() {
                 $('#_dataTable').DataTable({
                     processing: true,
-                    //serverSide: true,
                     responsive: true,
-                    /*
-                    ajax: {
-                        url: "{{-- $dataurl --}}"+"?"+$('#formdata').serialize(),
-                        type: 'GET',
-                        //headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
-                        //dataType: 'JSON',
-                        //data: $('#formdata').serialize(),
-                        cache: false,
-                        //async: false,
-                        //beforeSend: function (xhr) {
-                        //    xhr.setRequestHeader('Authorization');
-                        //},
-                        error: function(reason) {
-                            console.log("error encountered ! " + reason);
-                            // process reason here to know the type of the error
-                            // and then take appropriate action
-                        }
-                    },
-                     */
                     columns: [
                         @foreach ($columnas as $col)
                             { data: '{{ $col }}', name: '{{ $col }}' },

@@ -104,52 +104,127 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-12"><strong>Opciones de Pregunta:</strong></div>
-                    </div>
-                    <div class="form-group">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <td></td>
-                                <td><strong>Concepto</strong></td>
-                                <td><strong>Propiedad</strong></td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($reagentQuestions as $question)
-                                <tr>
-                                    <td>{{ $question->secuencia }}</td>
-                                    <td>{{ $question->concepto }}</td>
-                                    <td>{{ $question->propiedad }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <div id="reagent_format">
+                        @if($formatParam->opciones_resp_min > 0)
+                            @if($formatParam->imagenes == 'S')
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                    </div>
+                                    <div class="col-sm-8">
+                                        {!! Form::label('imagen','Carga Imagen', ['class' => 'col-sm-3 btn btn-primary no-padding-right']) !!}
+                                        {!! Form::file('imagen', ['class' => 'form-control', 'style' => 'display:none;', 'onchange' => "$('#imagen_info').html($(this).val());"]) !!}
+                                        <span class='' id="imagen_info"></span>
+                                    </div>
+                                </div>
+                            @endif
 
-                    <div class="form-group">
-                        <div class="col-sm-12"><strong>Opciones de Respuesta:</strong></div>
-                    </div>
-                    <div class="form-group">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <td></td>
-                                <td><strong>Descripcion</strong></td>
-                                <td><strong>Argumento</strong></td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($reagentAnswers as $answer)
-                                <tr>
-                                    <td>{{ $answer->secuencia }}</td>
-                                    <td>{{ $answer->descripcion }}</td>
-                                    <td>{{ $answer->argumento }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                            @if($formatParam->opciones_pregunta == 'S')
+                                <div class="form-group">
+                                    {!! Form::label('opcion_preg', 'Opciones de Pregunta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                    <div class="col-sm-8">
+                                        <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
+                                            <table id="opcion_preg" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
+                                                @for ($i = 1; $i <= $formatParam->opciones_preg_max; $i++)
+                                                    <tr>
+                                                        <td>
+                                                            {!! Form::text('conc_op_preg_'.$i,
+                                                                        ($i > $reagentQuestions->count()) ? null : $reagentQuestions[$i-1]->concepto, [
+                                                                        'id' => 'conc_op_preg_'.$i,
+                                                                        'class' => 'form-control',
+                                                                        'placeholder' => 'Concepto de pregunta.',
+                                                                        'style' => 'height: 25px;',
+                                                                        ($i > $reagentQuestions->count()) ? 'disabled' : ''
+                                                                ]) !!}
+                                                        </td>
+                                                        @if($formatParam->concepto_propiedad == 'S')
+                                                            <td>
+                                                                {!! Form::text('prop_op_preg_'.$i,
+                                                                            ($i > $reagentQuestions->count()) ? null : $reagentQuestions[$i-1]->propiedad, [
+                                                                            'id' => 'prop_op_preg_'.$i,
+                                                                            'class' => 'form-control',
+                                                                            'placeholder' => 'Propiedad de pregunta.',
+                                                                            'style' => 'height: 25px;',
+                                                                            ($i > $reagentQuestions->count()) ? 'disabled' : ''
+                                                                    ]) !!}
+                                                            </td>
+                                                        @endif
+                                                        <td>
+                                                            @if($i > $reagentQuestions->count())
+                                                                <div class="action-buttons">
+                                                                    <div id="activa_op_preg_{{ $i }}">
+                                                                        <a class="green" onclick="activa_op_preg('{{ $i }}')" title="Activar">
+                                                                            <i class="ace-icon fa fa-check bigger-120"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div id="desactiva_op_preg_{{ $i }}" hidden>
+                                                                        <a class="red" onclick="desactiva_op_preg('{{ $i }}')" title="Desactivar">
+                                                                            <i class="ace-icon fa fa-times bigger-120"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endfor
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="form-group">
+                                {!! Form::label('opcion_resp', 'Opciones de Respuesta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                <div class="col-sm-8">
+                                    <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
+                                        <table id="opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
+                                            @for ($i = 1; $i <= $formatParam->opciones_resp_max; $i++)
+                                                <tr>
+                                                    <td>
+                                                        {!! Form::radio('id_opcion_correcta', $i, ($i > $reagentAnswers->count()) ? false : ($reagentAnswers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false, ['id' => 'id_opcion_correcta_'.$i, ($i > $reagentAnswers->count()) ? 'disabled' : '']) !!}
+                                                    </td>
+                                                    <td>
+                                                        {!! Form::text('desc_op_resp_'.$i,
+                                                                ($i > $reagentAnswers->count()) ? null : $reagentAnswers[$i-1]->descripcion, [
+                                                                'id' => 'desc_op_resp_'.$i,
+                                                                'class' => 'form-control',
+                                                                'placeholder' => 'Descripción de respuesta.',
+                                                                'style' => 'height: 25px;',
+                                                                ($i > $reagentAnswers->count()) ? 'disabled' : ''
+                                                        ]) !!}
+                                                    </td>
+                                                    <td>
+                                                        {!! Form::text('arg_op_resp_'.$i,
+                                                                ($i > $reagentAnswers->count()) ? null : $reagentAnswers[$i-1]->argumento, [
+                                                                'id' => 'arg_op_resp_'.$i,
+                                                                'class' => 'form-control',
+                                                                'placeholder' => 'Argumento de respuesta.',
+                                                                'style' => 'height: 25px;',
+                                                                 ($i > $reagentAnswers->count()) ? 'disabled' : ''
+                                                        ]) !!}
+                                                    </td>
+                                                    <td>
+                                                        @if($i > $reagentAnswers->count())
+                                                            <div class="action-buttons">
+                                                                <div id="activa_op_resp_{{ $i }}">
+                                                                    <a class="green" onclick="activa_op_resp('{{ $i }}')" title="Activar">
+                                                                        <i class="ace-icon fa fa-check bigger-120"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div id="desactiva_op_resp_{{ $i }}" hidden>
+                                                                    <a class="red" onclick="desactiva_op_resp('{{ $i }}')" title="Desactivar">
+                                                                        <i class="ace-icon fa fa-times bigger-120"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endfor
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -199,3 +274,9 @@
     {!! Form::close() !!}
 
 @endsection
+
+@push('specific-script')
+
+<script type="text/javascript" src="{{ asset('scripts/reagent/reagents/edit.js') }}"></script>
+
+@endpush

@@ -11,6 +11,7 @@ $('#id_formato').on('change', function() {
         if(i > $("#"+id+"format_resp_min").val()){
             $("#"+id+"desc_op_resp_"+i).attr('disabled','disabled');
             $("#"+id+"arg_op_resp_"+i).attr('disabled','disabled');
+            $("#"+id+"id_opcion_correcta_"+i).attr('disabled', 'disabled');
         }
     }
 
@@ -34,7 +35,7 @@ function activa_op_resp(ind) {
 function desactiva_op_resp(ind) {
     var id = "f"+$('#id_formato').val()+"_";
     $("#"+id+"desactiva_op_resp_"+ind).attr("hidden", true);
-    $("#"+id+"activa_op_resp_"+ind).attr("hidden", false)
+    $("#"+id+"activa_op_resp_"+ind).attr("hidden", false);
     $("#"+id+"desc_op_resp_"+ind).val("");
     $("#"+id+"arg_op_resp_"+ind).val("");
     $("#"+id+"id_opcion_correcta_"+ind).attr("disabled", true);
@@ -53,7 +54,7 @@ function activa_op_preg(ind) {
 function desactiva_op_preg(ind) {
     var id = "f"+$('#id_formato').val()+"_";
     $("#"+id+"desactiva_op_preg_"+ind).attr("hidden", true);
-    $("#"+id+"activa_op_preg_"+ind).attr("hidden", false)
+    $("#"+id+"activa_op_preg_"+ind).attr("hidden", false);
     $("#"+id+"conc_op_preg_"+ind).val("");
     $("#"+id+"prop_op_preg_"+ind).val("");
     $("#"+id+"conc_op_preg_"+ind).attr("disabled", true);
@@ -81,7 +82,6 @@ jQuery(function($) {
                 $('#actions-bottons').click(function(e){
                     e.preventDefault();
                 });
-
                 //e.preventDefault();
             }
         })
@@ -143,5 +143,4 @@ jQuery(function($) {
         $('[class*=select2]').remove();
     });
     */
-})
-
+});
