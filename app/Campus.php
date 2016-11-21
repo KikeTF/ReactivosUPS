@@ -19,7 +19,4 @@ class Campus extends Model
         return $this->hasMany('ReactivosUPS\CareerCampus', 'id_campus');
     }
 
-    public function reagents(){
-        return $this->hasMany('ReactivosUPS\Reagent', 'id_campo');
-    }
 }

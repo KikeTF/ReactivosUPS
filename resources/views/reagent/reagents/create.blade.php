@@ -100,20 +100,23 @@
                         <div class="step-pane" data-step="2">
                             <div>
                                 <div class="form-group">
-                                    {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                    {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        <select id="id_contenido_det" name="id_contenido_det" class="form-control">
-                                            @foreach($contents as $content)
-                                                <option value="{{ $content->id }}">{{ $content->capitulo." ".$content->tema }}</option>
-                                            @endforeach
-                                        </select>
+                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => 'Seleccione Formato'] ) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                    {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => 'Selecione Formato'] ) !!}
+                                        {!! Form::select('id_contenido_det', $contents, null, ['class' => 'form-control', 'placeholder' => 'Seleccione Contenido']) !!}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                                    <div class="col-sm-8">
+                                        {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                                     </div>
                                 </div>
 
@@ -127,11 +130,7 @@
                                 <div class="form-group">
                                     {!! Form::label('id_campo', 'Campo de Conocimiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        <select id="id_campo" name="id_campo" class="form-control">
-                                            @foreach($fields as $field)
-                                                <option value="{{ $field->id }}">{{ $field->nombre}}</option>
-                                            @endforeach
-                                        </select>
+                                        {!! Form::select('id_campo', $fields, null, ['class' => 'form-control'] ) !!}
                                     </div>
                                 </div>
 
@@ -149,14 +148,14 @@
                                 <div class="form-group">
                                     {!! Form::label('descripcion', 'Operaci&oacute;n Cognitiva:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        {!! Form::textarea('descripcion', null, ['class' => 'form-control', 'size' => '100%x5'])!!}
+                                        {!! Form::textarea('descripcion', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('referencia', 'Referencia Bibliogr&aacute;fica:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        {!! Form::textarea('referencia', null, ['class' => 'form-control', 'size' => '100%x5'])!!}
+                                        {!! Form::textarea('referencia', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                                     </div>
                                 </div>
                             </div>

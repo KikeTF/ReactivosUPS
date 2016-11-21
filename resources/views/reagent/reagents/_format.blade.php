@@ -1,23 +1,14 @@
 
-<div class="form-group">
-    {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-    <div class="col-sm-8">
-        {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
-    </div>
-    {!! Form::text('format_count', $formatList->count(), ['id' => 'format_count', 'hidden']) !!}
-</div>
 
+{!! Form::text('format_count', $formatList->count(), ['id' => 'format_count', 'hidden']) !!}
 @foreach($formatList as $param)
-
     <div id="reagent_format_{{ $param->id }}" style="display: none;">
-
         {!! Form::text('f'.$param->id.'_format_resp_min', $param->opciones_resp_min, ['id' => 'f'.$param->id.'_format_resp_min', 'hidden']) !!}
         {!! Form::text('f'.$param->id.'_format_resp_max', $param->opciones_resp_max, ['id' => 'f'.$param->id.'_format_resp_max', 'hidden']) !!}
         {!! Form::text('f'.$param->id.'_format_preg_min', $param->opciones_preg_min, ['id' => 'f'.$param->id.'_format_preg_min', 'hidden']) !!}
         {!! Form::text('f'.$param->id.'_format_preg_max', $param->opciones_preg_max, ['id' => 'f'.$param->id.'_format_preg_max', 'hidden']) !!}
 
         @if($param->opciones_resp_min > 0)
-
             @if($param->imagenes == 'S')
                 <div class="form-group">
                     <div class="col-sm-3">
@@ -132,9 +123,6 @@
                     </div>
                 </div>
             </div>
-
         @endif
-
     </div>
-
 @endforeach

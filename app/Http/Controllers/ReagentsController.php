@@ -4,6 +4,8 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\Career;
+use ReactivosUPS\Campus;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\MatterCareer;
@@ -22,25 +24,25 @@ class ReagentsController extends Controller
      */
     public function index(Request $request)
     {
-        $id_campus = (int)$request->id_campus;
-        $id_carrera = (int)$request->id_carrera;
-        $id_mencion = (int)$request->id_mencion;
-        $id_materia = (int)$request->id_materia;
-
-        $campuses = $this->getCampuses();
-        $careers = $this->getCareers();
-        $mentions = $this->getMentions();
-        $matters = $this->getMatters();
+        $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+        $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+        $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+        $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
 
         $filters = array($id_campus, $id_carrera, $id_mencion, $id_materia);
-        $reagents = Reagent::query()->get();
+
+        if($id_mencion > 0 && $id_carrera > 0 && $id_campus > 0 && $id_materia > 0){
+            $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
+            $reagents = Reagent::filter($id_distributivo)->where('estado', '!=', 'E')->get();;
+        }else
+            $reagents = Reagent::query()->where('estado', '!=', 'E')->get();
 
         return view('reagent.reagents.index')
             ->with('reagents', $reagents)
-            ->with('campuses', $campuses)
-            ->with('careers', $careers)
-            ->with('matters', $matters)
-            ->with('mentions', $mentions)
+            ->with('campuses', $this->getCampuses())
+            ->with('careers', $this->getCareers())
+            ->with('mentions', $this->getMentions())
+            ->with('matters', $this->getMatters())
             ->with('filters', $filters);
     }
 
@@ -51,21 +53,14 @@ class ReagentsController extends Controller
      */
     public function create()
     {
-        $campuses = $this->getCampuses();
-        $careers = $this->getCareers();
-        $mentions = $this->getMentions();
-        $matters = $this->getMatters();
-        $fields = $this->getFields();
-        $formats = $this->getFormats();
-        $contents = $this->getContents();
         return view('reagent.reagents.create')
-            ->with('campuses', $campuses)
-            ->with('careers', $careers)
-            ->with('matters', $matters)
-            ->with('mentions', $mentions)
-            ->with('contents', $contents)
-            ->with('fields', $fields)
-            ->with('formats', $formats);
+            ->with('campuses', $this->getCampuses())
+            ->with('careers', $this->getCareers())
+            ->with('matters', $this->getMatters())
+            ->with('mentions', $this->getMentions())
+            ->with('contents', $this->getContents())
+            ->with('fields', $this->getFields())
+            ->with('formats', $this->getFormats());
     }
 
     /**
@@ -145,7 +140,31 @@ class ReagentsController extends Controller
      */
     public function show($id)
     {
-        //
+        $reagent = Reagent::find($id);
+        $mattercareer = MatterCareer::find($reagent->distributive->id_materia_carrera);
+
+        $reagent->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
+        $reagent->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
+        $reagent->desc_mencion = $mattercareer->mention->descripcion;
+        $reagent->desc_materia = $mattercareer->matter->descripcion;
+        $reagent->desc_formato = $reagent->format->nombre;
+        $reagent->desc_campo = $reagent->field->nombre;
+        $reagent->desc_contenido = $reagent->contentDetail->capitulo." ".$reagent->contentDetail->tema;
+        $reagent->usr_responsable = $this->getUserName($reagent->id_usr_responsable);
+        $reagent->dificultad = ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta';
+        $reagent->estado = ($reagent->estado == 'A') ? 'Activo' : 'Inactivo';
+        $reagent->creado_por = $this->getUserName($reagent->creado_por);
+        $reagent->modificado_por = $this->getUserName($reagent->modificado_por);
+
+        $reagentQuestions = ReagentQuestion::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+        $reagentAnswers = ReagentAnswer::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+
+        return view('reagent.reagents.show')
+            ->with('reagent', $reagent)
+            ->with('reagentQuestions', $reagentQuestions)
+            ->with('reagentAnswers', $reagentAnswers)
+            ->with('formatParam', $reagent->format);
+
     }
 
     /**
@@ -156,7 +175,30 @@ class ReagentsController extends Controller
      */
     public function edit($id)
     {
+        $reagent = Reagent::find($id);
+        $mattercareer = MatterCareer::find($reagent->distributive->id_materia_carrera);
 
+        $reagent->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
+        $reagent->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
+        $reagent->desc_mencion = $mattercareer->mention->descripcion;
+        $reagent->desc_materia = $mattercareer->matter->descripcion;
+        $reagent->desc_formato = $reagent->format->nombre;
+        $reagent->desc_campo = $reagent->field->nombre;
+        $reagent->desc_contenido = $reagent->contentDetail->capitulo." ".$reagent->contentDetail->tema;
+        $reagent->usr_responsable = $this->getUserName($reagent->id_usr_responsable);
+        $reagent->creado_por = $this->getUserName($reagent->creado_por);
+        $reagent->modificado_por = $this->getUserName($reagent->modificado_por);
+
+        $reagentQuestions = ReagentQuestion::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+        $reagentAnswers = ReagentAnswer::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+
+        return view('reagent.reagents.edit')
+            ->with('reagent', $reagent)
+            ->with('reagentQuestions', $reagentQuestions)
+            ->with('reagentAnswers', $reagentAnswers)
+            ->with('formatParam', $reagent->format)
+            ->with('contents', $this->getContents())
+            ->with('fields', $this->getFields());
     }
 
     /**

@@ -24,8 +24,8 @@ class Reagent extends Model
         return $this->belongsTo('ReactivosUPS\Format', 'id_formato');
     }
 
-    public function campus(){
-        return $this->belongsTo('ReactivosUPS\Campus', 'id_campo');
+    public function field(){
+        return $this->belongsTo('ReactivosUPS\Field', 'id_campo');
     }
 
     public function reagentsQuestions(){

@@ -33,22 +33,22 @@
                     <div class="col-sm-11">
                         <div class="col-sm-3">
                             {!! Form::label('id_campus', 'Seleccione Campus:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_campus', $campuses, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_campus', $campuses, $filters[0], ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_carrera', 'Seleccione Carrera:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_carrera', $careers, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_mencion', 'Seleccione Menci&oacute;n:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_mencion', $mentions, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_mencion', $mentions, $filters[2], ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_materia', 'Seleccione Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_materia', $matters, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_materia', $matters, $filters[3], ['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class="col-sm-1" align="right">
@@ -84,7 +84,43 @@
                         <td>{{ $reagent->id }}</td>
                         <td>{{ $reagent->planteamiento }}</td>
                         <td>{{ $reagent->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
-                        <td></td>
+                        <td>
+                            <div class="hidden-sm hidden-xs action-buttons">
+                                <a class="blue" href="{{ route('reagent.reagents.show', $reagent->id) }}">
+                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                </a>
+                                <a class="green" href="{{ route('reagent.reagents.edit', $reagent->id) }}">
+                                    <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                </a>
+                                <a class="red" href="{{ route('reagent.reagents.destroy', $reagent->id) }}">
+                                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                </a>
+                            </div>
+                            <div class="hidden-md hidden-lg">
+                                <div class="inline pos-rel">
+                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                        <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                        <li>
+                                            <a href="{{ route('reagent.reagents.show', $reagent->id) }}" class="tooltip-info" data-rel="tooltip" title="View">
+                                                <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('reagent.reagents.edit', $reagent->id) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('reagent.reagents.destroy', $reagent->id) }}" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

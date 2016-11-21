@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\Career;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
@@ -39,19 +40,14 @@ class MattersCareersController extends Controller
         }else
             $mattersCareers = MatterCareer::query()->where('estado', '!=', 'E')->get();
 
-        $campuses = $this->getCampuses();
-        $careers = $this->getCareers();
-        $areas = $this->getAreas();
-        $mentions = $this->getMentions();
-        $matters = $this->getMatters();
         $filters = array($id_campus, $id_carrera, $id_mencion, $id_area);
 
         return view('general.matterscareers.index')
             ->with('mattersCareers', $mattersCareers)
-            ->with('campuses', $campuses)
-            ->with('careers', $careers)
-            ->with('areas', $areas)
-            ->with('mentions', $mentions)
+            ->with('campuses', $this->getCampuses())
+            ->with('careers', $this->getCareers())
+            ->with('areas', $this->getAreas())
+            ->with('mentions', $this->getMentions())
             ->with('filters', $filters);
     }
 
@@ -86,7 +82,7 @@ class MattersCareersController extends Controller
     {
         $mattercareer = MatterCareer::find($id);
         $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-        $mattercareer->desc_carrera = Matter::find($mattercareer->careerCampus->id_carrera)->descripcion;
+        $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
         $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
         $mattercareer->desc_area = $mattercareer->area->descripcion;
         $mattercareer->desc_materia = $mattercareer->matter->descripcion;

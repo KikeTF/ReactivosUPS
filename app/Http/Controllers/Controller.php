@@ -49,7 +49,7 @@ abstract class Controller extends BaseController
     }
 
     public function getFields(){
-        $fields = Field::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+        $fields = Field::query()->where('estado','A')->orderBy('nombre', 'asc')->lists('nombre','id');
         return $fields;
     }
 
@@ -75,6 +75,7 @@ abstract class Controller extends BaseController
 
     public function getContents(){
         $contents = ContentDetail::query()->where('estado','A')->orderBy('capitulo', 'asc')->get();
+        $contents = $contents->lists('ContentDescription', 'id');
         return $contents;
     }
 

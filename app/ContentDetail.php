@@ -18,4 +18,9 @@ class ContentDetail extends Model
     public function reagents(){
         return $this->hasMany('ReactivosUPS\Reagent', 'id_contenido_det');
     }
+
+    public function getContentDescriptionAttribute()
+    {
+        return $this->attributes['capitulo'] .' '. $this->attributes['tema'];
+    }
 }

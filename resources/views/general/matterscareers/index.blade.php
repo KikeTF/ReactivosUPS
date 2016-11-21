@@ -34,22 +34,22 @@
                     <div class="col-sm-11">
                         <div class="col-sm-3">
                             {!! Form::label('id_campus', 'Seleccione Campus:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_campus', $campuses, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_campus', $campuses, $filters[0], ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_carrera', 'Seleccione Carrera:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_carrera', $careers, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_mencion', 'Seleccione Menci&oacute;n:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_mencion', $mentions, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_mencion', $mentions, $filters[2], ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_area', 'Seleccione &Aacute;rea:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_area', $areas, null, ['class' => 'form-control', 'placeholder' => 'Todas las Areas']) !!}
+                            {!! Form::select('id_area', $areas, $filters[3], ['class' => 'form-control', 'placeholder' => 'Todas las Areas']) !!}
                         </div>
                     </div>
                     <div class="col-sm-1" align="right">
