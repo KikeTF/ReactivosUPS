@@ -37,30 +37,18 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="id_carrera" style="font-size: 12px">Seleccione Carrera</label>
-                            <select id="id_carrera" name="id_carrera" class="form-control">
-                                @foreach($careers as $career)
-                                    <option value="{{ $career->id }}" {{ $career->id == $filters[1] ? 'selected="selected"' : '' }}>{{ $career->descripcion }}</option>
-                                @endforeach
-                            </select>
+                            {!! Form::label('id_carrera', 'Seleccione Carrera:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_carrera', $careers, null, ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="id_mencion" style="font-size: 12px">Seleccione Menci&oacute;n</label>
-                            <select id="id_mencion" name="id_mencion" class="form-control">
-                                @foreach($mentions as $mention)
-                                    <option value="{{ $mention->id }}" {{ $mention->id == $filters[2] ? 'selected="selected"' : '' }}>{{ $mention->descripcion }}</option>
-                                @endforeach
-                            </select>
+                            {!! Form::label('id_mencion', 'Seleccione Menci&oacute;n:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_mencion', $mentions, null, ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="id_materia" style="font-size: 12px">Seleccione Materia</label>
-                            <select id="id_materia" name="id_materia" class="form-control">
-                                @foreach($matters as $matter)
-                                    <option value="{{ $matter->id }}" {{ $matter->id == $filters[3] ? 'selected="selected"' : '' }}>{{ $matter->descripcion }}</option>
-                                @endforeach
-                            </select>
+                            {!! Form::label('id_materia', 'Seleccione Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_materia', $matters, null, ['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class="col-sm-1" align="right">
