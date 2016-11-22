@@ -28,7 +28,7 @@
 
         <div class="widget-body">
             <div class="widget-main">
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-sm-11">
                         <div class="col-sm-3">
                             {!! Form::label('id_campus', 'Seleccione Campus:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
@@ -50,8 +50,8 @@
                             {!! Form::select('id_materia', $matters, null, ['class' => 'form-control']) !!}
                         </div>
                     </div>
-                    <div class="col-sm-1" align="right">
-                        <div class="btn btn-white btn-primary btn-bold">
+                    <div class="col-sm-1" style="float:right; position:absolute; bottom:0; right:0;">
+                        <div class="btn btn-white btn-primary btn-bold" style="float:right;">
                             <a class="blue" href="#" onclick="document.forms[0].submit();">
                                 <i class='ace-icon fa fa-filter bigger-110 blue'></i>
                             </a>

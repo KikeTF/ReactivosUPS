@@ -62,6 +62,11 @@
                             <div class="col-sm-2"><strong>Responsable:</strong></div>
                             <div class="col-sm-8">{{ $reagent->usr_responsable }}</div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2"><strong>Estado:</strong></div>
+                            <div class="col-sm-8">{{ $reagent->desc_estado }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,11 +173,6 @@
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Referencia:</strong></div>
                             <div class="col-sm-8">{{ $reagent->referencia }}</div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Estado:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->estado }}</div>
                         </div>
 
                         <div class="form-group">

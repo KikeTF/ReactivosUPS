@@ -10,7 +10,7 @@ class Reagent extends Model
     public $timestamps = false;
 
     protected $fillable =["id_distributivo", "id_contenido_det", "id_formato", "id_campo", "descripcion", "planteamiento",
-                            "id_opcion_correcta", "dificultad", "puntaje", "referencia", "estado"];
+                            "id_opcion_correcta", "dificultad", "puntaje", "referencia", "id_estado"];
 
     public function distributive(){
         return $this->belongsTo('ReactivosUPS\Distributive', 'id_distributivo');
@@ -36,12 +36,22 @@ class Reagent extends Model
         return $this->hasMany('ReactivosUPS\ReagentAnswer', 'id_reactivo');
     }
 
-    public function ExamsDetails(){
+    public function examsDetails(){
         return $this->hasMany('ReactivosUPS\ExamDetail');
+    }
+
+    public function state(){
+        return $this->belongsTo('ReactivosUPS\ReagentState', 'id_estado');
     }
 
     public function scopeFilter($query, $id_distributivo){
         return $query
             ->where('id_distributivo', $id_distributivo);
+    }
+
+    public function scopeFilter2($query, $id_distributivo, $id_estado){
+        return $query
+            ->where('id_distributivo', $id_distributivo)
+            ->where('id_estado', $id_estado);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace ReactivosUPS\Http\Controllers;
 
+use ReactivosUPS\ReagentState;
 use Session;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -92,6 +93,14 @@ abstract class Controller extends BaseController
     public function getProfilesUsers(){
         $profilesUsers = ProfileUser::query()->where('estado','A')->orderBy('id', 'asc')->get();
         return $profilesUsers;
+    }
+
+    public function getReagentsStates(){
+        $reagentsStates = ReagentState::query()
+            ->where('estado','A')
+            ->where('id','!=',7)
+            ->orderBy('id', 'asc')->lists('descripcion','id');;
+        return $reagentsStates;
     }
 
     public function getDistributive($id_materia, $id_carrera, $id_campus){

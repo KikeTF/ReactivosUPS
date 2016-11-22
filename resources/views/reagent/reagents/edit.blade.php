@@ -67,6 +67,13 @@
                             {!! Form::text('usr_responsable', $reagent->usr_responsable, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        {!! Form::label('desc_estado', 'Estado:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                        <div class="col-sm-8">
+                            {!! Form::text('desc_estado', $reagent->desc_estado, ['class' => 'form-control', 'readonly']) !!}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,6 +134,7 @@
                                                 @for ($i = 1; $i <= $formatParam->opciones_preg_max; $i++)
                                                     <tr>
                                                         <td>
+                                                            {!! Form::text('id_preg_'.$i, ($i > $reagentQuestions->count()) ? null : $reagentQuestions[$i-1]->id, ['hidden']) !!}
                                                             {!! Form::text('conc_op_preg_'.$i,
                                                                         ($i > $reagentQuestions->count()) ? null : $reagentQuestions[$i-1]->concepto, [
                                                                         'id' => 'conc_op_preg_'.$i,
@@ -181,6 +189,7 @@
                                                 <tr>
                                                     <td>
                                                         {!! Form::radio('id_opcion_correcta', $i, ($i > $reagentAnswers->count()) ? false : ($reagentAnswers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false, ['id' => 'id_opcion_correcta_'.$i, ($i > $reagentAnswers->count()) ? 'disabled' : '']) !!}
+                                                        {!! Form::text('id_resp_'.$i, ($i > $reagentAnswers->count()) ? null : $reagentAnswers[$i-1]->id, ['hidden']) !!}
                                                     </td>
                                                     <td>
                                                         {!! Form::text('desc_op_resp_'.$i,
@@ -247,10 +256,6 @@
                         <div class="col-sm-8">
                             {!! Form::select('id_campo', $fields, $reagent->id_campo, ['class' => 'form-control'] ) !!}
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-2"><strong>Campo de Conocimiento:</strong></div>
-                        <div class="col-sm-8">{{ $reagent->desc_campo }}</div>
                     </div>
 
                     <div class="form-group">

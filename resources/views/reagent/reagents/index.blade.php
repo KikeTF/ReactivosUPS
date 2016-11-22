@@ -29,7 +29,7 @@
 
         <div class="widget-body">
             <div class="widget-main">
-                <div class="row">
+                <div class="row" style="position: relative;">
                     <div class="col-sm-11">
                         <div class="col-sm-3">
                             {!! Form::label('id_campus', 'Seleccione Campus:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
@@ -42,17 +42,17 @@
                         </div>
 
                         <div class="col-sm-3">
-                            {!! Form::label('id_mencion', 'Seleccione Menci&oacute;n:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_mencion', $mentions, $filters[2], ['class' => 'form-control']) !!}
+                            {!! Form::label('id_materia', 'Seleccione Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_materia', $matters, $filters[2], ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="col-sm-3">
-                            {!! Form::label('id_materia', 'Seleccione Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_materia', $matters, $filters[3], ['class' => 'form-control']) !!}
+                            {!! Form::label('id_estado', 'Seleccione Estado:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_estado', $states, $filters[3], ['class' => 'form-control', 'placeholder' => 'Todos los Estados']) !!}
                         </div>
                     </div>
-                    <div class="col-sm-1" align="right">
-                        <div class="btn btn-white btn-primary btn-bold">
+                    <div class="col-sm-1" style="float:right; position:absolute; bottom:0; right:0;">
+                        <div class="btn btn-white btn-primary btn-bold" style="float:right;">
                             <a class="blue" href="#" onclick="document.forms[0].submit();">
                                 <i class='ace-icon fa fa-filter bigger-110 blue'></i>
                             </a>
@@ -65,14 +65,11 @@
 
     {!! Form::close() !!}
 
-
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
             <tr>
                 <th>C&oacute;digo</th>
-                {{--<th>Cap&iacute;tulo</th>
-                <th>Tema</th>--}}
                 <th>Planteamiento</th>
                 <th>Estado</th>
                 <th></th>
@@ -83,7 +80,7 @@
                     <tr>
                         <td>{{ $reagent->id }}</td>
                         <td>{{ $reagent->planteamiento }}</td>
-                        <td>{{ $reagent->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                        <td>{{ $states[$reagent->id_estado] }}</td>
                         <td>
                             <div class="hidden-sm hidden-xs action-buttons">
                                 <a class="blue" href="{{ route('reagent.reagents.show', $reagent->id) }}">

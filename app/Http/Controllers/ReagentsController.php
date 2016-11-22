@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Career;
 use ReactivosUPS\Campus;
+use ReactivosUPS\Format;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\MatterCareer;
@@ -26,23 +27,26 @@ class ReagentsController extends Controller
     {
         $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
         $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
-        $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
         $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+        $id_estado = (isset($request['id_estado']) ? (int)$request->id_estado : 0);
 
-        $filters = array($id_campus, $id_carrera, $id_mencion, $id_materia);
+        $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
 
-        if($id_mencion > 0 && $id_carrera > 0 && $id_campus > 0 && $id_materia > 0){
+        if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0){
             $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
-            $reagents = Reagent::filter($id_distributivo)->where('estado', '!=', 'E')->get();;
+            if($id_estado == 0)
+                $reagents = Reagent::filter($id_distributivo)->where('id_estado','!=',7)->get();
+            else
+                $reagents = Reagent::filter2($id_distributivo, $id_estado)->where('id_estado','!=',7)->get();
         }else
-            $reagents = Reagent::query()->where('estado', '!=', 'E')->get();
+            $reagents = Reagent::query()->where('id_estado','!=',7)->get();
 
         return view('reagent.reagents.index')
             ->with('reagents', $reagents)
             ->with('campuses', $this->getCampuses())
             ->with('careers', $this->getCareers())
-            ->with('mentions', $this->getMentions())
             ->with('matters', $this->getMatters())
+            ->with('states', $this->getReagentsStates())
             ->with('filters', $filters);
     }
 
@@ -151,7 +155,7 @@ class ReagentsController extends Controller
         $reagent->desc_contenido = $reagent->contentDetail->capitulo." ".$reagent->contentDetail->tema;
         $reagent->usr_responsable = $this->getUserName($reagent->id_usr_responsable);
         $reagent->dificultad = ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta';
-        $reagent->estado = ($reagent->estado == 'A') ? 'Activo' : 'Inactivo';
+        $reagent->desc_estado = $reagent->state->descripcion;
         $reagent->creado_por = $this->getUserName($reagent->creado_por);
         $reagent->modificado_por = $this->getUserName($reagent->modificado_por);
 
@@ -181,6 +185,7 @@ class ReagentsController extends Controller
         $reagent->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
         $reagent->desc_mencion = $mattercareer->mention->descripcion;
         $reagent->desc_materia = $mattercareer->matter->descripcion;
+        $reagent->desc_estado = $reagent->state->descripcion;
         $reagent->desc_formato = $reagent->format->nombre;
         $reagent->desc_campo = $reagent->field->nombre;
         $reagent->desc_contenido = $reagent->contentDetail->capitulo." ".$reagent->contentDetail->tema;
@@ -209,7 +214,88 @@ class ReagentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd("update");
+        $reagent = Reagent::find($id);
+
+        $reagent->id_contenido_det = $request->id_contenido_det;
+        $reagent->planteamiento = $request->planteamiento;
+        $reagent->imagen = $request->imagen;
+        $reagent->id_opcion_correcta = $request->id_opcion_correcta;
+        $reagent->id_campo = $request->id_campo;
+        $reagent->descripcion = $request->descripcion;
+        $reagent->referencia = $request->referencia;
+        $reagent->modificado_por = \Auth::id();
+        $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+
+        $formatParam = Format::find($reagent->id_formato);
+
+        $nroOpRespMax = $formatParam->opciones_resp_max;
+        //$answersUpdateArray = array();
+        for($i = 1; $i <= $nroOpRespMax; $i++)
+            if( isset( $request['desc_op_resp_'.$i] ) )
+            {
+                if($answer = ReagentAnswer::find($request->input('id_resp_'.$i))){
+                    $answer->secuencia = $i;
+                    $answer->descripcion = $request->input('desc_op_resp_'.$i);
+                    $answer->argumento = $request->input('arg_op_resp_'.$i);
+                    $answer->modificado_por = \Auth::id();
+                    $answer->fecha_modificacion = date('Y-m-d h:i:s');
+                    $answersUpdateArray[] = $answer;
+                }else{
+                    $answer['secuencia'] = $i;
+                    $answer['descripcion'] = $request->input('desc_op_resp_'.$i);
+                    $answer['argumento'] = $request->input('arg_op_resp_'.$i);
+                    $answer['estado'] = 'A';
+                    $answer['creado_por'] = \Auth::id();
+                    $answer['fecha_creacion'] = date('Y-m-d h:i:s');
+                    $answersCreateArray[] = new ReagentAnswer($answer);
+                }
+            }
+
+        $nroOpPregMax = $formatParam->opciones_preg_max;
+        //$questionsArray = array();
+        for($i = 1; $i <= $nroOpPregMax; $i++)
+            if( isset( $request['conc_op_preg_'.$i] ) or isset( $request['prop_op_preg_'.$i] ) )
+            {
+                if($question = ReagentQuestion::find($request->input('id_preg_'.$i))){
+                    $question->secuencia = $i;
+                    $question->concepto = is_null($request->input('conc_op_preg_'.$i)) ? "" : $request->input('conc_op_preg_'.$i);
+                    $question->propiedad = is_null($request->input('prop_op_preg_'.$i)) ? "" : $request->input('prop_op_preg_'.$i);
+                    $question->modificado_por = \Auth::id();
+                    $question->fecha_modificacion = date('Y-m-d h:i:s');
+                    $questionsUpdateArray[] = $question;
+                }else{
+                    $question['secuencia'] = $i;
+                    $question['concepto'] = is_null($request->input('conc_op_preg_'.$i)) ? "" : $request->input('conc_op_preg_'.$i);
+                    $question['propiedad'] = is_null($request->input('prop_op_preg_'.$i)) ? "" : $request->input('prop_op_preg_'.$i);
+                    $question['estado'] = 'A';
+                    $question['creado_por'] = \Auth::id();
+                    $question['fecha_creacion'] = date('Y-m-d h:i:s');
+                    $questionsCreateArray[] = new ReagentQuestion($question);
+                }
+
+            }
+
+        \DB::beginTransaction(); //Start transaction!
+
+        try
+        {
+            $reagent->save();
+            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answersUpdateArray);
+            Reagent::find($reagent->id)->reagentsQuestions()->saveMany($questionsUpdateArray);
+            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answersCreateArray);
+            Reagent::find($reagent->id)->reagentsQuestions()->saveMany($questionsCreateArray);
+        }
+        catch(\Exception $e)
+        {
+            //failed logic here
+            \DB::rollback();
+            dd($e);
+        }
+
+        \DB::commit();
+
+        return redirect()->route('reagent.reagents.index');
+
     }
 
     /**
@@ -220,6 +306,13 @@ class ReagentsController extends Controller
      */
     public function destroy($id)
     {
-        dd("destroy");
+        $reagent = Reagent::find($id);
+
+        $reagent->id_estado = 7;
+        $reagent->modificado_por = \Auth::id();
+        $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+        $reagent->save();
+
+        return redirect()->route('reagent.reagents.index');
     }
 }
