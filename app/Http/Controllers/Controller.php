@@ -103,6 +103,14 @@ abstract class Controller extends BaseController
         return $reagentsStates;
     }
 
+    public function getReagentsStatesLabel(){
+        $statesLabel = ReagentState::query()
+            ->where('estado','A')
+            ->where('id','!=',7)
+            ->orderBy('id', 'asc')->lists('etiqueta','id');;
+        return $statesLabel;
+    }
+
     public function getDistributive($id_materia, $id_carrera, $id_campus){
         $id_profileUser = 1;//(int)Session::get('id_perfil_usuario');
         $id_periodLocation = 1;//(int)Session::get('id_periodo_sede');

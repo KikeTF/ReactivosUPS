@@ -47,6 +47,7 @@ class ReagentsController extends Controller
             ->with('careers', $this->getCareers())
             ->with('matters', $this->getMatters())
             ->with('states', $this->getReagentsStates())
+            ->with('statesLabels', $this->getReagentsStatesLabel())
             ->with('filters', $filters);
     }
 
@@ -77,7 +78,6 @@ class ReagentsController extends Controller
     {
         $reagent = new Reagent($request->all());
         $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
-        $reagent->estado = "A";
         $reagent->creado_por = \Auth::id();
         $reagent->fecha_creacion = date('Y-m-d h:i:s');
 

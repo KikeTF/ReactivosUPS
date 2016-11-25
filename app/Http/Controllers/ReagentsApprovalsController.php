@@ -9,6 +9,7 @@ use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
+use ReactivosUPS\Reagent;
 use Datatables;
 
 class ReagentsApprovalsController extends Controller
@@ -22,20 +23,24 @@ class ReagentsApprovalsController extends Controller
     {
         $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
         $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
-        $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+        //$id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
         $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
 
-        $campuses = $this->getCampuses();
-        $careers = $this->getCareers();
-        $matters = $this->getMatters();
-        $mentions = $this->getMentions();
-        $filters = array($id_campus, $id_carrera, $id_mencion, $id_materia);
+        $filters = array($id_campus, $id_carrera, $id_materia);
+
+        if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0){
+            $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
+            $reagents = Reagent::filter($id_distributivo)->where('id_estado','!=',7)->get();
+        }else
+            $reagents = Reagent::query()->where('id_estado','!=',7)->get();
 
         return view('reagent.approvals.index')
-            ->with('campuses', $campuses)
-            ->with('careers', $careers)
-            ->with('matters', $matters)
-            ->with('mentions', $mentions)
+            ->with('reagents', $reagents)
+            ->with('campuses', $this->getCampuses())
+            ->with('careers', $this->getCareers())
+            ->with('matters', $this->getMatters())
+            ->with('states', $this->getReagentsStates())
+            ->with('statesLabels', $this->getReagentsStatesLabel())
             ->with('filters', $filters);
     }
 

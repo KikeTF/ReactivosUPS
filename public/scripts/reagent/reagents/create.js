@@ -86,15 +86,18 @@ jQuery(function($) {
             }
         })
         .on('finished.fu.wizard', function(e) {
-            bootbox.dialog({
-                message: "Thank you! Your information was successfully saved!",
-                buttons: {
-                    "success" : {
-                        "label" : "OK",
-                        "className" : "btn-sm btn-primary"
+            $("#id_estado").val(2);
+            if(document.forms[0].submit()){
+                bootbox.dialog({
+                    message: "Thank you! Your information was successfully saved!",
+                    buttons: {
+                        "success" : {
+                            "label" : "OK",
+                            "className" : "btn-sm btn-primary"
+                        }
                     }
-                }
-            });
+                });
+            }
         }).on('stepclick.fu.wizard', function(e){
         //e.preventDefault();//this will prevent clicking and selecting steps
     });

@@ -165,6 +165,7 @@
                             <div class="center">
                                 <h3 class="green">Registro Exitoso!</h3>
                                 De clic en finalizar para solicitar aprobaci&oacute;n
+                                {!! Form::text('id_estado', 1, ['id' => 'id_estado', 'hidden'] ) !!}
                             </div>
                         </div>
                     </div>

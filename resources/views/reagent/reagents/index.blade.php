@@ -12,22 +12,18 @@
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.index','method' => 'GET']) !!}
 
-    <div class="widget-box">
+    <div class="widget-box collapsed">
         <div class="widget-header">
             <h5 class="widget-title">Filtros</h5>
 
             <div class="widget-toolbar">
                 <a href="#" data-action="collapse">
-                    <i class="ace-icon fa fa-chevron-up"></i>
+                    <i class="ace-icon fa fa-chevron-down"></i>
                 </a>
-
-                {{--<a href="#" data-action="close">
-                    <i class="ace-icon fa fa-times"></i>
-                </a>--}}
             </div>
         </div>
 
-        <div class="widget-body">
+        <div class="widget-body" style="display: none;">
             <div class="widget-main">
                 <div class="row" style="position: relative;">
                     <div class="col-sm-11">
@@ -71,7 +67,7 @@
             <tr>
                 <th>C&oacute;digo</th>
                 <th>Planteamiento</th>
-                <th>Estado</th>
+                <th style="text-align: center">Estado</th>
                 <th></th>
             </tr>
             </thead>
@@ -80,7 +76,7 @@
                     <tr>
                         <td>{{ $reagent->id }}</td>
                         <td>{{ $reagent->planteamiento }}</td>
-                        <td>{{ $states[$reagent->id_estado] }}</td>
+                        <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
                         <td>
                             <div class="hidden-sm hidden-xs action-buttons">
                                 <a class="blue" href="{{ route('reagent.reagents.show', $reagent->id) }}">
