@@ -10,6 +10,9 @@ use ReactivosUPS\Matter;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
+use ReactivosUPS\Career;
+use ReactivosUPS\ReagentQuestion;
+use ReactivosUPS\ReagentAnswer;
 use Datatables;
 
 class ReagentsApprovalsController extends Controller
@@ -73,7 +76,31 @@ class ReagentsApprovalsController extends Controller
      */
     public function show($id)
     {
-        //
+        $reagent = Reagent::find($id);
+        $mattercareer = MatterCareer::find($reagent->distributive->id_materia_carrera);
+
+        $reagent->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
+        $reagent->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
+        $reagent->desc_mencion = $mattercareer->mention->descripcion;
+        $reagent->desc_materia = $mattercareer->matter->descripcion;
+        $reagent->desc_formato = $reagent->format->nombre;
+        $reagent->desc_campo = $reagent->field->nombre;
+        $reagent->desc_contenido = $reagent->contentDetail->capitulo." ".$reagent->contentDetail->tema;
+        $reagent->usr_responsable = $this->getUserName($reagent->id_usr_responsable);
+        $reagent->dificultad = ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta';
+        $reagent->desc_estado = $reagent->state->descripcion;
+        $reagent->creado_por = $this->getUserName($reagent->creado_por);
+        $reagent->modificado_por = $this->getUserName($reagent->modificado_por);
+
+        $reagentQuestions = ReagentQuestion::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+        $reagentAnswers = ReagentAnswer::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+
+        return view('reagent.approvals.show')
+            ->with('reagent', $reagent)
+            ->with('reagentQuestions', $reagentQuestions)
+            ->with('reagentAnswers', $reagentAnswers)
+            ->with('formatParam', $reagent->format);
+
     }
 
     /**

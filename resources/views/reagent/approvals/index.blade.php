@@ -1,7 +1,7 @@
 @extends('shared.template.index')
 
 @section('titulo', 'Reactivos')
-@section('subtitulo', 'Aprovacion de reactivos')
+@section('subtitulo', 'Aprobacion de reactivos')
 
 @section('contenido')
     <?php
@@ -74,13 +74,13 @@
                     <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
                     <td>
                         <div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="{{ route('reagent.reagents.show', $reagent->id) }}">
+                            <a class="blue" href="{{ route('reagent.approvals.show', $reagent->id) }}">
                                 <i class="ace-icon fa fa-search-plus bigger-130"></i>
                             </a>
-                            <a class="green" href="{{ route('reagent.reagents.edit', $reagent->id) }}">
+                            <a class="green" href="{{ route('reagent.approvals.edit', $reagent->id) }}">
                                 <i class="ace-icon fa fa-comment-o bigger-130"></i>
                             </a>
-                            <a class="red" href="{{ route('reagent.reagents.destroy', $reagent->id) }}">
+                            <a class="red" href="{{ route('reagent.approvals.destroy', $reagent->id) }}">
                                 <i class="ace-icon fa fa-trash-o bigger-130"></i>
                             </a>
                         </div>
@@ -91,17 +91,17 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
                                     <li>
-                                        <a href="{{ route('reagent.reagents.show', $reagent->id) }}" class="tooltip-info" data-rel="tooltip" title="View">
+                                        <a href="{{ route('reagent.approvals.show', $reagent->id) }}" class="tooltip-info" data-rel="tooltip" title="View">
                                             <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('reagent.reagents.edit', $reagent->id) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                        <a href="{{ route('reagent.approvals.edit', $reagent->id) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
                                             <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('reagent.reagents.destroy', $reagent->id) }}" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                        <a href="{{ route('reagent.approvals.destroy', $reagent->id) }}" class="tooltip-error" data-rel="tooltip" title="Delete">
                                             <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
                                         </a>
                                     </li>
