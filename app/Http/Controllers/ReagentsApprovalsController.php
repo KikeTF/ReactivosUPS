@@ -13,6 +13,7 @@ use ReactivosUPS\Reagent;
 use ReactivosUPS\Career;
 use ReactivosUPS\ReagentQuestion;
 use ReactivosUPS\ReagentAnswer;
+use ReactivosUPS\ReagentComment;
 use Datatables;
 
 class ReagentsApprovalsController extends Controller
@@ -135,5 +136,41 @@ class ReagentsApprovalsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function comment(Request $request, $id)
+    {
+        $reagent = Reagent::find($id);
+
+        if( !isset( $request['id_estado'] ) ){
+            $reagent->id_estado = (int)$request->id_estado;
+            $reagent->modificado_por = \Auth::id();
+            $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+        }
+
+        $comment = new ReagentComment();
+        $comment->id_reactivo = $id;
+        $comment->id_estado_anterior = $reagent->id_estado;
+        $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $reagent->id_estado : (int)$request->id_estado;
+        $comment->comentario = $request->comentario;
+        $comment->creado_por = \Auth::id();
+        $comment->fecha_creacion = date('Y-m-d h:i:s');
+
+        \DB::beginTransaction(); //Start transaction!
+
+        try
+        {
+            $reagent->save();
+            $comment->save();
+        }
+        catch(\Exception $e)
+        {
+            //failed logic here
+            \DB::rollback();
+        }
+
+        \DB::commit();
+
+        return redirect()->route('reagent.approvals.index');
     }
 }

@@ -28,12 +28,16 @@ class Reagent extends Model
         return $this->belongsTo('ReactivosUPS\Field', 'id_campo');
     }
 
-    public function reagentsQuestions(){
+    public function questions(){
         return $this->hasMany('ReactivosUPS\ReagentQuestion', 'id_reactivo');
     }
 
-    public function reagentsAnswers(){
+    public function answers(){
         return $this->hasMany('ReactivosUPS\ReagentAnswer', 'id_reactivo');
+    }
+
+    public function comments(){
+        return $this->hasMany('ReactivosUPS\ReagentComment', 'id_reactivo');
     }
 
     public function examsDetails(){

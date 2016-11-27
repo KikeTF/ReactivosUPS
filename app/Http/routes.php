@@ -70,6 +70,12 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
         'as'    => 'reagent.reagents.destroy'
     ]);
 
+
+    Route::get('approvals/{id}/comment', [
+        'uses'  => 'ReagentsApprovalsController@comment',
+        'as'    => 'reagent.approvals.comment'
+    ]);
+
     Route::resource('approvals','ReagentsApprovalsController');
 
 });

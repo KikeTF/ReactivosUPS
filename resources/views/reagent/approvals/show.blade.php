@@ -236,6 +236,22 @@
 
 <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
 
+
 <script type="text/javascript" src="{{ asset('scripts/reagent/approvals/show.js') }}"></script>
+
+<script type="text/javascript">
+    jQuery(function($) {
+        $("#btn-comentarios").on(ace.click_event, function() {
+            bootbox.prompt("Ingrese si sus comentarios...", function(result) {
+                if (result === null) {
+                    console.log("null");
+                } else {
+                    $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result}, null, 'json');
+                }
+            });
+        });
+    });
+
+</script>
 
 @endpush

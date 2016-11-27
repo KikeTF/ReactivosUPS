@@ -280,16 +280,15 @@ class ReagentsController extends Controller
         try
         {
             $reagent->save();
-            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answersUpdateArray);
-            Reagent::find($reagent->id)->reagentsQuestions()->saveMany($questionsUpdateArray);
-            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answersCreateArray);
-            Reagent::find($reagent->id)->reagentsQuestions()->saveMany($questionsCreateArray);
+            Reagent::find($reagent->id)->answers()->saveMany($answersUpdateArray);
+            Reagent::find($reagent->id)->questions()->saveMany($questionsUpdateArray);
+            Reagent::find($reagent->id)->answers()->saveMany($answersCreateArray);
+            Reagent::find($reagent->id)->questions()->saveMany($questionsCreateArray);
         }
         catch(\Exception $e)
         {
             //failed logic here
             \DB::rollback();
-            dd($e);
         }
 
         \DB::commit();
