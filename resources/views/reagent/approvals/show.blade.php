@@ -1,4 +1,4 @@
-@extends('shared.template.index')
+@extends('shared.templates.index')
 
 @section('titulo', 'Reactivos')
 @section('subtitulo', 'Detalle de reactivo')
@@ -7,14 +7,14 @@
 
     <form class="form-horizontal" role="form">
 
-        <div class="form-group">
+        <div id="btn-aprobar" class="form-group">
             <div class="btn btn-white btn-primary btn-bold">
-                <a class="info" title="Aprobar" href="{{ route('reagent.approvals.edit', $reagent->id) }}">
+                <a class="info" title="Aprobar" href="#">
                     <i class='ace-icon fa fa-thumbs-o-up bigger-110 info'></i>
                 </a>
             </div>
-            <div class="btn btn-white btn-warning btn-bold">
-                <a class="orange2" title="Rechazar" href="{{ route('reagent.approvals.edit', $reagent->id) }}">
+            <div id="btn-rechazar" class="btn btn-white btn-warning btn-bold">
+                <a class="orange2" title="Rechazar" href="#">
                     <i class='ace-icon fa fa-thumbs-o-down bigger-110 orange2'></i>
                 </a>
             </div>
@@ -121,7 +121,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($reagentQuestions as $question)
+                                @foreach($questions as $question)
                                     <tr>
                                         <td>{{ $question->secuencia }}</td>
                                         <td>{{ $question->concepto }}</td>
@@ -145,7 +145,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($reagentAnswers as $answer)
+                                @foreach($answers as $answer)
                                     <tr>
                                         <td>{{ $answer->secuencia }}</td>
                                         <td>{{ $answer->descripcion }}</td>
@@ -215,13 +215,28 @@
                 <div class="panel-collapse collapse" id="collapseFour">
                     <div class="panel-body">
                         <div class="form-group">
-                            Comentarios...
-                        </div>
-                        <div class="form-group">
-                            Comentarios...
-                        </div>
-                        <div class="form-group">
-                            Comentarios...
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <td><strong>Fecha</strong></td>
+                                    <td><strong>Creado por</strong></td>
+                                    <td><strong>Comentario</strong></td>
+                                    <td><strong>Estado Nuevo</strong></td>
+                                    <td><strong>Estado Anterior</strong></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($comments as $comment)
+                                    <tr>
+                                        <td>{{ $comment->fecha_creacion }}</td>
+                                        <td>{{ $users[$comment->creado_por] }}</td>
+                                        <td>{{ $comment->comentario }}</td>
+                                        <td>{{ $states[$comment->id_estado_nuevo] }}</td>
+                                        <td>{{ $states[$comment->id_estado_anterior] }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -236,9 +251,6 @@
 
 <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
 
-
-<script type="text/javascript" src="{{ asset('scripts/reagent/approvals/show.js') }}"></script>
-
 <script type="text/javascript">
     jQuery(function($) {
         $("#btn-comentarios").on(ace.click_event, function() {
@@ -250,8 +262,17 @@
                 }
             });
         });
-    });
 
+        $("#btn-comentarios").on(ace.click_event, function() {
+            bootbox.prompt("Ingrese si sus comentarios...", function(result) {
+                if (result === null) {
+                    console.log("null");
+                } else {
+                    $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result}, null, 'json');
+                }
+            });
+        });
+    });
 </script>
 
 @endpush

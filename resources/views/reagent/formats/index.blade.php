@@ -1,4 +1,4 @@
-@extends('shared.template.index')
+@extends('shared.templates.index')
 
 @section('titulo', 'Reactivos')
 @section('subtitulo', 'Listado de formatos de reactivos')
@@ -28,6 +28,11 @@
             </thead>
             <tbody>
             @foreach($formats as $format)
+                <?php
+                $showurl = route('reagent.formats.show', $format->id);
+                $editurl = route('reagent.formats.edit', $format->id);
+                $destroyurl = route('reagent.formats.destroy', $format->id);
+                ?>
                 <tr>
                     <td>{{ $format->nombre }}</td>
                     <td>{{ $format->opciones_resp_min }}</td>
@@ -39,41 +44,7 @@
                     <td>{{ $format->imagenes == 'S' ? 'Si' : 'No' }}</td>
                     <td>{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
-                        <div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="{{ route('reagent.formats.show', $format->id) }}">
-                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                            </a>
-                            <a class="green" href="{{ route('reagent.formats.edit', $format->id) }}">
-                                <i class="ace-icon fa fa-pencil bigger-130"></i>
-                            </a>
-                            <a class="red" href="{{ route('reagent.formats.destroy', $format->id) }}">
-                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                            </a>
-                        </div>
-                        <div class="hidden-md hidden-lg">
-                            <div class="inline pos-rel">
-                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                    <li>
-                                        <a href="{{ route('reagent.formats.show', $format->id) }}" class="tooltip-info" data-rel="tooltip" title="View">
-                                            <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('reagent.formats.edit', $format->id) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                            <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('reagent.formats.destroy', $format->id) }}" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                            <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        @include('shared.templates._tablebuttons')
                     </td>
                 </tr>
             @endforeach

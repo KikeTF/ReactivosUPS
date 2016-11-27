@@ -1,4 +1,4 @@
-@extends('shared.template.index')
+@extends('shared.templates.index')
 
 @section('titulo', 'General')
 @section('subtitulo', 'Detalle de par&aacute;metros de materia')

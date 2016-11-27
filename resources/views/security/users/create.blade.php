@@ -1,4 +1,4 @@
-@extends('shared.template.index')
+@extends('shared.templates.index')
 
 @section('titulo', 'Seguridad')
 @section('subtitulo', 'Usuarios')

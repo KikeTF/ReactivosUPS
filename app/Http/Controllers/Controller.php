@@ -30,13 +30,17 @@ abstract class Controller extends BaseController
 
     public function getUserName($id){
         $userName = "";
-
         if( !is_null($id) ){
             $user = User::find($id);
             $userName = $user->nombres." ".$user->apellidos;
         }
-
         return $userName;
+    }
+
+    public function getUsers(){
+        $contents = User::query()->orderBy('nombres', 'asc')->get();
+        $contents = $contents->lists('UserName', 'id');
+        return $contents;
     }
 
     public function getCampuses(){

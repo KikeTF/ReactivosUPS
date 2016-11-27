@@ -95,11 +95,15 @@ class ReagentsApprovalsController extends Controller
 
         $reagentQuestions = ReagentQuestion::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
         $reagentAnswers = ReagentAnswer::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+        $reagentComments = ReagentComment::query()->where('id_reactivo', $reagent->id)->orderBy('id','desc')->get();
 
         return view('reagent.approvals.show')
             ->with('reagent', $reagent)
-            ->with('reagentQuestions', $reagentQuestions)
-            ->with('reagentAnswers', $reagentAnswers)
+            ->with('questions', $reagentQuestions)
+            ->with('answers', $reagentAnswers)
+            ->with('comments', $reagentComments)
+            ->with('states', $this->getReagentsStates())
+            ->with('users', $this->getUsers())
             ->with('formatParam', $reagent->format);
 
     }
@@ -142,7 +146,7 @@ class ReagentsApprovalsController extends Controller
     {
         $reagent = Reagent::find($id);
 
-        if( !isset( $request['id_estado'] ) ){
+        if( isset( $request['id_estado'] ) ){
             $reagent->id_estado = (int)$request->id_estado;
             $reagent->modificado_por = \Auth::id();
             $reagent->fecha_modificacion = date('Y-m-d h:i:s');

@@ -119,8 +119,8 @@ class ReagentsController extends Controller
         try
         {
             $reagent->save();
-            Reagent::find($reagent->id)->reagentsAnswers()->saveMany($answersArray);
-            Reagent::find($reagent->id)->reagentsQuestions()->saveMany($questionsArray);
+            Reagent::find($reagent->id)->answers()->saveMany($answersArray);
+            Reagent::find($reagent->id)->questions()->saveMany($questionsArray);
         }
         catch(\Exception $e)
         {

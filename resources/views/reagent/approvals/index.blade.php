@@ -1,4 +1,4 @@
-@extends('shared.template.index')
+@extends('shared.templates.index')
 
 @section('titulo', 'Reactivos')
 @section('subtitulo', 'Aprobacion de reactivos')
@@ -60,7 +60,7 @@
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
             <tr>
-                <th>C&oacute;digo</th>
+                <th style="text-align: center">C&oacute;digo</th>
                 <th>Planteamiento</th>
                 <th style="text-align: center">Estado</th>
                 <th></th>

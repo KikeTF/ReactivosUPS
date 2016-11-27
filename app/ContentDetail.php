@@ -11,6 +11,10 @@ class ContentDetail extends Model
 
     protected $fillable =["id_contenido_cab", "cod_contenido_det", "cod_contenido_cab", "capitulo", "tema", "estado"];
 
+    public function getContentDescriptionAttribute(){
+        return $this->attributes['capitulo'] .' '. $this->attributes['tema'];
+    }
+
     public function contentHeader(){
         return $this->belongsTo('ReactivosUPS\ContentHeader');
     }
@@ -19,8 +23,4 @@ class ContentDetail extends Model
         return $this->hasMany('ReactivosUPS\Reagent', 'id_contenido_det');
     }
 
-    public function getContentDescriptionAttribute()
-    {
-        return $this->attributes['capitulo'] .' '. $this->attributes['tema'];
-    }
 }
