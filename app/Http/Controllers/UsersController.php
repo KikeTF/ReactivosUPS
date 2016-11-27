@@ -4,8 +4,10 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\User;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use Datatables;
 
 class UsersController extends Controller
 {
@@ -16,7 +18,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::query()->where('estado','!=','E')->get();
+        return view('security.users.index')
+            ->with('users', $users);
     }
 
     /**
@@ -49,7 +53,11 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        $user->creado_por = $this->getUserName($user->creado_por);
+        $user->modificado_por = $this->getUserName($user->modificado_por);
+
+        return view('security.users.show')->with('user', $user);
     }
 
     /**

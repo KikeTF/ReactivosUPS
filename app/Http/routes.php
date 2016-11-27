@@ -43,6 +43,18 @@ Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
 
     Route::resource('users','UsersController');
 
+    Route::get('users/{id}/destroy', [
+        'uses'  => 'UsersController@destroy',
+        'as'    => 'security.users.destroy'
+    ]);
+
+    Route::resource('profiles','ProfilesController');
+
+    Route::get('profiles/{id}/destroy', [
+        'uses'  => 'ProfilesController@destroy',
+        'as'    => 'security.profiles.destroy'
+    ]);
+
 });
 
 

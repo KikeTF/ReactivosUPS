@@ -188,7 +188,7 @@
 
                     <ul class="submenu">
                         <li class="">
-                            <a href="{{ route('security.users.create') }}">
+                            <a href="{{ route('security.users.index') }}">
                                 <i class="menu-icon fa fa-caret-right"></i>
                                 Usuarios
                             </a>
@@ -197,7 +197,7 @@
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="{{ route('security.profiles.index') }}">
                                 <i class="menu-icon fa fa-caret-right"></i>
                                 Perfiles
                             </a>

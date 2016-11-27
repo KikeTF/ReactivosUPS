@@ -9,7 +9,7 @@ class Profile extends Model
     protected $table = "seg_perfiles";
     public $timestamps = false;
 
-    protected $fillable =["cod_perfil", "descripcion", "estado"];
+    protected $fillable =["cod_perfil", "nombre", "descripcion", "estado"];
 
     public function profilesUsers(){
         return $this->hasMany('ReactivosUPS\ProfileUser');
