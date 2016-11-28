@@ -68,46 +68,15 @@
             </thead>
             <tbody>
             @foreach($reagents as $reagent)
+                <?php
+                $showurl = route('reagent.approvals.show', $reagent->id);
+                ?>
                 <tr>
                     <td>{{ $reagent->id }}</td>
                     <td>{{ $reagent->planteamiento }}</td>
                     <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
                     <td>
-                        <div class="hidden-sm hidden-xs action-buttons">
-                            <a class="blue" href="{{ route('reagent.approvals.show', $reagent->id) }}">
-                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                            </a>
-                            <a class="green" href="{{ route('reagent.approvals.edit', $reagent->id) }}">
-                                <i class="ace-icon fa fa-comment-o bigger-130"></i>
-                            </a>
-                            <a class="red" href="{{ route('reagent.approvals.destroy', $reagent->id) }}">
-                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                            </a>
-                        </div>
-                        <div class="hidden-md hidden-lg">
-                            <div class="inline pos-rel">
-                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                    <li>
-                                        <a href="{{ route('reagent.approvals.show', $reagent->id) }}" class="tooltip-info" data-rel="tooltip" title="View">
-                                            <span class="blue"><i class="ace-icon fa fa-search-plus bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('reagent.approvals.edit', $reagent->id) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                            <span class="green"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('reagent.approvals.destroy', $reagent->id) }}" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                            <span class="red"><i class="ace-icon fa fa-trash-o bigger-120"></i></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        @include('shared.templates._tablebuttons')
                     </td>
                 </tr>
             @endforeach

@@ -39,7 +39,7 @@ abstract class Controller extends BaseController
 
     public function getUsers(){
         $contents = User::query()->orderBy('nombres', 'asc')->get();
-        $contents = $contents->lists('UserName', 'id');
+        $contents = $contents->lists('FullName', 'id');
         return $contents;
     }
 

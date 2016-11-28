@@ -116,7 +116,7 @@ class ReagentsApprovalsController extends Controller
      */
     public function edit($id)
     {
-        //
+        dd("No disponible!");
     }
 
     /**
@@ -128,7 +128,7 @@ class ReagentsApprovalsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd("No disponible!");
     }
 
     /**
@@ -139,7 +139,7 @@ class ReagentsApprovalsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        dd("No disponible!");
     }
 
     public function comment(Request $request, $id)

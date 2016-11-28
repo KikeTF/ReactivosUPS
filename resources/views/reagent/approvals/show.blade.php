@@ -7,18 +7,18 @@
 
     <form class="form-horizontal" role="form">
 
-        <div id="btn-aprobar" class="form-group">
-            <div class="btn btn-white btn-primary btn-bold">
+        <div class="form-group">
+            <div id="btn-aprobado" class="btn btn-white btn-primary btn-bold">
                 <a class="info" title="Aprobar" href="#">
                     <i class='ace-icon fa fa-thumbs-o-up bigger-110 info'></i>
                 </a>
             </div>
-            <div id="btn-rechazar" class="btn btn-white btn-warning btn-bold">
+            <div id="btn-rechazado" class="btn btn-white btn-warning btn-bold">
                 <a class="orange2" title="Rechazar" href="#">
                     <i class='ace-icon fa fa-thumbs-o-down bigger-110 orange2'></i>
                 </a>
             </div>
-            <div id="btn-comentarios" class="btn btn-white btn-grey btn-bold">
+            <div id="btn-comentario" class="btn btn-white btn-grey btn-bold">
                 <a class="grey" title="Comentarios" href="#">
                     <i class='ace-icon fa fa-comment-o bigger-110 grey'></i>
                 </a>
@@ -249,30 +249,84 @@
 
 @push('specific-script')
 
-<script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
+    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
 
-<script type="text/javascript">
-    jQuery(function($) {
-        $("#btn-comentarios").on(ace.click_event, function() {
-            bootbox.prompt("Ingrese si sus comentarios...", function(result) {
-                if (result === null) {
-                    console.log("null");
-                } else {
-                    $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result}, null, 'json');
+    <script type="text/javascript">
+        $("#btn-aprobado").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Aprobar',
+                        className: 'btn-info'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result, 'id_estado':5}, result, 'json');
+                    }
                 }
             });
         });
 
-        $("#btn-comentarios").on(ace.click_event, function() {
-            bootbox.prompt("Ingrese si sus comentarios...", function(result) {
-                if (result === null) {
-                    console.log("null");
-                } else {
-                    $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result}, null, 'json');
+        $("#btn-rechazado").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Rechazar',
+                        className: 'btn-danger'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result, 'id_estado':6}, result, 'json');
+                    }
                 }
             });
         });
-    });
-</script>
+
+        $("#btn-comentario").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Enviar',
+                        className: 'btn-info'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result, 'id_estado':4}, result, 'json');
+                    }
+                }
+            });
+        });
+
+        function result(){
+            console.log("Ok");
+        }
+    </script>
 
 @endpush
