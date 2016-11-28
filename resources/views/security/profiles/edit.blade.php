@@ -40,11 +40,7 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($profile->estado == 'A')
-                        {!! Form::checkbox('estado', $profile->estado, true) !!}
-                    @else
-                        {!! Form::checkbox('estado', $profile->estado) !!}
-                    @endif
+                    {!! Form::checkbox('estado', $profile->estado, ($profile->estado == 'A') ? true : false) !!}
                 </label>
             </div>
 

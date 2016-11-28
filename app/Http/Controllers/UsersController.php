@@ -9,6 +9,7 @@ use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Datatables;
 
+
 class UsersController extends Controller
 {
     /**
@@ -30,8 +31,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
-        return view('security.users.create');
+        dd("No disponible!");
     }
 
     /**
@@ -42,7 +42,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd("No disponible!");
     }
 
     /**
@@ -68,7 +68,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view('security.users.edit')->with('user', $user);
     }
 
     /**
@@ -80,7 +81,20 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //dd($request->all());
+        $user = User::find($id);
+
+        if(!is_null($request->password) and  $request->password != "")
+            $user->password = \Hash::make($request->password);
+
+        $user->username = $request->username;
+        $user->tipo = $request->tipo;
+        $user->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+        $user->modificado_por = \Auth::id();
+        $user->fecha_modificacion = date('Y-m-d h:i:s');
+        $user->save();
+
+        return redirect()->route('security.users.index');
     }
 
     /**
@@ -91,6 +105,16 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+
+        $user->estado = 'E';
+        $user->modificado_por = \Auth::id();
+        $user->fecha_modificacion = date('Y-m-d h:i:s');
+        $user->save();
+
+
+        return redirect()->route('security.users.index');
     }
+
+
 }

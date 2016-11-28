@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Seguridad')
-@section('subtitulo', 'Detalle de perfiles: '.$profile->nombre)
+@section('subtitulo', 'Detalle de perfil: '.$profile->nombre)
 
 @section('contenido')
 

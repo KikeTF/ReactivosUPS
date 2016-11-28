@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Seguridad')
-@section('subtitulo', 'Detalle de usuarios: '.$user->nombres.' '.$user->apellidos)
+@section('subtitulo', 'Detalle de usuario: '.$user->nombres.' '.$user->apellidos)
 
 @section('contenido')
 
