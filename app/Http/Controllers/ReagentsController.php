@@ -13,6 +13,7 @@ use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\ReagentAnswer;
 use ReactivosUPS\ReagentQuestion;
+use ReactivosUPS\ReagentComment;
 use Session;
 
 
@@ -161,11 +162,15 @@ class ReagentsController extends Controller
 
         $reagentQuestions = ReagentQuestion::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
         $reagentAnswers = ReagentAnswer::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+        $reagentComments = ReagentComment::query()->where('id_reactivo', $reagent->id)->orderBy('id','desc')->get();
 
         return view('reagent.reagents.show')
             ->with('reagent', $reagent)
-            ->with('reagentQuestions', $reagentQuestions)
-            ->with('reagentAnswers', $reagentAnswers)
+            ->with('questions', $reagentQuestions)
+            ->with('answers', $reagentAnswers)
+            ->with('comments', $reagentComments)
+            ->with('states', $this->getReagentsStates())
+            ->with('users', $this->getUsers())
             ->with('formatParam', $reagent->format);
 
     }
@@ -195,11 +200,15 @@ class ReagentsController extends Controller
 
         $reagentQuestions = ReagentQuestion::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
         $reagentAnswers = ReagentAnswer::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
+        $reagentComments = ReagentComment::query()->where('id_reactivo', $reagent->id)->orderBy('id','desc')->get();
 
         return view('reagent.reagents.edit')
             ->with('reagent', $reagent)
-            ->with('reagentQuestions', $reagentQuestions)
-            ->with('reagentAnswers', $reagentAnswers)
+            ->with('questions', $reagentQuestions)
+            ->with('answers', $reagentAnswers)
+            ->with('comments', $reagentComments)
+            ->with('states', $this->getReagentsStates())
+            ->with('users', $this->getUsers())
             ->with('formatParam', $reagent->format)
             ->with('contents', $this->getContents())
             ->with('fields', $this->getFields());
@@ -229,7 +238,8 @@ class ReagentsController extends Controller
         $formatParam = Format::find($reagent->id_formato);
 
         $nroOpRespMax = $formatParam->opciones_resp_max;
-        //$answersUpdateArray = array();
+        $answersUpdateArray = array();
+        $answersCreateArray = array();
         for($i = 1; $i <= $nroOpRespMax; $i++)
             if( isset( $request['desc_op_resp_'.$i] ) )
             {
@@ -252,7 +262,8 @@ class ReagentsController extends Controller
             }
 
         $nroOpPregMax = $formatParam->opciones_preg_max;
-        //$questionsArray = array();
+        $questionsUpdateArray = array();
+        $questionsCreateArray = array();
         for($i = 1; $i <= $nroOpPregMax; $i++)
             if( isset( $request['conc_op_preg_'.$i] ) or isset( $request['prop_op_preg_'.$i] ) )
             {
@@ -289,6 +300,7 @@ class ReagentsController extends Controller
         {
             //failed logic here
             \DB::rollback();
+            dd($e);
         }
 
         \DB::commit();

@@ -111,7 +111,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($reagentQuestions as $question)
+                                @foreach($questions as $question)
                                     <tr>
                                         <td>{{ $question->secuencia }}</td>
                                         <td>{{ $question->concepto }}</td>
@@ -135,7 +135,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($reagentAnswers as $answer)
+                                @foreach($answers as $answer)
                                     <tr>
                                         <td>{{ $answer->secuencia }}</td>
                                         <td>{{ $answer->descripcion }}</td>
@@ -187,6 +187,46 @@
                             <div class="col-sm-4">{{ $reagent->modificado_por }}</div>
                             <div class="col-sm-2"><strong>Fecha de modificación:</strong></div>
                             <div class="col-sm-4">{{ $reagent->fecha_modificacion }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                            <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                            &nbsp;Comentarios
+                        </a>
+                    </h4>
+                </div>
+
+                <div class="panel-collapse collapse" id="collapseFour">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <td><strong>Fecha</strong></td>
+                                    <td><strong>Creado por</strong></td>
+                                    <td><strong>Comentario</strong></td>
+                                    <td><strong>Estado Nuevo</strong></td>
+                                    <td><strong>Estado Anterior</strong></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($comments as $comment)
+                                    <tr>
+                                        <td>{{ $comment->fecha_creacion }}</td>
+                                        <td>{{ $users[$comment->creado_por] }}</td>
+                                        <td>{{ $comment->comentario }}</td>
+                                        <td>{{ $states[$comment->id_estado_nuevo] }}</td>
+                                        <td>{{ $states[$comment->id_estado_anterior] }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -134,30 +134,30 @@
                                                 @for ($i = 1; $i <= $formatParam->opciones_preg_max; $i++)
                                                     <tr>
                                                         <td>
-                                                            {!! Form::text('id_preg_'.$i, ($i > $reagentQuestions->count()) ? null : $reagentQuestions[$i-1]->id, ['hidden']) !!}
+                                                            {!! Form::text('id_preg_'.$i, ($i > $questions->count()) ? null : $questions[$i-1]->id, ['hidden']) !!}
                                                             {!! Form::text('conc_op_preg_'.$i,
-                                                                        ($i > $reagentQuestions->count()) ? null : $reagentQuestions[$i-1]->concepto, [
+                                                                        ($i > $questions->count()) ? null : $questions[$i-1]->concepto, [
                                                                         'id' => 'conc_op_preg_'.$i,
                                                                         'class' => 'form-control',
                                                                         'placeholder' => 'Concepto de pregunta.',
                                                                         'style' => 'height: 25px;',
-                                                                        ($i > $reagentQuestions->count()) ? 'disabled' : ''
+                                                                        ($i > $questions->count()) ? 'disabled' : ''
                                                                 ]) !!}
                                                         </td>
                                                         @if($formatParam->concepto_propiedad == 'S')
                                                             <td>
                                                                 {!! Form::text('prop_op_preg_'.$i,
-                                                                            ($i > $reagentQuestions->count()) ? null : $reagentQuestions[$i-1]->propiedad, [
+                                                                            ($i > $questions->count()) ? null : $questions[$i-1]->propiedad, [
                                                                             'id' => 'prop_op_preg_'.$i,
                                                                             'class' => 'form-control',
                                                                             'placeholder' => 'Propiedad de pregunta.',
                                                                             'style' => 'height: 25px;',
-                                                                            ($i > $reagentQuestions->count()) ? 'disabled' : ''
+                                                                            ($i > $questions->count()) ? 'disabled' : ''
                                                                     ]) !!}
                                                             </td>
                                                         @endif
                                                         <td>
-                                                            @if($i > $reagentQuestions->count())
+                                                            @if($i > $questions->count())
                                                                 <div class="action-buttons">
                                                                     <div id="activa_op_preg_{{ $i }}">
                                                                         <a class="green" onclick="activa_op_preg('{{ $i }}')" title="Activar">
@@ -188,31 +188,31 @@
                                             @for ($i = 1; $i <= $formatParam->opciones_resp_max; $i++)
                                                 <tr>
                                                     <td>
-                                                        {!! Form::radio('id_opcion_correcta', $i, ($i > $reagentAnswers->count()) ? false : ($reagentAnswers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false, ['id' => 'id_opcion_correcta_'.$i, ($i > $reagentAnswers->count()) ? 'disabled' : '']) !!}
-                                                        {!! Form::text('id_resp_'.$i, ($i > $reagentAnswers->count()) ? null : $reagentAnswers[$i-1]->id, ['hidden']) !!}
+                                                        {!! Form::radio('id_opcion_correcta', $i, ($i > $answers->count()) ? false : ($answers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false, ['id' => 'id_opcion_correcta_'.$i, ($i > $answers->count()) ? 'disabled' : '']) !!}
+                                                        {!! Form::text('id_resp_'.$i, ($i > $answers->count()) ? null : $answers[$i-1]->id, ['hidden']) !!}
                                                     </td>
                                                     <td>
                                                         {!! Form::text('desc_op_resp_'.$i,
-                                                                ($i > $reagentAnswers->count()) ? null : $reagentAnswers[$i-1]->descripcion, [
+                                                                ($i > $answers->count()) ? null : $answers[$i-1]->descripcion, [
                                                                 'id' => 'desc_op_resp_'.$i,
                                                                 'class' => 'form-control',
                                                                 'placeholder' => 'Descripción de respuesta.',
                                                                 'style' => 'height: 25px;',
-                                                                ($i > $reagentAnswers->count()) ? 'disabled' : ''
+                                                                ($i > $answers->count()) ? 'disabled' : ''
                                                         ]) !!}
                                                     </td>
                                                     <td>
                                                         {!! Form::text('arg_op_resp_'.$i,
-                                                                ($i > $reagentAnswers->count()) ? null : $reagentAnswers[$i-1]->argumento, [
+                                                                ($i > $answers->count()) ? null : $answers[$i-1]->argumento, [
                                                                 'id' => 'arg_op_resp_'.$i,
                                                                 'class' => 'form-control',
                                                                 'placeholder' => 'Argumento de respuesta.',
                                                                 'style' => 'height: 25px;',
-                                                                 ($i > $reagentAnswers->count()) ? 'disabled' : ''
+                                                                 ($i > $answers->count()) ? 'disabled' : ''
                                                         ]) !!}
                                                     </td>
                                                     <td>
-                                                        @if($i > $reagentAnswers->count())
+                                                        @if($i > $answers->count())
                                                             <div class="action-buttons">
                                                                 <div id="activa_op_resp_{{ $i }}">
                                                                     <a class="green" onclick="activa_op_resp('{{ $i }}')" title="Activar">
@@ -270,6 +270,46 @@
                         <div class="col-sm-8">
                             {!! Form::textarea('referencia', $reagent->referencia, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                        <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                        &nbsp;Comentarios
+                    </a>
+                </h4>
+            </div>
+
+            <div class="panel-collapse collapse" id="collapseFour">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <td><strong>Fecha</strong></td>
+                                <td><strong>Creado por</strong></td>
+                                <td><strong>Comentario</strong></td>
+                                <td><strong>Estado Nuevo</strong></td>
+                                <td><strong>Estado Anterior</strong></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($comments as $comment)
+                                <tr>
+                                    <td>{{ $comment->fecha_creacion }}</td>
+                                    <td>{{ $users[$comment->creado_por] }}</td>
+                                    <td>{{ $comment->comentario }}</td>
+                                    <td>{{ $states[$comment->id_estado_nuevo] }}</td>
+                                    <td>{{ $states[$comment->id_estado_anterior] }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
