@@ -80,6 +80,10 @@ jQuery(function($) {
         .on('actionclicked.fu.wizard' , function(e, info){
             if(info.step == 1) {
                 $('#actions-bottons').click(function(e){
+                    $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                    })
                     e.preventDefault();
                 });
                 //e.preventDefault();
@@ -101,6 +105,8 @@ jQuery(function($) {
         }).on('stepclick.fu.wizard', function(e){
         //e.preventDefault();//this will prevent clicking and selecting steps
     });
+
+
 
     /*
 

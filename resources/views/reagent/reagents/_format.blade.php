@@ -11,12 +11,9 @@
         @if($param->opciones_resp_min > 0)
             @if($param->imagenes == 'S')
                 <div class="form-group">
-                    <div class="col-sm-3">
-                    </div>
+                    {!! Form::label('f'.$param->id.'_imagen','Cargar Imagen:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                     <div class="col-sm-8">
-                        {!! Form::label('f'.$param->id.'_imagen','Carga Imagen', ['class' => 'col-sm-3 btn btn-primary no-padding-right']) !!}
-                        {!! Form::file('f'.$param->id.'_imagen', ['class' => 'form-control', 'style' => 'display:none;', 'onchange' => "$('#f".$param->id."_imagen_info').html($(this).val());"]) !!}
-                        <span class='' id="f{{ $param->id }}_imagen_info"></span>
+                        {!! Form::file('f'.$param->id.'_imagen', ['class' => 'input-file form-control']) !!}
                     </div>
                 </div>
             @endif
@@ -30,21 +27,23 @@
                                 @for ($i = 1; $i <= $param->opciones_preg_max; $i++)
                                 <tr>
                                     <td>
-                                        {!! Form::text('f'.$param->id.'_conc_op_preg_'.$i, null, [
+                                        {!! Form::textarea('f'.$param->id.'_conc_op_preg_'.$i, null, [
                                                     'id' => 'f'.$param->id.'_conc_op_preg_'.$i,
                                                     'class' => 'form-control',
                                                     'placeholder' => 'Concepto de pregunta.',
-                                                    'style' => 'height: 25px;',
+                                                    'size' => '100%x2',
+                                                    'style' => 'resize: vertical;',
                                                     ($i > $param->opciones_preg_min) ? 'disabled' : ''
                                             ]) !!}
                                     </td>
                                     @if($param->concepto_propiedad == 'S')
                                     <td>
-                                        {!! Form::text('f'.$param->id.'_prop_op_preg_'.$i, null, [
+                                        {!! Form::textarea('f'.$param->id.'_prop_op_preg_'.$i, null, [
                                                     'id' => 'f'.$param->id.'_prop_op_preg_'.$i,
                                                     'class' => 'form-control',
                                                     'placeholder' => 'Propiedad de pregunta.',
-                                                    'style' => 'height: 25px;',
+                                                    'size' => '100%x2',
+                                                    'style' => 'resize: vertical;',
                                                     ($i > $param->opciones_preg_min) ? 'disabled' : ''
                                             ]) !!}
                                     </td>
@@ -81,23 +80,30 @@
                             @for ($i = 1; $i <= $param->opciones_resp_max; $i++)
                                 <tr>
                                     <td>
-                                        {!! Form::radio('f'.$param->id.'_id_opcion_correcta', $i, false, ['id' => 'f'.$param->id.'_id_opcion_correcta_'.$i, ($i > $param->opciones_resp_min) ? 'disabled' : '']) !!}
+                                        <div class="radio">
+                                            <label>
+                                                {!! Form::radio('f'.$param->id.'_id_opcion_correcta', $i, false, ['class' => 'ace', 'id' => 'f'.$param->id.'_id_opcion_correcta_'.$i, ($i > $param->opciones_resp_min) ? 'disabled' : '']) !!}
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </div>
                                     </td>
                                     <td>
-                                        {!! Form::text('f'.$param->id.'_desc_op_resp_'.$i, null, [
+                                        {!! Form::textarea('f'.$param->id.'_desc_op_resp_'.$i, null, [
                                                 'id' => 'f'.$param->id.'_desc_op_resp_'.$i,
                                                 'class' => 'form-control',
                                                 'placeholder' => 'Descripción de respuesta.',
-                                                'style' => 'height: 25px;',
+                                                'size' => '100%x2',
+                                                'style' => 'resize: vertical;',
                                                 ($i > $param->opciones_resp_min) ? 'disabled' : ''
                                         ]) !!}
                                     </td>
                                     <td>
-                                        {!! Form::text('f'.$param->id.'_arg_op_resp_'.$i, null, [
+                                        {!! Form::textarea('f'.$param->id.'_arg_op_resp_'.$i, null, [
                                                 'id' => 'f'.$param->id.'_arg_op_resp_'.$i,
                                                 'class' => 'form-control',
                                                 'placeholder' => 'Argumento de respuesta.',
-                                                'style' => 'height: 25px;',
+                                                'size' => '100%x2',
+                                                'style' => 'resize: vertical;',
                                                  ($i > $param->opciones_resp_min) ? 'disabled' : ''
                                         ]) !!}
                                     </td>

@@ -109,7 +109,7 @@
                                 <div class="form-group">
                                     {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        {!! Form::select('id_contenido_det', $contents, null, ['class' => 'form-control', 'placeholder' => 'Seleccione Contenido']) !!}
+                                        {!! Form::select('id_contenido_det', $contents, null, ['class' => 'chosen-select form-control', 'data-placeholder' => 'Seleccione Contenido...']) !!}
                                     </div>
                                 </div>
 
@@ -195,6 +195,5 @@
     <script src="{{ asset('ace/js/fuelux.wizard.min.js') }}"></script>
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     <script src="{{ asset('ace/js/select2.min.js') }}"></script>
-
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
 @endpush

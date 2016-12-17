@@ -31,3 +31,5 @@ function desactiva_op_preg(ind) {
     $("#conc_op_preg_"+ind).attr("disabled", true);
     $("#prop_op_preg_"+ind).attr("disabled", true);
 }
+
+

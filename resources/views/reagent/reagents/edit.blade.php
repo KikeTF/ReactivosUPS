@@ -24,14 +24,14 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                         <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
                         &nbsp;Informaci&oacute;n General
                     </a>
                 </h4>
             </div>
 
-            <div class="panel-collapse collapse in" id="collapseOne">
+            <div class="panel-collapse collapse" id="collapseOne">
                 <div class="panel-body">
                     <div class="form-group">
                         {!! Form::label('desc_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
@@ -81,14 +81,14 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
                         <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
                         &nbsp;Informaci&oacute;n de Reactivo
                     </a>
                 </h4>
             </div>
 
-            <div class="panel-collapse collapse" id="collapseTwo">
+            <div class="panel-collapse collapse in" id="collapseTwo">
                 <div class="panel-body">
                     <div class="form-group">
                         {!! Form::label('desc_formato', 'Formato:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
@@ -100,7 +100,7 @@
                     <div class="form-group">
                         {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
-                            {!! Form::select('id_contenido_det', $contents, $reagent->id_contenido_det, ['class' => 'form-control']) !!}
+                            {!! Form::select('id_contenido_det', $contents, $reagent->id_contenido_det, ['class' => 'chosen-select form-control']) !!}
                         </div>
                     </div>
 
@@ -115,12 +115,9 @@
                         @if($formatParam->opciones_resp_min > 0)
                             @if($formatParam->imagenes == 'S')
                                 <div class="form-group">
-                                    <div class="col-sm-3">
-                                    </div>
+                                    {!! Form::label('imagen','Cargar Imagen:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        {!! Form::label('imagen','Carga Imagen', ['class' => 'col-sm-3 btn btn-primary no-padding-right']) !!}
-                                        {!! Form::file('imagen', ['class' => 'form-control', 'style' => 'display:none;', 'onchange' => "$('#imagen_info').html($(this).val());"]) !!}
-                                        <span class='' id="imagen_info"></span>
+                                        {!! Form::file('imagen', ['class' => 'input-file form-control']) !!}
                                     </div>
                                 </div>
                             @endif
@@ -135,23 +132,25 @@
                                                     <tr>
                                                         <td>
                                                             {!! Form::text('id_preg_'.$i, ($i > $questions->count()) ? null : $questions[$i-1]->id, ['hidden']) !!}
-                                                            {!! Form::text('conc_op_preg_'.$i,
+                                                            {!! Form::textarea('conc_op_preg_'.$i,
                                                                         ($i > $questions->count()) ? null : $questions[$i-1]->concepto, [
                                                                         'id' => 'conc_op_preg_'.$i,
                                                                         'class' => 'form-control',
                                                                         'placeholder' => 'Concepto de pregunta.',
-                                                                        'style' => 'height: 25px;',
+                                                                        'size' => '100%x2',
+                                                                        'style' => 'resize: vertical;',
                                                                         ($i > $questions->count()) ? 'disabled' : ''
                                                                 ]) !!}
                                                         </td>
                                                         @if($formatParam->concepto_propiedad == 'S')
                                                             <td>
-                                                                {!! Form::text('prop_op_preg_'.$i,
+                                                                {!! Form::textarea('prop_op_preg_'.$i,
                                                                             ($i > $questions->count()) ? null : $questions[$i-1]->propiedad, [
                                                                             'id' => 'prop_op_preg_'.$i,
                                                                             'class' => 'form-control',
                                                                             'placeholder' => 'Propiedad de pregunta.',
-                                                                            'style' => 'height: 25px;',
+                                                                            'size' => '100%x2',
+                                                                            'style' => 'resize: vertical;',
                                                                             ($i > $questions->count()) ? 'disabled' : ''
                                                                     ]) !!}
                                                             </td>
@@ -188,26 +187,33 @@
                                             @for ($i = 1; $i <= $formatParam->opciones_resp_max; $i++)
                                                 <tr>
                                                     <td>
-                                                        {!! Form::radio('id_opcion_correcta', $i, ($i > $answers->count()) ? false : ($answers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false, ['id' => 'id_opcion_correcta_'.$i, ($i > $answers->count()) ? 'disabled' : '']) !!}
+                                                        <div class="radio">
+                                                            <label>
+                                                                {!! Form::radio('id_opcion_correcta', $i, ($i > $answers->count()) ? false : ($answers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false, ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i > $answers->count()) ? 'disabled' : '']) !!}
+                                                                <span class="lbl"></span>
+                                                            </label>
+                                                        </div>
                                                         {!! Form::text('id_resp_'.$i, ($i > $answers->count()) ? null : $answers[$i-1]->id, ['hidden']) !!}
                                                     </td>
                                                     <td>
-                                                        {!! Form::text('desc_op_resp_'.$i,
+                                                        {!! Form::textarea('desc_op_resp_'.$i,
                                                                 ($i > $answers->count()) ? null : $answers[$i-1]->descripcion, [
                                                                 'id' => 'desc_op_resp_'.$i,
                                                                 'class' => 'form-control',
                                                                 'placeholder' => 'Descripción de respuesta.',
-                                                                'style' => 'height: 25px;',
+                                                                'size' => '100%x2',
+                                                                'style' => 'resize: vertical;',
                                                                 ($i > $answers->count()) ? 'disabled' : ''
                                                         ]) !!}
                                                     </td>
                                                     <td>
-                                                        {!! Form::text('arg_op_resp_'.$i,
+                                                        {!! Form::textarea('arg_op_resp_'.$i,
                                                                 ($i > $answers->count()) ? null : $answers[$i-1]->argumento, [
                                                                 'id' => 'arg_op_resp_'.$i,
                                                                 'class' => 'form-control',
                                                                 'placeholder' => 'Argumento de respuesta.',
-                                                                'style' => 'height: 25px;',
+                                                                'size' => '100%x2',
+                                                                'style' => 'resize: vertical;',
                                                                  ($i > $answers->count()) ? 'disabled' : ''
                                                         ]) !!}
                                                     </td>
@@ -321,7 +327,5 @@
 @endsection
 
 @push('specific-script')
-
-<script type="text/javascript" src="{{ asset('scripts/reagent/reagents/edit.js') }}"></script>
-
+    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/edit.js') }}"></script>
 @endpush

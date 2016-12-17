@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('ace/fonts/fonts.googleapis.com.css') }}" />
 
     <!-- ace styles -->
+    <link rel="stylesheet" href="{{ asset('ace/css/chosen.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
 
     <!-- datatable styles -->
@@ -525,6 +526,7 @@
     <script src="{{ asset('ace/js/jquery.flot.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.flot.pie.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.flot.resize.min.js') }}"></script>
+    <script src="{{ asset('ace/js/chosen.jquery.min.js') }}"></script>
 
     {{--@stack('datatable-script')--}}
     {{--<script src="{{ asset('ace/js/jquery-1.12.3.js') }}"></script>--}}
@@ -540,7 +542,8 @@
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
     <script src="{{ asset('ace/js/ace.min.js') }}"></script>
 
-
+    <!-- common scripts -->
+    <script src="{{ asset('scripts/shared/index.js') }}"></script>
 
     @if(isset($usetable))
         <script>
