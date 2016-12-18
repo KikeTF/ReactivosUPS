@@ -61,7 +61,7 @@
             <thead>
             <tr>
                 <th style="text-align: center">C&oacute;digo</th>
-                <th>Planteamiento</th>
+                <th style="text-align: center">Planteamiento</th>
                 <th style="text-align: center">Estado</th>
                 <th></th>
             </tr>
@@ -72,7 +72,7 @@
                 $showurl = route('reagent.approvals.show', $reagent->id);
                 ?>
                 <tr>
-                    <td>{{ $reagent->id }}</td>
+                    <td align="center">{{ $reagent->id }}</td>
                     <td>{{ $reagent->planteamiento }}</td>
                     <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
                     <td>

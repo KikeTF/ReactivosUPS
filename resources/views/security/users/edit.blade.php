@@ -66,11 +66,24 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('perfiles', 'Perfiles:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <select multiple="" name="perfiles" id="perfiles" class="chosen-select form-control tag-input-style" data-placeholder="Seleccione Perfiles..." style="display: none;">
+                <option value=""></option>
+                @foreach($profiles as $profile)
+                    <option value="{{ $profile->id }}">{{ $profile->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
         {!! Form::label('estado', '¿Activo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('estado', $user->estado, ($user->estado == 'A') ? true : false) !!}
+                    {!! Form::checkbox('estado', $user->estado, ($user->estado == 'A') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
 

@@ -34,15 +34,39 @@
                 <td colspan="3">{{ $format->descripcion }}</td>
             </tr>
             <tr>
-                <td><strong>Estado:</strong></td>
-                <td colspan="3">
-                    @if($format->estado == 'A')
-                        Activo
-                    @elseif($format->estado == 'I')
-                        Inactivo
-                    @endif
-                </td>
+                <td><strong>No. de respuesta m&iacute;nimo:</strong></td>
+                <td colspan="3">{{ $format->opciones_resp_min }}</td>
             </tr>
+            <tr>
+                <td><strong>No. de respuesta m&aacute;ximo:</strong></td>
+                <td colspan="3">{{ $format->opciones_resp_max }}</td>
+            </tr>
+            <tr>
+                <td><strong>¿Opciones de Pregunta?:</strong></td>
+                <td colspan="3">{{ $format->opciones_pregunta == 'S' ? 'Si' : 'No' }}</td>
+            </tr>
+            <tr>
+                <td><strong>¿Opciones Concepto/Propiedad?:</strong></td>
+                <td colspan="3">{{ $format->concepto_propiedad == 'S' ? 'Si' : 'No' }}</td>
+            </tr>
+            <tr>
+                <td><strong>No. de preguntas m&iacute;nimo:</strong></td>
+                <td colspan="3">{{ $format->opciones_preg_min }}</td>
+            </tr>
+            <tr>
+                <td><strong>No. de preguntas m&aacute;ximo:</strong></td>
+                <td colspan="3">{{ $format->opciones_preg_max }}</td>
+            </tr>
+            <tr>
+                <td><strong>¿Im&aacute;genes?:</strong></td>
+                <td colspan="3">{{ $format->imagenes == 'S' ? 'Si' : 'No' }}</td>
+            </tr>
+
+            <tr>
+                <td><strong>Estado:</strong></td>
+                <td>{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+            </tr>
+
             <tr>
                 <td><strong>Creado por:</strong></td>
                 <td>{{ $format->creado_por }}</td>

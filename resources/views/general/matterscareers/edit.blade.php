@@ -85,11 +85,8 @@
         <div class="col-sm-8">
             <div class="checkbox">
                 <label>
-                    @if($mattercareer->aplica_examen == 'S')
-                        {!! Form::checkbox('aplica_examen', $mattercareer->aplica_examen, true) !!}
-                    @else
-                        {!! Form::checkbox('aplica_examen', $mattercareer->aplica_examen) !!}
-                    @endif
+                    {!! Form::checkbox('aplica_examen', $mattercareer->aplica_examen, ($mattercareer->aplica_examen == 'S') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
 
@@ -101,11 +98,8 @@
         <div class="col-sm-8">
             <div class="checkbox">
                 <label>
-                    @if($mattercareer->estado == 'A')
-                        {!! Form::checkbox('estado', $mattercareer->estado, true) !!}
-                    @else
-                        {!! Form::checkbox('estado', $mattercareer->estado) !!}
-                    @endif
+                    {!! Form::checkbox('estado', $mattercareer->estado, ($mattercareer->estado == 'A') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
 

@@ -26,7 +26,7 @@
             <div class="btn btn-white btn-danger btn-bold">
                 <a class="red" title="Cerrar" href="{{ route('reagent.approvals.index') }}">
                     <i class='ace-icon fa fa-close bigger-110 red'></i>
-                </a>
+                </  a>
             </div>
         </div>
 

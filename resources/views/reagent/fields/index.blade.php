@@ -14,9 +14,9 @@
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Descripci&oacute;n</th>
-                    <th>Estado</th>
+                    <th style="text-align: center">Nombre</th>
+                    <th style="text-align: center">Descripci&oacute;n</th>
+                    <th style="text-align: center">Estado</th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,7 +30,7 @@
                 <tr>
                     <td>{{ $field->nombre }}</td>
                     <td>{{ $field->descripcion }}</td>
-                    <td>{{ $field->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                    <td align="center">{{ $field->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
                         @include('shared.templates._tablebuttons')
                     </td>

@@ -105,7 +105,7 @@ class MattersCareersController extends Controller
     {
         $mattercareer = MatterCareer::find($id);
         $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-        $mattercareer->desc_carrera = Matter::find($mattercareer->careerCampus->id_carrera)->descripcion;
+        $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
         $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
         $mattercareer->desc_area = $mattercareer->area->descripcion;
         $mattercareer->desc_materia = $mattercareer->matter->descripcion;

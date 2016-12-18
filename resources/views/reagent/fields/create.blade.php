@@ -44,7 +44,8 @@
             <div class="col-sm-10">
                 <div class="checkbox">
                     <label>
-                        {!! Form::checkbox('estado', 'A', true) !!}
+                        {!! Form::checkbox('estado', 'A', true, ['class' => 'ace']) !!}
+                        <span class="lbl"></span>
                     </label>
                 </div>
 

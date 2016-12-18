@@ -5,6 +5,7 @@ namespace ReactivosUPS\Http\Controllers;
 use Illuminate\Http\Request;
 
 use ReactivosUPS\User;
+use ReactivosUPS\Profile;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Datatables;
@@ -69,7 +70,10 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        return view('security.users.edit')->with('user', $user);
+        $profiles = Profile::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+        return view('security.users.edit')
+            ->with('user', $user)
+            ->with('profiles', $profiles);
     }
 
     /**
@@ -81,7 +85,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request->all());
+        dd($request->all());
         $user = User::find($id);
 
         if(!is_null($request->password) and  $request->password != "")

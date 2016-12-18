@@ -109,7 +109,12 @@
                                 <div class="form-group">
                                     {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-8">
-                                        {!! Form::select('id_contenido_det', $contents, null, ['class' => 'chosen-select form-control', 'data-placeholder' => 'Seleccione Contenido...']) !!}
+                                        <select name="id_contenido_det" id="id_contenido_det" class="chosen-select form-control" data-placeholder="Seleccione Contenido...">
+                                            <option value=""></option>
+                                            @foreach($contents as $content)
+                                                <option value="{{ $content->id }}">{{ $content->ContentDescription }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 

@@ -30,7 +30,7 @@
                 <tr>
                     <td>{{ $profile->nombre }}</td>
                     <td>{{ $profile->descripcion }}</td>
-                    <td>{{ $profile->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                    <td align="center">{{ $profile->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
                         @include('shared.templates._tablebuttons')
                     </td>

@@ -53,11 +53,8 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($format->opciones_pregunta == 'S')
-                        {!! Form::checkbox('opciones_pregunta', 'S', true) !!}
-                    @else
-                        {!! Form::checkbox('opciones_pregunta', $format->opciones_pregunta) !!}
-                    @endif
+                    {!! Form::checkbox('opciones_pregunta', $format->opciones_pregunta, ($format->opciones_pregunta == 'S') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
 
@@ -69,11 +66,8 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($format->concepto_propiedad == 'S')
-                        {!! Form::checkbox('concepto_propiedad', 'S', true) !!}
-                    @else
-                        {!! Form::checkbox('concepto_propiedad', $format->concepto_propiedad) !!}
-                    @endif
+                    {!! Form::checkbox('concepto_propiedad', $format->concepto_propiedad, ($format->concepto_propiedad == 'S') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
         </div>
@@ -98,11 +92,8 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($format->imagenes == 'S')
-                        {!! Form::checkbox('imagenes', 'S', true) !!}
-                    @else
-                        {!! Form::checkbox('imagenes', $format->imagenes) !!}
-                    @endif
+                    {!! Form::checkbox('imagenes', $format->imagenes, ($format->imagenes == 'S') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
         </div>
@@ -113,11 +104,8 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($format->estado == 'A')
-                        {!! Form::checkbox('estado', $format->estado, true) !!}
-                    @else
-                        {!! Form::checkbox('estado', $format->estado) !!}
-                    @endif
+                    {!! Form::checkbox('estado', $format->estado, ($format->estado == 'A') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
 

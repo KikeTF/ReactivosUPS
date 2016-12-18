@@ -14,15 +14,15 @@
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>No. respuestas m&iacute;nimo</th>
-                    <th>No. respuestas m&aacute;ximo</th>
-                    <th>Opci&oacuten pregunta</th>
-                    <th>Concepto propiedad</th>
-                    <th>No. preguntas m&iacute;nimo</th>
-                    <th>No. preguntas m&aacute;ximo</th>
-                    <th>Im&aacute;genes</th>
-                    <th>Estado</th>
+                    <th style="text-align: center">Nombre</th>
+                    <th style="text-align: center">No. respuestas m&iacute;nimo</th>
+                    <th style="text-align: center">No. respuestas m&aacute;ximo</th>
+                    <th style="text-align: center">Opci&oacuten pregunta</th>
+                    <th style="text-align: center">Concepto propiedad</th>
+                    <th style="text-align: center">No. preguntas m&iacute;nimo</th>
+                    <th style="text-align: center">No. preguntas m&aacute;ximo</th>
+                    <th style="text-align: center">Im&aacute;genes</th>
+                    <th style="text-align: center">Estado</th>
                     <th></th>
                 </tr>
             </thead>
@@ -35,14 +35,44 @@
                 ?>
                 <tr>
                     <td>{{ $format->nombre }}</td>
-                    <td>{{ $format->opciones_resp_min }}</td>
-                    <td>{{ $format->opciones_resp_max }}</td>
-                    <td>{{ $format->opciones_pregunta == 'S' ? 'Si' : 'No'  }}</td>
-                    <td>{{ $format->concepto_propiedad == 'S' ? 'Si' : 'No'  }}</td>
-                    <td>{{ $format->opciones_preg_min }}</td>
-                    <td>{{ $format->opciones_preg_max }}</td>
-                    <td>{{ $format->imagenes == 'S' ? 'Si' : 'No' }}</td>
-                    <td>{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                    <td align="center">{{ $format->opciones_resp_min }}</td>
+                    <td align="center">{{ $format->opciones_resp_max }}</td>
+                    <td align="center">
+                    @if($format->opciones_pregunta == 'S')
+                        <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                            <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                        </a>
+                    @else
+                        <a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                            <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                        </a>
+                        @endif
+                        </td>
+                    <td align="center">
+                        @if($format->concepto_propiedad == 'S')
+                            <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                                <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                            </a>
+                        @else
+                            <a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                                <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                            </a>
+                        @endif
+                    </td>
+                    <td align="center">{{ $format->opciones_preg_min }}</td>
+                    <td align="center">{{ $format->opciones_preg_max }}</td>
+                    <td align="center">
+                        @if($format->imagenes == 'S')
+                            <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                                <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                            </a>
+                        @else
+                            <a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                                <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                            </a>
+                        @endif
+                    </td>
+                    <td align="center">{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
                         @include('shared.templates._tablebuttons')
                     </td>

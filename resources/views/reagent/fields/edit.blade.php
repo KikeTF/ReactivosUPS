@@ -39,11 +39,8 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    @if($field->estado == 'A')
-                        {!! Form::checkbox('estado', $field->estado, true) !!}
-                    @else
-                        {!! Form::checkbox('estado', $field->estado) !!}
-                    @endif
+                    {!! Form::checkbox('estado', $field->estado, ($field->estado == 'A') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
 

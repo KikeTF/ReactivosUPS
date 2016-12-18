@@ -70,13 +70,13 @@
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
                 <tr>
-                    <th>Materia</th>
-                    <th>Nivel</th>
-                    <th>Tipo</th>
-                    <th>No. Reactivos Entregables</th>
-                    <th>Aplica Examen</th>
-                    <th>No. Reactivos en Examen</th>
-                    <th>Estado</th>
+                    <th style="text-align: center">Materia</th>
+                    <th style="text-align: center">Nivel</th>
+                    <th style="text-align: center">Tipo</th>
+                    <th style="text-align: center">No. Reactivos Entregables</th>
+                    <th style="text-align: center">Aplica Examen</th>
+                    <th style="text-align: center">No. Reactivos en Examen</th>
+                    <th style="text-align: center">Estado</th>
                     <th></th>
                 </tr>
             </thead>
@@ -89,10 +89,10 @@
                     ?>
                     <tr>
                         <td>{{ \ReactivosUPS\Matter::find($matterCareer->id_materia)->descripcion }}</td>
-                        <td>{{ $matterCareer->nivel }}</td>
-                        <td>{{ $matterCareer->tipo }}</td>
-                        <td>{{ $matterCareer->nro_reactivos_mat }}</td>
-                        <td>
+                        <td align="center">{{ $matterCareer->nivel }}</td>
+                        <td align="center">{{ $matterCareer->tipo }}</td>
+                        <td align="center">{{ $matterCareer->nro_reactivos_mat }}</td>
+                        <td align="center">
                             @if($matterCareer->aplica_examen == 'S')
                                 <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
                                     <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
@@ -103,8 +103,8 @@
                                 </a>
                             @endif
                         </td>
-                        <td>{{ $matterCareer->nro_reactivos_exam }}</td>
-                        <td>{{ $matterCareer->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                        <td align="center">{{ $matterCareer->nro_reactivos_exam }}</td>
+                        <td align="center">{{ $matterCareer->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                         <td>
                             @include('shared.templates._tablebuttons')
                         </td>

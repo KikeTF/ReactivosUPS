@@ -32,8 +32,8 @@
                     <td>{{ $user->username }}</td>
                     <td>{{ $user->nombres.' '.$user->apellidos }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante'  }}</td>
-                    <td>{{ $user->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                    <td align="center">{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante'  }}</td>
+                    <td align="center">{{ $user->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
                         @include('shared.templates._tablebuttons')
                     </td>

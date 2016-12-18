@@ -64,7 +64,7 @@ class ReagentsController extends Controller
             ->with('careers', $this->getCareers())
             ->with('matters', $this->getMatters())
             ->with('mentions', $this->getMentions())
-            ->with('contents', $this->getContents())
+            ->with('contents', $this->getContentsModel())
             ->with('fields', $this->getFields())
             ->with('formats', $this->getFormats());
     }

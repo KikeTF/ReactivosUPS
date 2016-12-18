@@ -40,7 +40,8 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('estado', $profile->estado, ($profile->estado == 'A') ? true : false) !!}
+                    {!! Form::checkbox('estado', $profile->estado, ($profile->estado == 'A') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
                 </label>
             </div>
 

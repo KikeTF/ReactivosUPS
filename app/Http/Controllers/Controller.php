@@ -84,6 +84,11 @@ abstract class Controller extends BaseController
         return $contents;
     }
 
+    public function getContentsModel(){
+        $contents = ContentDetail::query()->where('estado','A')->orderBy('capitulo', 'asc')->get();
+        return $contents;
+    }
+
     public function getCareersCampuses(){
         $careersCampuses = CareerCampus::query()->where('estado','A')->orderBy('id', 'asc')->get();
         return $careersCampuses;
