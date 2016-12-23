@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\ProfileUser;
 use ReactivosUPS\User;
 use ReactivosUPS\Profile;
 use ReactivosUPS\Http\Requests;
@@ -70,10 +71,13 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $profiles = Profile::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+        $userProfiles = ProfileUser::query()->where('id_usuario', $id)->get();
+        $profilesList = Profile::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+
         return view('security.users.edit')
             ->with('user', $user)
-            ->with('profiles', $profiles);
+            ->with('userProfiles', $userProfiles)
+            ->with('profilesList', $profilesList);
     }
 
     /**
@@ -85,7 +89,6 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->all());
         $user = User::find($id);
 
         if(!is_null($request->password) and  $request->password != "")
@@ -96,7 +99,34 @@ class UsersController extends Controller
         $user->estado = !isset( $request['estado'] ) ? 'I' : 'A';
         $user->modificado_por = \Auth::id();
         $user->fecha_modificacion = date('Y-m-d h:i:s');
-        $user->save();
+
+        $profiles = array();
+        foreach ($request->perfiles as $perfil) {
+            if(User::find($user->id)->profilesUsers()->where('id_perfil', $perfil)->count() == 0){
+                $profile['id_perfil'] = $perfil;
+                $profile['id_usuario'] = $id;
+                $profile['estado'] = 'A';
+                $profile['creado_por'] = \Auth::id();
+                $profile['fecha_creacion'] = date('Y-m-d h:i:s');
+                $profiles[] = new ProfileUser($profile);
+            }
+        }
+
+        \DB::beginTransaction(); //Start transaction!
+
+        try
+        {
+            $user->save();
+            User::find($user->id)->profilesUsers()->saveMany($profiles);
+        }
+        catch(\Exception $e)
+        {
+            //failed logic here
+            \DB::rollback();
+            dd($e);
+        }
+
+        \DB::commit();
 
         return redirect()->route('security.users.index');
     }

@@ -49,6 +49,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function profilesUsers(){
-        return $this->hasMany('ReactivosUPS\ProfileUser');
+        return $this->hasMany('ReactivosUPS\ProfileUser', 'id_usuario');
     }
 }

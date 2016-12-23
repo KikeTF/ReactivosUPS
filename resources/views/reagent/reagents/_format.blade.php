@@ -1,4 +1,6 @@
-
+<?php
+$letra = array('a', 'b', 'c', 'd', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u');
+?>
 
 {!! Form::text('format_count', $formatList->count(), ['id' => 'format_count', 'hidden']) !!}
 @foreach($formatList as $param)
@@ -11,8 +13,8 @@
         @if($param->opciones_resp_min > 0)
             @if($param->imagenes == 'S')
                 <div class="form-group">
-                    {!! Form::label('f'.$param->id.'_imagen','Cargar Imagen:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                    <div class="col-sm-8">
+                    {!! Form::label('f'.$param->id.'_imagen','Cargar Imagen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                    <div class="col-sm-9">
                         {!! Form::file('f'.$param->id.'_imagen', ['class' => 'input-file form-control']) !!}
                     </div>
                 </div>
@@ -20,12 +22,15 @@
 
             @if($param->opciones_pregunta == 'S')
                 <div class="form-group">
-                    {!! Form::label('f'.$param->id.'_opcion_preg', 'Opciones de Pregunta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                    <div class="col-sm-8">
+                    {!! Form::label('f'.$param->id.'_opcion_preg', 'Opciones de Pregunta:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                    <div class="col-sm-9">
                         <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
                             <table id="f{{ $param->id }}_opcion_preg" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
                                 @for ($i = 1; $i <= $param->opciones_preg_max; $i++)
                                 <tr>
+                                    <td>
+                                        {{ $i }}
+                                    </td>
                                     <td>
                                         {!! Form::textarea('f'.$param->id.'_conc_op_preg_'.$i, null, [
                                                     'id' => 'f'.$param->id.'_conc_op_preg_'.$i,
@@ -37,16 +42,19 @@
                                             ]) !!}
                                     </td>
                                     @if($param->concepto_propiedad == 'S')
-                                    <td>
-                                        {!! Form::textarea('f'.$param->id.'_prop_op_preg_'.$i, null, [
-                                                    'id' => 'f'.$param->id.'_prop_op_preg_'.$i,
-                                                    'class' => 'form-control',
-                                                    'placeholder' => 'Propiedad de pregunta.',
-                                                    'size' => '100%x2',
-                                                    'style' => 'resize: vertical;',
-                                                    ($i > $param->opciones_preg_min) ? 'disabled' : ''
-                                            ]) !!}
-                                    </td>
+                                        <td>
+                                            {{ $letra[$i-1] }}
+                                        </td>
+                                        <td>
+                                            {!! Form::textarea('f'.$param->id.'_prop_op_preg_'.$i, null, [
+                                                        'id' => 'f'.$param->id.'_prop_op_preg_'.$i,
+                                                        'class' => 'form-control',
+                                                        'placeholder' => 'Propiedad de pregunta.',
+                                                        'size' => '100%x2',
+                                                        'style' => 'resize: vertical;',
+                                                        ($i > $param->opciones_preg_min) ? 'disabled' : ''
+                                                ]) !!}
+                                        </td>
                                     @endif
                                     <td>
                                         @if($i > $param->opciones_preg_min)
@@ -73,8 +81,8 @@
             @endif
 
             <div class="form-group">
-                {!! Form::label('f'.$param->id.'_opcion_resp', 'Opciones de Respuesta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                <div class="col-sm-8">
+                {!! Form::label('f'.$param->id.'_opcion_resp', 'Opciones de Respuesta:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                <div class="col-sm-9">
                     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
                         <table id="f{{ $param->id }}_opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
                             @for ($i = 1; $i <= $param->opciones_resp_max; $i++)

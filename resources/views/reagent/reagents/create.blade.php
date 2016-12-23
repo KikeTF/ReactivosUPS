@@ -68,28 +68,28 @@
                             <div>
                                 <div class="form-group">
                                     {!! Form::label('id_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         {!! Form::select('id_campus', $campuses, null, ['id' => 'id_campus', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_carrera', 'Carrera:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         {!! Form::select('id_carrera', $careers, null, ['id' => 'id_carrera', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_mencion', 'Mención:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         {!! Form::select('id_mencion', $mentions, null, ['id' => 'id_mencion', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_materia', 'Materia:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         {!! Form::select('id_materia', $matters, null, ['id' => 'id_materia', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
@@ -100,15 +100,15 @@
                         <div class="step-pane" data-step="2">
                             <div>
                                 <div class="form-group">
-                                    {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                                    <div class="col-sm-9">
                                         {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => 'Seleccione Formato'] ) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                                    <div class="col-sm-9">
                                         <select name="id_contenido_det" id="id_contenido_det" class="chosen-select form-control" data-placeholder="Seleccione Contenido...">
                                             <option value=""></option>
                                             @foreach($contents as $content)
@@ -119,8 +119,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                                    <div class="col-sm-9">
                                         {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                                     </div>
                                 </div>
@@ -134,14 +134,14 @@
                             <div>
                                 <div class="form-group">
                                     {!! Form::label('id_campo', 'Campo de Conocimiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         {!! Form::select('id_campo', $fields, null, ['class' => 'form-control'] ) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('dificultad', 'Dificultad:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         <select id="dificultad" name="dificultad" class="form-control">
                                             <option value="B">Baja</option>
                                             <option value="M">Media</option>
@@ -152,14 +152,14 @@
 
                                 <div class="form-group">
                                     {!! Form::label('descripcion', 'Operaci&oacute;n Cognitiva:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         {!! Form::textarea('descripcion', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('referencia', 'Referencia Bibliogr&aacute;fica:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         {!! Form::textarea('referencia', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                                     </div>
                                 </div>

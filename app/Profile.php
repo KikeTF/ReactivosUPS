@@ -12,7 +12,7 @@ class Profile extends Model
     protected $fillable =["cod_perfil", "nombre", "descripcion", "estado"];
 
     public function profilesUsers(){
-        return $this->hasMany('ReactivosUPS\ProfileUser');
+        return $this->hasMany('ReactivosUPS\ProfileUser', 'id_perfil');
     }
 
     public function optionsProfiles(){
