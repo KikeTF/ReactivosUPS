@@ -208,6 +208,7 @@ return [
         'Flash'     => Laracasts\Flash\Flash::class,
         'Gate'      => Illuminate\Support\Facades\Gate::class,
         'Datatables'=> Yajra\Datatables\Facades\Datatables::class,
+        'Flash'     => Laracasts\Flash\Flash::class,
 
     ],
 

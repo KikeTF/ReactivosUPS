@@ -30,10 +30,20 @@ Route::get('auth/logout', [
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', function () {
+        if (!(\Session::has('id_sede'))){
+            \Auth::logout();
+            return redirect()->guest('auth/login');
+        }
+
         return view('index');
     });
 
     Route::get('home', ['as' => 'home', function () {
+        if (!(\Session::has('id_sede'))){
+            \Auth::logout();
+            return redirect()->guest('auth/login');
+        }
+
         return view('index');
     }]);
 

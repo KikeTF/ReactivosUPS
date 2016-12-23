@@ -158,5 +158,12 @@ abstract class Controller extends BaseController
         return $parameters;
     }
 
+    public function isSessionExpire(){
+        if (!(\Session::has('id_sede'))){
+            \Auth::logout();
+            return true;
+        }
+        return false;
+    }
 
 }

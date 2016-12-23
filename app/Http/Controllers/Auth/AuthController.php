@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers\Auth;
 
 use Auth;
 use Session;
+use View;
 use ReactivosUPS\User;
 use Validator;
 use ReactivosUPS\Http\Controllers\Controller;
@@ -39,7 +40,14 @@ class AuthController extends Controller
 
     public function getLogin()
     {
-        return view('auth.login');
+        // Verificamos si hay sesión activa
+        if (Auth::check())
+        {
+            // Si tenemos sesión activa mostrará la página de inicio
+            return redirect()->guest('/');
+        }
+        // Si no hay sesión activa mostramos el formulario
+        return View::make('auth.login');
     }
 
     public function postLogin(Request $request)
@@ -74,7 +82,7 @@ class AuthController extends Controller
 
     protected $redirectPath = '/';
 
-    protected $loginPath = 'auth/login';
+    protected $loginPath = 'auth.login';
 
     /*
     protected function validator(array $data)
