@@ -123,14 +123,22 @@ class MattersCareersController extends Controller
     public function update(Request $request, $id)
     {
         $matterCareer = MatterCareer::find($id);
+        try
+        {
+            $matterCareer->nro_reactivos_mat = $request->nro_reactivos_mat;
+            $matterCareer->nro_reactivos_exam = $request->nro_reactivos_exam;
+            $matterCareer->aplica_examen = !isset( $request['aplica_examen'] ) ? 'N' : 'S';
+            $matterCareer->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $matterCareer->modificado_por = \Auth::id();
+            $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
+            $matterCareer->save();
 
-        $matterCareer->nro_reactivos_mat = $request->nro_reactivos_mat;
-        $matterCareer->nro_reactivos_exam = $request->nro_reactivos_exam;
-        $matterCareer->aplica_examen = !isset( $request['aplica_examen'] ) ? 'N' : 'S';
-        $matterCareer->estado = !isset( $request['estado'] ) ? 'I' : 'A';
-        $matterCareer->modificado_por = \Auth::id();
-        $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
-        $matterCareer->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            return view('reagent.matterscareers.edit')->with('matterscareers', $matterCareer);
+        }
 
         return redirect()->route('general.matterscareers.index');
     }
@@ -145,11 +153,19 @@ class MattersCareersController extends Controller
     {
         $matterCareer = MatterCareer::find($id);
 
-        $matterCareer->estado = 'E';
-        $matterCareer->modificado_por = \Auth::id();
-        $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
-        $matterCareer->save();
+        try
+        {
+            $matterCareer->estado = 'I';
+            $matterCareer->modificado_por = \Auth::id();
+            $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
+            $matterCareer->save();
 
-        return redirect()->route('reagent.formats.index');
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+        }
+
+        return redirect()->route('general.matterscareers.index');
     }
 }

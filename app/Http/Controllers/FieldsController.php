@@ -41,14 +41,21 @@ class FieldsController extends Controller
      */
     public function store(Request $request)
     {
-        $field = new Field($request->all());
+        try
+        {
+            $field = new Field($request->all());
 
-        if( !isset( $request['estado'] ) )
-            $field->estado = 'I';
+            $field->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $field->creado_por = \Auth::id();
+            $field->fecha_creacion = date('Y-m-d h:i:s');
+            $field->save();
 
-        $field->creado_por = \Auth::id();
-        $field->fecha_creacion = date('Y-m-d h:i:s');
-        $field->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            return view('reagent.fields.create');
+        }
 
         return redirect()->route('reagent.fields.index');
     }
@@ -91,16 +98,22 @@ class FieldsController extends Controller
     {
         $field = Field::find($id);
 
-        if( !isset( $request['estado'] ) )
-            $field->estado = 'I';
-        else
-            $field->estado = 'A';
+        try
+        {
 
-        $field->nombre = $request->nombre;
-        $field->descripcion = $request->descripcion;
-        $field->modificado_por = \Auth::id();
-        $field->fecha_modificacion = date('Y-m-d h:i:s');
-        $field->save();
+            $field->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $field->nombre = $request->nombre;
+            $field->descripcion = $request->descripcion;
+            $field->modificado_por = \Auth::id();
+            $field->fecha_modificacion = date('Y-m-d h:i:s');
+            $field->save();
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            return view('reagent.$field.edit')->with('$field', $field);
+        }
 
         return redirect()->route('reagent.fields.index');
     }
@@ -115,10 +128,19 @@ class FieldsController extends Controller
     {
         $field = Field::find($id);
 
-        $field->estado = 'E';
-        $field->modificado_por = \Auth::id();
-        $field->fecha_modificacion = date('Y-m-d h:i:s');
-        $field->save();
+        try
+        {
+
+            $field->estado = 'E';
+            $field->modificado_por = \Auth::id();
+            $field->fecha_modificacion = date('Y-m-d h:i:s');
+            $field->save();
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+        }
 
         return redirect()->route('reagent.fields.index');
     }

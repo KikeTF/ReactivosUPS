@@ -36,7 +36,9 @@ class ReagentsApprovalsController extends Controller
             $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
             $reagents = Reagent::filter($id_distributivo)->where('id_estado','!=',7)->get();
         }else
-            $reagents = Reagent::query()->where('id_estado','!=',7)->get();
+            $reagents = Reagent::query()->where('id_estado','!=',7);
+
+        $reagents = $reagents->orderBy('id', 'desc')->get();
 
         return view('reagent.approvals.index')
             ->with('reagents', $reagents)

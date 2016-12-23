@@ -8,6 +8,7 @@ use ReactivosUPS\Format;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Datatables;
+use Laracasts\Flash\Flash;
 
 class FormatsController extends Controller
 {
@@ -41,14 +42,23 @@ class FormatsController extends Controller
      */
     public function store(Request $request)
     {
-        $format = new Format($request->all());
-        $format->opciones_pregunta = !isset( $request['opciones_pregunta'] ) ? 'N' : 'S';
-        $format->concepto_propiedad = !isset( $request['concepto_propiedad'] ) ? 'N' : 'S';
-        $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
-        $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
-        $format->creado_por = \Auth::id();
-        $format->fecha_creacion = date('Y-m-d h:i:s');
-        $format->save();
+        try
+        {
+            $format = new Format($request->all());
+            $format->opciones_pregunta = !isset( $request['opciones_pregunta'] ) ? 'N' : 'S';
+            $format->concepto_propiedad = !isset( $request['concepto_propiedad'] ) ? 'N' : 'S';
+            $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
+            $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $format->creado_por = \Auth::id();
+            $format->fecha_creacion = date('Y-m-d h:i:s');
+            $format->save();
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            return view('reagent.formats.create');
+        }
 
         return redirect()->route('reagent.formats.index');
     }
@@ -89,23 +99,30 @@ class FormatsController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $format = Format::find($id);
 
+        try
+        {
+            $format->nombre = $request->nombre;
+            $format->descripcion = $request->descripcion;
+            $format->opciones_resp_min = $request->opciones_resp_min;
+            $format->opciones_resp_max = $request->opciones_resp_max;
+            $format->opciones_pregunta = !isset( $request['opciones_pregunta'] ) ? 'N' : 'S';
+            $format->concepto_propiedad = !isset( $request['concepto_propiedad'] ) ? 'N' : 'S';
+            $format->opciones_preg_min = $request->opciones_preg_min;
+            $format->opciones_preg_max = $request->opciones_preg_max;
+            $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
+            $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $format->modificado_por = \Auth::id();
+            $format->fecha_modificacion = date('Y-m-d h:i:s');
+            $format->save();
 
-        $format->nombre = $request->nombre;
-        $format->descripcion = $request->descripcion;
-        $format->opciones_resp_min = $request->opciones_resp_min;
-        $format->opciones_resp_max = $request->opciones_resp_max;
-        $format->opciones_pregunta = !isset( $request['opciones_pregunta'] ) ? 'N' : 'S';
-        $format->concepto_propiedad = !isset( $request['concepto_propiedad'] ) ? 'N' : 'S';
-        $format->opciones_preg_min = $request->opciones_preg_min;
-        $format->opciones_preg_max = $request->opciones_preg_max;
-        $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
-        $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
-        $format->modificado_por = \Auth::id();
-        $format->fecha_modificacion = date('Y-m-d h:i:s');
-        $format->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            return view('reagent.formats.edit')->with('format', $format);
+        }
 
         return redirect()->route('reagent.formats.index');
     }
@@ -120,10 +137,18 @@ class FormatsController extends Controller
     {
         $format = Format::find($id);
 
-        $format->estado = 'E';
-        $format->modificado_por = \Auth::id();
-        $format->fecha_modificacion = date('Y-m-d h:i:s');
-        $format->save();
+        try
+        {
+            $format->estado = 'E';
+            $format->modificado_por = \Auth::id();
+            $format->fecha_modificacion = date('Y-m-d h:i:s');
+            $format->save();
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+        }
 
         return redirect()->route('reagent.formats.index');
     }

@@ -453,6 +453,7 @@
                             <div class="col-sm-12">
 
                                 <section>
+                                    @include('flash::message')
                                     @yield('contenido')
                                 </section>
 
@@ -557,7 +558,7 @@
                         @endforeach
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
-                    sorting: [[0, 'asc']],
+                    //sorting: [[0, 'asc']],
                     @if( !isset($newurl) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                     @else // Con boton de agregar nuevo

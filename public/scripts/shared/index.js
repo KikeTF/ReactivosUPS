@@ -1,3 +1,5 @@
+$('div.alert').not('.alert-important').delay(3000).fadeOut(350);
+
 jQuery(function($) {
     if(!ace.vars['touch']) {
         $('.chosen-select').chosen({allow_single_deselect:true});

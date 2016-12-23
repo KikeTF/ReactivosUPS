@@ -41,11 +41,20 @@ class ProfilesController extends Controller
      */
     public function store(Request $request)
     {
-        $profile = new Profile($request->all());
-        $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
-        $profile->creado_por = \Auth::id();
-        $profile->fecha_creacion = date('Y-m-d h:i:s');
-        $profile->save();
+        try
+        {
+
+            $profile = new Profile($request->all());
+            $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $profile->creado_por = \Auth::id();
+            $profile->fecha_creacion = date('Y-m-d h:i:s');
+            $profile->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            return view('security.profiles.create');
+        }
 
         return redirect()->route('security.profiles.index');
     }
@@ -88,12 +97,22 @@ class ProfilesController extends Controller
     {
         $profile = Profile::find($id);
 
-        $profile->nombre = $request->nombre;
-        $profile->descripcion = $request->descripcion;
-        $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
-        $profile->modificado_por = \Auth::id();
-        $profile->fecha_modificacion = date('Y-m-d h:i:s');
-        $profile->save();
+        try
+        {
+
+            $profile->nombre = $request->nombre;
+            $profile->descripcion = $request->descripcion;
+            $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $profile->modificado_por = \Auth::id();
+            $profile->fecha_modificacion = date('Y-m-d h:i:s');
+            $profile->save();
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            return view('security.profiles.edit')->with('profile', $profile);
+        }
 
         return redirect()->route('security.profiles.index');
     }
@@ -108,10 +127,18 @@ class ProfilesController extends Controller
     {
         $profile = Profile::find($id);
 
-        $profile->estado = 'E';
-        $profile->modificado_por = \Auth::id();
-        $profile->fecha_modificacion = date('Y-m-d h:i:s');
-        $profile->save();
+        try
+        {
+            $profile->estado = 'E';
+            $profile->modificado_por = \Auth::id();
+            $profile->fecha_modificacion = date('Y-m-d h:i:s');
+            $profile->save();
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+        }
 
         return redirect()->route('security.profiles.index');
     }

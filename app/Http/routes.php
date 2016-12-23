@@ -96,6 +96,11 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
 
     Route::resource('matterscareers','MattersCareersController');
 
+    Route::get('matterscareers/{id}/destroy', [
+        'uses'  => 'MattersCareersController@destroy',
+        'as'    => 'general.matterscareers.destroy'
+    ]);
+
 });
 
 Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
