@@ -42,7 +42,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['username', 'password', 'email', 'cod_usuario', 'nombres', 'apellidos', 'tipo', 'estado'];
+    protected $fillable = ['id', 'username', 'password', 'email', 'cod_usuario', 'nombres', 'apellidos', 'tipo', 'estado'];
 
     public function getFullNameAttribute(){
         return $this->attributes['nombres'] .' '. $this->attributes['apellidos'];

@@ -3,6 +3,8 @@
 namespace ReactivosUPS\Http\Controllers\Auth;
 
 use Auth;
+use Dompdf\Exception;
+use ReactivosUPS\Profile;
 use Session;
 use View;
 use ReactivosUPS\User;
@@ -50,6 +52,33 @@ class AuthController extends Controller
         return View::make('auth.login');
     }
 
+    public function getUserProfiles(Request $request)
+    {
+        $errMessage = "";
+        $valid = false;
+        try{
+            $user = User::query()->where('username', $request->username)->first();
+            if(!is_null($user)){
+                if($user->estado == "A"){
+                    if($user->profilesUsers->count() > 0){
+                        foreach($user->profilesUsers as $userProfile){
+                            $ids[] = $userProfile->id_perfil;
+                        }
+                        $profiles = Profile::find($ids);
+                        return array('valid' => true, 'profiles' => $profiles);
+                    }else
+                        $errMessage = "El usuario no tiene roles asignados!";
+                }else
+                    $errMessage = "El usuario no se encuentra activo!";
+            }else
+                $errMessage = "El usuario es incorrecto!";
+        }catch (Exception $e){
+            $errMessage = "El usuario es incorrecto!";
+        }
+
+        return array("valid" => $valid, "message" => $errMessage);
+    }
+
     public function postLogin(Request $request)
     {
         $username = $request->input('username');
@@ -77,7 +106,7 @@ class AuthController extends Controller
 
     public function getLogout(){
         Auth::logout();
-        return view('auth.login');
+        return redirect()->guest('auth/login');
     }
 
     protected $redirectPath = '/';

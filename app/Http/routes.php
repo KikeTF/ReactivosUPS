@@ -27,6 +27,11 @@ Route::get('auth/logout', [
     'as'    => 'auth.logout'
 ]);
 
+Route::get('auth/userprofiles', [
+    'uses'  => 'Auth\AuthController@getUserProfiles',
+    'as'    => 'auth.userprofiles'
+]);
+
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', function () {

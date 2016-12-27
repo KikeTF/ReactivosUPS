@@ -1,5 +1,4 @@
-﻿
-function btnLogin_onClick() {
+﻿function btnLogin_onClick() {
     var userData = {
         username: $("#user").val(),
         password: $("#pass").val(),

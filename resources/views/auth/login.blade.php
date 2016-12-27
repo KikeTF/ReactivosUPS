@@ -72,10 +72,10 @@
                                         <form>
                                             <fieldset>
                                                 <label class="block clearfix">
-                                                            <span class="block input-icon input-icon-right">
-                                                                <input id="user" type="text" class="form-control" placeholder="Correo Institucional" />
-                                                                <i class="ace-icon fa fa-user"></i>
-                                                            </span>
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input id="user" type="text" class="form-control" placeholder="Correo Institucional" />
+                                                        <i class="ace-icon fa fa-user"></i>
+                                                    </span>
                                                 </label>
 
                                                 <label class="block clearfix">
@@ -84,6 +84,15 @@
                                                         <i class="ace-icon fa fa-lock"></i>
                                                     </span>
                                                 </label>
+
+                                                <div id="perfiles" hidden>
+                                                    <label class="block clearfix">
+                                                        <span class="block input-icon input-icon-right">
+                                                            <select id="id_perfil" name="id_perfil" class="form-control">
+                                                            </select>
+                                                        </span>
+                                                    </label>
+                                                </div>
 
                                                 <div class="space"></div>
 
@@ -203,6 +212,38 @@
 
     <!-- inline scripts related to this page -->
     <script src="{{ asset('scripts/login/index.js') }}"></script>
+
+    <script type="text/javascript">
+        //var perfiles = {
+          //  id:  };
+        $("#user").on("focusout", function () {
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8000/auth/userprofiles",
+                data: { username: $("#user").val() },
+                dataType: "json",
+                async: true,
+                cache: false,
+                error: function (e) {
+                    console.log(e);
+                },
+                success: function (r) {
+                    if (r.valid) {
+                        $("#perfiles").attr('hidden', false);
+                        var p = r.profiles;
+                        for(var i = 0; i < p.length; i++){
+                            $("#id_perfil").append('<option value="'+p[i].id+'">'+p[i].nombre+'</option>');
+                        }
+                    }
+                    else {
+                        $("#perfiles").attr('hidden', true);
+                        $("#alerta #text").html(r.message);
+                        $("#alerta").css("display", "");
+                    }
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
