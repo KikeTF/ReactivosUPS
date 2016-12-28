@@ -81,27 +81,25 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
-        $rememberMe = $request->input('rememberMe');
-
-        $valid = false;
-        $errMessage = "El usuario o contraseña son incorrectos!";
+        $username = $request->username;
+        $password = $request->password;
+        $profile = (int)$request->profile;
+        $rememberMe = !isset( $request['rememberMe'] ) ? false : true;
         //dd(\Hash::make($password));
 
-        if (Auth::attempt(['username' => $username, 'password' => $password], $rememberMe)) {
+        if (Auth::attempt(['username' => $username, 'password' => $password, 'estado' => 'A'], $rememberMe)) {
             $valid = true;
-            $errMessage = "";
-            Session::put('id_sede', 1);
-            Session::put('id_periodo', 1);
-            Session::put('id_periodo_sede', 1);
-            Session::put('id_perfil', 1);
-            Session::put('id_perfil_usuario', 1);
+            Session::put('idSede', 1);
+            Session::put('idPeriodo', 1);
+            Session::put('idPeriodoSede', 1);
+            Session::put('idPerfil', $profile);
+            Session::put('idPerfilUsuario', 1);
+            return redirect()->guest('home');
+            //return view('index');
         }
 
-        $result = array("valid"=>$valid, "message"=>$errMessage);
-
-        return json_encode($result);
+        return view("auth.login")
+            ->with("message", "El usuario o contraseña son incorrectos!");
     }
 
     public function getLogout(){

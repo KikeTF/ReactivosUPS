@@ -69,18 +69,18 @@
 
                                         <div class="space-6"></div>
 
-                                        <form>
+                                        {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'auth.login','method' => 'POST']) !!}
                                             <fieldset>
                                                 <label class="block clearfix">
                                                     <span class="block input-icon input-icon-right">
-                                                        <input id="user" type="text" class="form-control" placeholder="Correo Institucional" />
+                                                        <input id="username" name="username" type="text" class="form-control" placeholder="Correo Institucional" required/>
                                                         <i class="ace-icon fa fa-user"></i>
                                                     </span>
                                                 </label>
 
                                                 <label class="block clearfix">
                                                     <span class="block input-icon input-icon-right">
-                                                        <input id="pass" type="password" class="form-control" placeholder="Contrase&ntilde;a" />
+                                                        <input id="password" name="password" type="password" class="form-control" placeholder="Contrase&ntilde;a" required/>
                                                         <i class="ace-icon fa fa-lock"></i>
                                                     </span>
                                                 </label>
@@ -88,7 +88,7 @@
                                                 <div id="perfiles" hidden>
                                                     <label class="block clearfix">
                                                         <span class="block input-icon input-icon-right">
-                                                            <select id="id_perfil" name="id_perfil" class="form-control">
+                                                            <select id="profile" name="profile" class="form-control">
                                                             </select>
                                                         </span>
                                                     </label>
@@ -96,18 +96,18 @@
 
                                                 <div class="space"></div>
 
-                                                <div id="alerta" style="width: 100%; display: none;">
-                                                    <div id="text" class="alert alert-danger center" style="padding: 5px; width: 100%;">Mostrar Alerta</div>
+                                                <div id="alerta" style="width: 100%; {{ !isset($message) ? "display: none" : "" }}">
+                                                    <div id="text" class="alert alert-danger center" style="padding: 5px; width: 100%;">{{ isset($message) ? $message : "" }}</div>
                                                     <div class="space"></div>
                                                 </div>
 
                                                 <div class="clearfix">
                                                     <label class="inline">
-                                                        <input id="recuerdame" type="checkbox" class="ace" />
+                                                        <input id="rememberMe" name="rememberMe" type="checkbox" class="ace" />
                                                         <span class="lbl">Recu&eacute;rdame</span>
                                                     </label>
 
-                                                    <button id="btnLogin" type="button" class="width-45 pull-right btn btn-sm btn-primary" >
+                                                    <button id="btnLogin" type="submit" class="width-45 pull-right btn btn-sm btn-primary" >
                                                         <i class="ace-icon fa fa-key"></i>
                                                         <span class="bigger-110">Iniciar Sesi&oacute;n</span>
                                                     </button>
@@ -115,7 +115,7 @@
 
                                                 <div class="space-4"></div>
                                             </fieldset>
-                                        </form>
+                                        {!! Form::close() !!}
 
                                     </div><!-- /.widget-main -->
 
@@ -214,13 +214,11 @@
     <script src="{{ asset('scripts/login/index.js') }}"></script>
 
     <script type="text/javascript">
-        //var perfiles = {
-          //  id:  };
-        $("#user").on("focusout", function () {
+        $("#username").on("focusout", function () {
             $.ajax({
                 type: 'GET',
                 url: "http://localhost:8000/auth/userprofiles",
-                data: { username: $("#user").val() },
+                data: { username: $("#username").val() },
                 dataType: "json",
                 async: true,
                 cache: false,
@@ -232,7 +230,7 @@
                         $("#perfiles").attr('hidden', false);
                         var p = r.profiles;
                         for(var i = 0; i < p.length; i++){
-                            $("#id_perfil").append('<option value="'+p[i].id+'">'+p[i].nombre+'</option>');
+                            $("#profile").append('<option value="'+p[i].id+'">'+p[i].nombre+'</option>');
                         }
                     }
                     else {

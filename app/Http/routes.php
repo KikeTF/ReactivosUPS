@@ -35,7 +35,7 @@ Route::get('auth/userprofiles', [
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', function () {
-        if (!(\Session::has('id_sede'))){
+        if (!(\Session::has('idSede'))){
             \Auth::logout();
             return redirect()->guest('auth/login');
         }
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('home', ['as' => 'home', function () {
-        if (!(\Session::has('id_sede'))){
+        if (!(\Session::has('idSede'))){
             \Auth::logout();
             return redirect()->guest('auth/login');
         }
