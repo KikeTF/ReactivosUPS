@@ -228,6 +228,17 @@
                             <b class="arrow"></b>
                         </li>
                     </ul>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="{{ route('general.datasource.index') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Importar CSV
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="">

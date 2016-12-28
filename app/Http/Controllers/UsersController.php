@@ -89,6 +89,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $user = User::find($id);
 
         if(!is_null($request->password) and  $request->password != "")
@@ -140,11 +141,17 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-
-        $user->estado = 'E';
-        $user->modificado_por = \Auth::id();
-        $user->fecha_modificacion = date('Y-m-d h:i:s');
-        $user->save();
+        try
+        {
+            $user->estado = 'I';
+            $user->modificado_por = \Auth::id();
+            $user->fecha_modificacion = date('Y-m-d h:i:s');
+            $user->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }catch (\Exception $e)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+        }
 
 
         return redirect()->route('security.users.index');

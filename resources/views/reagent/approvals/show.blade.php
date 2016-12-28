@@ -270,7 +270,25 @@
                     if (result === null) {
                         console.log("Ok");
                     } else {
-                        $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result, 'id_estado':5}, result, 'json');
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("reagent.approvals.comment", $reagent->id) }}",
+                            data: {'comentario':result, 'id_estado':5},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
                     }
                 }
             });
@@ -294,7 +312,25 @@
                     if (result === null) {
                         console.log("Ok");
                     } else {
-                        $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result, 'id_estado':6}, result, 'json');
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("reagent.approvals.comment", $reagent->id) }}",
+                            data: {'comentario':result, 'id_estado':6},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
                     }
                 }
             });
@@ -318,13 +354,33 @@
                     if (result === null) {
                         console.log("Ok");
                     } else {
-                        $.get("{{ Route("reagent.approvals.comment", $reagent->id) }}",{'comentario':result, 'id_estado':4}, result, 'json');
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("reagent.approvals.comment", $reagent->id) }}",
+                            data: {'comentario':result, 'id_estado':4},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
+                                }
+                                else {
+                                    window.location.replace("{{ Route("reagent.approvals.show", $reagent->id) }}");
+
+                                }
+                            }
+                        });
                     }
                 }
             });
         });
 
-        function result(){
+        function result(arg){
+            alert(arg);
             console.log("Ok");
         }
     </script>

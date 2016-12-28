@@ -146,37 +146,40 @@ class ReagentsApprovalsController extends Controller
 
     public function comment(Request $request, $id)
     {
+        $valid = true;
         $reagent = Reagent::find($id);
-
-        if( isset( $request['id_estado'] ) ){
-            $reagent->id_estado = (int)$request->id_estado;
-            $reagent->modificado_por = \Auth::id();
-            $reagent->fecha_modificacion = date('Y-m-d h:i:s');
-        }
-
-        $comment = new ReagentComment();
-        $comment->id_reactivo = $id;
-        $comment->id_estado_anterior = $reagent->id_estado;
-        $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $reagent->id_estado : (int)$request->id_estado;
-        $comment->comentario = $request->comentario;
-        $comment->creado_por = \Auth::id();
-        $comment->fecha_creacion = date('Y-m-d h:i:s');
 
         \DB::beginTransaction(); //Start transaction!
 
         try
         {
+            if( isset( $request['id_estado'] ) ){
+                $reagent->id_estado = (int)$request->id_estado;
+                $reagent->modificado_por = \Auth::id();
+                $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+            }
+
+            $comment = new ReagentComment();
+            $comment->id_reactivo = $id;
+            $comment->id_estado_anterior = $reagent->id_estado;
+            $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $reagent->id_estado : (int)$request->id_estado;
+            $comment->comentario = $request->comentario;
+            $comment->creado_por = \Auth::id();
+            $comment->fecha_creacion = date('Y-m-d h:i:s');
+
             $reagent->save();
             $comment->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
         }
         catch(\Exception $e)
         {
             //failed logic here
             \DB::rollback();
+            $valid = false;
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
         }
 
         \DB::commit();
-
-        return redirect()->route('reagent.approvals.index');
+        return array("valid"=>$valid);
     }
 }

@@ -116,6 +116,15 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
         'as'    => 'general.matterscareers.destroy'
     ]);
 
+    Route::get('datasource', [
+        'uses'  => 'DataSourcesController@index',
+        'as'    => 'general.datasource.index'
+    ]);
+
+    Route::get('datasource/import', [
+        'uses'  => 'DataSourcesController@import',
+        'as'    => 'general.datasource.import'
+    ]);
 });
 
 Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
