@@ -88,14 +88,8 @@ class AuthController extends Controller
         //dd(\Hash::make($password));
 
         if (Auth::attempt(['username' => $username, 'password' => $password, 'estado' => 'A'], $rememberMe)) {
-            $valid = true;
-            Session::put('idSede', 1);
-            Session::put('idPeriodo', 1);
-            Session::put('idPeriodoSede', 1);
-            Session::put('idPerfil', $profile);
-            Session::put('idPerfilUsuario', 1);
-            return redirect()->guest('home');
-            //return view('index');
+            if($this->loadSessionData($profile, Auth::id()))
+                return redirect()->guest('home');
         }
 
         return view("auth.login")

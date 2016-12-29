@@ -2,6 +2,9 @@
 
 namespace ReactivosUPS\Http\Controllers;
 
+use Dompdf\Exception;
+use ReactivosUPS\Period;
+use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\ReagentState;
 use Session;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -121,8 +124,8 @@ abstract class Controller extends BaseController
     }
 
     public function getDistributive($id_materia, $id_carrera, $id_campus){
-        $id_profileUser = 1;//(int)Session::get('id_perfil_usuario');
-        $id_periodLocation = 1;//(int)Session::get('id_periodo_sede');
+        $id_profileUser = (int)Session::get('idPerfilUsuario');
+        $id_periodLocation = (int)Session::get('idPeriodoSede');
 
         $id_careerCampus = $this->getCareersCampuses()
             ->where('id_carrera', $id_carrera)
@@ -164,6 +167,41 @@ abstract class Controller extends BaseController
             return true;
         }
         return false;
+    }
+
+    public function loadSessionData($idPerfil, $idUsuario){
+        $result = false;
+        try{
+            $idSede = (int)User::find($idUsuario)->id_sede;
+
+            $idPeriodo = (int)Period::query()
+                ->where('estado', 'A')
+                ->orderBy('fecha_inicio', 'desc')
+                ->first()->id;
+
+            $idPerfilUsuario = (int)ProfileUser::query()
+                ->where('id_perfil', $idPerfil)
+                ->where('id_usuario', $idUsuario)
+                ->where('estado', 'A')
+                ->first()->id;
+
+            $idPeriodoSede = (int)PeriodLocation::query()
+                ->where('id_periodo', $idPeriodo)
+                ->where('id_sede', $idSede)
+                ->where('estado', 'A')
+                ->first()->id;
+
+            Session::put('idSede', $idSede);
+            Session::put('idPeriodo', $idPeriodo);
+            Session::put('idPeriodoSede', $idPeriodoSede);
+            Session::put('idPerfil', $idPerfil);
+            Session::put('idPerfilUsuario', $idPerfilUsuario);
+            $result = true;
+        }catch (Exception $ex){
+
+        }
+
+        return $result;
     }
 
 }
