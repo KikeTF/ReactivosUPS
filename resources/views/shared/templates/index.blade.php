@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -52,6 +53,9 @@
     <script src="ace/js/respond.min.js"></script>
     -->
     <!--[endif]-->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
 </head>
 
 <body class="no-skin">
