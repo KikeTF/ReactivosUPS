@@ -12,7 +12,8 @@
         "caouecs/laravel-lang": "3.0.8",
         "yajra/laravel-datatables-oracle": "6.0.x-dev",
         "laracasts/flash": "^2.0",
-        "maatwebsite/excel": "~2.1.0"
+        "maatwebsite/excel": "~2.1.0",
+        "monolog/monolog": "^1.22"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -85,15 +85,20 @@ class AuthController extends Controller
         $password = $request->password;
         $profile = (int)$request->profile;
         $rememberMe = !isset( $request['rememberMe'] ) ? false : true;
+        $errMessage = "";
         //dd(\Hash::make($password));
 
         if (Auth::attempt(['username' => $username, 'password' => $password, 'estado' => 'A'], $rememberMe)) {
             if($this->loadSessionData($profile, Auth::id()))
                 return redirect()->guest('home');
-        }
+            else
+                $errMessage = "Perfil del usuario no encontrado!";
+        }else
+            $errMessage = "El usuario o contraseña son incorrectos!";
+
 
         return view("auth.login")
-            ->with("message", "El usuario o contraseña son incorrectos!");
+            ->with("message", $errMessage);
     }
 
     public function getLogout(){

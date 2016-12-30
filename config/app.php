@@ -152,9 +152,9 @@ return [
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-
         Yajra\Datatables\DatatablesServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -208,7 +208,8 @@ return [
         'Flash'     => Laracasts\Flash\Flash::class,
         'Gate'      => Illuminate\Support\Facades\Gate::class,
         'Datatables'=> Yajra\Datatables\Facades\Datatables::class,
-        'Flash'     => Laracasts\Flash\Flash::class,
+        'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
+
 
     ],
 

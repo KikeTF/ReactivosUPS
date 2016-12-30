@@ -24,6 +24,7 @@ use ReactivosUPS\Campus;
 use ReactivosUPS\Career;
 use ReactivosUPS\Matter;
 use ReactivosUPS\Format;
+use Log;
 
 
 
@@ -162,16 +163,23 @@ abstract class Controller extends BaseController
     }
 
     public function isSessionExpire(){
-        if (!(\Session::has('id_sede'))){
-            \Auth::logout();
-            return true;
+        $result = false;
+        try{
+            if (!(\Session::has('idUsuario'))) {
+                \Auth::logout();
+                $result = true;
+            }
+        }catch (\Exception $ex){
+            Log::error("La session ha expirado! ".$ex);
         }
-        return false;
+        return $result;
     }
 
     public function loadSessionData($idPerfil, $idUsuario){
         $result = false;
         try{
+            Log::debug("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil);
+
             $idSede = (int)User::find($idUsuario)->id_sede;
 
             $idPeriodo = (int)Period::query()
@@ -191,14 +199,15 @@ abstract class Controller extends BaseController
                 ->where('estado', 'A')
                 ->first()->id;
 
+            Session::put('idUsuario', $idUsuario);
             Session::put('idSede', $idSede);
             Session::put('idPeriodo', $idPeriodo);
             Session::put('idPeriodoSede', $idPeriodoSede);
             Session::put('idPerfil', $idPerfil);
             Session::put('idPerfilUsuario', $idPerfilUsuario);
             $result = true;
-        }catch (Exception $ex){
-
+        }catch (\Exception $ex){
+            Log::error("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil.". Exception: ".$ex);
         }
 
         return $result;
