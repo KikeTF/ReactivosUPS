@@ -11,6 +11,7 @@ use ReactivosUPS\Matter;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
 use Datatables;
+use Log;
 
 class MattersCareersController extends Controller
 {
@@ -134,9 +135,10 @@ class MattersCareersController extends Controller
             $matterCareer->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[MattersCareersController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
             return view('reagent.matterscareers.edit')->with('matterscareers', $matterCareer);
         }
 
@@ -161,9 +163,10 @@ class MattersCareersController extends Controller
             $matterCareer->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[MattersCareersController][destroy] Datos: id=".$id.". Exception: ".$ex);
         }
 
         return redirect()->route('general.matterscareers.index');

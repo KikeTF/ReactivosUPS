@@ -10,6 +10,7 @@ use ReactivosUPS\Profile;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Datatables;
+use Log;
 
 
 class UsersController extends Controller
@@ -148,9 +149,10 @@ class UsersController extends Controller
             $user->fecha_modificacion = date('Y-m-d h:i:s');
             $user->save();
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[UsersController][destroy] Datos: id=".$id.". Exception: ".$ex);
         }
 
 

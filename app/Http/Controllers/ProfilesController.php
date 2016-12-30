@@ -8,6 +8,7 @@ use ReactivosUPS\Profile;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Datatables;
+use Log;
 
 class ProfilesController extends Controller
 {
@@ -50,9 +51,10 @@ class ProfilesController extends Controller
             $profile->fecha_creacion = date('Y-m-d h:i:s');
             $profile->save();
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ProfilesController][store] Datos: Request=".$request->all().". Exception: ".$ex);
             return view('security.profiles.create');
         }
 
@@ -108,9 +110,10 @@ class ProfilesController extends Controller
             $profile->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[FieldsController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
             return view('security.profiles.edit')->with('profile', $profile);
         }
 
@@ -135,9 +138,10 @@ class ProfilesController extends Controller
             $profile->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ProfilesController][destroy] Datos: id=".$id.". Exception: ".$ex);
         }
 
         return redirect()->route('security.profiles.index');

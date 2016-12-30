@@ -8,6 +8,7 @@ use ReactivosUPS\Field;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Datatables;
+use Log;
 
 class FieldsController extends Controller
 {
@@ -55,9 +56,10 @@ class FieldsController extends Controller
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[FieldsController][store] Datos: Request=".$request->all().". Exception: ".$ex);
             return view('reagent.fields.create');
         }
 
@@ -113,9 +115,10 @@ class FieldsController extends Controller
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[FieldsController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
             return view('reagent.$field.edit')->with('$field', $field);
         }
 
@@ -141,9 +144,10 @@ class FieldsController extends Controller
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $e)
+        }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[FieldsController][destroy] Datos: id=".$id.". Exception: ".$ex);
         }
 
         return redirect()->route('reagent.fields.index');

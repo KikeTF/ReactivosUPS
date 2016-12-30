@@ -15,6 +15,7 @@ use ReactivosUPS\ReagentQuestion;
 use ReactivosUPS\ReagentAnswer;
 use ReactivosUPS\ReagentComment;
 use Datatables;
+use Log;
 
 class ReagentsApprovalsController extends Controller
 {
@@ -171,12 +172,13 @@ class ReagentsApprovalsController extends Controller
             $comment->save();
             flash('Transacci&oacuten realizada existosamente', 'success');
         }
-        catch(\Exception $e)
+        catch(\Exception $ex)
         {
             //failed logic here
             \DB::rollback();
             $valid = false;
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ReagentsApprovalsController][comment] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
         }
 
         \DB::commit();
