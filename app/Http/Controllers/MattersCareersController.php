@@ -139,7 +139,7 @@ class MattersCareersController extends Controller
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[MattersCareersController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
-            return view('reagent.matterscareers.edit')->with('matterscareers', $matterCareer);
+            return redirect()->route('reagent.matterscareers.edit', $id);
         }
 
         return redirect()->route('general.matterscareers.index');

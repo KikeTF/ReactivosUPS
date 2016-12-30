@@ -9,7 +9,7 @@ class ProfileUser extends Model
     protected $table = "seg_perfiles_usuarios";
     public $timestamps = false;
 
-    protected $fillable =["id_perfil", "id_usuario", "estado", "creado_por", "fecha_creacion"];
+    protected $fillable =["id_perfil", "id_usuario", "creado_por", "fecha_creacion"];
 
     public function profile(){
         return $this->belongsTo('ReactivosUPS\Profile', 'id_perfil');
