@@ -16,6 +16,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if($this->isSessionExpire())
+            return redirect()->guest('auth/login');
+
         return view('index');
     }
 

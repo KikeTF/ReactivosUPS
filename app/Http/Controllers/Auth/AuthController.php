@@ -42,13 +42,11 @@ class AuthController extends Controller
 
     public function getLogin()
     {
-        // Verificamos si hay sesión activa
-        if (Auth::check())
-        {
-            // Si tenemos sesión activa mostrará la página de inicio
-            return redirect()->guest('/');
+        if (Auth::check()){
+            if(!$this->isSessionExpire())
+                return redirect()->guest('/');
         }
-        // Si no hay sesión activa mostramos el formulario
+
         return View::make('auth.login');
     }
 

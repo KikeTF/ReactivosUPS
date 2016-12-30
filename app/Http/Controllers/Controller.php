@@ -191,13 +191,11 @@ abstract class Controller extends BaseController
             $idPerfilUsuario = (int)ProfileUser::query()
                 ->where('id_perfil', $idPerfil)
                 ->where('id_usuario', $idUsuario)
-                ->where('estado', 'A')
                 ->first()->id;
 
             $idPeriodoSede = (int)PeriodLocation::query()
                 ->where('id_periodo', $idPeriodo)
                 ->where('id_sede', $idSede)
-                ->where('estado', 'A')
                 ->first()->id;
 
             Session::put('idUsuario', $idUsuario);
