@@ -34,23 +34,15 @@ Route::get('auth/userprofiles', [
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/', function () {
-        if (!(\Session::has('idSede'))){
-            \Auth::logout();
-            return redirect()->guest('auth/login');
-        }
+    Route::get('/', [
+        'uses'  => 'HomeController@index',
+        'as'    => 'index'
+    ]);
 
-        return view('index');
-    });
-
-    Route::get('home', ['as' => 'home', function () {
-        if (!(\Session::has('idSede'))){
-            \Auth::logout();
-            return redirect()->guest('auth/login');
-        }
-
-        return view('index');
-    }]);
+    Route::get('home', [
+        'uses'  => 'HomeController@index',
+        'as'    => 'index'
+    ]);
 
 });
 

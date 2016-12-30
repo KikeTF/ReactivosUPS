@@ -14,7 +14,8 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer(['reagent.reagents.create'], 'ReactivosUPS\Http\ViewComposers\FormatComposer');
+        View::composer('*', 'ReactivosUPS\Http\ViewComposers\OptionsComposer');
+        View::composer('reagent.reagents.create', 'ReactivosUPS\Http\ViewComposers\FormatComposer');
     }
 
     /**

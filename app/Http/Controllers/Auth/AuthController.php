@@ -83,15 +83,15 @@ class AuthController extends Controller
     {
         $username = $request->username;
         $password = $request->password;
-        $profile = (int)$request->profile;
+        $idProfile = (int)$request->profile;
         $rememberMe = !isset( $request['rememberMe'] ) ? false : true;
         $errMessage = "";
         //dd(\Hash::make($password));
 
         if (Auth::attempt(['username' => $username, 'password' => $password, 'estado' => 'A'], $rememberMe)) {
-            if($this->loadSessionData($profile, Auth::id()))
+            if($this->loadSessionData($idProfile, Auth::id())){
                 return redirect()->guest('home');
-            else
+            }else
                 $errMessage = "Perfil del usuario no encontrado!";
         }else
             $errMessage = "El usuario o contraseña son incorrectos!";
@@ -128,9 +128,5 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
-
-    //protected $redirectPath = '/';
-
-    //protected $loginPath = '/login';
     */
 }

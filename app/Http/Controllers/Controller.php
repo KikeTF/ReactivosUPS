@@ -2,7 +2,7 @@
 
 namespace ReactivosUPS\Http\Controllers;
 
-use Dompdf\Exception;
+use ReactivosUPS\Option;
 use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\ReagentState;
@@ -17,6 +17,7 @@ use ReactivosUPS\Distributive;
 use ReactivosUPS\Field;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Mention;
+use ReactivosUPS\Profile;
 use ReactivosUPS\ProfileUser;
 use ReactivosUPS\ReagentParameter;
 use ReactivosUPS\User;

@@ -19,6 +19,7 @@ class FieldsController extends Controller
      */
     public function index()
     {
+
         dd(\Session::all());
         if($this->isSessionExpire())
             return redirect()->guest('auth/login');

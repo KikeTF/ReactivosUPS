@@ -12,10 +12,10 @@ class OptionUser extends Model
     protected $fillable =["id_opcion", "id_perfil_usuario", "estado"];
 
     public function option(){
-        return $this->belongsTo('ReactivosUPS\Option');
+        return $this->belongsTo('ReactivosUPS\Option', 'id_opcion');
     }
 
     public function profileUser(){
-        return $this->belongsTo('ReactivosUPS\ProfileUser');
+        return $this->belongsTo('ReactivosUPS\ProfileUser', 'id_perfil_usuario');
     }
 }
