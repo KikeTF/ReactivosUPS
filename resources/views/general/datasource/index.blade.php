@@ -5,12 +5,15 @@
 
 @section('contenido')
 
-    <div>Prueba</div>
     <button type="button" class="btn btn-primary" onclick="importData()">Importar</button>
+
+    <div class="pull-right center spinner-preview" id="spinner-preview"></div>
 
     <script type="text/javascript">
 
+
         function importData(){
+            spinnerLoadingStart();
             $.ajax({
                 type: 'GET',
                 url: "{{ Route("general.datasource.import") }}",
@@ -21,8 +24,13 @@
                 error: function (e) {
                     console.log(e);
                 },
-                success: function () {
-                    console.log("ok");
+                success: function (result) {
+                    if(result.valid){
+                        window.location.replace("{{ Route("general.datasource.index") }}");
+                    }
+                },
+                complete: function () {
+                    spinnerLoadingStop();
                 }
             });
         }

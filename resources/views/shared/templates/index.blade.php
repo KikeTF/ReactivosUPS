@@ -284,6 +284,7 @@
     <script src="{{ asset('ace/js/dataTables.tableTools.min.js') }}"></script>
     <script src="{{ asset('ace/js/dataTables.colVis.min.js') }}"></script>
     <script src="{{ asset('ace/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('ace/js/spin.min.js') }}"></script>
 
     @stack('specific-script')
 

@@ -7,7 +7,7 @@
         <b class="arrow"></b>
     </li>
 
-    @foreach($options as $option)
+    @foreach($navOptions as $option)
         <li class="">
             <a href="#" class="dropdown-toggle">
                 <i class="menu-icon {{ $option->ruta }}"></i>
@@ -17,7 +17,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-                @foreach($suboptions->where('id_padre', $option->id) as $suboption)
+                @foreach($navSuboptions->where('id_padre', $option->id) as $suboption)
                     <li class="">
                         <a href="{{ route($suboption->ruta) }}">
                             <i class="menu-icon fa fa-caret-right"></i>
