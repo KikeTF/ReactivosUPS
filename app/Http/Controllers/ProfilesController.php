@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use ReactivosUPS\Profile;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\OptionProfile;
+use ReactivosUPS\Option;
 use Datatables;
 use Log;
 
@@ -19,9 +21,16 @@ class ProfilesController extends Controller
      */
     public function index()
     {
-        $profiles = Profile::query()->where('estado','!=','E')->get();
-        return view('security.profiles.index')
-            ->with('profiles', $profiles);
+        try{
+            $profiles = Profile::query()->where('estado','!=','E')->get();
+            return view('security.profiles.index')
+                ->with('profiles', $profiles);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ProfilesController][index] Exception: ".$ex);
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -31,7 +40,17 @@ class ProfilesController extends Controller
      */
     public function create()
     {
-        return view('security.profiles.create');
+        try{
+            $optionsList = Option::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+
+            return view('security.profiles.create')
+                ->with('optionsList', $optionsList);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ProfilesController][create] Exception: ".$ex);
+            return redirect()->route('security.profiles.index');
+        }
     }
 
     /**
@@ -42,22 +61,36 @@ class ProfilesController extends Controller
      */
     public function store(Request $request)
     {
+        \DB::beginTransaction(); //Start transaction!
         try
         {
-
             $profile = new Profile($request->all());
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->creado_por = \Auth::id();
             $profile->fecha_creacion = date('Y-m-d h:i:s');
             $profile->save();
+
+            $optionsprofiles = array();
+            foreach ($request->optionsprofile as $option) {
+                $optionsprofile['id_opcion'] = $option;
+                $optionsprofile['id_perfil'] = $profile->id;
+                $optionsprofile['creado_por'] = \Auth::id();
+                $optionsprofile['fecha_creacion'] = date('Y-m-d h:i:s');
+                $optionsprofiles[] = new OptionProfile($optionsprofile);
+            }
+
+            Profile::find($profile->id)->optionsProfiles()->saveMany($optionsprofiles);
+
             flash('Transacci&oacuten realizada existosamente', 'success');
         }catch (\Exception $ex)
         {
+            \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[ProfilesController][store] Datos: Request=".$request->all().". Exception: ".$ex);
-            return view('security.profiles.create');
+            return redirect()->route('security.profiles.create');
         }
 
+        \DB::commit();
         return redirect()->route('security.profiles.index');
     }
 
@@ -69,11 +102,27 @@ class ProfilesController extends Controller
      */
     public function show($id)
     {
-        $profile = Profile::find($id);
-        $profile->creado_por = $this->getUserName($profile->creado_por);
-        $profile->modificado_por = $this->getUserName($profile->modificado_por);
+        try{
+            $profile = Profile::find($id);
+            $profile->creado_por = $this->getUserName($profile->creado_por);
+            $profile->modificado_por = $this->getUserName($profile->modificado_por);
+            foreach($profile->optionsProfiles as $optionProfile){
+                $ids[] = $optionProfile->id_opcion;
+            }
 
-        return view('security.profiles.show')->with('profile', $profile);
+            $options = [];
+            if( isset($ids) )
+                $options = Option::find($ids);
+
+            return view('security.profiles.show')
+                ->with('profile', $profile)
+                ->with('optionsProfiles', $options);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ProfilesController][show] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('security.profiles.index');
+        }
     }
 
     /**
@@ -84,8 +133,21 @@ class ProfilesController extends Controller
      */
     public function edit($id)
     {
-        $profile = Profile::find($id);
-        return view('security.profiles.edit')->with('profile', $profile);
+        try{
+            $profile = Profile::find($id);
+            $optionsProfiles = OptionProfile::query()->where('id_perfil', $id)->get();
+            $optionsList = Option::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+
+            return view('security.profiles.edit')
+                ->with('profile', $profile)
+                ->with('optionsProfiles', $optionsProfiles)
+                ->with('optionsList', $optionsList);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ProfilesController][edit] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('security.profiles.index');
+        }
     }
 
     /**
@@ -97,10 +159,22 @@ class ProfilesController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $profile = Profile::find($id);
+        \DB::beginTransaction(); //Start transaction!
 
         try
         {
+            $optionsprofiles = array();
+            foreach ($request->optionsprofile as $option) {
+                if(Profile::find($profile->id)->optionsProfiles()->where('id_opcion', $option)->count() == 0){
+                    $optionsprofile['id_opcion'] = $option;
+                    $optionsprofile['id_perfil'] = $profile->id;
+                    $optionsprofile['creado_por'] = \Auth::id();
+                    $optionsprofile['fecha_creacion'] = date('Y-m-d h:i:s');
+                    $optionsprofiles[] = new OptionProfile($optionsprofile);
+                }
+            }
 
             $profile->nombre = $request->nombre;
             $profile->descripcion = $request->descripcion;
@@ -109,14 +183,20 @@ class ProfilesController extends Controller
             $profile->fecha_modificacion = date('Y-m-d h:i:s');
             $profile->save();
 
+            Profile::find($profile->id)->optionsProfiles()->saveMany($optionsprofiles);
+            Profile::find($profile->id)->optionsProfiles()->whereNotIn('id_opcion', $request->optionsprofile)->delete();
+
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
+            \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FieldsController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
-            return view('security.profiles.edit')->with('profile', $profile);
+            Log::error("[ProfilesController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
+            return redirect()->route('security.profiles.edit', $id);
         }
 
+        \DB::commit();
         return redirect()->route('security.profiles.index');
     }
 
@@ -143,7 +223,6 @@ class ProfilesController extends Controller
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[ProfilesController][destroy] Datos: id=".$id.". Exception: ".$ex);
         }
-
         return redirect()->route('security.profiles.index');
     }
 }

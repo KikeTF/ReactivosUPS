@@ -20,9 +20,16 @@ class FormatsController extends Controller
      */
     public function index()
     {
-        $formats = Format::query()->where('estado','!=','E')->get();
-        return view('reagent.formats.index')
-            ->with('formats', $formats);
+        try{
+            $formats = Format::query()->where('estado','!=','E')->get();
+            return view('reagent.formats.index')
+                ->with('formats', $formats);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[FormatsController][index] Exception: ".$ex);
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -73,11 +80,18 @@ class FormatsController extends Controller
      */
     public function show($id)
     {
-        $format = Format::find($id);
-        $format->creado_por = $this->getUserName($format->creado_por);
-        $format->modificado_por = $this->getUserName($format->modificado_por);
+        try{
+            $format = Format::find($id);
+            $format->creado_por = $this->getUserName($format->creado_por);
+            $format->modificado_por = $this->getUserName($format->modificado_por);
 
-        return view('reagent.formats.show')->with('format', $format);
+            return view('reagent.formats.show')->with('format', $format);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[FormatsController][show] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('reagent.formats.index');
+        }
     }
 
     /**
@@ -88,8 +102,15 @@ class FormatsController extends Controller
      */
     public function edit($id)
     {
-        $format = Format::find($id);
-        return view('reagent.formats.edit')->with('format', $format);
+        try{
+            $format = Format::find($id);
+            return view('reagent.formats.edit')->with('format', $format);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[FormatsController][edit] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('reagent.formats.index');
+        }
     }
 
     /**

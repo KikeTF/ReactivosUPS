@@ -46,6 +46,14 @@
                 <td>{{ $user->tipo == 'D' ? 'Docente' : 'Estado' }}</td>
             </tr>
             <tr>
+                <td><strong>Perfiles:</strong></td>
+                <td colspan="3">
+                    @foreach($profiles as $profile)
+                        {{$profile->nombre}}<span>; </span>
+                    @endforeach
+                </td>
+            </tr>
+            <tr>
                 <td><strong>Estado:</strong></td>
                 <td>{{ $user->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
             </tr>

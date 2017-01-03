@@ -22,34 +22,41 @@ class MattersCareersController extends Controller
      */
     public function index(Request $request)
     {
-        $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
-        $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
-        $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
-        $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+        try{
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+            $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
 
-        if($id_mencion > 0 && $id_carrera > 0 && $id_campus > 0){
-            $careersCampuses = $this->getCareersCampuses();
-            $id_careerCampus = $careersCampuses
-                ->where('id_carrera', $id_carrera)
-                ->where('id_campus', $id_campus)
-                ->first()->id;
+            if($id_mencion > 0 && $id_carrera > 0 && $id_campus > 0){
+                $careersCampuses = $this->getCareersCampuses();
+                $id_careerCampus = $careersCampuses
+                    ->where('id_carrera', $id_carrera)
+                    ->where('id_campus', $id_campus)
+                    ->first()->id;
 
-            if( $id_area > 0 )
-                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->where('estado', '!=', 'E')->get();
-            else
-                $mattersCareers = MatterCareer::filter2($id_careerCampus, $id_mencion)->where('estado', '!=', 'E')->get();
-        }else
-            $mattersCareers = MatterCareer::query()->where('estado', '!=', 'E')->get();
+                if( $id_area > 0 )
+                    $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->where('estado', '!=', 'E')->get();
+                else
+                    $mattersCareers = MatterCareer::filter2($id_careerCampus, $id_mencion)->where('estado', '!=', 'E')->get();
+            }else
+                $mattersCareers = MatterCareer::query()->where('estado', '!=', 'E')->get();
 
-        $filters = array($id_campus, $id_carrera, $id_mencion, $id_area);
+            $filters = array($id_campus, $id_carrera, $id_mencion, $id_area);
 
-        return view('general.matterscareers.index')
-            ->with('mattersCareers', $mattersCareers)
-            ->with('campuses', $this->getCampuses())
-            ->with('careers', $this->getCareers())
-            ->with('areas', $this->getAreas())
-            ->with('mentions', $this->getMentions())
-            ->with('filters', $filters);
+            return view('general.matterscareers.index')
+                ->with('mattersCareers', $mattersCareers)
+                ->with('campuses', $this->getCampuses())
+                ->with('careers', $this->getCareers())
+                ->with('areas', $this->getAreas())
+                ->with('mentions', $this->getMentions())
+                ->with('filters', $filters);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[MattersCareersController][index] Exception: ".$ex);
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -59,7 +66,7 @@ class MattersCareersController extends Controller
      */
     public function create()
     {
-        dd("No disponible!");
+        return redirect()->route('general.matterscareers.index');
     }
 
     /**
@@ -70,7 +77,7 @@ class MattersCareersController extends Controller
      */
     public function store(Request $request)
     {
-        dd("No disponible!");
+        return redirect()->route('general.matterscareers.index');
     }
 
     /**
@@ -81,19 +88,26 @@ class MattersCareersController extends Controller
      */
     public function show($id)
     {
-        $mattercareer = MatterCareer::find($id);
-        $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-        $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
-        $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
-        $mattercareer->desc_area = $mattercareer->area->descripcion;
-        $mattercareer->desc_materia = $mattercareer->matter->descripcion;
-        $mattercareer->usr_responsable = $this->getUserName($mattercareer->id_usr_responsable);
-        $mattercareer->estado = ($mattercareer->estado == 'A') ? 'Activo' : 'Inactivo';
-        $mattercareer->aplica_examen = ($mattercareer->aplica_examen == 'S') ? 'Si' : 'No';
-        $mattercareer->creado_por = $this->getUserName($mattercareer->creado_por);
-        $mattercareer->modificado_por = $this->getUserName($mattercareer->modificado_por);
+        try{
+            $mattercareer = MatterCareer::find($id);
+            $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
+            $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
+            $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
+            $mattercareer->desc_area = $mattercareer->area->descripcion;
+            $mattercareer->desc_materia = $mattercareer->matter->descripcion;
+            $mattercareer->usr_responsable = $this->getUserName($mattercareer->id_usr_responsable);
+            $mattercareer->estado = ($mattercareer->estado == 'A') ? 'Activo' : 'Inactivo';
+            $mattercareer->aplica_examen = ($mattercareer->aplica_examen == 'S') ? 'Si' : 'No';
+            $mattercareer->creado_por = $this->getUserName($mattercareer->creado_por);
+            $mattercareer->modificado_por = $this->getUserName($mattercareer->modificado_por);
 
-        return view('general.matterscareers.show')->with('mattercareer', $mattercareer);
+            return view('general.matterscareers.show')->with('mattercareer', $mattercareer);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[MattersCareersController][show] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('general.matterscareers.index');
+        }
     }
 
     /**
@@ -104,14 +118,21 @@ class MattersCareersController extends Controller
      */
     public function edit($id)
     {
-        $mattercareer = MatterCareer::find($id);
-        $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-        $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
-        $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
-        $mattercareer->desc_area = $mattercareer->area->descripcion;
-        $mattercareer->desc_materia = $mattercareer->matter->descripcion;
+        try{
+            $mattercareer = MatterCareer::find($id);
+            $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
+            $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
+            $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
+            $mattercareer->desc_area = $mattercareer->area->descripcion;
+            $mattercareer->desc_materia = $mattercareer->matter->descripcion;
 
-        return view('general.matterscareers.edit')->with('mattercareer', $mattercareer);
+            return view('general.matterscareers.edit')->with('mattercareer', $mattercareer);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[MattersCareersController][edit] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('general.matterscareers.index');
+        }
     }
 
     /**

@@ -18,19 +18,33 @@ class ExamParametersController extends Controller
      */
     public function index()
     {
-        $parameter = ExamParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
+        try{
+            $parameter = ExamParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
 
-        if( is_null($parameter) ){
-            return view('exam.parameters.create');
-        }else{
-            return view('exam.parameters.index')->with('parameter', $parameter);
+            if( is_null($parameter) ){
+                return view('exam.parameters.create');
+            }else{
+                return view('exam.parameters.index')->with('parameter', $parameter);
+            }
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ExamParametersController][index] Exception: ".$ex);
+            return redirect()->route('index');
         }
     }
 
     public function history()
     {
-        $parameter = ExamParameter::query()->where('estado', 'A')->get();
-        return view('exam.parameters.history')->with('parameter', $parameter);
+        try{
+            $parameter = ExamParameter::query()->where('estado', 'A')->get();
+            return view('exam.parameters.history')->with('parameter', $parameter);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ExamParametersController][index] Exception: ".$ex);
+            return redirect()->route('exam.parameters.index');
+        }
     }
 
     public function data()

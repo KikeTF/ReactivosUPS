@@ -22,9 +22,17 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::query()->where('estado','!=','E')->get();
-        return view('security.users.index')
-            ->with('users', $users);
+        try {
+
+            $users = User::query()->where('estado', '!=', 'E')->get();
+            return view('security.users.index')
+                ->with('users', $users);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[UsersController][index] Exception: ".$ex);
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -34,7 +42,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        dd("No disponible!");
+        return redirect()->route('security.users.index');
     }
 
     /**
@@ -45,7 +53,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        dd("No disponible!");
+        return redirect()->route('security.users.index');
     }
 
     /**
@@ -56,11 +64,28 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        $user->creado_por = $this->getUserName($user->creado_por);
-        $user->modificado_por = $this->getUserName($user->modificado_por);
+        try {
+            $user = User::find($id);
+            $user->creado_por = $this->getUserName($user->creado_por);
+            $user->modificado_por = $this->getUserName($user->modificado_por);
 
-        return view('security.users.show')->with('user', $user);
+            foreach ($user->profilesUsers as $profileUsers) {
+                $ids[] = $profileUsers->id_perfil;
+            }
+
+            $profiles = [];
+            if (isset($ids))
+                $profiles = Profile::find($ids);
+
+            return view('security.users.show')
+                ->with('user', $user)
+                ->with('profiles', $profiles);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[UsersController][show] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('security.users.index');
+        }
     }
 
     /**
@@ -71,14 +96,22 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-        $userProfiles = ProfileUser::query()->where('id_usuario', $id)->get();
-        $profilesList = Profile::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
+        try{
+            $user = User::find($id);
+            $userProfiles = ProfileUser::query()->where('id_usuario', $id)->get();
+            $profilesList = Profile::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
 
-        return view('security.users.edit')
-            ->with('user', $user)
-            ->with('userProfiles', $userProfiles)
-            ->with('profilesList', $profilesList);
+            return view('security.users.edit')
+                ->with('user', $user)
+                ->with('userProfiles', $userProfiles)
+                ->with('profilesList', $profilesList);
+
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[UsersController][edit] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('security.users.index');
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use Log;
 
 class HomeController extends Controller
 {
@@ -16,10 +17,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if($this->isSessionExpire())
-            return redirect()->guest('auth/login');
+        try{
+            if($this->isSessionExpire())
+                return redirect()->guest('auth/login');
 
-        return view('index');
+            return view('index');
+        }catch(\Exception $ex)
+        {
+            Log::error("[HomeController][index] Exception: ".$ex);
+            return redirect()->guest('auth/login');
+        }
     }
 
 }

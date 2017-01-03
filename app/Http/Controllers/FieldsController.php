@@ -19,14 +19,19 @@ class FieldsController extends Controller
      */
     public function index()
     {
+        try{
+            if($this->isSessionExpire())
+                return redirect()->guest('auth/login');
 
-        dd(\Session::all());
-        if($this->isSessionExpire())
-            return redirect()->guest('auth/login');
-
-        $fields = Field::query()->where('estado','!=','E')->get();
-        return view('reagent.fields.index')
-            ->with('fields', $fields);
+            $fields = Field::query()->where('estado','!=','E')->get();
+            return view('reagent.fields.index')
+                ->with('fields', $fields);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[FieldsController][index] Exception: ".$ex);
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -50,7 +55,6 @@ class FieldsController extends Controller
         try
         {
             $field = new Field($request->all());
-
             $field->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $field->creado_por = \Auth::id();
             $field->fecha_creacion = date('Y-m-d h:i:s');
@@ -63,7 +67,6 @@ class FieldsController extends Controller
             Log::error("[FieldsController][store] Datos: Request=".$request->all().". Exception: ".$ex);
             return view('reagent.fields.create');
         }
-
         return redirect()->route('reagent.fields.index');
     }
 
@@ -75,11 +78,18 @@ class FieldsController extends Controller
      */
     public function show($id)
     {
-        $field = Field::find($id);
-        $field->creado_por = $this->getUserName($field->creado_por);
-        $field->modificado_por = $this->getUserName($field->modificado_por);
+        try{
+            $field = Field::find($id);
+            $field->creado_por = $this->getUserName($field->creado_por);
+            $field->modificado_por = $this->getUserName($field->modificado_por);
 
-        return view('reagent.fields.show')->with('field', $field);
+            return view('reagent.fields.show')->with('field', $field);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[FieldsController][show] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('reagent.fields.index');
+        }
     }
 
     /**
@@ -90,8 +100,15 @@ class FieldsController extends Controller
      */
     public function edit($id)
     {
-        $field = Field::find($id);
-        return view('reagent.fields.edit')->with('field', $field);
+        try{
+            $field = Field::find($id);
+            return view('reagent.fields.edit')->with('field', $field);
+        }catch(\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[FieldsController][edit] Datos: id=".$id.". Exception: ".$ex);
+            return redirect()->route('reagent.fields.index');
+        }
     }
 
     /**
@@ -107,7 +124,6 @@ class FieldsController extends Controller
 
         try
         {
-
             $field->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $field->nombre = $request->nombre;
             $field->descripcion = $request->descripcion;
@@ -122,7 +138,6 @@ class FieldsController extends Controller
             Log::error("[FieldsController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
             return view('reagent.$field.edit')->with('$field', $field);
         }
-
         return redirect()->route('reagent.fields.index');
     }
 
@@ -135,10 +150,8 @@ class FieldsController extends Controller
     public function destroy($id)
     {
         $field = Field::find($id);
-
         try
         {
-
             $field->estado = 'E';
             $field->modificado_por = \Auth::id();
             $field->fecha_modificacion = date('Y-m-d h:i:s');
@@ -150,7 +163,6 @@ class FieldsController extends Controller
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[FieldsController][destroy] Datos: id=".$id.". Exception: ".$ex);
         }
-
         return redirect()->route('reagent.fields.index');
     }
 }

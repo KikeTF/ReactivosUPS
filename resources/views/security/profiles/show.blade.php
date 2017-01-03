@@ -34,6 +34,14 @@
                 <td colspan="3">{{ $profile->descripcion }}</td>
             </tr>
             <tr>
+                <td><strong>Accesos:</strong></td>
+                <td colspan="3">
+                    @foreach($optionsProfiles as $option)
+                        {{$option->descripcion}}<span>; </span>
+                    @endforeach
+                </td>
+            </tr>
+            <tr>
                 <td><strong>Estado:</strong></td>
                 <td>{{ $profile->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
             </tr>

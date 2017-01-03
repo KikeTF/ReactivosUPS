@@ -9,7 +9,7 @@ class OptionProfile extends Model
     protected $table = "seg_opciones_perfiles";
     public $timestamps = false;
 
-    protected $fillable =["id_opcion", "id_perfil"];
+    protected $fillable =["id_opcion", "id_perfil","creado_por","fecha_creacion"];
 
     public function option(){
         return $this->belongsTo('ReactivosUPS\Option', 'id_opcion');
