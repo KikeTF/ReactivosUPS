@@ -59,7 +59,7 @@
 </head>
 
 <body class="no-skin">
-    <div id="navbar" class="navbar navbar-default">
+    <div id="navbar" class="navbar navbar-default navbar-fixed-top">
         <script type="text/javascript">
             try{ace.settings.check('navbar' , 'fixed')}catch(e){}
         </script>
@@ -165,7 +165,7 @@
             try{ace.settings.check('main-container' , 'fixed')}catch(e){}
         </script>
 
-        <div id="sidebar" class="sidebar responsive">
+        <div id="sidebar" class="sidebar responsive sidebar-fixed">
             <script type="text/javascript">
                 try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
             </script>
@@ -285,8 +285,7 @@
     <script src="{{ asset('ace/js/dataTables.colVis.min.js') }}"></script>
     <script src="{{ asset('ace/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('ace/js/spin.min.js') }}"></script>
-
-    @stack('specific-script')
+    <script src="{{ asset('ace/js/jquery.validate.min.js') }}"></script>
 
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
@@ -294,6 +293,9 @@
 
     <!-- common scripts -->
     <script src="{{ asset('scripts/shared/index.js') }}"></script>
+
+    <!-- specific scripts -->
+    @stack('specific-script')
 
     @if(isset($usetable))
         <script>

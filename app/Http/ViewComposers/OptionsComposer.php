@@ -31,18 +31,23 @@ class OptionsComposer extends Controller
                 $perfil = Profile::find($idPerfil);
                 if($perfil->optionsProfiles->count() > 0){
                     foreach($perfil->optionsProfiles as $optionProfile){
-                        $ids[] = $optionProfile->id_opcion;
+                        $subIds[] = $optionProfile->id_opcion;
                     }
                 }
             }else{
                 foreach($perfilUsuario->optionsUsers as $optionUser){
-                    $ids[] = $optionUser->id_opcion;
+                    $subIds[] = $optionUser->id_opcion;
                 }
             }
 
-            if( isset($ids) ){
-                $suboptions = Option::find($ids)->where('estado','A');
-                $options = Option::query()->where('estado', 'A')->where('id_padre', 0)->get();
+            if( isset($subIds) ){
+                $suboptions = Option::find($subIds)->where('estado','A');
+                foreach($suboptions as $suboption){
+                    if( !(isset($ids) && in_array($suboption->id_padre, $ids)) ) {
+                            $ids[] = $suboption->id_padre;
+                    }
+                }
+                $options = Option::find($ids)->where('estado', 'A')->where('id_padre', 0);
             }
 
         }catch (\Exception $ex){

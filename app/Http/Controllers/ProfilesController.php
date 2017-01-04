@@ -22,7 +22,7 @@ class ProfilesController extends Controller
     public function index()
     {
         try{
-            $profiles = Profile::query()->where('estado','!=','E')->get();
+            $profiles = Profile::query()->where('estado','!=','E')->orderBy('nombre','asc')->get();
             return view('security.profiles.index')
                 ->with('profiles', $profiles);
         }catch(\Exception $ex)

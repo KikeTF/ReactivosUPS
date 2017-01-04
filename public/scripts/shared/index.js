@@ -1,5 +1,91 @@
 $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
 
+jQuery.extend(jQuery.validator.messages, {
+    required: "Este campo es requerido.",
+    remote: "Please fix this field.",
+    email: "Por favor ingrese un correo electronico valido.",
+    url: "Por favor ingrese una URL valido.",
+    date: "Por favor ingrese una fecha valida.",
+    //dateISO: "Por favor ingrese una fecha (ISO) valida.",
+    number: "Por favor ingrese un numero valido.",
+    digits: "Por favor ingrese solo digitos.",
+    //creditcard: "Please enter a valid credit card number.",
+    //equalTo: "Please enter the same value again.",
+    //accept: "Please enter a value with a valid extension.",
+    //maxlength: jQuery.validator.format("Please enter no more than {0} characters."),
+    //minlength: jQuery.validator.format("Please enter at least {0} characters."),
+    //rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
+    //range: jQuery.validator.format("Please enter a value between {0} and {1}."),
+    //max: jQuery.validator.format("Please enter a value less than or equal to {0}."),
+    //min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
+});
+
+$('#formulario').validate({
+    errorElement: 'div',
+    errorClass: 'help-block',
+    focusInvalid: false,
+    ignore: "",
+    /*
+     rules: {
+     email: {
+     required: true,
+     email:true
+     },
+     password: {
+     required: true,
+     minlength: 5
+     },
+     password2: {
+     required: true,
+     minlength: 5,
+     equalTo: "#password"
+     },
+     name: {
+     required: true
+     }
+     },
+
+     message: {
+     email: {
+     required: "Please provide a valid email.",
+     email: "Please provide a valid email."
+     },
+     password: {
+     required: "Please specify a password.",
+     minlength: "Please specify a secure password."
+     }
+     },
+     */
+    highlight: function (e) {
+        $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+    },
+
+    success: function (e) {
+        $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+        $(e).remove();
+    },
+
+    errorPlacement: function (error, element) {
+        if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+            var controls = element.closest('div[class*="col-"]');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chosen-select')) {
+            error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+        }
+        else error.insertAfter(element.parent());
+    }//,
+
+    //submitHandler: function (form) {
+    //},
+    //invalidHandler: function (form) {
+    //}
+});
+
 jQuery(function($) {
     if(!ace.vars['touch']) {
         $('.chosen-select').chosen({allow_single_deselect:true});

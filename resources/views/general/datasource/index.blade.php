@@ -10,8 +10,6 @@
     <div class="pull-right center spinner-preview" id="spinner-preview"></div>
 
     <script type="text/javascript">
-
-
         function importData(){
             spinnerLoadingStart();
             $.ajax({

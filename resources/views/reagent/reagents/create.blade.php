@@ -9,24 +9,18 @@
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.store','method' => 'POST']) !!}
+    {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.store','method' => 'POST']) !!}
 
     <div class="form-group">
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="blue" href="#" onclick="document.forms[0].submit();">
-                <i class='ace-icon fa fa-save bigger-110 blue'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="green" href="{{ route('reagent.reagents.create') }}">
-                <i class='ace-icon fa fa-repeat bigger-110 green'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="red" href="{{ route('reagent.reagents.index') }}">
-                <i class='ace-icon fa fa-close bigger-110 red'></i>
-            </a>
-        </div>
+        <button title="Guardar" type="submit" class="btn btn-white btn-primary btn-bold">
+            <i class='ace-icon fa fa-save bigger-110 blue' style="margin: 0"></i>
+        </button>
+        <button title="Refrescar" onclick="location.href='{{ route('reagent.reagents.create') }}'" class="btn btn-white btn-success btn-bold">
+            <i class='ace-icon fa fa-repeat bigger-110 green' style="margin: 0"></i>
+        </button>
+        <button title="Cerrar" onclick="location.href='{{ route('reagent.reagents.index') }}'" class="btn btn-white btn-danger btn-bold">
+            <i class='ace-icon fa fa-close bigger-110 red' style="margin: 0"></i>
+        </button>
     </div>
 
     <div class="widget-box">
@@ -102,7 +96,7 @@
                                 <div class="form-group">
                                     {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                                     <div class="col-sm-9">
-                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => 'Seleccione Formato'] ) !!}
+                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => 'Seleccione Formato', 'required'] ) !!}
                                     </div>
                                 </div>
 
