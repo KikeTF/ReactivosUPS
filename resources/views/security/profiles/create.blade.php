@@ -5,30 +5,20 @@
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'security.profiles.store','method' => 'POST']) !!}
-
-    <div class="form-group">
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="blue" href="#" onclick="document.forms[0].submit();">
-                <i class='ace-icon fa fa-save bigger-110 blue'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="green" href="{{ route('security.profiles.create') }}">
-                <i class='ace-icon fa fa-repeat bigger-110 green'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="red" href="{{ route('security.profiles.index') }}">
-                <i class='ace-icon fa fa-close bigger-110 red'></i>
-            </a>
-        </div>
-    </div>
+    {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form','route' => 'security.profiles.store','method' => 'POST']) !!}
+    <?php
+    $btnsave = 1;
+    $btnrefresh = route('security.profiles.create');
+    $btnclose = route('security.profiles.index');
+    ?>
+    @include('shared.templates._formbuttons')
 
     <div class="form-group">
         {!! Form::label('nombre', 'Nombre:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre']) !!}
+            <div class="clearfix">
+                {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required']) !!}
+            </div>
         </div>
     </div>
 
@@ -42,7 +32,7 @@
     <div class="form-group">
         {!! Form::label('optionsprofile', 'Opciones de Perfil:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select multiple="" name="optionsprofile[]" class="chosen-select form-control tag-input-style" data-placeholder="Seleccione Opci&oacute;n..." style="display: none;">
+            <select multiple="" name="optionsprofile[]" class="chosen-select form-control tag-input-style" data-placeholder="Seleccione Opci&oacute;n..." style="display: none;" required>
                 <option value=""></option>
                 @foreach($optionsList as $option)
                     <option value="{{ $option->id }}" >{{ $option->descripcion }}</option>

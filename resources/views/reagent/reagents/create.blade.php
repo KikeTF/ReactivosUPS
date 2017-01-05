@@ -3,10 +3,6 @@
 @section('titulo', 'Reactivos')
 @section('subtitulo', 'Nuevo reactivo')
 
-@push('specific-styles')
-    <link rel="stylesheet" href="{{ asset('ace/css/select2.min.css') }}" />
-@endpush
-
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.store','method' => 'POST']) !!}
@@ -193,6 +189,5 @@
 @push('specific-script')
     <script src="{{ asset('ace/js/fuelux.wizard.min.js') }}"></script>
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
-    <script src="{{ asset('ace/js/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
 @endpush

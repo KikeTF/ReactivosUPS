@@ -20,8 +20,8 @@ class FieldsController extends Controller
     public function index()
     {
         try{
-            if($this->isSessionExpire())
-                return redirect()->guest('auth/login');
+            //if($this->isSessionExpire())
+            //    return redirect()->guest('auth/login');
 
             $fields = Field::query()->where('estado','!=','E')->get();
             return view('reagent.fields.index')

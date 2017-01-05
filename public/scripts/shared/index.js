@@ -1,5 +1,13 @@
 $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
 
+$(".chosen-select").on('change', function(){
+    $(this).closest('form').validate().element($(this));
+});
+
+$(".select2").on('change', function(){
+    $(this).closest('form').validate().element($(this));
+});
+
 jQuery.extend(jQuery.validator.messages, {
     required: "Este campo es requerido.",
     remote: "Please fix this field.",
@@ -12,12 +20,12 @@ jQuery.extend(jQuery.validator.messages, {
     //creditcard: "Please enter a valid credit card number.",
     //equalTo: "Please enter the same value again.",
     //accept: "Please enter a value with a valid extension.",
-    //maxlength: jQuery.validator.format("Please enter no more than {0} characters."),
-    //minlength: jQuery.validator.format("Please enter at least {0} characters."),
+    maxlength: jQuery.validator.format("Por favor ingrese no mas de {0} caracteres."),
+    minlength: jQuery.validator.format("Por favor ingrese al menos {0} caracteres."),
     //rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
     //range: jQuery.validator.format("Please enter a value between {0} and {1}."),
-    //max: jQuery.validator.format("Please enter a value less than or equal to {0}."),
-    //min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
+    max: jQuery.validator.format("Por favor ingrese un numero menor o igual a {0}."),
+    min: jQuery.validator.format("Por favor ingrese un numero mayor o igual a {0}.")
 });
 
 $('#formulario').validate({
@@ -62,7 +70,6 @@ $('#formulario').validate({
 
     success: function (e) {
         $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
-        $(e).remove();
     },
 
     errorPlacement: function (error, element) {

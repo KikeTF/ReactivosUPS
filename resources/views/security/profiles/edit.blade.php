@@ -1,20 +1,16 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Seguridad')
-@section('subtitulo', 'Editar perfil: '.$profile->descripcion)
+@section('subtitulo', 'Editar perfil: '.$profile->nombre)
 
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form','route' => ['security.profiles.update',$profile->id],'method' => 'PUT']) !!}
-
-    <div class="form-group">
-        <button title="Guardar" type="submit" class="btn btn-white btn-primary btn-bold">
-            <i class='ace-icon fa fa-save bigger-110 blue' style="margin: 0"></i>
-        </button>
-        <button title="Cerrar" onclick="location.href='{{ route('security.profiles.index') }}'" class="btn btn-white btn-danger btn-bold">
-            <i class='ace-icon fa fa-close bigger-110 red' style="margin: 0"></i>
-        </button>
-    </div>
+    <?php
+    $btnsave = 1;
+    $btnclose = route('security.profiles.index');
+    ?>
+    @include('shared.templates._formbuttons')
 
     <div class="form-group">
         {!! Form::label('nombre', 'Nombre:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}

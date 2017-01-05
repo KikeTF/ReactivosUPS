@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ asset('ace/fonts/fonts.googleapis.com.css') }}" />
 
     <!-- ace styles -->
+    <link rel="stylesheet" href="{{ asset('ace/css/select2.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('ace/css/chosen.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
 
@@ -275,6 +276,7 @@
     <script src="{{ asset('ace/js/jquery.flot.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.flot.pie.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.flot.resize.min.js') }}"></script>
+    <script src="{{ asset('ace/js/select2.min.js') }}"></script>
     <script src="{{ asset('ace/js/chosen.jquery.min.js') }}"></script>
 
     {{--@stack('datatable-script')--}}
