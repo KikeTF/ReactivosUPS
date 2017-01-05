@@ -5,7 +5,7 @@
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['general.matterscareers.update',$mattercareer->id],'method' => 'PUT']) !!}
+    {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => ['general.matterscareers.update',$mattercareer->id],'method' => 'PUT']) !!}
 
     <div class="form-group">
         <div class="btn btn-white btn-primary btn-bold">
@@ -50,6 +50,13 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('desc_materia', 'Materia:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        <div class="col-sm-8">
+            {!! Form::text('desc_materia', $mattercareer->desc_materia, ['class' => 'form-control', 'readonly']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
         {!! Form::label('nivel', 'Nivel:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
             {!! Form::text('nivel', $mattercareer->nivel, ['class' => 'form-control', 'readonly']) !!}
@@ -66,17 +73,22 @@
 
     <div class="form-group">
         {!! Form::label('nro_reactivos_mat', 'No. de Reactivos Entregables:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-        <div class="col-sm-8">
-            {!! Form::input('number','nro_reactivos_mat', $mattercareer->nro_reactivos_mat,
-                ['class' => 'form-control', 'placeholder' => 'Ingrese cantidad de reactivos', 'required']
-            ) !!}
+        <div class="col-xs-6 col-sm-2">
+            <div class="clearfix">
+                {!! Form::input('number','nro_reactivos_mat', $mattercareer->nro_reactivos_mat,
+                    ['min'=>'0', 'max'=>'50','class' => 'form-control', 'placeholder' => 'M&iacute;nimo 0; M&aacute;ximo 50', 'required']
+                ) !!}
+            </div>
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('nro_reactivos_exam', 'No. de Reactivos en Examen:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-        <div class="col-sm-8">
-            {!! Form::input('number','nro_reactivos_exam', $mattercareer->nro_reactivos_exam, ['class' => 'form-control', 'placeholder' => 'Ingrese cantidad de reactivos','required']) !!}
+        <div class="col-xs-6 col-sm-2">
+            <div class="clearfix">
+                {!! Form::input('number','nro_reactivos_exam', $mattercareer->nro_reactivos_exam,
+                    ['min'=>'0', 'max'=>'50','class' => 'form-control', 'placeholder' => 'M&iacute;nimo 0; M&aacute;ximo 50','required']) !!}
+            </div>
         </div>
     </div>
 

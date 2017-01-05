@@ -5,7 +5,7 @@
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.formats.store','method' => 'POST']) !!}
+    {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.formats.store','method' => 'POST']) !!}
 
     <div class="form-group">
         <div class="btn btn-white btn-primary btn-bold">
@@ -28,7 +28,9 @@
     <div class="form-group">
         {!! Form::label('nombre', 'Nombre:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Formato de reactivo','required']) !!}
+            <div class="clearfix">
+                {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Formato de reactivo','required']) !!}
+            </div>
         </div>
     </div>
 
@@ -41,15 +43,21 @@
 
     <div class="form-group">
         {!! Form::label('opciones_resp_min', 'No. de respuesta m&iacute;nimo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::input('number','opciones_resp_min', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de respuestas m&iacute;nimo','required']) !!}
+        <div class="col-xs-6 col-sm-2">
+            <div class="clearfix">
+                {!! Form::input('number','opciones_resp_min', null,
+                    ['min'=>'2', 'max'=>'10','class' => 'form-control', 'placeholder' => 'M&iacute;nimo 2; M&aacute;ximo 10','required']) !!}
+            </div>
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('opciones_resp_max', 'No. de respuesta m&aacute;ximo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::input('number','opciones_resp_max', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de respuestas m&aacute;ximo','required']) !!}
+        <div class="col-xs-6 col-sm-2">
+            <div class="clearfix">
+                {!! Form::input('number','opciones_resp_max', null,
+                    ['min'=>'2', 'max'=>'10','class' => 'form-control', 'placeholder' => 'M&iacute;nimo 2; M&aacute;ximo 10','required']) !!}
+            </div>
         </div>
     </div>
 
@@ -80,15 +88,21 @@
 
     <div class="form-group">
         {!! Form::label('opciones_preg_min', 'No. de preguntas m&iacute;nimo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::input('number','opciones_preg_min', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de preguntas m&iacute;nimo','required']) !!}
+        <div class="col-xs-6 col-sm-2">
+            <div class="clearfix">
+                {!! Form::input('number','opciones_preg_min', null,
+                    ['min'=>'0', 'max'=>'10','class' => 'form-control', 'placeholder' => 'M&iacute;nimo 0; M&aacute;ximo 10','required']) !!}
+            </div>
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('opciones_preg_max', 'No. de preguntas m&aacute;ximo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::input('number','opciones_preg_max', null, ['class' => 'form-control', 'placeholder' => 'Ingrese n&uacute;mero de respuestas m&aacute;ximo','required']) !!}
+        <div class="col-xs-6 col-sm-2">
+            <div class="clearfix">
+                {!! Form::input('number','opciones_preg_max', null,
+                ['min'=>'0', 'max'=>'10','class' => 'form-control', 'placeholder' => 'M&iacute;nimo 0; M&aacute;ximo 10','required']) !!}
+            </div>
         </div>
     </div>
 

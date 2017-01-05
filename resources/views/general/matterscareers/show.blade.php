@@ -46,6 +46,10 @@
                 <td colspan="3">{{ $mattercareer->desc_materia }}</td>
             </tr>
             <tr>
+                <td><strong>Nivel:</strong></td>
+                <td colspan="3">{{ $mattercareer->nivel }}</td>
+            </tr>
+            <tr>
                 <td><strong>No. Reactivos Entregables:</strong></td>
                 <td colspan="3">{{ $mattercareer->nro_reactivos_mat }}</td>
             </tr>

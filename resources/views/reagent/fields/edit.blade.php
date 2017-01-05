@@ -5,7 +5,7 @@
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.fields.update', $field->id],'method' => 'PUT']) !!}
+    {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.fields.update', $field->id],'method' => 'PUT']) !!}
 
     <div class="form-group">
         <div class="btn btn-white btn-primary btn-bold">
@@ -23,7 +23,9 @@
     <div class="form-group">
         {!! Form::label('nombre', 'Nombre:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('nombre', $field->nombre, ['class' => 'form-control', 'placeholder' => 'Campo de conocimiento','required']) !!}
+            <div class="clearfix">
+                {!! Form::text('nombre', $field->nombre, ['class' => 'form-control', 'placeholder' => 'Campo de conocimiento','required']) !!}
+            </div>
         </div>
     </div>
 

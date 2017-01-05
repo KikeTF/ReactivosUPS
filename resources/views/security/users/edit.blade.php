@@ -44,14 +44,18 @@
     <div class="form-group">
         {!! Form::label('username', 'Usuario:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('username', $user->username, ['class' => 'form-control', 'placeholder' => 'Usuario']) !!}
+            <div class="clearfix">
+                {!! Form::text('username', $user->username, ['class' => 'form-control', 'placeholder' => 'Usuario', 'required']) !!}
+            </div>
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('password', 'Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Ingrese la nueva contrase&ntilde;a']) !!}
+            <div class="clearfix">
+                {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Ingrese la nueva contrase&ntilde;a', 'required']) !!}
+            </div>
         </div>
     </div>
 
@@ -69,7 +73,7 @@
     <div class="form-group">
         {!! Form::label('perfiles', 'Perfiles:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select multiple="" name="perfiles[]" class="chosen-select form-control tag-input-style" data-placeholder="Seleccione Perfiles..." style="display: none;">
+            <select multiple="" name="perfiles[]" class="chosen-select form-control tag-input-style" data-placeholder="Seleccione Perfiles..." style="display: none;" required>
                 <option value=""></option>
                 @foreach($profilesList as $profile)
                     <option value="{{ $profile->id }}" {!! ($userProfiles->where('id_perfil', $profile->id)->count() > 0) ? "selected" : "" !!}>{{ $profile->nombre }}</option>
