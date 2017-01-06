@@ -6,19 +6,11 @@
 @section('contenido')
 
     <form class="form-horizontal" role="form">
-
-        <div class="form-group">
-            <div class="btn btn-white btn-primary btn-bold">
-                <a class="green" href="{{ route('general.matterscareers.edit', $mattercareer->id) }}">
-                    <i class='ace-icon fa fa-pencil bigger-110 green'></i>
-                </a>
-            </div>
-            <div class="btn btn-white btn-primary btn-bold">
-                <a class="red" href="{{ route('general.matterscareers.index') }}">
-                    <i class='ace-icon fa fa-close bigger-110 red'></i>
-                </a>
-            </div>
-        </div>
+        <?php
+        $btnedit = route('general.matterscareers.edit', $mattercareer->id);
+        $btnclose = route('general.matterscareers.index');
+        ?>
+        @include('shared.templates._formbuttons')
 
         <table class="table table-hover">
             <tr>

@@ -7,18 +7,11 @@
 
     <form class="form-horizontal" role="form">
 
-        <div class="form-group">
-            <div class="btn btn-white btn-primary btn-bold">
-                <a class="green" href="{{ route('security.users.edit', $user->id) }}">
-                    <i class='ace-icon fa fa-pencil bigger-110 green'></i>
-                </a>
-            </div>
-            <div class="btn btn-white btn-primary btn-bold">
-                <a class="red" href="{{ route('security.users.index') }}">
-                    <i class='ace-icon fa fa-close bigger-110 red'></i>
-                </a>
-            </div>
-        </div>
+        <?php
+        $btnedit = route('security.users.edit', $user->id);
+        $btnclose = route('security.users.index');
+        ?>
+        @include('shared.templates._formbuttons')
 
         <table class="table table-hover">
             <tr>

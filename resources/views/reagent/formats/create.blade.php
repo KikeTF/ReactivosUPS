@@ -6,24 +6,12 @@
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.formats.store','method' => 'POST']) !!}
-
-    <div class="form-group">
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="blue" href="#" onclick="document.forms[0].submit();">
-                <i class='ace-icon fa fa-save bigger-110 blue'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="green" href="{{ route('reagent.formats.create') }}">
-                <i class='ace-icon fa fa-repeat bigger-110 green'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="red" href="{{ route('reagent.formats.index') }}">
-                <i class='ace-icon fa fa-close bigger-110 red'></i>
-            </a>
-        </div>
-    </div>
+    <?php
+    $btnsave = 1;
+    $btnrefresh = route('reagent.formats.create');
+    $btnclose = route('reagent.formats.index');
+    ?>
+    @include('shared.templates._formbuttons')
 
     <div class="form-group">
         {!! Form::label('nombre', 'Nombre:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}

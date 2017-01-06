@@ -6,19 +6,12 @@
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => ['general.matterscareers.update',$mattercareer->id],'method' => 'PUT']) !!}
-
-    <div class="form-group">
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="blue" href="#" onclick="document.forms[0].submit();">
-                <i class='ace-icon fa fa-save bigger-110 blue'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="red" href="{{ route('general.matterscareers.index') }}">
-                <i class='ace-icon fa fa-close bigger-110 red'></i>
-            </a>
-        </div>
-    </div>
+    <?php
+    $btnsave = 1;
+    $btnrefresh = route('general.matterscareers.edit',$mattercareer->id);
+    $btnclose = route('general.matterscareers.index');
+    ?>
+    @include('shared.templates._formbuttons')
 
 
     <div class="form-group">

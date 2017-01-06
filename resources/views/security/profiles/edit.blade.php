@@ -8,6 +8,7 @@
     {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form','route' => ['security.profiles.update',$profile->id],'method' => 'PUT']) !!}
     <?php
     $btnsave = 1;
+    $btnrefresh = route('security.profiles.edit',$profile->id);
     $btnclose = route('security.profiles.index');
     ?>
     @include('shared.templates._formbuttons')
