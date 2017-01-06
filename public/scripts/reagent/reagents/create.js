@@ -83,14 +83,20 @@ jQuery(function($) {
                     $('.chosen-select').each(function() {
                         var $this = $(this);
                         $this.next().css({'width': $this.parent().width()});
-                    })
+                    });
                     e.preventDefault();
                 });
-                //e.preventDefault();
+            } else if(info.step == 3){
+                $("#finishMessage").attr("hidden", false);
+                $("#validateMessage").attr("hidden", true);
             }
         })
         .on('finished.fu.wizard', function(e) {
             $("#id_estado").val(2);
+            $("#formulario").submit();
+            $("#finishMessage").attr("hidden", true);
+            $("#validateMessage").attr("hidden", false);
+            /*
             if(document.forms[0].submit()){
                 bootbox.dialog({
                     message: "Thank you! Your information was successfully saved!",
@@ -102,16 +108,18 @@ jQuery(function($) {
                     }
                 });
             }
-        }).on('stepclick.fu.wizard', function(e){
-        //e.preventDefault();//this will prevent clicking and selecting steps
+            */
+        }).on('stepclicked.fu.wizard', function(e, info){
+            $("#actions-steps").click(function(e){
+                alert('aa');
+                $('.chosen-select').each(function() {
+                    var $this = $(this);
+                    $this.next().css({'width': $this.parent().width()});
+                });
+                e.preventDefault();
+            });
+            //e.preventDefault();//this will prevent clicking and selecting steps
     });
-
-
-
-    /*
-
-    */
-
 
     //jump to a step
     /**
@@ -124,32 +132,4 @@ jQuery(function($) {
     //wizard.selectedItem().step
 
 
-
-    //hide or show the other form which requires validation
-    //this is for demo only, you usullay want just one form in your application
-
-
-
-
-
-    //$('#modal-wizard-container').ace_wizard();
-    //$('#modal-wizard .wizard-actions .btn[data-dismiss=modal]').removeAttr('disabled');
-
-
-    /**
-     $('#date').datepicker({autoclose:true}).on('changeDate', function(ev) {
-                $(this).closest('form').validate().element($(this));
-            });
-
-     $('#mychosen').chosen().on('change', function(ev) {
-                $(this).closest('form').validate().element($(this));
-            });
-     */
-
-    /*
-    $(document).one('ajaxloadstart.page', function(e) {
-        //in ajax mode, remove remaining elements before leaving page
-        $('[class*=select2]').remove();
-    });
-    */
 });

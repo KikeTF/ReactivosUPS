@@ -1,5 +1,5 @@
 <?php
-$letra = array('a', 'b', 'c', 'd', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u');
+$letra = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
 ?>
 
 {!! Form::text('format_count', $formatList->count(), ['id' => 'format_count', 'hidden']) !!}
@@ -90,30 +90,34 @@ $letra = array('a', 'b', 'c', 'd', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
                                     <td>
                                         <div class="radio">
                                             <label>
-                                                {!! Form::radio('f'.$param->id.'_id_opcion_correcta', $i, false, ['class' => 'ace', 'id' => 'f'.$param->id.'_id_opcion_correcta_'.$i, ($i > $param->opciones_resp_min) ? 'disabled' : '']) !!}
+                                                {!! Form::radio('f'.$param->id.'_id_opcion_correcta', $i, false, ['class' => 'ace', 'id' => 'f'.$param->id.'_id_opcion_correcta_'.$i, ($i > $param->opciones_resp_min) ? 'disabled' : '', 'required']) !!}
                                                 <span class="lbl"></span>
                                             </label>
                                         </div>
                                     </td>
                                     <td>
-                                        {!! Form::textarea('f'.$param->id.'_desc_op_resp_'.$i, null, [
-                                                'id' => 'f'.$param->id.'_desc_op_resp_'.$i,
+                                        <div class="clearfix">
+                                        {!! Form::textarea('f'.$param->id.'_desc_op_resp_'.$i, null,
+                                            [   'id' => 'f'.$param->id.'_desc_op_resp_'.$i,
                                                 'class' => 'form-control',
                                                 'placeholder' => 'Descripción de respuesta.',
                                                 'size' => '100%x2',
                                                 'style' => 'resize: vertical;',
-                                                ($i > $param->opciones_resp_min) ? 'disabled' : ''
-                                        ]) !!}
+                                                'required',
+                                                ($i > $param->opciones_resp_min) ? 'disabled' : '' ]) !!}
+                                        </div>
                                     </td>
                                     <td>
-                                        {!! Form::textarea('f'.$param->id.'_arg_op_resp_'.$i, null, [
-                                                'id' => 'f'.$param->id.'_arg_op_resp_'.$i,
+                                        <div class="clearfix">
+                                        {!! Form::textarea('f'.$param->id.'_arg_op_resp_'.$i, null,
+                                            [   'id' => 'f'.$param->id.'_arg_op_resp_'.$i,
                                                 'class' => 'form-control',
                                                 'placeholder' => 'Argumento de respuesta.',
                                                 'size' => '100%x2',
                                                 'style' => 'resize: vertical;',
-                                                 ($i > $param->opciones_resp_min) ? 'disabled' : ''
-                                        ]) !!}
+                                                'required',
+                                                 ($i > $param->opciones_resp_min) ? 'disabled' : '' ]) !!}
+                                        </div>
                                     </td>
                                     <td>
                                         @if($i > $param->opciones_resp_min)

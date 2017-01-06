@@ -6,18 +6,12 @@
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.store','method' => 'POST']) !!}
-
-    <div class="form-group">
-        <button title="Guardar" type="submit" class="btn btn-white btn-primary btn-bold">
-            <i class='ace-icon fa fa-save bigger-110 blue' style="margin: 0"></i>
-        </button>
-        <button title="Refrescar" onclick="location.href='{{ route('reagent.reagents.create') }}'" class="btn btn-white btn-success btn-bold">
-            <i class='ace-icon fa fa-repeat bigger-110 green' style="margin: 0"></i>
-        </button>
-        <button title="Cerrar" onclick="location.href='{{ route('reagent.reagents.index') }}'" class="btn btn-white btn-danger btn-bold">
-            <i class='ace-icon fa fa-close bigger-110 red' style="margin: 0"></i>
-        </button>
-    </div>
+    <?php
+    $btnsave = 1;
+    $btnrefresh = route('reagent.reagents.create');
+    $btnclose = route('reagent.reagents.index');
+    ?>
+    @include('shared.templates._formbuttons')
 
     <div class="widget-box">
         <div class="widget-header widget-header-blue widget-header-flat">
@@ -28,7 +22,7 @@
             <div class="widget-main">
                 <div id="fuelux-wizard-container">
                     <div>
-                        <ul class="steps">
+                        <ul id="actions-steps" class="steps">
                             <li data-step="1" class="active">
                                 <span class="step">1</span>
                                 <span class="title">Informaci&oacute;n General</span>
@@ -92,14 +86,16 @@
                                 <div class="form-group">
                                     {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                                     <div class="col-sm-9">
-                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => 'Seleccione Formato', 'required'] ) !!}
+                                        <div class="clearfix">
+                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => '-- Seleccione Formato --', 'required'] ) !!}
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                                     <div class="col-sm-9">
-                                        <select name="id_contenido_det" id="id_contenido_det" class="chosen-select form-control" data-placeholder="Seleccione Contenido...">
+                                        <select name="id_contenido_det" id="id_contenido_det" class="chosen-select form-control" data-placeholder="-- Seleccione Contenido --" required>
                                             <option value=""></option>
                                             @foreach($contents as $content)
                                                 <option value="{{ $content->id }}">{{ $content->ContentDescription }}</option>
@@ -111,7 +107,9 @@
                                 <div class="form-group">
                                     {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                                     <div class="col-sm-9">
-                                        {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
+                                        <div class="clearfix">
+                                            {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;', 'required'])!!}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -125,18 +123,23 @@
                                 <div class="form-group">
                                     {!! Form::label('id_campo', 'Campo de Conocimiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-7">
-                                        {!! Form::select('id_campo', $fields, null, ['class' => 'form-control'] ) !!}
+                                        <div class="clearfix">
+                                        {!! Form::select('id_campo', $fields, null, ['class' => 'form-control', 'placeholder' => '-- Seleccione Campo de Conocimiento --', 'required'] ) !!}
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('dificultad', 'Dificultad:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-7">
-                                        <select id="dificultad" name="dificultad" class="form-control">
-                                            <option value="B">Baja</option>
-                                            <option value="M">Media</option>
-                                            <option value="A">Alta</option>
-                                        </select>
+                                        <div class="clearfix">
+                                            <select id="dificultad" name="dificultad" class="form-control" required>
+                                                <option value="">-- Seleccione Dificultad --</option>
+                                                <option value="B">Baja</option>
+                                                <option value="M">Media</option>
+                                                <option value="A">Alta</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -150,7 +153,9 @@
                                 <div class="form-group">
                                     {!! Form::label('referencia', 'Referencia Bibliogr&aacute;fica:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-7">
-                                        {!! Form::textarea('referencia', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
+                                        <div class="clearfix">
+                                            {!! Form::textarea('referencia', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;', 'required'])!!}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -158,8 +163,8 @@
 
                         <div class="step-pane" data-step="4">
                             <div class="center">
-                                <h3 class="green">Registro Exitoso!</h3>
-                                De clic en finalizar para solicitar aprobaci&oacute;n
+                                <div id="finishMessage" class="well"><h4>Presione <strong class="green">"Finalizar"</strong> para enviar a aprobaci&oacute;n!</h4></div>
+                                <div hidden id="validateMessage" class="well"><h4 class="red">Registro incompleto. Por favor verificar!</h4></div>
                                 {!! Form::text('id_estado', 1, ['id' => 'id_estado', 'hidden'] ) !!}
                             </div>
                         </div>
