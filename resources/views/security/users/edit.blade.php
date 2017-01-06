@@ -66,7 +66,7 @@
     <div class="form-group">
         {!! Form::label('perfiles', 'Perfiles:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select multiple="" name="perfiles[]" class="chosen-select form-control tag-input-style" data-placeholder="Seleccione Perfiles..." style="display: none;" required>
+            <select multiple="" name="perfiles[]" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Perfiles --" style="display: none;" required>
                 <option value=""></option>
                 @foreach($profilesList as $profile)
                     <option value="{{ $profile->id }}" {!! ($userProfiles->where('id_perfil', $profile->id)->count() > 0) ? "selected" : "" !!}>{{ $profile->nombre }}</option>

@@ -49,7 +49,7 @@
 
                         <div class="col-sm-3">
                             {!! Form::label('id_area', 'Seleccione &Aacute;rea:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_area', $areas, $filters[3], ['class' => 'form-control', 'placeholder' => 'Todas las Areas']) !!}
+                            {!! Form::select('id_area', $areas, $filters[3], ['class' => 'form-control', 'placeholder' => '-- Todas las Areas --']) !!}
                         </div>
                     </div>
                     <div class="col-sm-1" style="float:right; position:absolute; bottom:0; right:0;">

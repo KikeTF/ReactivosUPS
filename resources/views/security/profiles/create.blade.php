@@ -30,9 +30,9 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('optionsprofile', 'Opciones de Perfil:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('optionsprofile', 'Accesos:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select multiple="" name="optionsprofile[]" class="chosen-select form-control tag-input-style" data-placeholder="Seleccione Opci&oacute;n..." style="display: none;" required>
+            <select multiple="" name="optionsprofile[]" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Accesos --" style="display: none;" required>
                 <option value=""></option>
                 @foreach($optionsList as $option)
                     <option value="{{ $option->id }}" >{{ $option->descripcion }}</option>
