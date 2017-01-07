@@ -82,7 +82,7 @@ jQuery(function($) {
                 $('#actions-bottons').click(function(e){
                     $('.chosen-select').each(function() {
                         var $this = $(this);
-                        $this.next().css({'width': $this.parent().width()});
+                        $this.next().css({'width': '100%'});
                     });
                     e.preventDefault();
                 });
@@ -96,27 +96,11 @@ jQuery(function($) {
             $("#formulario").submit();
             $("#finishMessage").attr("hidden", true);
             $("#validateMessage").attr("hidden", false);
-            /*
-            if(document.forms[0].submit()){
-                bootbox.dialog({
-                    message: "Thank you! Your information was successfully saved!",
-                    buttons: {
-                        "success" : {
-                            "label" : "OK",
-                            "className" : "btn-sm btn-primary"
-                        }
-                    }
-                });
-            }
-            */
         }).on('stepclicked.fu.wizard', function(e, info){
-                $('.chosen-select').each(function() {
+            $('.chosen-select').each(function() {
                     var $this = $(this);
-                    alert($this);
-
-                    $this.next().css({'width': $this.parent().width()});
+                    $this.next().css({'width': '100%'});
                 });
-                //e.preventDefault();
             //e.preventDefault();//this will prevent clicking and selecting steps
     });
 
