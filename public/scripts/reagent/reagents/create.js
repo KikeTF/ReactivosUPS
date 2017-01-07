@@ -110,14 +110,13 @@ jQuery(function($) {
             }
             */
         }).on('stepclicked.fu.wizard', function(e, info){
-            $("#actions-steps").click(function(e){
-                alert('aa');
                 $('.chosen-select').each(function() {
                     var $this = $(this);
+                    alert($this);
+
                     $this.next().css({'width': $this.parent().width()});
                 });
-                e.preventDefault();
-            });
+                //e.preventDefault();
             //e.preventDefault();//this will prevent clicking and selecting steps
     });
 
@@ -131,5 +130,18 @@ jQuery(function($) {
     //determine selected step
     //wizard.selectedItem().step
 
+    $('.input-file').ace_file_input({
+        no_file:'Sin imagen...',
+        btn_choose:'Seleccionar',
+        btn_change:'Cambiar',
+        droppable:false,
+        onchange:null,
+        thumbnail:false, //| true | large
+        whitelist:'gif|png|jpg|jpeg|bmp',
+        allowExt: ["jpeg","jpg","png","gif","bmp"]
+        //blacklist:'exe|php'
+        //onchange:''
+        //
+    });
 
 });

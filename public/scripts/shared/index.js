@@ -116,20 +116,6 @@ jQuery(function($) {
             })
         });
     }
-
-    $('.input-file').ace_file_input({
-        no_file:'Sin imagen...',
-        btn_choose:'Seleccionar',
-        btn_change:'Cambiar',
-        droppable:false,
-        onchange:null,
-        thumbnail:false, //| true | large
-        whitelist:'gif|png|jpg|jpeg|bmp',
-        allowExt: ["jpeg","jpg","png","gif","bmp"]
-        //blacklist:'exe|php'
-        //onchange:''
-        //
-    });
 });
 
 function spinnerLoadingStart() {
