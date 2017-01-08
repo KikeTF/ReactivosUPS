@@ -113,7 +113,7 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
         'as'    => 'general.datasource.index'
     ]);
 
-    Route::get('datasource/import', [
+    Route::post('datasource/import', [
         'uses'  => 'DataSourcesController@import',
         'as'    => 'general.datasource.import'
     ]);
