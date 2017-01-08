@@ -26,20 +26,34 @@ class DataSourcesController extends Controller
 
     public function import(Request $request)
     {
+        $isValidFile = false;
+        $destinationPath = public_path()."\\uploads";
+        $fileName = "datos.csv";
         try
         {
+            if( $request->hasFile('csvFile') ){
+                if( $request->file('csvFile')->isValid() ){
+                    $isValidFile = true;
+                }else{
+                    flash("El archivo excede el tamaño m&aacute;ximo permitido!", 'warning')->important();
+                    Log::warning("DataSourcesController][import] Reason: El archivo excede el tamanio maximo permitido!");
+                }
+            }else{
+                flash("No se encontro archivo de importaci&oacute;n!", 'warning')->important();
+                Log::warning("DataSourcesController][import] Reason: No se encontro archivo de importacion!");
+            }
 
-            if( Input::hasFile('csvFile') && Input::file('csvFile')->isValid() ){
+            if( $isValidFile )
+            {
+                Log::debug("DataSourcesController][import] El archivo existe y es valido.");
 
-                Log::debug("DataSourcesController][import] CSV Source Path: ".$request->csvFile->path());
+                $csvPath = $request->file('csvFile')->move($destinationPath, $fileName);
+                Log::debug("DataSourcesController][import] Archivo cargado en la ruta: ".$csvPath);
 
-                \Storage::disk('uploads')->put('datos.csv', Input::file('csvFile'));
-
+                //Limpia tabla previo a importacion de datos
                 \DB::statement("TRUNCATE TABLE org_datos");
 
-                $csvPath = public_path()."\\uploads\\datos.csv";
-                Log::debug("DataSourcesController][import] Public CSV Path: ".$csvPath);
-
+                //Query de importacion
                 $statement = "LOAD DATA LOCAL INFILE '%s' ".
                     "INTO TABLE org_datos ".
                     "CHARACTER SET utf8 ".
@@ -53,18 +67,30 @@ class DataSourcesController extends Controller
                     "pd_desc_periodo, pd_fecha_inicio, pd_fecha_fin, di_cod_distributivo, cn_cod_contenido_cab, ".
                     "cd_cod_contenido_det, cd_capitulo, cd_tema)";
                 $query = sprintf($statement, addslashes($csvPath));
+
+                Log::debug("DataSourcesController][import] Inicio de importacion de los datos. Consulta: ".$query);
+
+                //Importacion de datos
                 $rows = \DB::connection()->getpdo()->exec($query);
 
-                flash($rows. ' registros importados correctamente. ', 'success');
-            }
-            else{
-                flash("No se encontro archivo de importaci&oacute;n!", 'warning')->important();
-                Log::warning("DataSourcesController][import] Reason: No se encontro archivo de importacion!");
-            }
-        }catch (\Exception $ex){
+                Log::debug("DataSourcesController][import] Datos importados correctamente. Registros cargados: ".$rows);
 
-            Log::error("DataSourcesController][import] Exception: ".$ex);
+                //Limpia tabla al finalizar el proceso de importacion
+                //\DB::statement("TRUNCATE TABLE org_datos");
+
+                flash('Proceso ejecutado correctamente. Registros importados: '.$rows, 'success');
+            }
         }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo importar los datos!", 'danger')->important();
+            Log::error("DataSourcesController][import] Exception: ".$ex);
+
+        }
+
+        //Elimina archivo de public folder si existe
+        if( \Storage::disk('uploads')->exists($fileName) )
+            \Storage::disk('uploads')->delete($fileName);
 
         return redirect()->route('general.datasource.index');
     }

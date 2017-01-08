@@ -17,21 +17,25 @@
         <br/>
         <br/>
         <div class="form-group">
-            {!! Form::label('csvFile','Subir Archivo:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-            <div class="col-sm-8">
+            {!! Form::label('csvFile','Subir Archivo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+            <div class="col-sm-7">
                 {!! Form::file('csvFile', ['id' => 'csvFile', 'class' => 'input-file form-control']) !!}
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-sm-12" align="center">
+            <div class="col-sm-10" align="center">
                 <button type="button" class="btn btn-primary" onclick="importData()">Importar</button>
             </div>
         </div>
 
-        <div class="pull-right center spinner-preview" id="spinner-preview"></div>
+        <div class="form-group">
+            <div class="col-sm-10" align="center">
+                <div class="pull-right center spinner-preview" id="spinner-preview"></div>
+            </div>
+        </div>
 
-    </form>
+    {!! Form::close() !!}
 
     <script type="text/javascript">
         function importData(){
