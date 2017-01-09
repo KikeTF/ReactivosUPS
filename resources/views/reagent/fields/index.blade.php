@@ -23,16 +23,18 @@
             <tbody>
             @foreach($fields as $field)
                 <?php
-                $showurl = route('reagent.fields.show', $field->id);
-                $editurl = route('reagent.fields.edit', $field->id);
-                $destroyurl = route('reagent.fields.destroy', $field->id);
+                $urls = array(
+                        'showurl' => route('reagent.fields.show', $field->id),
+                        'editurl' => route('reagent.fields.edit', $field->id),
+                        'destroyurl' => route('reagent.fields.destroy', $field->id)
+                );
                 ?>
                 <tr>
                     <td>{{ $field->nombre }}</td>
                     <td>{{ $field->descripcion }}</td>
                     <td align="center">{{ $field->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
-                        @include('shared.templates._tablebuttons')
+                        @include('shared.templates._tablebuttons', $urls)
                     </td>
                 </tr>
             @endforeach

@@ -29,9 +29,11 @@
             <tbody>
             @foreach($formats as $format)
                 <?php
-                $showurl = route('reagent.formats.show', $format->id);
-                $editurl = route('reagent.formats.edit', $format->id);
-                $destroyurl = route('reagent.formats.destroy', $format->id);
+                $urls = array(
+                        'showurl' => route('reagent.formats.show', $format->id),
+                        'editurl' => route('reagent.formats.edit', $format->id),
+                        'destroyurl' => route('reagent.formats.destroy', $format->id)
+                );
                 ?>
                 <tr>
                     <td>{{ $format->nombre }}</td>
@@ -74,7 +76,7 @@
                     </td>
                     <td align="center">{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
-                        @include('shared.templates._tablebuttons')
+                        @include('shared.templates._tablebuttons', $urls)
                     </td>
                 </tr>
             @endforeach

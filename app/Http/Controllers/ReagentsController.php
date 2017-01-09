@@ -135,7 +135,7 @@ class ReagentsController extends Controller
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[ReagentsController][index] Exception: " . $ex);
-            return redirect()->route('reagent.reagents.index');
+            return redirect()->route('reagent.reagents.create');
         }
 
         \DB::commit();

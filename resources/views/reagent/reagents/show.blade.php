@@ -7,18 +7,13 @@
 
     <form class="form-horizontal" role="form">
 
-        <div class="form-group">
-            <div class="btn btn-white btn-primary btn-bold">
-                <a class="green" href="{{ route('reagent.reagents.edit', $reagent->id) }}">
-                    <i class='ace-icon fa fa-pencil bigger-110 green'></i>
-                </a>
-            </div>
-            <div class="btn btn-white btn-primary btn-bold">
-                <a class="red" href="{{ route('reagent.reagents.index') }}">
-                    <i class='ace-icon fa fa-close bigger-110 red'></i>
-                </a>
-            </div>
-        </div>
+        <?php
+            if( in_array($reagent->id_estado, array(1, 4)) )
+                $btnedit = route('reagent.reagents.edit', $reagent->id);
+
+            $btnclose = route('reagent.reagents.index');
+        ?>
+        @include('shared.templates._formbuttons')
 
         <div id="accordion" class="accordion-style1 panel-group">
             <div class="panel panel-default">

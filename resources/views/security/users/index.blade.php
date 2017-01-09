@@ -24,9 +24,11 @@
             <tbody>
             @foreach($users as $user)
                 <?php
-                $showurl = route('security.users.show', $user->id);
-                $editurl = route('security.users.edit', $user->id);
-                $destroyurl = route('security.users.destroy', $user->id);
+                $urls = array(
+                        'showurl' => route('security.users.show', $user->id),
+                        'editurl' => route('security.users.edit', $user->id),
+                        'destroyurl' => route('security.users.destroy', $user->id)
+                );
                 ?>
                 <tr>
                     <td>{{ $user->username }}</td>
@@ -35,7 +37,7 @@
                     <td align="center">{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante'  }}</td>
                     <td align="center">{{ $user->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
-                        @include('shared.templates._tablebuttons')
+                        @include('shared.templates._tablebuttons', $urls)
                     </td>
                 </tr>
             @endforeach

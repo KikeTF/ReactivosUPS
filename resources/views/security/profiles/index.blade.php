@@ -23,16 +23,18 @@
             <tbody>
             @foreach($profiles as $profile)
                 <?php
-                $showurl = route('security.profiles.show', $profile->id);
-                $editurl = route('security.profiles.edit', $profile->id);
-                $destroyurl = route('security.profiles.destroy', $profile->id);
+                $urls = array(
+                        'showurl' => route('security.profiles.show', $profile->id),
+                        'editurl' => route('security.profiles.edit', $profile->id),
+                        'destroyurl' => route('security.profiles.destroy', $profile->id)
+                );
                 ?>
                 <tr>
                     <td>{{ $profile->nombre }}</td>
                     <td>{{ $profile->descripcion }}</td>
                     <td align="center">{{ $profile->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
-                        @include('shared.templates._tablebuttons')
+                        @include('shared.templates._tablebuttons', $urls)
                     </td>
                 </tr>
             @endforeach

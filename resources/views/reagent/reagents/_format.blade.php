@@ -1,10 +1,15 @@
 <?php
+$secuencial = 0;
 $letra = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
 ?>
 
 {!! Form::text('format_count', $formatList->count(), ['id' => 'format_count', 'hidden']) !!}
 @foreach($formatList as $param)
+    <?php
+    $secuencial = $secuencial + 1;
+    ?>
     <div id="reagent_format_{{ $param->id }}" style="display: none;">
+        {!! Form::text('secuencial_'.$secuencial, $param->id, ['id' => 'secuencial_'.$secuencial, 'hidden']) !!}
         {!! Form::text('f'.$param->id.'_format_resp_min', $param->opciones_resp_min, ['id' => 'f'.$param->id.'_format_resp_min', 'hidden']) !!}
         {!! Form::text('f'.$param->id.'_format_resp_max', $param->opciones_resp_max, ['id' => 'f'.$param->id.'_format_resp_max', 'hidden']) !!}
         {!! Form::text('f'.$param->id.'_format_preg_min', $param->opciones_preg_min, ['id' => 'f'.$param->id.'_format_preg_min', 'hidden']) !!}

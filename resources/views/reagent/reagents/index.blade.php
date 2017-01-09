@@ -74,16 +74,27 @@
             <tbody>
                 @foreach($reagents as $reagent)
                     <?php
-                    $showurl = route('reagent.reagents.show', $reagent->id);
-                    $editurl = route('reagent.reagents.edit', $reagent->id);
-                    $destroyurl = route('reagent.reagents.destroy', $reagent->id);
+                    //$showurl = route('reagent.reagents.show', $reagent->id);
+                    //$editurl = route('reagent.reagents.edit', $reagent->id);
+                    //$destroyurl = route('reagent.reagents.destroy', $reagent->id);
+                    if( in_array($reagent->id_estado, array(1, 4)) )
+                        $urls = array(
+                            'showurl' => route('reagent.reagents.show', $reagent->id),
+                            'editurl' => route('reagent.reagents.edit', $reagent->id),
+                            'destroyurl' => route('reagent.reagents.destroy', $reagent->id)
+                        );
+                    else
+                        $urls = array(
+                            'showurl' => route('reagent.reagents.show', $reagent->id)
+                        );
+
                     ?>
                     <tr>
                         <td align="center">{{ $reagent->id }}</td>
                         <td>{{ $reagent->planteamiento }}</td>
                         <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
                         <td>
-                            @include('shared.templates._tablebuttons')
+                            @include('shared.templates._tablebuttons', $urls)
                         </td>
                     </tr>
                 @endforeach

@@ -295,6 +295,7 @@
 
     <!-- common scripts -->
     <script src="{{ asset('scripts/shared/index.js') }}"></script>
+    <script src="{{ asset('scripts/shared/CapsLock.compressed.js') }}"></script>
 
     <!-- specific scripts -->
     @stack('specific-script')
@@ -306,12 +307,17 @@
                     processing: true,
                     responsive: true,
                     columns: [
+                        @if(isset($isApproval))
+                            { data: 'check', name: 'check', orderable: false, searchable: false },
+                        @endif
                         @foreach ($columnas as $col)
                             { data: '{{ $col }}', name: '{{ $col }}' },
                         @endforeach
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
-                    //sorting: [[0, 'asc']],
+                    @if(isset($isApproval))
+                        sorting: [[1, 'asc']],
+                    @endif
                     @if( !isset($newurl) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                     @else // Con boton de agregar nuevo

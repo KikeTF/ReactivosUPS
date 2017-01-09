@@ -83,9 +83,11 @@
             <tbody>
                 @foreach($mattersCareers as $matterCareer)
                     <?php
-                    $showurl = route('general.matterscareers.show', $matterCareer->id);
-                    $editurl = route('general.matterscareers.edit', $matterCareer->id);
-                    $destroyurl = route('general.matterscareers.destroy', $matterCareer->id);
+                    $urls = array(
+                            'showurl' => route('general.matterscareers.show', $matterCareer->id),
+                            'editurl' => route('general.matterscareers.edit', $matterCareer->id),
+                            'destroyurl' => route('general.matterscareers.destroy', $matterCareer->id)
+                    );
                     ?>
                     <tr>
                         <td>{{ \ReactivosUPS\Matter::find($matterCareer->id_materia)->descripcion }}</td>
@@ -106,7 +108,7 @@
                         <td align="center">{{ $matterCareer->nro_reactivos_exam }}</td>
                         <td align="center">{{ $matterCareer->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                         <td>
-                            @include('shared.templates._tablebuttons')
+                            @include('shared.templates._tablebuttons', $urls)
                         </td>
                     </tr>
                 @endforeach

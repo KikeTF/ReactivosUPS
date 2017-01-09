@@ -5,20 +5,14 @@
 
 @section('contenido')
 
-    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.reagents.update', $reagent->id],'method' => 'PUT']) !!}
+    {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.reagents.update', $reagent->id],'method' => 'PUT']) !!}
 
-    <div class="form-group">
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="blue" href="#" onclick="document.forms[0].submit();">
-                <i class='ace-icon fa fa-save bigger-110 blue'></i>
-            </a>
-        </div>
-        <div class="btn btn-white btn-primary btn-bold">
-            <a class="red" href="{{ route('reagent.reagents.index') }}">
-                <i class='ace-icon fa fa-close bigger-110 red'></i>
-            </a>
-        </div>
-    </div>
+    <?php
+    $btnsave = 1;
+    $btnrefresh = route('reagent.reagents.edit',$reagent->id);
+    $btnclose = route('reagent.reagents.index');
+    ?>
+    @include('shared.templates._formbuttons')
 
     <div id="accordion" class="accordion-style1 panel-group">
         <div class="panel panel-default">
@@ -327,5 +321,6 @@
 @endsection
 
 @push('specific-script')
+    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/edit.js') }}"></script>
 @endpush

@@ -8,21 +8,24 @@
     <form class="form-horizontal" role="form">
 
         <div class="form-group">
-            <div id="btn-aprobado" class="btn btn-white btn-primary btn-bold">
-                <a class="info" title="Aprobar" href="#">
-                    <i class='ace-icon fa fa-thumbs-o-up bigger-110 info'></i>
-                </a>
-            </div>
-            <div id="btn-rechazado" class="btn btn-white btn-warning btn-bold">
-                <a class="orange2" title="Rechazar" href="#">
-                    <i class='ace-icon fa fa-thumbs-o-down bigger-110 orange2'></i>
-                </a>
-            </div>
-            <div id="btn-comentario" class="btn btn-white btn-grey btn-bold">
-                <a class="grey" title="Comentarios" href="#">
-                    <i class='ace-icon fa fa-comment-o bigger-110 grey'></i>
-                </a>
-            </div>
+            @if($reagent->id_estado == 2)
+                <div id="btn-aprobado" class="btn btn-white btn-primary btn-bold">
+                    <a class="info" title="Aprobar" href="#">
+                        <i class='ace-icon fa fa-thumbs-o-up bigger-110 info'></i>
+                    </a>
+                </div>
+                <div id="btn-rechazado" class="btn btn-white btn-warning btn-bold">
+                    <a class="orange2" title="Rechazar" href="#">
+                        <i class='ace-icon fa fa-thumbs-o-down bigger-110 orange2'></i>
+                    </a>
+                </div>
+                <div id="btn-comentario" class="btn btn-white btn-grey btn-bold">
+                    <a class="grey" title="Comentarios" href="#">
+                        <i class='ace-icon fa fa-comment-o bigger-110 grey'></i>
+                    </a>
+                </div>
+            @endif
+
             <div class="btn btn-white btn-danger btn-bold">
                 <a class="red" title="Cerrar" href="{{ route('reagent.approvals.index') }}">
                     <i class='ace-icon fa fa-close bigger-110 red'></i>

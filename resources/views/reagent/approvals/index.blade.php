@@ -1,13 +1,14 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Reactivos')
-@section('subtitulo', 'Aprobacion de reactivos')
+@section('subtitulo', 'Aprobaci&oacute;n de reactivos')
 
 @section('contenido')
     <?php
     $usetable = 1;
+    $isApproval = 1;
     //$newurl = route('reagent.approvals.create');
-    $columnas = array("id",  "planteamiento", "estado"); // "capitulo", "tema",
+    $columnas = array("id",  "planteamiento", "estado","creado_por", "modificado_por"); // "capitulo", "tema",
     ?>
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.approvals.index','method' => 'GET']) !!}
@@ -60,23 +61,42 @@
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
             <tr>
+                @if(isset($isApproval))
+                <th></th>
+                @endif
                 <th style="text-align: center">C&oacute;digo</th>
                 <th style="text-align: center">Planteamiento</th>
                 <th style="text-align: center">Estado</th>
+                <th style="text-align: center">Creado Por</th>
+                <th style="text-align: center">Revisado Por</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             @foreach($reagents as $reagent)
                 <?php
-                $showurl = route('reagent.approvals.show', $reagent->id);
+                $urls = array(
+                        'showurl' => route('reagent.approvals.show', $reagent->id),
+                );
                 ?>
                 <tr>
+                    @if(isset($isApproval))
+                    <td align="center" width="40px">
+                        <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
+                            <label>
+                                {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace']) !!}
+                                <span class="lbl"></span>
+                            </label>
+                        </div>
+                    </td>
+                    @endif
                     <td align="center">{{ $reagent->id }}</td>
                     <td>{{ $reagent->planteamiento }}</td>
                     <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
+                    <td align="center">{{ $reagent->creado_por }}</td>
+                    <td align="center">{{ $reagent->modificado_por }}</td>
                     <td>
-                        @include('shared.templates._tablebuttons')
+                        @include('shared.templates._tablebuttons', $urls)
                     </td>
                 </tr>
             @endforeach

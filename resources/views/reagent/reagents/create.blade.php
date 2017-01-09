@@ -108,7 +108,7 @@
                                     {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                                     <div class="col-sm-9">
                                         <div class="clearfix">
-                                            {!! Form::textarea('planteamiento', null, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;', 'required'])!!}
+                                            {!! Form::textarea('planteamiento', null, ['id' => 'planteamiento', 'class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;', 'required'])!!}
                                         </div>
                                     </div>
                                 </div>
@@ -195,4 +195,5 @@
     <script src="{{ asset('ace/js/fuelux.wizard.min.js') }}"></script>
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script>
 @endpush
