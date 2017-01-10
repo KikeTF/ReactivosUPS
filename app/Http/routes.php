@@ -128,5 +128,7 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
 
     Route::resource('parameters','ExamParametersController');
 
+    Route::resource('exams','ExamsController');
+
 });
 
