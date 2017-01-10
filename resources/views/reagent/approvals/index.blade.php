@@ -93,8 +93,8 @@
                     <td align="center">{{ $reagent->id }}</td>
                     <td>{{ $reagent->planteamiento }}</td>
                     <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
-                    <td align="center">{{ $reagent->creado_por }}</td>
-                    <td align="center">{{ $reagent->modificado_por }}</td>
+                    <td align="center">{{ \ReactivosUPS\User::find($reagent->creado_por)->FullName }}</td>
+                    <td align="center">{{ ( ($reagent->modificado_por == "") ? "": \ReactivosUPS\User::find($reagent->modificado_por)->FullName ) }}</td>
                     <td>
                         @include('shared.templates._tablebuttons', $urls)
                     </td>
