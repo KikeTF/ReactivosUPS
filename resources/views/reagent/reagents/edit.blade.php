@@ -321,6 +321,10 @@
 @endsection
 
 @push('specific-script')
-    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/edit.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
+    <script type="text/javascript">
+        $(window).load(function() {
+            inputFileLoad();
+        });
+    </script>
 @endpush
