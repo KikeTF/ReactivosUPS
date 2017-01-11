@@ -19,14 +19,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                             <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
                             &nbsp;Informaci&oacute;n General
                         </a>
                     </h4>
                 </div>
 
-                <div class="panel-collapse collapse in" id="collapseOne">
+                <div class="panel-collapse collapse" id="collapseOne">
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-sm-2"><strong>C&oacute;digo:</strong></div>
@@ -69,14 +69,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
                             <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
                             &nbsp;Informaci&oacute;n de Reactivo
                         </a>
                     </h4>
                 </div>
 
-                <div class="panel-collapse collapse" id="collapseTwo">
+                <div class="panel-collapse collapse in" id="collapseTwo">
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Formato:</strong></div>

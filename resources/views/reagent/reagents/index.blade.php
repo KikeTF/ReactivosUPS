@@ -6,6 +6,7 @@
 @section('contenido')
     <?php
     $usetable = 1;
+    $isReagent = 1;
     $newurl = route('reagent.reagents.create');
     $columnas = array("id",  "planteamiento", "estado"); // "capitulo", "tema",
     ?>

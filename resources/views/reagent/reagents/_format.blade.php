@@ -18,15 +18,17 @@
                         <tr>
                             <td>
                                 {{ $i }}
+                                {!! Form::text('id_preg[]', ((isset($questions) && $i <= $questions->count()) ? $questions[$i-1]->id : null), ['hidden']) !!}
                             </td>
                             <td>
-                                {!! Form::textarea('conc_op_preg[]'.$i, null, [
-                                            'id' => 'conc_op_preg_'.$i,
-                                            'class' => 'form-control',
-                                            'placeholder' => 'Concepto de pregunta.',
-                                            'size' => '100%x2',
-                                            'style' => 'resize: vertical;',
-                                            ($i > $format->opciones_preg_min) ? 'disabled' : ''
+                                {!! Form::textarea('conc_op_preg[]',
+                                    ((isset($questions) && $i <= $questions->count()) ? $questions[$i-1]->concepto : null),
+                                    [   'id' => 'conc_op_preg_'.$i,
+                                        'class' => 'form-control',
+                                        'placeholder' => 'Concepto de pregunta.',
+                                        'size' => '100%x2',
+                                        'style' => 'resize: vertical;',
+                                        ($i > $format->opciones_preg_min) ? 'disabled' : ''
                                     ]) !!}
                             </td>
                             @if($format->concepto_propiedad == 'S')
@@ -34,13 +36,14 @@
                                     {{ $abc[$i-1] }}
                                 </td>
                                 <td>
-                                    {!! Form::textarea('prop_op_preg[]', null, [
-                                                'id' => 'prop_op_preg_'.$i,
-                                                'class' => 'form-control',
-                                                'placeholder' => 'Propiedad de pregunta.',
-                                                'size' => '100%x2',
-                                                'style' => 'resize: vertical;',
-                                                ($i > $format->opciones_preg_min) ? 'disabled' : ''
+                                    {!! Form::textarea('prop_op_preg[]',
+                                        ((isset($questions) && $i <= $questions->count()) ? $questions[$i-1]->propiedad : null),
+                                        [   'id' => 'prop_op_preg_'.$i,
+                                            'class' => 'form-control',
+                                            'placeholder' => 'Propiedad de pregunta.',
+                                            'size' => '100%x2',
+                                            'style' => 'resize: vertical;',
+                                            ($i > $format->opciones_preg_min) ? 'disabled' : ''
                                         ]) !!}
                                 </td>
                             @endif
@@ -78,14 +81,19 @@
                             <td>
                                 <div class="radio">
                                     <label>
-                                        {!! Form::radio('id_opcion_correcta', $i, false, ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i > $format->opciones_resp_min) ? 'disabled' : '', 'required']) !!}
+                                        {!! Form::radio('id_opcion_correcta', $i,
+                                            ((isset($answers) && $i <= $answers->count()) ? (($answers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false) : false),
+                                            ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i > $format->opciones_resp_min) ? 'disabled' : '', 'required'])
+                                        !!}
                                         <span class="lbl"></span>
                                     </label>
                                 </div>
+                                {!! Form::text('id_resp[]', ((isset($answers) && $i <= $answers->count()) ? $answers[$i-1]->id : null), ['hidden']) !!}
                             </td>
                             <td>
                                 <div class="clearfix">
-                                {!! Form::textarea('desc_op_resp[]', null,
+                                {!! Form::textarea('desc_op_resp[]',
+                                    ((isset($answers) && $i <= $answers->count()) ? $answers[$i-1]->descripcion : null),
                                     [   'id' => 'desc_op_resp_'.$i,
                                         'class' => 'form-control',
                                         'placeholder' => 'Descripción de respuesta.',
@@ -97,7 +105,8 @@
                             </td>
                             <td>
                                 <div class="clearfix">
-                                {!! Form::textarea('arg_op_resp[]', null,
+                                {!! Form::textarea('arg_op_resp[]',
+                                    ((isset($answers) && $i <= $answers->count()) ? $answers[$i-1]->argumento : null),
                                     [   'id' => 'arg_op_resp_'.$i,
                                         'class' => 'form-control',
                                         'placeholder' => 'Argumento de respuesta.',

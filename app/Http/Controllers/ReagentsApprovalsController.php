@@ -40,7 +40,7 @@ class ReagentsApprovalsController extends Controller
             }else
                 $reagents = Reagent::query()->where('id_estado','!=',7);
 
-            $reagents = $reagents->orderBy('id', 'desc')->get();
+            $reagents = $reagents->orderBy('id', 'asc')->get();
 
             return view('reagent.approvals.index')
                 ->with('reagents', $reagents)

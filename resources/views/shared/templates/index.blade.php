@@ -317,6 +317,8 @@
                     ],
                     @if(isset($isApproval))
                         sorting: [[1, 'asc']],
+                    @elseif(isset($isReagent))
+                        sorting: [[0, 'desc']],
                     @endif
                     @if( !isset($newurl) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',

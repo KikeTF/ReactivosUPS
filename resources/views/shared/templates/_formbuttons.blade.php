@@ -13,7 +13,13 @@
 
     @if(isset($btnrefresh))
         <button title="Refrescar" onclick="location.href='{{ $btnrefresh }}'; return false;" class="btn btn-white btn-success btn-bold">
-            <i class='ace-icon fa fa-repeat bigger-110 green' style="margin: 0"></i>
+            <i class='ace-icon fa fa-refresh bigger-110 green' style="margin: 0"></i>
+        </button>
+    @endif
+
+    @if(isset($btndelete))
+        <button title="Eliminar" onclick="location.href='{{ $btndelete }}'; return false;" class="btn btn-white btn-danger btn-bold">
+            <i class='ace-icon fa fa-trash-o bigger-110 red' style="margin: 0"></i>
         </button>
     @endif
 

@@ -39,11 +39,13 @@ class ReagentsController extends Controller
             if ($id_campus > 0 && $id_carrera > 0 && $id_materia > 0) {
                 $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
                 if ($id_estado == 0)
-                    $reagents = Reagent::filter($id_distributivo)->where('id_estado', '!=', 7)->get();
+                    $reagents = Reagent::filter($id_distributivo)->where('id_estado', '!=', 7);
                 else
-                    $reagents = Reagent::filter2($id_distributivo, $id_estado)->where('id_estado', '!=', 7)->get();
+                    $reagents = Reagent::filter2($id_distributivo, $id_estado)->where('id_estado', '!=', 7);
             } else
-                $reagents = Reagent::query()->where('id_estado', '!=', 7)->get();
+                $reagents = Reagent::query()->where('id_estado', '!=', 7);
+
+            $reagents = $reagents->orderBy('id', 'desc')->get();
 
             return view('reagent.reagents.index')
                 ->with('reagents', $reagents)
@@ -101,30 +103,35 @@ class ReagentsController extends Controller
             $reagent->id_opcion_correcta = $request->input('id_opcion_correcta');
             $reagent->imagen = $request->file('imagen');
 
-            $nroOpRespMax = $request->input('format_resp_max');
+            $OpRespDes = $request->input('desc_op_resp');
+            $OpRespArg = $request->input('arg_op_resp');
             $answersArray = array();
-            for ($i = 1; $i <= $nroOpRespMax; $i++)
-                if (isset($request['desc_op_resp_' . $i])) {
-                    $answer['secuencia'] = $i;
-                    $answer['descripcion'] = $request->input('desc_op_resp_' . $i);
-                    $answer['argumento'] = $request->input('arg_op_resp_' . $i);
+            if(count($OpRespDes) == count($OpRespArg)){
+                for ($i = 0; $i < count($OpRespDes); $i++){
+                    $answer['secuencia'] = $i+1;
+                    $answer['descripcion'] = $OpRespDes[$i];
+                    $answer['argumento'] = $OpRespArg[$i];
                     $answer['estado'] = 'A';
                     $answer['creado_por'] = \Auth::id();
                     $answer['fecha_creacion'] = date('Y-m-d h:i:s');
                     $answersArray[] = new ReagentAnswer($answer);
                 }
-            $nroOpPregMax = $request->input('format_preg_max');
+            }
+
+            $OpPregConc = $request->input('conc_op_preg');
+            $OpPregProp = $request->input('prop_op_preg');
             $questionsArray = array();
-            for ($i = 1; $i <= $nroOpPregMax; $i++)
-                if (isset($request['conc_op_preg_' . $i]) or isset($request['prop_op_preg_' . $i])) {
-                    $question['secuencia'] = $i;
-                    $question['concepto'] = is_null($request->input('conc_op_preg_' . $i)) ? "" : $request->input('conc_op_preg_' . $i);
-                    $question['propiedad'] = is_null($request->input('prop_op_preg_' . $i)) ? "" : $request->input('prop_op_preg_' . $i);
-                    $question['estado'] = 'A';
-                    $question['creado_por'] = \Auth::id();
-                    $question['fecha_creacion'] = date('Y-m-d h:i:s');
-                    $questionsArray[] = new ReagentQuestion($question);
-                }
+            for ($i = 0; $i < count($OpPregConc); $i++){
+                $question['secuencia'] = $i;
+                $question['concepto'] = is_null($OpPregConc[$i]) ? "" : $OpPregConc[$i];
+                $question['secuencia_letra'] = $this->abc[$i];
+                $question['propiedad'] = is_null($OpPregProp[$i]) ? "" : $OpPregProp[$i];
+                $question['estado'] = 'A';
+                $question['creado_por'] = \Auth::id();
+                $question['fecha_creacion'] = date('Y-m-d h:i:s');
+                $questionsArray[] = new ReagentQuestion($question);
+            }
+
             $reagent->save();
             Reagent::find($reagent->id)->answers()->saveMany($answersArray);
             Reagent::find($reagent->id)->questions()->saveMany($questionsArray);
@@ -222,9 +229,10 @@ class ReagentsController extends Controller
                 ->with('comments', $reagentComments)
                 ->with('states', $this->getReagentsStates())
                 ->with('users', $this->getUsers())
-                ->with('formatParam', $reagent->format)
+                ->with('format', $reagent->format)
                 ->with('contents', $this->getContents())
-                ->with('fields', $this->getFields());
+                ->with('fields', $this->getFields())
+                ->with('abc', $this->abc);
 
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
@@ -350,13 +358,12 @@ class ReagentsController extends Controller
 
     public function getFormat(Request $request)
     {
-        $abc = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
         try {
             $id_formato = $request->id_formato;
             $format = Format::find($id_formato);
             $html = View::make('reagent.reagents._format')
                 ->with('format', $format)
-                ->with('abc', $abc)->render();
+                ->with('abc', $this->abc)->render();
         } catch (\Exception $ex) {
             $html = "Informaci&oacute;n no disponibles";
             Log::error("[ReagentsController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);

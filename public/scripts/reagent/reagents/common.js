@@ -1,8 +1,9 @@
 $('#planteamiento').keyup(function(){
     var validator = $( "#formulario" ).validate();
     validator.resetForm();
+    $(this).parent().parent().parent().removeClass( "has-error");
 
-    if($(this).val() != "" && $(this).val() === $(this).val().toUpperCase()){
+    if($(this).val().length > 1 && $(this).val() === $(this).val().toUpperCase()){
         if (CapsLock.isOn()){
             validator.showErrors({"planteamiento": "Block Mayus activado!"});
         }else{

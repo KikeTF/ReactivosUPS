@@ -86,156 +86,28 @@
             <div class="panel-collapse collapse in" id="collapseTwo">
                 <div class="panel-body">
                     <div class="form-group">
-                        {!! Form::label('desc_formato', 'Formato:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                        <div class="col-sm-8">
+                        {!! Form::label('desc_formato', 'Formato:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                        <div class="col-sm-9">
                             {!! Form::text('desc_formato', $reagent->desc_formato, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                        <div class="col-sm-8">
+                        {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                        <div class="col-sm-9">
                             {!! Form::select('id_contenido_det', $contents, $reagent->id_contenido_det, ['class' => 'chosen-select form-control']) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                        <div class="col-sm-8">
+                        {!! Form::label('planteamiento', 'Planteamiento:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+                        <div class="col-sm-9">
                             {!! Form::textarea('planteamiento', $reagent->planteamiento, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                         </div>
                     </div>
 
-                    <div id="reagent_format">
-                        @if($formatParam->opciones_resp_min > 0)
-                            @if($formatParam->imagenes == 'S')
-                                <div class="form-group">
-                                    {!! Form::label('imagen','Cargar Imagen:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
-                                        {!! Form::file('imagen', ['class' => 'input-file form-control']) !!}
-                                    </div>
-                                </div>
-                            @endif
+                    @include('reagent.reagents._format')
 
-                            @if($formatParam->opciones_pregunta == 'S')
-                                <div class="form-group">
-                                    {!! Form::label('opcion_preg', 'Opciones de Pregunta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-8">
-                                        <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
-                                            <table id="opcion_preg" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
-                                                @for ($i = 1; $i <= $formatParam->opciones_preg_max; $i++)
-                                                    <tr>
-                                                        <td>
-                                                            {!! Form::text('id_preg_'.$i, ($i > $questions->count()) ? null : $questions[$i-1]->id, ['hidden']) !!}
-                                                            {!! Form::textarea('conc_op_preg_'.$i,
-                                                                        ($i > $questions->count()) ? null : $questions[$i-1]->concepto, [
-                                                                        'id' => 'conc_op_preg_'.$i,
-                                                                        'class' => 'form-control',
-                                                                        'placeholder' => 'Concepto de pregunta.',
-                                                                        'size' => '100%x2',
-                                                                        'style' => 'resize: vertical;',
-                                                                        ($i > $questions->count()) ? 'disabled' : ''
-                                                                ]) !!}
-                                                        </td>
-                                                        @if($formatParam->concepto_propiedad == 'S')
-                                                            <td>
-                                                                {!! Form::textarea('prop_op_preg_'.$i,
-                                                                            ($i > $questions->count()) ? null : $questions[$i-1]->propiedad, [
-                                                                            'id' => 'prop_op_preg_'.$i,
-                                                                            'class' => 'form-control',
-                                                                            'placeholder' => 'Propiedad de pregunta.',
-                                                                            'size' => '100%x2',
-                                                                            'style' => 'resize: vertical;',
-                                                                            ($i > $questions->count()) ? 'disabled' : ''
-                                                                    ]) !!}
-                                                            </td>
-                                                        @endif
-                                                        <td>
-                                                            @if($i > $questions->count())
-                                                                <div class="action-buttons">
-                                                                    <div id="activa_op_preg_{{ $i }}">
-                                                                        <a class="green" onclick="activa_op_preg('{{ $i }}')" title="Activar">
-                                                                            <i class="ace-icon fa fa-check bigger-120"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                    <div id="desactiva_op_preg_{{ $i }}" hidden>
-                                                                        <a class="red" onclick="desactiva_op_preg('{{ $i }}')" title="Desactivar">
-                                                                            <i class="ace-icon fa fa-times bigger-120"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endfor
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                            <div class="form-group">
-                                {!! Form::label('opcion_resp', 'Opciones de Respuesta:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                <div class="col-sm-8">
-                                    <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
-                                        <table id="opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
-                                            @for ($i = 1; $i <= $formatParam->opciones_resp_max; $i++)
-                                                <tr>
-                                                    <td>
-                                                        <div class="radio">
-                                                            <label>
-                                                                {!! Form::radio('id_opcion_correcta', $i, ($i > $answers->count()) ? false : ($answers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false, ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i > $answers->count()) ? 'disabled' : '']) !!}
-                                                                <span class="lbl"></span>
-                                                            </label>
-                                                        </div>
-                                                        {!! Form::text('id_resp_'.$i, ($i > $answers->count()) ? null : $answers[$i-1]->id, ['hidden']) !!}
-                                                    </td>
-                                                    <td>
-                                                        {!! Form::textarea('desc_op_resp_'.$i,
-                                                                ($i > $answers->count()) ? null : $answers[$i-1]->descripcion, [
-                                                                'id' => 'desc_op_resp_'.$i,
-                                                                'class' => 'form-control',
-                                                                'placeholder' => 'Descripción de respuesta.',
-                                                                'size' => '100%x2',
-                                                                'style' => 'resize: vertical;',
-                                                                ($i > $answers->count()) ? 'disabled' : ''
-                                                        ]) !!}
-                                                    </td>
-                                                    <td>
-                                                        {!! Form::textarea('arg_op_resp_'.$i,
-                                                                ($i > $answers->count()) ? null : $answers[$i-1]->argumento, [
-                                                                'id' => 'arg_op_resp_'.$i,
-                                                                'class' => 'form-control',
-                                                                'placeholder' => 'Argumento de respuesta.',
-                                                                'size' => '100%x2',
-                                                                'style' => 'resize: vertical;',
-                                                                 ($i > $answers->count()) ? 'disabled' : ''
-                                                        ]) !!}
-                                                    </td>
-                                                    <td>
-                                                        @if($i > $answers->count())
-                                                            <div class="action-buttons">
-                                                                <div id="activa_op_resp_{{ $i }}">
-                                                                    <a class="green" onclick="activa_op_resp('{{ $i }}')" title="Activar">
-                                                                        <i class="ace-icon fa fa-check bigger-120"></i>
-                                                                    </a>
-                                                                </div>
-                                                                <div id="desactiva_op_resp_{{ $i }}" hidden>
-                                                                    <a class="red" onclick="desactiva_op_resp('{{ $i }}')" title="Desactivar">
-                                                                        <i class="ace-icon fa fa-times bigger-120"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endfor
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
                 </div>
             </div>
         </div>
