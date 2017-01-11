@@ -102,6 +102,7 @@
                                 <tr>
                                     <td></td>
                                     <td><strong>Concepto</strong></td>
+                                    <td></td>
                                     <td><strong>Propiedad</strong></td>
                                 </tr>
                                 </thead>
@@ -110,6 +111,7 @@
                                     <tr>
                                         <td>{{ $question->secuencia }}</td>
                                         <td>{{ $question->concepto }}</td>
+                                        <td>{{ $question->secuencia_letra }}</td>
                                         <td>{{ $question->propiedad }}</td>
                                     </tr>
                                 @endforeach
