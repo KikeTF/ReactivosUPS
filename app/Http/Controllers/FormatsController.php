@@ -65,7 +65,7 @@ class FormatsController extends Controller
         }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FormatsController][store] Datos: Request=".$request->all().". Exception: ".$ex);
+            Log::error("[FormatsController][store] Request=". implode(", ", $request->all()) ."; Exception: ".$ex);
             return view('reagent.formats.create');
         }
 
@@ -144,7 +144,7 @@ class FormatsController extends Controller
         }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FormatsController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
+            Log::error("[FormatsController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
             return view('reagent.formats.edit')->with('format', $format);
         }
 

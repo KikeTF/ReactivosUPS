@@ -36,7 +36,7 @@ class ReagentsApprovalsController extends Controller
 
             if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0){
                 $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
-                $reagents = Reagent::filter($id_distributivo)->where('id_estado','!=',7)->get();
+                $reagents = Reagent::filter($id_distributivo)->where('id_estado','!=',7);
             }else
                 $reagents = Reagent::query()->where('id_estado','!=',7);
 
@@ -53,7 +53,7 @@ class ReagentsApprovalsController extends Controller
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsApprovalsController][index] Datos: Request=".$request->all().". Exception: ".$ex);
+            Log::error("[ReagentsApprovalsController][index] Request=".implode(", ", $request->all())."; Exception: ".$ex);
             return redirect()->route('index');
         }
     }
@@ -191,7 +191,7 @@ class ReagentsApprovalsController extends Controller
             \DB::rollback();
             $valid = false;
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ReagentsApprovalsController][comment] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
+            Log::error("[ReagentsApprovalsController][comment] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
         }
 
         \DB::commit();

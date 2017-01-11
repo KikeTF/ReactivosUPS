@@ -86,7 +86,7 @@ class ProfilesController extends Controller
         {
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ProfilesController][store] Datos: Request=".$request->all().". Exception: ".$ex);
+            Log::error("[ProfilesController][store] Request=". implode(", ", $request->all()) ."; Exception: ".$ex);
             return redirect()->route('security.profiles.create');
         }
 
@@ -192,7 +192,7 @@ class ProfilesController extends Controller
         {
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ProfilesController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
+            Log::error("[ProfilesController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
             return redirect()->route('security.profiles.edit', $id);
         }
 

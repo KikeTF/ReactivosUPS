@@ -36,11 +36,13 @@ class MattersCareersController extends Controller
                     ->first()->id;
 
                 if( $id_area > 0 )
-                    $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->where('estado', '!=', 'E')->get();
+                    $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->where('estado', '!=', 'E');
                 else
-                    $mattersCareers = MatterCareer::filter2($id_careerCampus, $id_mencion)->where('estado', '!=', 'E')->get();
+                    $mattersCareers = MatterCareer::filter2($id_careerCampus, $id_mencion)->where('estado', '!=', 'E');
             }else
-                $mattersCareers = MatterCareer::query()->where('estado', '!=', 'E')->get();
+                $mattersCareers = MatterCareer::query()->where('estado', '!=', 'E');
+
+            $mattersCareers = $mattersCareers->orderBy('id', 'desc')->get();
 
             $filters = array($id_campus, $id_carrera, $id_mencion, $id_area);
 
@@ -159,7 +161,7 @@ class MattersCareersController extends Controller
         }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[MattersCareersController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
+            Log::error("[MattersCareersController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
             return redirect()->route('reagent.matterscareers.edit', $id);
         }
 

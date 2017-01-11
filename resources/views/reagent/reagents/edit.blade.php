@@ -10,6 +10,7 @@
     <?php
     $btnsave = 1;
     $btnrefresh = route('reagent.reagents.edit',$reagent->id);
+    $btndelete = route('reagent.reagents.destroy', $reagent->id);
     $btnclose = route('reagent.reagents.index');
     ?>
     @include('shared.templates._formbuttons')

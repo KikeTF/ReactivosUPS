@@ -13,18 +13,18 @@
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.approvals.index','method' => 'GET']) !!}
 
-    <div class="widget-box collapsed">
+    <div class="widget-box">
         <div class="widget-header">
             <h5 class="widget-title">Filtros</h5>
 
             <div class="widget-toolbar">
                 <a href="#" data-action="collapse">
-                    <i class="ace-icon fa fa-chevron-down"></i>
+                    <i class="ace-icon fa fa-chevron-up"></i>
                 </a>
             </div>
         </div>
 
-        <div class="widget-body" style="display: none;">
+        <div class="widget-body" style="display: block;">
             <div class="widget-main">
                 <div class="row" style="position: relative;">
                     <div class="col-sm-11">
@@ -57,6 +57,7 @@
 
     {!! Form::close() !!}
 
+
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
@@ -73,33 +74,35 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($reagents as $reagent)
-                <?php
-                $urls = array(
-                        'showurl' => route('reagent.approvals.show', $reagent->id),
-                );
-                ?>
-                <tr>
-                    @if(isset($isApproval))
-                    <td align="center" width="40px">
-                        <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
-                            <label>
-                                {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace']) !!}
-                                <span class="lbl"></span>
-                            </label>
-                        </div>
-                    </td>
-                    @endif
-                    <td align="center">{{ $reagent->id }}</td>
-                    <td>{{ $reagent->planteamiento }}</td>
-                    <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
-                    <td align="center">{{ \ReactivosUPS\User::find($reagent->creado_por)->FullName }}</td>
-                    <td align="center">{{ ( ($reagent->modificado_por == "") ? "": \ReactivosUPS\User::find($reagent->modificado_por)->FullName ) }}</td>
-                    <td>
-                        @include('shared.templates._tablebuttons', $urls)
-                    </td>
-                </tr>
-            @endforeach
+            @if($filters[0] > 0)
+                @foreach($reagents as $reagent)
+                    <?php
+                    $urls = array(
+                            'showurl' => route('reagent.approvals.show', $reagent->id)
+                    );
+                    ?>
+                    <tr>
+                        @if(isset($isApproval))
+                        <td align="center" width="40px">
+                            <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
+                                <label>
+                                    {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace']) !!}
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+                        </td>
+                        @endif
+                        <td align="center">{{ $reagent->id }}</td>
+                        <td>{{ $reagent->planteamiento }}</td>
+                        <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
+                        <td align="center">{{ \ReactivosUPS\User::find($reagent->creado_por)->FullName }}</td>
+                        <td align="center">{{ ( ($reagent->modificado_por == "") ? "": \ReactivosUPS\User::find($reagent->modificado_por)->FullName ) }}</td>
+                        <td>
+                            @include('shared.templates._tablebuttons', $urls)
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
             </tbody>
         </table>
     </div>

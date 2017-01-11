@@ -81,6 +81,7 @@
                 </tr>
             </thead>
             <tbody>
+            @if($filters[0] > 0)
                 @foreach($mattersCareers as $matterCareer)
                     <?php
                     $urls = array(
@@ -112,6 +113,7 @@
                         </td>
                     </tr>
                 @endforeach
+            @endif
             </tbody>
         </table>
     </div>

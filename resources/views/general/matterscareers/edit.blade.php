@@ -9,6 +9,7 @@
     <?php
     $btnsave = 1;
     $btnrefresh = route('general.matterscareers.edit',$mattercareer->id);
+    $btndelete = route('general.matterscareers.destroy', $mattercareer->id);
     $btnclose = route('general.matterscareers.index');
     ?>
     @include('shared.templates._formbuttons')

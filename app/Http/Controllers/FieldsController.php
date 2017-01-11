@@ -64,7 +64,7 @@ class FieldsController extends Controller
         }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FieldsController][store] Datos: Request=".$request->all().". Exception: ".$ex);
+            Log::error("[FieldsController][store] Request=". implode(", ", $request->all()) ."; Exception: ".$ex);
             return view('reagent.fields.create');
         }
         return redirect()->route('reagent.fields.index');
@@ -135,7 +135,7 @@ class FieldsController extends Controller
         }catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FieldsController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
+            Log::error("[FieldsController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
             return view('reagent.$field.edit')->with('$field', $field);
         }
         return redirect()->route('reagent.fields.index');

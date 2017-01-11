@@ -12,18 +12,18 @@
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.index','method' => 'GET']) !!}
 
-    <div class="widget-box collapsed">
+    <div class="widget-box">
         <div class="widget-header">
             <h5 class="widget-title">Filtros</h5>
 
             <div class="widget-toolbar">
                 <a href="#" data-action="collapse">
-                    <i class="ace-icon fa fa-chevron-down"></i>
+                    <i class="ace-icon fa fa-chevron-up"></i>
                 </a>
             </div>
         </div>
 
-        <div class="widget-body" style="display: none;">
+        <div class="widget-body" style="display: block;">
             <div class="widget-main">
                 <div class="row" style="position: relative;">
                     <div class="col-sm-11">
@@ -72,32 +72,34 @@
             </tr>
             </thead>
             <tbody>
-                @foreach($reagents as $reagent)
-                    <?php
-                    //$showurl = route('reagent.reagents.show', $reagent->id);
-                    //$editurl = route('reagent.reagents.edit', $reagent->id);
-                    //$destroyurl = route('reagent.reagents.destroy', $reagent->id);
-                    if( in_array($reagent->id_estado, array(1, 4)) )
-                        $urls = array(
-                            'showurl' => route('reagent.reagents.show', $reagent->id),
-                            'editurl' => route('reagent.reagents.edit', $reagent->id),
-                            'destroyurl' => route('reagent.reagents.destroy', $reagent->id)
-                        );
-                    else
-                        $urls = array(
-                            'showurl' => route('reagent.reagents.show', $reagent->id)
-                        );
+            @if($filters[0] > 0)
+                    @foreach($reagents as $reagent)
+                        <?php
+                        //$showurl = route('reagent.reagents.show', $reagent->id);
+                        //$editurl = route('reagent.reagents.edit', $reagent->id);
+                        //$destroyurl = route('reagent.reagents.destroy', $reagent->id);
+                        if( in_array($reagent->id_estado, array(1, 4)) )
+                            $urls = array(
+                                'showurl' => route('reagent.reagents.show', $reagent->id),
+                                'editurl' => route('reagent.reagents.edit', $reagent->id),
+                                'destroyurl' => route('reagent.reagents.destroy', $reagent->id)
+                            );
+                        else
+                            $urls = array(
+                                'showurl' => route('reagent.reagents.show', $reagent->id)
+                            );
 
-                    ?>
-                    <tr>
-                        <td align="center">{{ $reagent->id }}</td>
-                        <td>{{ $reagent->planteamiento }}</td>
-                        <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
-                        <td>
-                            @include('shared.templates._tablebuttons', $urls)
-                        </td>
-                    </tr>
-                @endforeach
+                        ?>
+                        <tr>
+                            <td align="center">{{ $reagent->id }}</td>
+                            <td>{{ $reagent->planteamiento }}</td>
+                            <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
+                            <td>
+                                @include('shared.templates._tablebuttons', $urls)
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>

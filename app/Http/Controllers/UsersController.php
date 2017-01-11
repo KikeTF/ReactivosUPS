@@ -158,7 +158,7 @@ class UsersController extends Controller
         {
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[UsersController][update] Datos: Request=".$request->all()."; id=".$id.". Exception: ".$ex);
+            Log::error("[UsersController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
             return redirect()->route('security.users.edit', $id);
         }
 

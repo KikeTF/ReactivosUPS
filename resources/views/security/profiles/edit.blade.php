@@ -9,6 +9,7 @@
     <?php
     $btnsave = 1;
     $btnrefresh = route('security.profiles.edit',$profile->id);
+    $btndelete = route('security.profiles.destroy', $profile->id);
     $btnclose = route('security.profiles.index');
     ?>
     @include('shared.templates._formbuttons')

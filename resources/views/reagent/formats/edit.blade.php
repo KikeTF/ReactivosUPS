@@ -9,6 +9,7 @@
     <?php
     $btnsave = 1;
     $btnrefresh = route('reagent.formats.edit',$format->id);
+    $btndelete = route('reagent.formats.destroy', $format->id);
     $btnclose = route('reagent.formats.index');
     ?>
     @include('shared.templates._formbuttons')
