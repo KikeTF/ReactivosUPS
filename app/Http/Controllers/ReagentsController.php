@@ -15,6 +15,7 @@ use ReactivosUPS\ReagentAnswer;
 use ReactivosUPS\ReagentQuestion;
 use ReactivosUPS\ReagentComment;
 use Log;
+use View;
 use Session;
 
 
@@ -54,7 +55,7 @@ class ReagentsController extends Controller
                 ->with('filters', $filters);
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsController][index] Exception: " . $ex);
+            Log::error("[ReagentsController][index] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
             return redirect()->route('index');
         }
     }
@@ -77,7 +78,7 @@ class ReagentsController extends Controller
                 ->with('formats', $this->getFormats());
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsController][index] Exception: " . $ex);
+            Log::error("[ReagentsController][create] Exception: " . $ex);
             return redirect()->route('reagent.reagents.index');
         }
     }
@@ -97,30 +98,28 @@ class ReagentsController extends Controller
             $reagent->creado_por = \Auth::id();
             $reagent->fecha_creacion = date('Y-m-d h:i:s');
 
-            $prefix = "f" . $request->id_formato . "_";
+            $reagent->id_opcion_correcta = $request->input('id_opcion_correcta');
+            $reagent->imagen = $request->file('imagen');
 
-            $reagent->id_opcion_correcta = $request->input($prefix . 'id_opcion_correcta');
-            $reagent->imagen = $request->file($prefix . 'imagen');
-
-            $nroOpRespMax = $request->input($prefix . 'format_resp_max');
+            $nroOpRespMax = $request->input('format_resp_max');
             $answersArray = array();
             for ($i = 1; $i <= $nroOpRespMax; $i++)
-                if (isset($request[$prefix . 'desc_op_resp_' . $i])) {
+                if (isset($request['desc_op_resp_' . $i])) {
                     $answer['secuencia'] = $i;
-                    $answer['descripcion'] = $request->input($prefix . 'desc_op_resp_' . $i);
-                    $answer['argumento'] = $request->input($prefix . 'arg_op_resp_' . $i);
+                    $answer['descripcion'] = $request->input('desc_op_resp_' . $i);
+                    $answer['argumento'] = $request->input('arg_op_resp_' . $i);
                     $answer['estado'] = 'A';
                     $answer['creado_por'] = \Auth::id();
                     $answer['fecha_creacion'] = date('Y-m-d h:i:s');
                     $answersArray[] = new ReagentAnswer($answer);
                 }
-            $nroOpPregMax = $request->input($prefix . 'format_preg_max');
+            $nroOpPregMax = $request->input('format_preg_max');
             $questionsArray = array();
             for ($i = 1; $i <= $nroOpPregMax; $i++)
-                if (isset($request[$prefix . 'conc_op_preg_' . $i]) or isset($request[$prefix . 'prop_op_preg_' . $i])) {
+                if (isset($request['conc_op_preg_' . $i]) or isset($request['prop_op_preg_' . $i])) {
                     $question['secuencia'] = $i;
-                    $question['concepto'] = is_null($request->input($prefix . 'conc_op_preg_' . $i)) ? "" : $request->input($prefix . 'conc_op_preg_' . $i);
-                    $question['propiedad'] = is_null($request->input($prefix . 'prop_op_preg_' . $i)) ? "" : $request->input($prefix . 'prop_op_preg_' . $i);
+                    $question['concepto'] = is_null($request->input('conc_op_preg_' . $i)) ? "" : $request->input('conc_op_preg_' . $i);
+                    $question['propiedad'] = is_null($request->input('prop_op_preg_' . $i)) ? "" : $request->input('prop_op_preg_' . $i);
                     $question['estado'] = 'A';
                     $question['creado_por'] = \Auth::id();
                     $question['fecha_creacion'] = date('Y-m-d h:i:s');
@@ -134,7 +133,7 @@ class ReagentsController extends Controller
             //failed logic here
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ReagentsController][index] Exception: " . $ex);
+            Log::error("[ReagentsController][store] Request: " . implode(", ", $request->all()) . "; Exception: " . $ex);
             return redirect()->route('reagent.reagents.create');
         }
 
@@ -183,7 +182,7 @@ class ReagentsController extends Controller
                 ->with('formatParam', $reagent->format);
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsController][show] Datos: id=" . $id . ". Exception: " . $ex);
+            Log::error("[ReagentsController][show] id=" . $id . ". Exception: " . $ex);
             return redirect()->route('reagent.reagents.index');
         }
     }
@@ -229,7 +228,7 @@ class ReagentsController extends Controller
 
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsController][edit] Datos: id=" . $id . ". Exception: " . $ex);
+            Log::error("[ReagentsController][edit] id=" . $id . ". Exception: " . $ex);
             return redirect()->route('reagent.reagents.index');
         }
     }
@@ -317,7 +316,7 @@ class ReagentsController extends Controller
             //failed logic here
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ReagentsController][update] Datos: Request=" . $request->all() . "; id=" . $id . ". Exception: " . $ex);
+            Log::error("[ReagentsController][update] Request=" . implode(", ", $request->all()) . "; id=" . $id . "; Exception: " . $ex);
             return redirect()->route('reagent.reagents.edit', $id);
         }
 
@@ -346,6 +345,23 @@ class ReagentsController extends Controller
             Log::error("[ReagentsController][destroy] Datos: id=" . $id . ". Exception: " . $ex);
         }
         return redirect()->route('reagent.reagents.index');
+    }
+
+
+    public function getFormat(Request $request)
+    {
+        $abc = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
+        try {
+            $id_formato = $request->id_formato;
+            $format = Format::find($id_formato);
+            $html = View::make('reagent.reagents._format')
+                ->with('format', $format)
+                ->with('abc', $abc)->render();
+        } catch (\Exception $ex) {
+            $html = "Informaci&oacute;n no disponibles";
+            Log::error("[ReagentsController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+        }
+        return \Response::json(['html' => $html]);
     }
 }
 

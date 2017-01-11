@@ -87,7 +87,7 @@
                                     {!! Form::label('id_formato', 'Formato:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                                     <div class="col-sm-9">
                                         <div class="clearfix">
-                                        {!! Form::select('id_formato', $formats, null, ['class' => 'form-control', 'placeholder' => '-- Seleccione Formato --', 'required'] ) !!}
+                                        {!! Form::select('id_formato', $formats, null, ['id' => 'id_formato', 'class' => 'form-control', 'placeholder' => '-- Seleccione Formato --', 'required'] ) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -113,8 +113,9 @@
                                     </div>
                                 </div>
 
-                                @include('reagent.reagents._format')
+                                <div id="contenedorFormato">
 
+                                </div>
                             </div>
                         </div>
 
@@ -196,4 +197,14 @@
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script>
+    <script type="text/javascript">
+        $("#id_formato").change(function(){
+            url = "{{  route('reagent.reagents.format') }}";
+            $.get(url, {"id_formato" : $(this).val()}, function(data) {
+                $('#contenedorFormato').empty();
+                $('#contenedorFormato').append(data['html']);
+                inputFileLoad();
+            });
+        });
+    </script>
 @endpush
