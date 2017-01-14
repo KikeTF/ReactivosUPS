@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'General')
-@section('subtitulo', 'Detalle de par&aacute;metros de materia')
+@section('subtitulo', 'Detalle de par&aacute;metros por materia')
 
 @section('contenido')
 
