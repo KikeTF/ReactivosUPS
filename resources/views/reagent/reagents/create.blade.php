@@ -40,7 +40,7 @@
 
                             <li data-step="4">
                                 <span class="step">4</span>
-                                <span class="title">Enviar a Aprobaci&oacute;n</span>
+                                <span class="title">Solicitar Aprobaci&oacute;n</span>
                             </li>
                         </ul>
                     </div>
