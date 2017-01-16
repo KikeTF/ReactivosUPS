@@ -10,8 +10,8 @@ class Format extends Model
     public $timestamps = false;
 
     protected $fillable = ['nombre','descripcion','opciones_resp_min','opciones_resp_max','opciones_pregunta',
-                            'concepto_propiedad','opciones_preg_min','opciones_preg_max','imagenes','estado',
-                            'creado_por','fecha_creacion','modificado_por','fecha_modificacion'];
+                            'concepto_propiedad','opciones_preg_min','opciones_preg_max','opciones_prop_min','opciones_prop_max',
+                            'imagenes','estado','creado_por','fecha_creacion','modificado_por','fecha_modificacion'];
 
     public function reagents(){
         return $this->hasMany('ReactivosUPS\Reagent', 'id_formato');

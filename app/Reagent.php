@@ -9,8 +9,10 @@ class Reagent extends Model
     protected $table = "rea_reactivos";
     public $timestamps = false;
 
+    protected $guarded = ['id'];
+
     protected $fillable =["id_distributivo", "id_contenido_det", "id_formato", "id_campo", "descripcion", "planteamiento",
-                            "id_opcion_correcta", "dificultad", "puntaje", "referencia", "id_estado"];
+                            "id_opcion_correcta", "dificultad", "puntaje", "referencia", "id_estado", "imagen"];
 
     public function distributive(){
         return $this->belongsTo('ReactivosUPS\Distributive', 'id_distributivo');
@@ -28,8 +30,12 @@ class Reagent extends Model
         return $this->belongsTo('ReactivosUPS\Field', 'id_campo');
     }
 
-    public function questions(){
-        return $this->hasMany('ReactivosUPS\ReagentQuestion', 'id_reactivo');
+    public function questionsConcepts(){
+        return $this->hasMany('ReactivosUPS\ReagentQuestionConcept', 'id_reactivo');
+    }
+
+    public function questionsProperties(){
+        return $this->hasMany('ReactivosUPS\ReagentQuestionProperty', 'id_reactivo');
     }
 
     public function answers(){

@@ -3,7 +3,7 @@
         <div class="form-group">
             {!! Form::label('imagen','Cargar Imagen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
             <div class="col-sm-9">
-                {!! Form::file('imagen', ['class' => 'input-file form-control']) !!}
+                {!! Form::file('imagen', ['id' => 'imagen', 'class' => 'input-file form-control']) !!}
             </div>
         </div>
     @endif
@@ -14,55 +14,111 @@
             <div class="col-sm-9">
                 <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
                     <table id="opcion_preg" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
-                        @for ($i = 1; $i <= $format->opciones_preg_max; $i++)
+                        <?php
+                            $max_preg = (($format->opciones_preg_max >= $format->opciones_prop_max) ? $format->opciones_preg_max : $format->opciones_prop_max);
+                            $max_conc = $format->opciones_preg_max;
+                            $min_conc = $format->opciones_preg_min;
+                            $max_prop = $format->opciones_prop_max;
+                            $min_prop = $format->opciones_prop_min;
+
+                            if(isset($questionsConc) && isset($questionsProp))
+                                $preg = (($questionsConc->count() >= $questionsProp->count()) ? $questionsConc->count() : $questionsProp->count());
+
+                            if(isset($questionsConc)){
+                                $preg = isset($preg) ? $preg : (($max_preg >= $questionsConc->count()) ? $max_preg : $questionsConc->count());
+                                $max_conc = (($max_conc >= $questionsConc->count()) ? $max_conc : $questionsConc->count());
+                                $min_conc = (($min_conc >= $questionsConc->count()) ? $min_conc : $questionsConc->count());
+                            }
+                            if(isset($questionsProp)){
+                                $preg = isset($preg) ? $preg : (($max_preg >= $questionsProp->count()) ? $max_preg : $questionsProp->count());
+                                $max_prop = (($max_prop >= $questionsProp->count()) ? $max_prop : $questionsProp->count());
+                                $min_prop = (($min_prop >= $questionsProp->count()) ? $min_prop : $questionsProp->count());
+                            }
+                            $max_preg = (($max_preg >= $preg) ? $max_preg : $preg);
+                        ?>
+                        @for ($i = 0; $i < $max_preg; $i++)
                         <tr>
-                            <td>
-                                {{ $i }}
-                                {!! Form::text('id_preg[]', ((isset($questions) && $i <= $questions->count()) ? $questions[$i-1]->id : null), ['hidden']) !!}
-                            </td>
-                            <td>
-                                {!! Form::textarea('conc_op_preg[]',
-                                    ((isset($questions) && $i <= $questions->count()) ? $questions[$i-1]->concepto : null),
-                                    [   'id' => 'conc_op_preg_'.$i,
-                                        'class' => 'form-control',
-                                        'placeholder' => 'Concepto de pregunta.',
-                                        'size' => '100%x2',
-                                        'style' => 'resize: vertical;',
-                                        ($i > $format->opciones_preg_min) ? 'disabled' : ''
-                                    ]) !!}
-                            </td>
-                            @if($format->concepto_propiedad == 'S')
-                                <td>
-                                    {{ $abc[$i-1] }}
+                            @if($i < $max_conc)
+                                <td style="text-align: right; width: 50px">
+                                    {!! Form::label('', '('.($i+1).')',['class' => 'control-label']) !!}
+                                    {!! Form::text('questionsConc['.$i.'][id]',
+                                        ((isset($questionsConc) && $i < $questionsConc->count()) ? $questionsConc[$i]->id : null),
+                                        [   'id' => 'conc_id_preg_'.$i, 'hidden', ($i >= $min_conc) ? 'disabled' : '' ])!!}
+                                    {!! Form::text('questionsConc['.$i.'][numeral]',
+                                        ((isset($questionsConc) && $i < $questionsConc->count()) ? $questionsConc[$i]->numeral : ($i+1)),
+                                        [   'hidden', ($i >= $min_conc) ? 'disabled' : ''])!!}
                                 </td>
                                 <td>
-                                    {!! Form::textarea('prop_op_preg[]',
-                                        ((isset($questions) && $i <= $questions->count()) ? $questions[$i-1]->propiedad : null),
-                                        [   'id' => 'prop_op_preg_'.$i,
-                                            'class' => 'form-control',
-                                            'placeholder' => 'Propiedad de pregunta.',
-                                            'size' => '100%x2',
-                                            'style' => 'resize: vertical;',
-                                            ($i > $format->opciones_preg_min) ? 'disabled' : ''
-                                        ]) !!}
+                                    {!! Form::textarea('questionsConc['.$i.'][concepto]',
+                                        ((isset($questionsConc) && $i < $questionsConc->count()) ? $questionsConc[$i]->concepto : null),
+                                        [   'id' => 'conc_op_preg_'.$i, 'class' => 'form-control', 'placeholder' => 'Concepto de pregunta.',
+                                            'size' => '100%x2', 'style' => 'resize: vertical;', ($i >= $min_conc) ? 'disabled' : '' ]) !!}
                                 </td>
+                                <td style="width: 50px">
+                                    @if($i >= $format->opciones_preg_min)
+                                        <div class="action-buttons">
+                                            <div id="conc_activa_op_preg_{{ $i }}" {{($format->opciones_preg_min < $min_conc) ? 'hidden' : ''}}>
+                                                <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'C', 1)" title="Activar">
+                                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                                </label>
+                                            </div>
+                                            <div id="conc_desactiva_op_preg_{{ $i }}" {{($format->opciones_preg_min < $min_conc) ? '' : 'hidden'}}>
+                                                <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'C', 0)" title="Desactivar">
+                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </td>
+                            @else
+                                <td></td>
+                                <td></td>
+                                <td style="width: 50px"></td>
                             @endif
-                            <td>
-                                @if($i > $format->opciones_preg_min)
-                                <div class="action-buttons">
-                                    <div id="activa_op_preg_{{ $i }}">
-                                        <a class="green" onclick="activa_op_preg('{{ $i }}')" title="Activar">
-                                            <i class="ace-icon fa fa-check bigger-120"></i>
-                                        </a>
-                                    </div>
-                                    <div id="desactiva_op_preg_{{ $i }}" hidden>
-                                        <a class="red" onclick="desactiva_op_preg('{{ $i }}')" title="Desactivar">
-                                            <i class="ace-icon fa fa-times bigger-120"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                            @if($format->concepto_propiedad == 'S')
+                                @if($i < $max_prop)
+                                    <td style="text-align: right; width: 50px">
+                                        {!! Form::label('', '('.$abc[$i].')',['class' => 'control-label']) !!}
+                                        {!! Form::text('questionsProp['.$i.'][id]',
+                                        ((isset($questionsProp) && $i < $questionsProp->count()) ? $questionsProp[$i]->id : null),
+                                        [   'id' => 'prop_id_preg_'.$i, 'hidden', ($i >= $min_prop) ? 'disabled' : '' ])!!}
+                                        {!! Form::text('questionsProp['.$i.'][literal]',
+                                            ((isset($questionsProp) && $i < $questionsProp->count()) ? $questionsProp[$i]->literal : $abc[$i]),
+                                            [   ($i >= $min_prop) ? 'disabled' : '', 'hidden' ]) !!}
+                                    </td>
+                                    <td>
+                                        {!! Form::textarea('questionsProp['.$i.'][propiedad]',
+                                            ((isset($questionsProp) && $i < $questionsProp->count()) ? $questionsProp[$i]->propiedad : null),
+                                            [   'id' => 'prop_op_preg_'.$i,
+                                                'class' => 'form-control',
+                                                'placeholder' => 'Propiedad de pregunta.',
+                                                'size' => '100%x2',
+                                                'style' => 'resize: vertical;',
+                                                ($i >= $min_prop) ? 'disabled' : ''
+                                            ]) !!}
+                                    </td>
+                                    <td style="width: 50px">
+                                        @if($i >= $format->opciones_prop_min)
+                                        <div class="action-buttons">
+                                            <div id="prop_activa_op_preg_{{ $i }}" {{($format->opciones_prop_min < $min_prop) ? 'hidden' : ''}}>
+                                                <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'P', 1)" title="Activar">
+                                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                                </label>
+                                            </div>
+                                            <div id="prop_desactiva_op_preg_{{ $i }}" {{($format->opciones_prop_min < $min_prop) ? '' : 'hidden'}}>
+                                                <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'P', 0)" title="Desactivar">
+                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </td>
+                                @else
+                                    <td></td>
+                                    <td></td>
+                                    <td style="width: 50px"></td>
                                 @endif
-                            </td>
+                            @endif
                         </tr>
                         @endfor
                     </table>
@@ -76,58 +132,61 @@
         <div class="col-sm-9">
             <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
                 <table id="opcion_resp" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
-                    @for ($i = 1; $i <= $format->opciones_resp_max; $i++)
+                    <?php
+                    $max_resp = $format->opciones_resp_max;
+                    $min_resp = $format->opciones_resp_min;
+                    if(isset($answers)){
+                        $max_resp = (($max_resp >= $answers->count()) ? $max_resp : $answers->count());
+                        $min_resp = (($min_resp >= $answers->count()) ? $min_resp : $answers->count());
+                    }
+                    ?>
+                    @for ($i = 0; $i < $max_resp; $i++)
                         <tr>
-                            <td>
+                            <td style="width: 50px">
                                 <div class="radio">
                                     <label>
-                                        {!! Form::radio('id_opcion_correcta', $i,
-                                            ((isset($answers) && $i <= $answers->count()) ? (($answers[$i-1]->secuencia == $reagent->id_opcion_correcta) ? true : false) : false),
-                                            ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i > $format->opciones_resp_min) ? 'disabled' : '', 'required'])
-                                        !!}
+                                        {!! Form::radio('id_opcion_correcta',
+                                            ((isset($answers) && $i < $answers->count()) ? $answers[$i]->id : null),
+                                            ((isset($reagent) && isset($answers) && $i < $answers->count()) ? (($answers[$i]->id == $reagent->id_opcion_correcta) ? true : false) : false),
+                                            ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i >= $min_resp) ? 'disabled' : '', 'required']) !!}
                                         <span class="lbl"></span>
                                     </label>
                                 </div>
-                                {!! Form::text('id_resp[]', ((isset($answers) && $i <= $answers->count()) ? $answers[$i-1]->id : null), ['hidden']) !!}
+                                {!! Form::text('answers['.$i.'][id]',
+                                    ((isset($answers) && $i < $answers->count()) ? $answers[$i]->id : null),
+                                    [   'id' => 'id_resp_'.$i, 'hidden', ($i >= $min_resp) ? 'disabled' : '' ]) !!}
+                                {!! Form::text('answers['.$i.'][numeral]',
+                                    ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : ($i+1)),
+                                    [   ($i >= $min_resp) ? 'disabled' : '', 'hidden' ]) !!}
                             </td>
                             <td>
                                 <div class="clearfix">
-                                {!! Form::textarea('desc_op_resp[]',
-                                    ((isset($answers) && $i <= $answers->count()) ? $answers[$i-1]->descripcion : null),
-                                    [   'id' => 'desc_op_resp_'.$i,
-                                        'class' => 'form-control',
-                                        'placeholder' => 'Descripción de respuesta.',
-                                        'size' => '100%x2',
-                                        'style' => 'resize: vertical;',
-                                        'required',
-                                        ($i > $format->opciones_resp_min) ? 'disabled' : '' ]) !!}
+                                {!! Form::textarea('answers['.$i.'][descripcion]',
+                                    ((isset($answers) && $i < $answers->count()) ? $answers[$i]->descripcion : null),
+                                    [   'id' => 'desc_op_resp_'.$i, 'class' => 'form-control', 'placeholder' => 'Descripción de respuesta.',
+                                        'size' => '100%x2', 'style' => 'resize: vertical;', 'required', ($i >= $min_resp) ? 'disabled' : '' ]) !!}
                                 </div>
                             </td>
                             <td>
                                 <div class="clearfix">
-                                {!! Form::textarea('arg_op_resp[]',
-                                    ((isset($answers) && $i <= $answers->count()) ? $answers[$i-1]->argumento : null),
-                                    [   'id' => 'arg_op_resp_'.$i,
-                                        'class' => 'form-control',
-                                        'placeholder' => 'Argumento de respuesta.',
-                                        'size' => '100%x2',
-                                        'style' => 'resize: vertical;',
-                                        'required',
-                                         ($i > $format->opciones_resp_min) ? 'disabled' : '' ]) !!}
+                                {!! Form::textarea('answers['.$i.'][argumento]',
+                                    ((isset($answers) && $i < $answers->count()) ? $answers[$i]->argumento : null),
+                                    [   'id' => 'arg_op_resp_'.$i, 'class' => 'form-control', 'placeholder' => 'Argumento de respuesta.',
+                                        'size' => '100%x2', 'style' => 'resize: vertical;', 'required', ($i >= $min_resp) ? 'disabled' : '' ]) !!}
                                 </div>
                             </td>
-                            <td>
-                                @if($i > $format->opciones_resp_min)
+                            <td style="width: 50px">
+                                @if($i >= $format->opciones_resp_min)
                                 <div class="action-buttons">
-                                    <div id="activa_op_resp_{{ $i }}">
-                                        <a class="green" onclick="activa_op_resp('{{ $i }}')" title="Activar">
+                                    <div id="activa_op_resp_{{ $i }}" {{($format->opciones_resp_min < $min_resp) ? 'hidden' : ''}}>
+                                        <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'A', 1)" title="Activar">
                                             <i class="ace-icon fa fa-check bigger-120"></i>
-                                        </a>
+                                        </label>
                                     </div>
-                                    <div id="desactiva_op_resp_{{ $i }}" hidden>
-                                        <a class="red" onclick="desactiva_op_resp('{{ $i }}')" title="Desactivar">
+                                    <div id="desactiva_op_resp_{{ $i }}" {{($format->opciones_resp_min < $min_resp) ? '' : 'hidden'}}>
+                                        <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'A', 0)" title="Desactivar">
                                             <i class="ace-icon fa fa-times bigger-120"></i>
-                                        </a>
+                                        </label>
                                     </div>
                                 </div>
                                 @endif

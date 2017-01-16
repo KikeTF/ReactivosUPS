@@ -5,7 +5,12 @@
 
 @section('contenido')
 
-    {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => ['reagent.reagents.update', $reagent->id],'method' => 'PUT']) !!}
+    {!! Form::open(['id' => 'formulario',
+        'class' => 'form-horizontal',
+        'role' => 'form',
+        'route' => ['reagent.reagents.update', $reagent->id],
+        'method' => 'PUT',
+        'files' => true]) !!}
 
     <?php
     $btnsave = 1;

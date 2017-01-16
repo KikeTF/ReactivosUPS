@@ -42,37 +42,34 @@ function isUpperCase(){
     return result;
 }
 
-function activa_op_resp(ind) {
-    $("#activa_op_resp_"+ind).attr("hidden", true);
-    $("#desactiva_op_resp_"+ind).attr("hidden", false);
-    $("#id_opcion_correcta_"+ind).attr("disabled", false);
-    $("#desc_op_resp_"+ind).attr("disabled", false);
-    $("#arg_op_resp_"+ind).attr("disabled", false);
-}
+function formatOptionAction(ind, type, action) {
+    //i: Indice de la opcion
+    //type: A=Respuesta, C=Concepto Pregunta, P=Propiedad Pregunta
+    //action: 0=Deshabilitar, 1=Habilitar
+    enab = (action == 1);
+    switch(type) {
+        case 'A':
+            $("#activa_op_resp_"+ind).attr("hidden", enab);
+            $("#desactiva_op_resp_"+ind).attr("hidden", !enab);
+            $("#id_opcion_correcta_"+ind).attr("disabled", !enab);
+            $("#desc_op_resp_"+ind).attr("disabled", !enab);
+            $("#arg_op_resp_"+ind).attr("disabled", !enab);
+            $("#id_resp_"+ind).attr("disabled", !enab);
+            break;
+        case 'C':
+            $("#conc_activa_op_preg_"+ind).attr("hidden", enab);
+            $("#conc_desactiva_op_preg_"+ind).attr("hidden", !enab);
+            $("#conc_op_preg_"+ind).attr("disabled", !enab);
+            $("#conc_id_preg_"+ind).attr("disabled", !enab);
+            break;
+        case 'P':
+            $("#prop_activa_op_preg_"+ind).attr("hidden", enab);
+            $("#prop_desactiva_op_preg_"+ind).attr("hidden", !enab);
+            $("#prop_op_preg_"+ind).attr("disabled", !enab);
+            $("#prop_id_preg_"+ind).attr("disabled", !enab);
+            break;
+        default:
+            console.log("El tipo de opcion especificado es incorrecto.")
 
-function desactiva_op_resp(ind) {
-    $("#desactiva_op_resp_"+ind).attr("hidden", true);
-    $("#activa_op_resp_"+ind).attr("hidden", false);
-    $("#desc_op_resp_"+ind).val("");
-    $("#arg_op_resp_"+ind).val("");
-    $("#id_opcion_correcta_"+ind).attr("disabled", true);
-    $("#desc_op_resp_"+ind).attr("disabled", true);
-    $("#arg_op_resp_"+ind).attr("disabled", true);
+    }
 }
-
-function activa_op_preg(ind) {
-    $("#activa_op_preg_"+ind).attr("hidden", true);
-    $("#desactiva_op_preg_"+ind).attr("hidden", false);
-    $("#conc_op_preg_"+ind).attr("disabled", false);
-    $("#prop_op_preg_"+ind).attr("disabled", false);
-}
-
-function desactiva_op_preg(ind) {
-    $("#desactiva_op_preg_"+ind).attr("hidden", true);
-    $("#activa_op_preg_"+ind).attr("hidden", false);
-    $("#conc_op_preg_"+ind).val("");
-    $("#prop_op_preg_"+ind).val("");
-    $("#conc_op_preg_"+ind).attr("disabled", true);
-    $("#prop_op_preg_"+ind).attr("disabled", true);
-}
-
