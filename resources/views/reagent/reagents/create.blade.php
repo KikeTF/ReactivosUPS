@@ -164,7 +164,7 @@
 
                         <div class="step-pane" data-step="4">
                             <div class="center">
-                                <div id="finishMessage" class="well"><h4>Presione <strong class="green">"Finalizar"</strong> para enviar a aprobaci&oacute;n!</h4></div>
+                                <div id="finishMessage" class="well"><h4>Presione <strong class="green">"Finalizar"</strong> para solicitar aprobaci&oacute;n!</h4></div>
                                 <div hidden id="validateMessage" class="well"><h4 class="red">Registro incompleto. Por favor verificar!</h4></div>
                                 {!! Form::text('id_estado', 1, ['id' => 'id_estado', 'hidden'] ) !!}
                             </div>
