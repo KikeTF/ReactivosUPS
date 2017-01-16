@@ -14,14 +14,14 @@
                         <i class='ace-icon fa fa-thumbs-o-up bigger-110 info'></i>
                     </a>
                 </div>
-                <div id="btn-rechazado" class="btn btn-white btn-warning btn-bold">
-                    <a class="orange2" title="Rechazar" href="#">
-                        <i class='ace-icon fa fa-thumbs-o-down bigger-110 orange2'></i>
+                <div id="btn-rechazado" class="btn btn-white btn-grey btn-bold">
+                    <a class="grey" title="Rechazar" href="#">
+                        <i class='ace-icon fa fa-thumbs-o-down bigger-110 grey'></i>
                     </a>
                 </div>
-                <div id="btn-comentario" class="btn btn-white btn-grey btn-bold">
-                    <a class="grey" title="Comentarios" href="#">
-                        <i class='ace-icon fa fa-comment-o bigger-110 grey'></i>
+                <div id="btn-comentario" class="btn btn-white btn-warning btn-bold">
+                    <a class="orange2" title="Comentarios" href="#">
+                        <i class='ace-icon fa fa-comment-o bigger-110 orange2'></i>
                     </a>
                 </div>
             @endif
