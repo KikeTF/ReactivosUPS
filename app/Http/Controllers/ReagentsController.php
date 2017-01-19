@@ -95,61 +95,93 @@ class ReagentsController extends Controller
      */
     public function store(Request $request)
     {
-        \DB::beginTransaction(); //Start transaction!
-        try {
+        $isValidImage = true;
+
+        try
+        {
             $reagent = new Reagent($request->all());
             $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
             $reagent->creado_por = \Auth::id();
-            $reagent->fecha_creacion = date('Y-m-d h:i:s');
-
-            $reagent->id_opcion_correcta = $request->input('id_opcion_correcta');
+            //$reagent->id_opcion_correcta = $request->input('id_opcion_correcta');
             $reagent->imagen = $request->file('imagen');
 
-            $OpRespDes = $request->input('desc_op_resp');
-            $OpRespArg = $request->input('arg_op_resp');
-            $answersArray = array();
-            if(count($OpRespDes) == count($OpRespArg)){
-                for ($i = 0; $i < count($OpRespDes); $i++){
-                    $answer['secuencia'] = $i+1;
-                    $answer['descripcion'] = $OpRespDes[$i];
-                    $answer['argumento'] = $OpRespArg[$i];
-                    $answer['estado'] = 'A';
-                    $answer['creado_por'] = \Auth::id();
-                    $answer['fecha_creacion'] = date('Y-m-d h:i:s');
-                    $answersArray[] = new ReagentAnswer($answer);
-                }
+            if( $request->file('imagen') != '' && $request->hasFile('imagen') && $request->file('imagen')->isValid() )
+                $reagent->imagen = $request->file('imagen');
+            else
+                $isValidImage = false;
+
+            Log::debug("Reagent create: answers create");
+            $reaAnswers = array();
+            for ($i = 0; $i < sizeof($request->answers); $i++)
+            {
+                $reqAnswer = $request->answers[$i];
+                //$answer['numeral'] = $reqAnswer['numeral'];
+                $answer['descripcion'] = $reqAnswer['descripcion'];
+                $answer['argumento'] = $reqAnswer['argumento'];
+                $answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
+                $answer['creado_por'] = \Auth::id();
+                $reaAnswer = new ReagentAnswer($answer);
+                $reaAnswers[] = $reaAnswer;
             }
 
-            $OpPregConc = $request->input('conc_op_preg');
-            $OpPregProp = $request->input('prop_op_preg');
-            $questionsArray = array();
-            for ($i = 0; $i < count($OpPregConc); $i++){
-                $question['secuencia'] = $i;
-                $question['concepto'] = is_null($OpPregConc[$i]) ? "" : $OpPregConc[$i];
-                $question['secuencia_letra'] = $this->abc[$i];
-                $question['propiedad'] = is_null($OpPregProp[$i]) ? "" : $OpPregProp[$i];
-                $question['estado'] = 'A';
+            Log::debug("Reagent create: questions concepts create");
+            $reaQuestionsConc = array();
+            for ($i = 0; $i < sizeof($request->questionsConc); $i++)
+            {
+                $reqQuestion = $request->questionsConc[$i];
+                //$question['numeral'] = $reqQuestion['numeral'];
+                $question['concepto'] = $reqQuestion['concepto'];
                 $question['creado_por'] = \Auth::id();
-                $question['fecha_creacion'] = date('Y-m-d h:i:s');
-                $questionsArray[] = new ReagentQuestion($question);
+                $reaQuestion = new ReagentQuestionConcept($question);
+                $reaQuestionsConc[] = $reaQuestion;
             }
 
+            Log::debug("Reagent create: questions properties create");
+            $reaQuestionsProp = array();
+            for ($i = 0; $i < sizeof($request->questionsProp); $i++)
+            {
+                $reqQuestion = $request->questionsProp[$i];
+                //$question['literal'] = $reqQuestion['literal'];
+                $question['propiedad'] = $reqQuestion['propiedad'];
+                $question['creado_por'] = \Auth::id();
+                $reaQuestion = new ReagentQuestionProperty($question);
+                $reaQuestionsProp[] = $reaQuestion;
+            }
+
+            \DB::beginTransaction(); //Start transaction!
+
+            Log::debug("Reagent create: save reagent model");
             $reagent->save();
-            Reagent::find($reagent->id)->answers()->saveMany($answersArray);
-            Reagent::find($reagent->id)->questions()->saveMany($questionsArray);
-            flash('Transacci&oacuten realizada existosamente', 'success');
-        } catch (\Exception $ex) {
+
+            Log::debug("Reagent create: save reagent answers model");
+            //Reagent::find($reagent->id)
+            $reagent->answers()->saveMany($reaAnswers);
+
+            Log::debug("Reagent create: save questions concepts model");
+            $reagent->questionsConcepts()->saveMany($reaQuestionsConc);
+
+            Log::debug("Reagent create: save questions properties model");
+            $reagent->questionsProperties()->saveMany($reaQuestionsProp);
+
+            if(!$isValidImage)
+                flash('Transacci&oacuten realizada parcialmente. La imagen no pudo ser procesada!', 'warning')->important();
+            else
+                flash('Transacci&oacuten realizada existosamente', 'success');
+        }
+        catch (\Exception $ex)
+        {
             //failed logic here
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ReagentsController][store] Request: " . implode(", ", $request->all()) . "; Exception: " . $ex);
+            Log::error("[ReagentsController][store] Exception: " . $ex);
             return redirect()->route('reagent.reagents.create');
         }
-
-        \DB::commit();
+        finally
+        {
+            \DB::commit();
+        }
 
         return redirect()->route('reagent.reagents.index');
-
     }
 
     /**
@@ -249,16 +281,16 @@ class ReagentsController extends Controller
     {
         //dd($request->all());
         $reagent = Reagent::find($id);
-        $isValidImage = false;
-        try {
-            \DB::beginTransaction(); //Start transaction!
-
+        $isValidImage = true;
+        try
+        {
             Log::debug("Reagent update: fill request");
             $reagent->fill($request->all());
-            if( $request->hasFile('imagen') && $request->file('imagen')->isValid() ){
+            if( $request->hasFile('imagen') && $request->file('imagen')->isValid() )
                 $reagent->imagen = $request->file('imagen');
-                $isValidImage = true;
-            }
+            else
+                $isValidImage = !isset($request->imagen) ? true : false;
+
             $reagent->modificado_por = \Auth::id();
 
             Log::debug("Reagent update: answers update");
@@ -272,6 +304,7 @@ class ReagentsController extends Controller
                     //$reaAnswer->numeral = $reqAnswer['numeral'];
                     $reaAnswer->descripcion = $reqAnswer['descripcion'];
                     $reaAnswer->argumento = $reqAnswer['argumento'];
+                    $reaAnswer->opcion_correcta = ($reqAnswer['numeral'] == $request->input('opcion_correcta')) ? 'S' : 'N';
                     $reaAnswer->modificado_por = \Auth::id();
                 }
                 else
@@ -281,6 +314,7 @@ class ReagentsController extends Controller
                     //$answer['numeral'] = $reqAnswer['numeral'];
                     $answer['descripcion'] = $reqAnswer['descripcion'];
                     $answer['argumento'] = $reqAnswer['argumento'];
+                    $answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
                     $answer['creado_por'] = \Auth::id();
                     $reaAnswer = new ReagentAnswer($answer);
                 }
@@ -337,11 +371,14 @@ class ReagentsController extends Controller
                     $reaQuestionsProp[] = $reaQuestion;
             }
 
+            \DB::beginTransaction(); //Start transaction!
+
             Log::debug("Reagent update: save reagent model");
             $reagent->save();
 
             Log::debug("Reagent update: save reagent answers model");
             $reagent->answers()->saveMany($reaAnswers);
+            //$reagent->answers()->whereNotIn('id_opcion', $request->optionsprofile)->delete();
 
             Log::debug("Reagent update: save questions concepts model");
             $reagent->questionsConcepts()->saveMany($reaQuestionsConc);
@@ -350,7 +387,7 @@ class ReagentsController extends Controller
             $reagent->questionsProperties()->saveMany($reaQuestionsProp);
 
             if(!$isValidImage)
-                flash('Transacci&oacuten realizada parcialmente. La imagen no pudo ser procesada!', 'success')->important();
+                flash('Transacci&oacuten realizada parcialmente. La imagen no pudo ser procesada!', 'warning')->important();
             else
                 flash('Transacci&oacuten realizada existosamente', 'success');
         }
@@ -367,7 +404,7 @@ class ReagentsController extends Controller
             \DB::commit();
         }
 
-        return redirect()->route('reagent.reagents.index');
+        return redirect()->route('reagent.reagents.show', $id);
     }
 
     /**

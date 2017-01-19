@@ -57,12 +57,12 @@
                                 <td style="width: 50px">
                                     @if($i >= $format->opciones_preg_min)
                                         <div class="action-buttons">
-                                            <div id="conc_activa_op_preg_{{ $i }}" {{($format->opciones_preg_min < $min_conc) ? 'hidden' : ''}}>
+                                            <div id="conc_activa_op_preg_{{ $i }}" {{($i < $min_conc) ? 'hidden' : ''}}>
                                                 <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'C', 1)" title="Activar">
                                                     <i class="ace-icon fa fa-check bigger-120"></i>
                                                 </label>
                                             </div>
-                                            <div id="conc_desactiva_op_preg_{{ $i }}" {{($format->opciones_preg_min < $min_conc) ? '' : 'hidden'}}>
+                                            <div id="conc_desactiva_op_preg_{{ $i }}" {{($i < $min_conc) ? '' : 'hidden'}}>
                                                 <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'C', 0)" title="Desactivar">
                                                     <i class="ace-icon fa fa-times bigger-120"></i>
                                                 </label>
@@ -100,12 +100,12 @@
                                     <td style="width: 50px">
                                         @if($i >= $format->opciones_prop_min)
                                         <div class="action-buttons">
-                                            <div id="prop_activa_op_preg_{{ $i }}" {{($format->opciones_prop_min < $min_prop) ? 'hidden' : ''}}>
+                                            <div id="prop_activa_op_preg_{{ $i }}" {{($i < $min_prop) ? 'hidden' : ''}}>
                                                 <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'P', 1)" title="Activar">
                                                     <i class="ace-icon fa fa-check bigger-120"></i>
                                                 </label>
                                             </div>
-                                            <div id="prop_desactiva_op_preg_{{ $i }}" {{($format->opciones_prop_min < $min_prop) ? '' : 'hidden'}}>
+                                            <div id="prop_desactiva_op_preg_{{ $i }}" {{($i < $min_prop) ? '' : 'hidden'}}>
                                                 <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'P', 0)" title="Desactivar">
                                                     <i class="ace-icon fa fa-times bigger-120"></i>
                                                 </label>
@@ -145,10 +145,10 @@
                             <td style="width: 50px">
                                 <div class="radio">
                                     <label>
-                                        {!! Form::radio('id_opcion_correcta',
-                                            ((isset($answers) && $i < $answers->count()) ? $answers[$i]->id : null),
-                                            ((isset($reagent) && isset($answers) && $i < $answers->count()) ? (($answers[$i]->id == $reagent->id_opcion_correcta) ? true : false) : false),
-                                            ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i >= $min_resp) ? 'disabled' : '', 'required']) !!}
+                                        {!! Form::radio('opcion_correcta',
+                                            ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : ($i+1)),
+                                            ((isset($answers) && $i < $answers->count()) ? (($answers[$i]->opcion_correcta == 'S') ? true : false) : false),
+                                            ['class' => 'ace', 'id' => 'opcion_correcta_'.$i, ($i >= $min_resp) ? 'disabled' : '', 'required' ]) !!}
                                         <span class="lbl"></span>
                                     </label>
                                 </div>
@@ -178,12 +178,12 @@
                             <td style="width: 50px">
                                 @if($i >= $format->opciones_resp_min)
                                 <div class="action-buttons">
-                                    <div id="activa_op_resp_{{ $i }}" {{($format->opciones_resp_min < $min_resp) ? 'hidden' : ''}}>
+                                    <div id="activa_op_resp_{{ $i }}" {{($i < $min_resp) ? 'hidden' : ''}}>
                                         <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'A', 1)" title="Activar">
                                             <i class="ace-icon fa fa-check bigger-120"></i>
                                         </label>
                                     </div>
-                                    <div id="desactiva_op_resp_{{ $i }}" {{($format->opciones_resp_min < $min_resp) ? '' : 'hidden'}}>
+                                    <div id="desactiva_op_resp_{{ $i }}" {{($i < $min_resp) ? '' : 'hidden'}}>
                                         <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'A', 0)" title="Desactivar">
                                             <i class="ace-icon fa fa-times bigger-120"></i>
                                         </label>

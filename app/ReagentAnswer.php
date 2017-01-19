@@ -14,7 +14,7 @@ class ReagentAnswer extends Model
 
     protected $guarded = ['id', "numeral"];
 
-    protected $fillable =["id_reactivo", "descripcion", "argumento", 'creado_por', 'modificado_por'];
+    protected $fillable =["id_reactivo", "descripcion", "argumento", "opcion_correcta", 'creado_por', 'modificado_por'];
 
     public function reagent(){
         return $this->belongsTo('ReactivosUPS\Reagent', 'id_reactivo');
