@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\Matter;
+use ReactivosUPS\Reagent;
 
 class ExamsController extends Controller
 {
@@ -26,7 +28,12 @@ class ExamsController extends Controller
      */
     public function create()
     {
-        //
+        $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        $reagents = Reagent::query()->where('id_estado','5')->get();
+
+        return view('exam.exams.create')
+            ->with('matters', $matters)
+            ->with('reagents', $reagents);
     }
 
     /**

@@ -269,6 +269,7 @@
     <script src="ace/js/excanvas.min.js"></script>
     -->
     <!--[endif]-->
+    <script src="{{ asset('ace/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery-ui.custom.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.easypiechart.min.js') }}"></script>
