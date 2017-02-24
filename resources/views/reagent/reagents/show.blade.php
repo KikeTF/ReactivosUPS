@@ -107,7 +107,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($questions as $question)
+                                @foreach($reagent->questionsConcepts as $question)
                                     <tr>
                                         <td>{{ $question->secuencia }}</td>
                                         <td>{{ $question->concepto }}</td>
@@ -132,7 +132,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($answers as $answer)
+                                @foreach($reagent->answers as $answer)
                                     <tr>
                                         <td>{{ $answer->secuencia }}</td>
                                         <td>{{ $answer->descripcion }}</td>
@@ -213,7 +213,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($comments as $comment)
+                                @foreach($reagent->comments as $comment)
                                     <tr>
                                         <td>{{ $comment->fecha_creacion }}</td>
                                         <td>{{ $users[$comment->creado_por] }}</td>

@@ -211,13 +211,13 @@ class ReagentsController extends Controller
 
             return view('reagent.reagents.show')
                 ->with('reagent', $reagent)
-                ->with('questionsConc', $reagent->questionsConcepts)
-                ->with('questionsProp', $reagent->questionsProperties)
-                ->with('answers', $reagent->answers)
-                ->with('comments',$reagent->comments)
+                //->with('questionsConc', $reagent->questionsConcepts)
+                //->with('questionsProp', $reagent->questionsProperties)
+                //->with('answers', $reagent->answers)
+                //->with('comments', $reagent->comments)
                 ->with('states', $this->getReagentsStates())
-                ->with('users', $this->getUsers())
-                ->with('formatParam', $reagent->format);
+                ->with('users', $this->getUsers());
+                //->with('formatParam', $reagent->format);
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsController][show] id=" . $id . ". Exception: " . $ex);
