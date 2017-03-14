@@ -1,17 +1,17 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Reactivos')
-@section('subtitulo', 'Aprobaci&oacute;n de reactivos')
+@section('subtitulo', 'Listado de reactivos')
 
 @section('contenido')
     <?php
     $usetable = 1;
-    $isApproval = 1;
-    //$newurl = route('reagent.approvals.create');
-    $columnas = array("id",  "planteamiento", "estado","creado_por", "modificado_por"); // "capitulo", "tema",
+    //$isReagent = 1;
+    $newurl = route('exam.exams.create');
+    $columnas = array("id",  "planteamiento", "estado"); // "capitulo", "tema",
     ?>
 
-    {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.approvals.index','method' => 'GET']) !!}
+    {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.index','method' => 'GET']) !!}
 
     <div class="widget-box">
         <div class="widget-header">
@@ -35,11 +35,17 @@
 
                         <div class="col-sm-3">
                             {!! Form::label('id_carrera', 'Seleccione Carrera:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control', 'placeholder' => '-- Todas las Menciones --']) !!}
+                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control']) !!}
                         </div>
 
-                        <div id="listaMaterias" class="col-sm-3">
-                            @include('shared.optionlists._matterslist')
+                        <div class="col-sm-3">
+                            {!! Form::label('id_materia', 'Seleccione Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_materia', $matters, $filters[2], ['class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="col-sm-3">
+                            {!! Form::label('id_estado', 'Seleccione Estado:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            {!! Form::select('id_estado', $states, $filters[3], ['class' => 'form-control', 'placeholder' => 'Todos los Estados']) !!}
                         </div>
                     </div>
                     <div class="col-sm-1" style="float:right; position:absolute; bottom:0; right:0;">
@@ -56,19 +62,13 @@
 
     {!! Form::close() !!}
 
-
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
             <tr>
-                @if(isset($isApproval))
-                <th></th>
-                @endif
                 <th style="text-align: center">C&oacute;digo</th>
                 <th style="text-align: center">Planteamiento</th>
                 <th style="text-align: center">Estado</th>
-                <th style="text-align: center">Creado Por</th>
-                <th style="text-align: center">Revisado Por</th>
                 <th></th>
             </tr>
             </thead>
@@ -76,26 +76,25 @@
             @if($filters[0] > 0)
                 @foreach($reagents as $reagent)
                     <?php
-                    $urls = array(
-                            'showurl' => route('reagent.approvals.show', $reagent->id)
-                    );
+                    //$showurl = route('reagent.reagents.show', $reagent->id);
+                    //$editurl = route('reagent.reagents.edit', $reagent->id);
+                    //$destroyurl = route('reagent.reagents.destroy', $reagent->id);
+                    if( in_array($reagent->id_estado, array(1, 4)) )
+                        $urls = array(
+                                'showurl' => route('reagent.reagents.show', $reagent->id),
+                                'editurl' => route('reagent.reagents.edit', $reagent->id),
+                                'destroyurl' => route('reagent.reagents.destroy', $reagent->id)
+                        );
+                    else
+                        $urls = array(
+                                'showurl' => route('reagent.reagents.show', $reagent->id)
+                        );
+
                     ?>
                     <tr>
-                        @if(isset($isApproval))
-                        <td align="center" width="40px">
-                            <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
-                                <label>
-                                    {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace']) !!}
-                                    <span class="lbl"></span>
-                                </label>
-                            </div>
-                        </td>
-                        @endif
                         <td align="center">{{ $reagent->id }}</td>
                         <td>{{ $reagent->planteamiento }}</td>
                         <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
-                        <td align="center">{{ \ReactivosUPS\User::find($reagent->creado_por)->FullName }}</td>
-                        <td align="center">{{ ( ($reagent->modificado_por == "") ? "": \ReactivosUPS\User::find($reagent->modificado_por)->FullName ) }}</td>
                         <td>
                             @include('shared.templates._tablebuttons', $urls)
                         </td>
@@ -106,15 +105,3 @@
         </table>
     </div>
 @endsection
-@push('specific-script')
-<script type="text/javascript">
-    $("#id_carrera").change(function(){
-        url = "{{  route('general.matterscareers.matters') }}";
-        $.get(url, {"id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val()}, function(data) {
-            $('#listaMaterias').empty();
-            $('#listaMaterias').append(data['html']);
-            //inputFileLoad();
-        });
-    });
-</script>
-@endpush

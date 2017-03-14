@@ -53,7 +53,7 @@ class ReagentsController extends Controller
                 ->with('reagents', $reagents)
                 ->with('campuses', $this->getCampuses())
                 ->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters())
+                ->with('matters', $this->getMatters($id_campus, $id_carrera, 0, 0))
                 ->with('states', $this->getReagentsStates())
                 ->with('statesLabels', $this->getReagentsStatesLabel())
                 ->with('filters', $filters);
@@ -75,7 +75,7 @@ class ReagentsController extends Controller
             return view('reagent.reagents.create')
                 ->with('campuses', $this->getCampuses())
                 ->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters())
+                ->with('matters', $this->getMatters(0, 0, 0, 0))
                 ->with('mentions', $this->getMentions())
                 ->with('contents', $this->getContentsModel())
                 ->with('fields', $this->getFields())
@@ -100,10 +100,12 @@ class ReagentsController extends Controller
         try
         {
             $reagent = new Reagent($request->all());
+            $reagent->id_periodo = (int)Session::get('idPeriodo');
+            $reagent->id_sede = (int)Session::get('idSede');
             $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
             $reagent->creado_por = \Auth::id();
             //$reagent->id_opcion_correcta = $request->input('id_opcion_correcta');
-            $reagent->imagen = $request->file('imagen');
+            //$reagent->imagen = $request->file('imagen');
 
             if( $request->file('imagen') != '' && $request->hasFile('imagen') && $request->file('imagen')->isValid() )
                 $reagent->imagen = $request->file('imagen');

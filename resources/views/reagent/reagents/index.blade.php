@@ -40,7 +40,7 @@
 
                         <div class="col-sm-3">
                             {!! Form::label('id_materia', 'Seleccione Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_materia', $matters, $filters[2], ['class' => 'form-control']) !!}
+                            {!! Form::select('id_materia', $matters, $filters[2], ['class' => 'form-control', 'placeholder' => 'Todas las Materias']) !!}
                         </div>
 
                         <div class="col-sm-3">
@@ -105,3 +105,15 @@
         </table>
     </div>
 @endsection
+@push('specific-script')
+<script type="text/javascript">
+    $("#id_carrera").change(function(){
+        url = "{{  route('general.matterscareers.matters') }}";
+        $.get(url, {"id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val()}, function(data) {
+            $('#listaMaterias').empty();
+            $('#listaMaterias').append(data['html']);
+            //inputFileLoad();
+        });
+    });
+</script>
+@endpush

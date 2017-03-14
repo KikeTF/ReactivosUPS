@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
-use ReactivosUPS\Matter;
+use ReactivosUPS\Area;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
@@ -29,8 +29,10 @@ class ReagentsApprovalsController extends Controller
         try{
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
-            //$id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
             $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+
+            $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
+            $idJefeArea = ($area->count() > 0) ? $area->first()->id : 0;
 
             $filters = array($id_campus, $id_carrera, $id_materia);
 
@@ -46,7 +48,7 @@ class ReagentsApprovalsController extends Controller
                 ->with('reagents', $reagents)
                 ->with('campuses', $this->getCampuses())
                 ->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters())
+                ->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
                 ->with('states', $this->getReagentsStates())
                 ->with('statesLabels', $this->getReagentsStatesLabel())
                 ->with('filters', $filters);

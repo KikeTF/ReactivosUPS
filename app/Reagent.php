@@ -12,7 +12,8 @@ class Reagent extends Model
     protected $guarded = ['id'];
 
     protected $fillable =["id_distributivo", "id_contenido_det", "id_formato", "id_campo", "descripcion", "planteamiento",
-                            "id_opcion_correcta", "dificultad", "puntaje", "referencia", "id_estado", "imagen"];
+                            "id_opcion_correcta", "dificultad", "puntaje", "referencia", "id_estado", "imagen",
+                            "id_materia", "id_carrera", "id_campus", "id_periodo", "id_sede"];
 
     public function distributive(){
         return $this->belongsTo('ReactivosUPS\Distributive', 'id_distributivo');

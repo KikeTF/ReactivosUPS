@@ -38,16 +38,19 @@ class MatterCareer extends Model
     }
 
     public function scopeFilter($query, $id_carrera_campus, $id_mencion, $id_area){
-        return $query
-            ->where('id_carrera_campus', $id_carrera_campus)
-            ->where('id_mencion', $id_mencion)
-            ->where('id_area', $id_area);
+        if($id_carrera_campus > 0 )
+            $query = $query->where('id_carrera_campus', $id_carrera_campus);
+
+        if($id_mencion > 0 )
+            $query = $query->where('id_mencion', $id_mencion);
+
+        if($id_area > 0 )
+            $query = $query->where('id_area', $id_area);
+
+        return $query->where('estado', '!=', 'E');
     }
 
-    public function scopeFilter2($query, $id_carrera_campus, $id_mencion){
-        return $query
-            ->where('id_carrera_campus', $id_carrera_campus)
-            ->where('id_mencion', $id_mencion);
+    public function getMatterDescriptionAttribute(){
+        return $this->matter->descripcion;
     }
-
 }

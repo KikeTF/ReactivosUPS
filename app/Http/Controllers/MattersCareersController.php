@@ -10,8 +10,10 @@ use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
+use ReactivosUPS\Area;
 use Datatables;
 use Log;
+use View;
 
 class MattersCareersController extends Controller
 {
@@ -28,23 +30,27 @@ class MattersCareersController extends Controller
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
             $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
 
-            if($id_mencion > 0 && $id_carrera > 0 && $id_campus > 0){
-                $careersCampuses = $this->getCareersCampuses();
-                $id_careerCampus = $careersCampuses
+            $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
+            $idJefeArea = ($area->count() > 0) ? $area->first()->id : 0;
+
+            if($id_carrera > 0 && $id_campus > 0)
+            {
+                $id_careerCampus = $this->getCareersCampuses()
                     ->where('id_carrera', $id_carrera)
                     ->where('id_campus', $id_campus)
                     ->first()->id;
+            }
+            else
+                $id_careerCampus = 0;
 
-                if( $id_area > 0 )
-                    $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->where('estado', '!=', 'E');
-                else
-                    $mattersCareers = MatterCareer::filter2($id_careerCampus, $id_mencion)->where('estado', '!=', 'E');
-            }else
-                $mattersCareers = MatterCareer::query()->where('estado', '!=', 'E');
+            if( $idJefeArea > 0 )
+                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $idJefeArea);
+            else
+                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area);
 
             $mattersCareers = $mattersCareers->orderBy('id', 'desc')->get();
 
-            $filters = array($id_campus, $id_carrera, $id_mencion, $id_area);
+            $filters = array($id_campus, $id_carrera, $id_mencion, (($idJefeArea > 0) ? -1 :$id_area));
 
             return view('general.matterscareers.index')
                 ->with('mattersCareers', $mattersCareers)
@@ -193,5 +199,46 @@ class MattersCareersController extends Controller
         }
 
         return redirect()->route('general.matterscareers.index');
+    }
+
+    public function getMattersList(Request $request)
+    {
+        try {
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+            $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+
+            $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
+            $idJefeArea = ($area->count() > 0) ? $area->first()->id : 0;
+
+            if($id_carrera > 0 && $id_campus > 0)
+            {
+                $id_careerCampus = $this->getCareersCampuses()
+                    ->where('id_carrera', $id_carrera)
+                    ->where('id_campus', $id_campus)
+                    ->first()->id;
+            }
+            else
+                $id_careerCampus = 0;
+
+            if( $idJefeArea > 0 )
+                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $idJefeArea)->get();
+            else
+                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+            dd($idJefeArea);
+            foreach ($mattersCareers as $matterCareer)
+            {
+                $ids[] = $matterCareer->id_materia;
+            }
+
+            $matters = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
+
+            $html = View::make('shared.optionlists._matterslist')->with('matters', $matters)->render();
+        } catch (\Exception $ex) {
+            $html = "Informaci&oacute;n no disponibles";
+            Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+        }
+        return \Response::json(['html' => $html]);
     }
 }

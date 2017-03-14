@@ -9,6 +9,7 @@ use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
+use Log;
 
 class ExamsController extends Controller
 {
@@ -17,9 +18,40 @@ class ExamsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('exam.exams.index');
+        try {
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+            $id_estado = (isset($request['id_estado']) ? (int)$request->id_estado : 0);
+
+            $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
+
+            if ($id_campus > 0 && $id_carrera > 0 && $id_materia > 0) {
+                $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
+                if ($id_estado == 0)
+                    $reagents = Reagent::filter($id_distributivo)->where('id_estado', '!=', 7);
+                else
+                    $reagents = Reagent::filter2($id_distributivo, $id_estado)->where('id_estado', '!=', 7);
+            } else
+                $reagents = Reagent::query()->where('id_estado', '!=', 7);
+
+            $reagents = $reagents->orderBy('id', 'desc')->get();
+
+            return view('exam.exams.index')
+                ->with('reagents', $reagents)
+                ->with('campuses', $this->getCampuses())
+                ->with('careers', $this->getCareers())
+                ->with('matters', $this->getMatters(0, 0, 0, 0))
+                ->with('states', $this->getReagentsStates())
+                ->with('statesLabels', $this->getReagentsStatesLabel())
+                ->with('filters', $filters);
+        } catch (\Exception $ex) {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ExamsController][index] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -27,14 +59,32 @@ class ExamsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
+    {
+        try {
+            return view('exam.exams.create')
+                ->with('campuses', $this->getCampuses())
+                ->with('careers', $this->getCareers())
+                ->with('matters', $this->getMatters(0, 0, 0, 0))
+                ->with('mentions', $this->getMentions())
+                ->with('contents', $this->getContentsModel())
+                ->with('fields', $this->getFields())
+                ->with('formats', $this->getFormats());
+        } catch (\Exception $ex) {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ReagentsController][create] Exception: " . $ex);
+            return redirect()->route('reagent.reagents.index');
+        }
+    }
+
+    public function detail(Request $request)
     {
         $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
         $id_materia = (isset($request['id_materia']) ? (int)$request->id_carrera : 0);
 
         $reagents = Reagent::query()->where('id_estado','5')->get();
 
-        return view('exam.exams.create')
+        return view('exam.exams.detail')
             ->with('matters', $matters)
             ->with('reagents', $reagents);
     }

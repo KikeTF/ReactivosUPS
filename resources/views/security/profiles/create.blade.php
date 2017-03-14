@@ -30,6 +30,18 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <select name="tipo" class="form-control">
+                <option value="A">APROBADOR</option>
+                <option value="D">DOCENTE</option>
+                <option value="E">ESTUDIANTE</option>
+                <option value="O">OTRO</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
         {!! Form::label('optionsprofile', 'Accesos:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <select multiple="" name="optionsprofile[]" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Accesos --" style="display: none;" required>

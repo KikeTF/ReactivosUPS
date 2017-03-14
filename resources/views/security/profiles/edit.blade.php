@@ -31,6 +31,18 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <select name="tipo" class="form-control">
+                <option value="A" {{ ($profile->tipo == 'A' ? 'selected' : '') }}>APROBADOR</option>
+                <option value="D" {{ ($profile->tipo == 'D' ? 'selected' : '') }}>DOCENTE</option>
+                <option value="E" {{ ($profile->tipo == 'E' ? 'selected' : '') }}>ESTUDIANTE</option>
+                <option value="O" {{ ($profile->tipo == 'O' ? 'selected' : '') }}>OTRO</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
         {!! Form::label('optionsprofile', 'Accesos:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <select multiple="" name="optionsprofile[]" id="optionsprofile" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Accesos --" style="display: none;" required>

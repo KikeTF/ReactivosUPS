@@ -65,8 +65,28 @@ abstract class Controller extends BaseController
         return $fields;
     }
 
-    public function getMatters(){
-        $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
+    public function getMatters($id_campus, $id_carrera, $id_mencion, $id_area){
+        //$matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
+
+        if($id_carrera > 0 && $id_campus > 0)
+        {
+            $id_careerCampus = $this->getCareersCampuses()
+                ->where('id_carrera', $id_carrera)
+                ->where('id_campus', $id_campus)
+                ->first()->id;
+        }
+        else
+            $id_careerCampus = 0;
+
+        $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+
+        foreach ($mattersCareers as $matterCareer)
+        {
+            $ids[] = $matterCareer->id_materia;
+        }
+
+        $matters = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
+
         return $matters;
     }
 

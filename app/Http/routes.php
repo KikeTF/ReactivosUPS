@@ -105,6 +105,11 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
 
+    Route::get('matterscareers/matters', [
+        'uses'  => 'MattersCareersController@getMattersList',
+        'as'    => 'general.matterscareers.matters'
+    ]);
+
     Route::resource('matterscareers','MattersCareersController');
 
     Route::get('matterscareers/{id}/destroy', [
@@ -128,6 +133,11 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
     Route::get('parameters/history', [
         'uses'  => 'ExamParametersController@history',
         'as'    => 'exam.parameters.history'
+    ]);
+
+    Route::get('exams/detail', [
+        'uses'  => 'ExamsController@detail',
+        'as'    => 'exam.exams.detail'
     ]);
 
     Route::resource('parameters','ExamParametersController');

@@ -41,7 +41,11 @@ class ProfilesController extends Controller
     public function create()
     {
         try{
-            $optionsList = Option::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+            $optionsList = Option::query()
+                ->where('estado','A')
+                ->where('id_padre','!=',0)
+                ->orderBy('descripcion', 'asc')
+                ->get();
 
             return view('security.profiles.create')
                 ->with('optionsList', $optionsList);
@@ -136,7 +140,12 @@ class ProfilesController extends Controller
         try{
             $profile = Profile::find($id);
             $optionsProfiles = OptionProfile::query()->where('id_perfil', $id)->get();
-            $optionsList = Option::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+
+            $optionsList = Option::query()
+                ->where('estado','A')
+                ->where('id_padre','!=',0)
+                ->orderBy('descripcion', 'asc')
+                ->get();
 
             return view('security.profiles.edit')
                 ->with('profile', $profile)
