@@ -12,6 +12,7 @@ use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\ReagentAnswer;
+use ReactivosUPS\Distributive;
 use ReactivosUPS\ReagentComment;
 use Log;
 use ReactivosUPS\ReagentQuestionConcept;
@@ -99,10 +100,23 @@ class ReagentsController extends Controller
 
         try
         {
+            $id_periodo = (int)Session::get('idPeriodo');
+            $id_sede = (int)Session::get('idSede');
+
             $reagent = new Reagent($request->all());
             $reagent->id_periodo = (int)Session::get('idPeriodo');
             $reagent->id_sede = (int)Session::get('idSede');
-            $reagent->id_distributivo = $this->getDistributive((int)$request->id_materia, (int)$request->id_carrera, (int)$request->id_campus)->id;
+
+            $reagent->id_distributivo = Distributive::query()
+                ->where('estado','A')
+                ->where('id_periodo', $id_periodo)
+                ->where('id_carrera', $request->id_carrera)
+                ->where('id_campus', $request->id_campus)
+                ->where('id_sede', $id_sede)
+                ->where('id_materia', $request->id_materia)
+                ->where('id_usuario', \Auth::id())
+                ->first()->id;
+
             $reagent->creado_por = \Auth::id();
             //$reagent->id_opcion_correcta = $request->input('id_opcion_correcta');
             //$reagent->imagen = $request->file('imagen');
