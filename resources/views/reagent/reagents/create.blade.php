@@ -101,12 +101,7 @@
                                 <div class="form-group">
                                     {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                                     <div id="listaContenidos" class="col-sm-9">
-                                        <select name="id_contenido_det" id="id_contenido_det" class="chosen-select form-control" data-placeholder="-- Seleccione Contenido --" required>
-                                            <option value=""></option>
-                                            @foreach($contents as $content)
-                                                <option value="{{ $content->id }}">{{ $content->ContentDescription }}</option>
-                                            @endforeach
-                                        </select>
+                                        @include('shared.optionlists._contentslist')
                                     </div>
                                 </div>
 
@@ -211,9 +206,6 @@
                 $('#contenedorFormato').append(data['html']);
                 inputFileLoad();
             });
-        });
-        $("#id_materia").change(function(){
-            console.log(1);
         });
     </script>
     @include('shared.optionlists.functions')

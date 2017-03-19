@@ -13,4 +13,11 @@
             $('#listaCarreras').append(data['html']);
         });
     }
+    function getContentsByMatter() {
+        url = "{{  route('general.matterscareers.contents') }}";
+        $.get(url, {"id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val(), "id_materia" : $("#id_materia").val()}, function(data) {
+            $('#listaContenidos').empty();
+            $('#listaContenidos').append(data['html']);
+        });
+    }
 </script>
