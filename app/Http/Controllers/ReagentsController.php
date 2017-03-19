@@ -51,9 +51,9 @@ class ReagentsController extends Controller
 
             return view('reagent.reagents.index')
                 ->with('reagents', $reagents)
-                ->with('campuses', $this->getCampuses())
-                ->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters($id_campus, $id_carrera, 0, 0))
+                ->with('campusList', $this->getCampuses())
+                //->with('careersList', $this->getCareers())
+                //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, 0))
                 ->with('states', $this->getReagentsStates())
                 ->with('statesLabels', $this->getReagentsStatesLabel())
                 ->with('filters', $filters);
@@ -73,10 +73,10 @@ class ReagentsController extends Controller
     {
         try {
             return view('reagent.reagents.create')
-                ->with('campuses', $this->getCampuses())
-                ->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters(0, 0, 0, 0))
-                ->with('mentions', $this->getMentions())
+                ->with('campusList', $this->getCampuses())
+                //->with('careers', $this->getCareers())
+                //->with('matters', $this->getMatters(0, 0, 0, 0))
+                //->with('mentions', $this->getMentions())
                 ->with('contents', $this->getContentsModel())
                 ->with('fields', $this->getFields())
                 ->with('formats', $this->getFormats());

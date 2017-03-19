@@ -30,14 +30,26 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('aprueba_reactivo', '¿Aprueba Reactivo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select name="tipo" class="form-control">
-                <option value="A">APROBADOR</option>
-                <option value="D">DOCENTE</option>
-                <option value="E">ESTUDIANTE</option>
-                <option value="O">OTRO</option>
-            </select>
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('aprueba_reactivo', 'S', true, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('aprueba_examen', '¿Activo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('aprueba_examen', 'S', true, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -62,7 +74,6 @@
                     <span class="lbl"></span>
                 </label>
             </div>
-
         </div>
     </div>
 

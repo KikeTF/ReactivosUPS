@@ -95,4 +95,8 @@ class DataSourcesController extends Controller
         return redirect()->route('general.datasource.index');
     }
 
+    public function importContent(Request $request)
+    {
+
+    }
 }

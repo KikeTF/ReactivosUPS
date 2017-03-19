@@ -31,14 +31,26 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('aprueba_reactivo', '¿Aprueba Reactivo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select name="tipo" class="form-control">
-                <option value="A" {{ ($profile->tipo == 'A' ? 'selected' : '') }}>APROBADOR</option>
-                <option value="D" {{ ($profile->tipo == 'D' ? 'selected' : '') }}>DOCENTE</option>
-                <option value="E" {{ ($profile->tipo == 'E' ? 'selected' : '') }}>ESTUDIANTE</option>
-                <option value="O" {{ ($profile->tipo == 'O' ? 'selected' : '') }}>OTRO</option>
-            </select>
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('aprueba_reactivo', $profile->aprueba_reactivo, ($profile->aprueba_reactivo == 'S') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('aprueba_examen', '¿Aprueba Examen?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('aprueba_examen', $profile->aprueba_examen, ($profile->aprueba_examen == 'S') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -54,7 +66,6 @@
         </div>
     </div>
 
-
     <div class="form-group">
         {!! Form::label('estado', '¿Activo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
@@ -64,7 +75,6 @@
                     <span class="lbl"></span>
                 </label>
             </div>
-
         </div>
     </div>
 

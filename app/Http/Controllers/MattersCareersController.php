@@ -5,12 +5,15 @@ namespace ReactivosUPS\Http\Controllers;
 use Illuminate\Http\Request;
 
 use ReactivosUPS\Career;
+use ReactivosUPS\ContentHeader;
+use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Area;
+use ReactivosUPS\CareerCampus;
 use Datatables;
 use Log;
 use View;
@@ -204,40 +207,131 @@ class MattersCareersController extends Controller
     public function getMattersList(Request $request)
     {
         try {
+            $aprReactivo = \Session::get('ApruebaReactivo');
+            $aprExamen = \Session::get('ApruebaExamen');
+            $id_Sede = (int)\Session::get('idSede');
+
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_careerCampus = 0;
+            $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+            $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+
+            if($aprReactivo == 'S')
+            {
+                $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
+                $id_area = ($area->count() > 0) ? $area->first()->id : 0;
+
+                if($id_carrera > 0 && $id_campus > 0)
+                    $id_careerCampus = $this->getCareersCampuses()->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
+
+                $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+            }
+            else
+            {
+                $dist = Distributive::query()
+                    ->where('estado','A')
+                    ->where('id_carrera', $id_carrera)
+                    ->where('id_campus', $id_campus)
+                    ->where('id_sede', $id_Sede)
+                    ->where('id_usuario', \Auth::id())->get();
+            }
+
+            foreach ($dist as $mat)
+            {
+                //if(!isset($ids) || (isset($ids) && !in_array($mat->id_materia, $ids)))
+                    $ids[] = $mat->id_materia;
+            }
+
+            if(isset($ids))
+            {
+                array_unique($ids);
+                $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
+            }
+
+            $html = View::make('shared.optionlists._matterslist')->with('mattersList', $mattersList)->render();
+        } catch (\Exception $ex) {
+            Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            $html = View::make('shared.optionlists._matterslist')->render();
+        }
+        return \Response::json(['html' => $html]);
+    }
+
+    public function getCareersList(Request $request)
+    {
+        try {
+            $aprReactivo = \Session::get('ApruebaReactivo');
+            $aprExamen = \Session::get('ApruebaExamen');
+            $id_Sede = (int)\Session::get('idSede');
+
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
             $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
 
-            $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
-            $idJefeArea = ($area->count() > 0) ? $area->first()->id : 0;
+            if($aprReactivo == 'S')
+            {
+                $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
+                $id_area = ($area->count() > 0) ? $area->first()->id : 0;
+
+                if($id_carrera > 0)
+                    $careerCampus = CareerCampus::query()
+                        ->where('estado','A')
+                        ->where('id_campus', $id_campus)->first()->id;
+
+                //$dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+            }
+            else
+            {
+                $dist = Distributive::query()
+                    ->where('estado','A')
+                    ->where('id_campus', $id_campus)
+                    ->where('id_sede', $id_Sede)
+                    ->where('id_usuario', \Auth::id())->get();
+            }
+
+            foreach ($dist as $car)
+            {
+                //if(!isset($ids) || (isset($ids) && !in_array($mat->id_materia, $ids)))
+                $ids[] = $car->id_carrera;
+            }
+
+            if(isset($ids))
+                $careersList = Career::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
+
+            $html = View::make('shared.optionlists._careerslist')->with('careersList', $careersList)->render();
+        } catch (\Exception $ex) {
+            Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            $html = View::make('shared.optionlists._careerslist')->render();
+        }
+        return \Response::json(['html' => $html]);
+    }
+
+    public function getContentsList(Request $request)
+    {
+        try {
+            $id_Sede = (int)\Session::get('idSede');
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_materia = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+            $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+
+            //ContentHeader::query()
+            $contents = ContentDetail::query()->where('estado','A')->orderBy('capitulo', 'asc')->get();
 
             if($id_carrera > 0 && $id_campus > 0)
-            {
-                $id_careerCampus = $this->getCareersCampuses()
-                    ->where('id_carrera', $id_carrera)
-                    ->where('id_campus', $id_campus)
-                    ->first()->id;
-            }
-            else
-                $id_careerCampus = 0;
+                $careerCampus = CareerCampus::query()
+                    ->where('estado','A')
+                    ->where('id_campus', $id_campus)->first()->id;
 
-            if( $idJefeArea > 0 )
-                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $idJefeArea)->get();
-            else
-                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
-            dd($idJefeArea);
-            foreach ($mattersCareers as $matterCareer)
-            {
-                $ids[] = $matterCareer->id_materia;
-            }
 
-            $matters = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
+            if(isset($ids))
+                $careersList = Career::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
 
-            $html = View::make('shared.optionlists._matterslist')->with('matters', $matters)->render();
+            $html = View::make('shared.optionlists._careerslist')->with('careersList', $careersList)->render();
         } catch (\Exception $ex) {
-            $html = "Informaci&oacute;n no disponibles";
             Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            $html = View::make('shared.optionlists._careerslist')->render();
         }
         return \Response::json(['html' => $html]);
     }

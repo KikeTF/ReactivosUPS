@@ -30,17 +30,23 @@
                     <div class="col-sm-11">
                         <div class="col-sm-3">
                             {!! Form::label('id_campus', 'Seleccione Campus:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_campus', $campuses, $filters[0], ['class' => 'form-control']) !!}
+                            <div id="listaCampus">
+                                @include('shared.optionlists._campuslist')
+                            </div>
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_carrera', 'Seleccione Carrera:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control']) !!}
+                            <div id="listaCarreras">
+                                @include('shared.optionlists._careerslist')
+                            </div>
                         </div>
 
                         <div class="col-sm-3">
-                            {!! Form::label('id_materia', 'Seleccione Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_materia', $matters, $filters[2], ['class' => 'form-control', 'placeholder' => 'Todas las Materias']) !!}
+                            {!! Form::label('id_materia', 'Materia:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
+                            <div id="listaMaterias">
+                                @include('shared.optionlists._matterslist')
+                            </div>
                         </div>
 
                         <div class="col-sm-3">
@@ -104,16 +110,9 @@
             </tbody>
         </table>
     </div>
+
 @endsection
+
 @push('specific-script')
-<script type="text/javascript">
-    $("#id_carrera").change(function(){
-        url = "{{  route('general.matterscareers.matters') }}";
-        $.get(url, {"id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val()}, function(data) {
-            $('#listaMaterias').empty();
-            $('#listaMaterias').append(data['html']);
-            //inputFileLoad();
-        });
-    });
-</script>
+    @include('shared.optionlists.functions')
 @endpush

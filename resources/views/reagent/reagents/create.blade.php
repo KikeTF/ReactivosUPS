@@ -58,29 +58,29 @@
                             <div>
                                 <div class="form-group">
                                     {!! Form::label('id_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-7">
-                                        {!! Form::select('id_campus', $campuses, null, ['id' => 'id_campus', 'class' => 'form-control']) !!}
+                                    <div id="listaCampus" class="col-sm-7">
+                                        @include('shared.optionlists._campuslist')
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_carrera', 'Carrera:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-7">
-                                        {!! Form::select('id_carrera', $careers, null, ['id' => 'id_carrera', 'class' => 'form-control']) !!}
+                                    <div id="listaCarreras" class="col-sm-7">
+                                        @include('shared.optionlists._careerslist')
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" style="display: none;">
                                     {!! Form::label('id_mencion', 'Mención:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                                     <div class="col-sm-7">
-                                        {!! Form::select('id_mencion', $mentions, null, ['id' => 'id_mencion', 'class' => 'form-control']) !!}
+                                        {!! Form::select('id_mencion', ['No Disponible'], null, ['id' => 'id_mencion', 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('id_materia', 'Materia:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                                    <div class="col-sm-7">
-                                        {!! Form::select('id_materia', $matters, null, ['id' => 'id_materia', 'class' => 'form-control']) !!}
+                                    <div id="listaMaterias" class="col-sm-7">
+                                        @include('shared.optionlists._matterslist')
                                     </div>
                                 </div>
 
@@ -100,7 +100,7 @@
 
                                 <div class="form-group">
                                     {!! Form::label('id_contenido_det', 'Tema:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-                                    <div class="col-sm-9">
+                                    <div id="listaContenidos" class="col-sm-9">
                                         <select name="id_contenido_det" id="id_contenido_det" class="chosen-select form-control" data-placeholder="-- Seleccione Contenido --" required>
                                             <option value=""></option>
                                             @foreach($contents as $content)
@@ -212,5 +212,9 @@
                 inputFileLoad();
             });
         });
+        $("#id_materia").change(function(){
+            console.log(1);
+        });
     </script>
+    @include('shared.optionlists.functions')
 @endpush

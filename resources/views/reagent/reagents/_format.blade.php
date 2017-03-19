@@ -34,7 +34,9 @@
                                 $max_prop = (($max_prop >= $questionsProp->count()) ? $max_prop : $questionsProp->count());
                                 $min_prop = (($min_prop >= $questionsProp->count()) ? $min_prop : $questionsProp->count());
                             }
-                            $max_preg = (($max_preg >= $preg) ? $max_preg : $preg);
+
+                            if(isset($questionsConc) && isset($questionsProp))
+                                $max_preg = (($max_preg >= $preg) ? $max_preg : $preg);
                         ?>
                         @for ($i = 0; $i < $max_preg; $i++)
                         <tr>

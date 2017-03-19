@@ -110,6 +110,16 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
         'as'    => 'general.matterscareers.matters'
     ]);
 
+    Route::get('matterscareers/careers', [
+        'uses'  => 'MattersCareersController@getCareersList',
+        'as'    => 'general.matterscareers.careers'
+    ]);
+
+    Route::get('matterscareers/contents', [
+        'uses'  => 'MattersCareersController@getContentsList',
+        'as'    => 'general.matterscareers.contents'
+    ]);
+
     Route::resource('matterscareers','MattersCareersController');
 
     Route::get('matterscareers/{id}/destroy', [

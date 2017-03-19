@@ -7,7 +7,7 @@
     <?php
     $usetable = 1;
     $newurl = route('security.profiles.create');
-    $columnas = array("nombre", "descripcion", "tipo", "estado");
+    $columnas = array("nombre", "descripcion", "aprueba_reactivo", "aprueba_examen", "estado");
     ?>
 
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
@@ -16,7 +16,8 @@
             <tr>
                 <th style="text-align:center">Nombre</th>
                 <th style="text-align:center">Descripci&oacute;n</th>
-                <th style="text-align:center">Tipo</th>
+                <th style="text-align:center">¿Aprueba Reactivos?</th>
+                <th style="text-align:center">¿Aprueba Examen?</th>
                 <th style="text-align:center">Estado</th>
                 <th></th>
             </tr>
@@ -33,17 +34,8 @@
                 <tr>
                     <td>{{ $profile->nombre }}</td>
                     <td>{{ $profile->descripcion }}</td>
-                    <td align="center">
-                        @if($profile->tipo == 'A')
-                            Aprobador
-                        @elseif($profile->tipo == 'D')
-                            Docente
-                        @elseif($profile->tipo == 'E')
-                            Estudiante
-                        @else
-                            Otro
-                        @endif
-                    </td>
+                    <td align="center">{{ $profile->aprueba_reactivo == 'S' ? 'Si' : 'No' }}</td>
+                    <td align="center">{{ $profile->aprueba_examen == 'S' ? 'Si' : 'No' }}</td>
                     <td align="center">{{ $profile->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
                     <td>
                         @include('shared.templates._tablebuttons', $urls)

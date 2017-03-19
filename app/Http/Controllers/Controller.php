@@ -220,12 +220,18 @@ abstract class Controller extends BaseController
                 ->where('id_sede', $idSede)
                 ->first()->id;
 
+            $perfil = Profile::find($idPerfil);
+            $aprReactivo = $perfil->aprueba_reactivo;
+            $aprExamen = $perfil->aprueba_examen;
+
             Session::put('idUsuario', $idUsuario);
             Session::put('idSede', $idSede);
             Session::put('idPeriodo', $idPeriodo);
             Session::put('idPeriodoSede', $idPeriodoSede);
             Session::put('idPerfil', $idPerfil);
             Session::put('idPerfilUsuario', $idPerfilUsuario);
+            Session::put('ApruebaReactivo', $aprReactivo);
+            Session::put('ApruebaExamen', $aprExamen);
             $result = true;
         }catch (\Exception $ex){
             Log::error("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil.". Exception: ".$ex);
