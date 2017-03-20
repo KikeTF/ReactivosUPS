@@ -63,8 +63,8 @@ class ExamsController extends Controller
     {
         try {
             return view('exam.exams.create')
-                ->with('campuses', $this->getCampuses())
-                ->with('careers', $this->getCareers())
+                ->with('campusList', $this->getCampuses())
+                //->with('careers', $this->getCareers())
                 ->with('matters', $this->getMatters(0, 0, 0, 0))
                 ->with('mentions', $this->getMentions())
                 ->with('contents', $this->getContentsModel())
@@ -89,15 +89,21 @@ class ExamsController extends Controller
             ->with('reagents', $reagents);
     }
 
-    public function getReagentsByMatter($id_matter)
+    public function getReagentsByMatter($id_matter, $id_career, $id_campus)
     {
+        $id_location = (int)\Session::get('idSede');
         $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
-        $id_materia = (isset($request['id_materia']) ? (int)$request->id_carrera : 0);
-        $matterSCareers = MatterCareer::query()->where('id_materia', $id_matter)->first()->id;
-        dd($matterSCareers);
-        $reagents = Reagent::query()->where('id_estado','5')->get();
+        //$id_materia = (isset($request['id_materia']) ? (int)$request->id_carrera : 0);
+        //$matterSCareers = MatterCareer::query()->where('id_materia', $id_matter)->first()->id;
+        //dd($matterSCareers);
+        $reagents = Reagent::query()
+            ->where('id_carrera', $id_career)
+            ->where('id_campus', $id_campus)
+            ->where('id_sede', $id_location)
+            ->where('id_materia', $id_matter)
+            ->get();//->where('id_estado','5')
 
-        return view('exam.exams.create')
+        return view('exam.exams.detail')
             ->with('matters', $matters)
             ->with('reagents', $reagents);
     }
@@ -110,7 +116,7 @@ class ExamsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

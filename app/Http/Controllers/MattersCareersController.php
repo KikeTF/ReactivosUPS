@@ -270,17 +270,21 @@ class MattersCareersController extends Controller
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
             $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
 
-            if($aprReactivo == 'S')
+            if($aprExamen == 'S')
+            {
+                $careersList = Career::query();
+            }
+            elseif ($aprReactivo == 'S')
             {
                 $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
                 $id_area = ($area->count() > 0) ? $area->first()->id : 0;
 
-                if($id_carrera > 0)
-                    $careerCampus = CareerCampus::query()
+                if($id_campus > 0)
+                    $id_careerCampus = CareerCampus::query()
                         ->where('estado','A')
                         ->where('id_campus', $id_campus)->first()->id;
 
-                //$dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+                $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
             }
             else
             {
@@ -291,14 +295,18 @@ class MattersCareersController extends Controller
                     ->where('id_usuario', \Auth::id())->get();
             }
 
-            foreach ($dist as $car)
+            if(isset($dist))
             {
-                //if(!isset($ids) || (isset($ids) && !in_array($mat->id_materia, $ids)))
-                $ids[] = $car->id_carrera;
+                foreach ($dist as $car)
+                {
+                    $ids[] = $car->id_carrera;
+                }
+
+                if(isset($ids))
+                    $careersList = Career::query()->whereIn('id',$ids);
             }
 
-            if(isset($ids))
-                $careersList = Career::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
+            $careersList = $careersList->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
 
             $html = View::make('shared.optionlists._careerslist')->with('careersList', $careersList)->render();
         } catch (\Exception $ex) {

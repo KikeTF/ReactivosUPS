@@ -29,7 +29,7 @@
                         <ul class="nav nav-pills nav-stacked" style="padding: 0px; margin: 0px;">
                             @foreach($matters as $matter)
                                 <li>
-                                    <a href="{{ route('exam.exams.reagentsbymatter', $matter->id ) }}" style="padding: 0px;">{{ $matter->descripcion }}</a>
+                                    <a href="{{ route('exam.exams.reagentsbymatter', ['id_matter' => $matter->id, ' id_career' => 1, 'id_campus' => 1] ) }}" style="padding: 0px;">{{ $matter->descripcion }}</a>
                                     <hr style="margin: 5px 0 5px 0" />
                                 </li>
                             @endforeach

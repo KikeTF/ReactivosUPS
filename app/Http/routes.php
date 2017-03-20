@@ -152,7 +152,7 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
 
     Route::resource('parameters','ExamParametersController');
 
-    Route::get('exams/{id_matter}/reagentsbymatter', [
+    Route::get('exams/{id_matter}/{id_career}/{id_campus}/reagentsbymatter', [
         'uses'  => 'ExamsController@getReagentsByMatter',
         'as'    => 'exam.exams.reagentsbymatter'
     ]);

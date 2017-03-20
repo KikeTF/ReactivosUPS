@@ -8,23 +8,54 @@
     {!! Form::open(['id' => 'formulario',
             'class' => 'form-horizontal',
             'role' => 'form',
-            'route' =>
-            'exam.exams.store',
-            'method' => 'POST',
-            'files' => true]) !!}
+            'route' => 'exam.exams.store',
+            'method' => 'POST']) !!}
+
+        <?php
+        $btnsave = 1;
+        $btnrefresh = route('exam.exams.create');
+        $btnclose = route('exam.exams.index');
+        ?>
+        @include('shared.templates._formbuttons')
 
         <div>
             <div class="form-group">
                 {!! Form::label('id_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-                <div class="col-sm-7">
-                    {!! Form::select('id_campus', $campuses, null, ['id' => 'id_campus', 'class' => 'form-control']) !!}
+                <div id="listaCampus" class="col-sm-7">
+                    @include("shared.optionlists._campuslist")
                 </div>
             </div>
 
             <div class="form-group">
                 {!! Form::label('id_carrera', 'Carrera:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                <div id="listaCarreras" class="col-sm-7">
+                    @include("shared.optionlists._careerslist")
+                </div>
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('descripcion', 'Descripcion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                 <div class="col-sm-7">
-                    {!! Form::select('id_carrera', $careers, null, ['id' => 'id_carrera', 'class' => 'form-control']) !!}
+                    {!! Form::text('descripcion', null, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('fecha_activacion', 'Fecha Activacion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                <div class="col-sm-7">
+                    {!! Form::date('fecha_activacion', null, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('es_prueba', '¿Es de prueba?', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                <div class="col-sm-7">
+                    <div class="checkbox">
+                        <label>
+                            {!! Form::checkbox('es_prueba', 'S', true, ['class' => 'ace']) !!}
+                            <span class="lbl"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,17 +66,6 @@
 
 @push('specific-script')
 <script type="text/javascript" src="{{ asset('scripts/exam/exams/common.js') }}"></script>
-<script type="text/javascript">
-    jQuery(function($) {
-        //$('.modal.aside').ace_aside();
+@include("shared.optionlists.functions")
 
-        //$('#aside-inside-modal').addClass('aside').ace_aside({container: '#my-modal > .modal-dialog'});
-
-        //$(document).one('ajaxloadstart.page', function(e) {
-        //in ajax mode, remove before leaving page
-        //    $('.modal.aside').remove();
-        //    $(window).off('.aside')
-        //});
-    })
-</script>
 @endpush
