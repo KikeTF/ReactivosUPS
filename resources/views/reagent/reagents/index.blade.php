@@ -115,4 +115,10 @@
 
 @push('specific-script')
     @include('shared.optionlists.functions')
+    <script type="text/javascript">
+        $( window ).load(function() {
+            getCareersByCampus();
+            getMattersByCareer();
+        });
+    </script>
 @endpush

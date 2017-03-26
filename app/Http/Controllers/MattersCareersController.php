@@ -214,6 +214,7 @@ class MattersCareersController extends Controller
 
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
             $id_careerCampus = 0;
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
             $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
@@ -250,7 +251,10 @@ class MattersCareersController extends Controller
                 $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
             }
 
-            $html = View::make('shared.optionlists._matterslist')->with('mattersList', $mattersList)->render();
+            $html = View::make('shared.optionlists._matterslist')
+                ->with('mattersList', $mattersList)
+                ->with('matterFilter', $id_materia)
+                ->render();
         } catch (\Exception $ex) {
             Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
             $html = View::make('shared.optionlists._matterslist')->render();
@@ -308,7 +312,10 @@ class MattersCareersController extends Controller
 
             $careersList = $careersList->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
 
-            $html = View::make('shared.optionlists._careerslist')->with('careersList', $careersList)->render();
+            $html = View::make('shared.optionlists._careerslist')
+                ->with('careersList', $careersList)
+                ->with('careerFilter', $id_carrera)
+                ->render();
         } catch (\Exception $ex) {
             Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
             $html = View::make('shared.optionlists._careerslist')->render();

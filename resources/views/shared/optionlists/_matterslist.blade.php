@@ -1,5 +1,5 @@
 @if(isset($mattersList))
-    {!! Form::select('id_materia', $mattersList, (isset($filters) ? $filters[2] : 0),
+    {!! Form::select('id_materia', $mattersList, $matterFilter,
         ['id' => 'id_materia', 'class' => 'form-control', 'placeholder' => '-- Seleccione Materia --', 'onchange' => 'getContentsByMatter()'])
     !!}
 @else

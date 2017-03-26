@@ -93,6 +93,7 @@
                             <div class="col-sm-8">{{ $reagent->planteamiento }}</div>
                         </div>
 
+                        @if($reagent->format->opciones_pregunta == 'S')
                         <div class="form-group">
                             <div class="col-sm-12"><strong>Opciones de Pregunta:</strong></div>
                         </div>
@@ -118,6 +119,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        @endif
 
                         <div class="form-group">
                             <div class="col-sm-12"><strong>Opciones de Respuesta:</strong></div>

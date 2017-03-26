@@ -1,5 +1,5 @@
 @if(isset($careersList))
-    {!! Form::select('id_carrera', $careersList, (isset($filters) ? $filters[1] : 0),
+    {!! Form::select('id_carrera', $careersList, $careerFilter,
         ['id' => 'id_carrera', 'class' => 'form-control', 'placeholder' => '-- Seleccione Carrera --', 'onchange' => 'getMattersByCareer()'])
     !!}
 @else
