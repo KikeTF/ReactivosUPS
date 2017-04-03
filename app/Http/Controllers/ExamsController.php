@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\ExamHeader;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
@@ -77,35 +78,73 @@ class ExamsController extends Controller
         }
     }
 
-    public function detail(Request $request)
+    public function detail(Request $request, $id, $id_matter)
     {
-        $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
-        $id_materia = (isset($request['id_materia']) ? (int)$request->id_carrera : 0);
+        $exam = ExamHeader::find($id);
+        //$matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
+        //$id_materia = (isset($request['id_materia']) ? (int)$request->id_carrera : 0);
 
-        $reagents = Reagent::query()->where('id_estado','5')->get();
+        $reagents = Reagent::query()
+            //->where('id_estado','5')
+            ->where('id_sede', $exam->id_sede)
+            ->where('id_periodo', $exam->id_periodo)
+            ->where('id_campus', $exam->id_campus)
+            ->where('id_carrera', $exam->id_carrera);
+        
+        foreach ($reagents->get() as $mat)
+        {
+            $ids[] = $mat->id_materia;
+        }
+
+        if(isset($ids))
+        {
+            array_unique($ids);
+            $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->get();
+        }
+        
+        if($id_matter > 0)
+        {
+            $reagents = $reagents->where('id_materia', $id_matter)->get();
+            $exam->matter = Matter::find($id_matter)->descripcion;
+        }
+
+
 
         return view('exam.exams.detail')
-            ->with('matters', $matters)
-            ->with('reagents', $reagents);
+            ->with('matters', $mattersList)
+            ->with('reagents', $reagents)
+            ->with('exam', $exam);
     }
 
-    public function getReagentsByMatter($id_matter, $id_career, $id_campus)
+    public function getReagentsByMatter($id_exam, $id_matter)
     {
-        $id_location = (int)\Session::get('idSede');
-        $matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
-        //$id_materia = (isset($request['id_materia']) ? (int)$request->id_carrera : 0);
-        //$matterSCareers = MatterCareer::query()->where('id_materia', $id_matter)->first()->id;
-        //dd($matterSCareers);
+        $exam = ExamHeader::find($id_exam);
+
         $reagents = Reagent::query()
-            ->where('id_carrera', $id_career)
-            ->where('id_campus', $id_campus)
-            ->where('id_sede', $id_location)
+            //->where('id_estado','5')
+            ->where('id_sede', $exam->id_sede)
+            ->where('id_periodo', $exam->id_periodo)
+            ->where('id_campus', $exam->id_campus)
+            ->where('id_carrera', $exam->id_carrera)
             ->where('id_materia', $id_matter)
-            ->get();//->where('id_estado','5')
+            ->get();
+
+        foreach ($reagents as $mat)
+        {
+            $ids[] = $mat->id_materia;
+        }
+
+        if(isset($ids))
+        {
+            array_unique($ids);
+            $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->get();
+        }
 
         return view('exam.exams.detail')
-            ->with('matters', $matters)
-            ->with('reagents', $reagents);
+            ->with('matters', $mattersList)
+            ->with('reagents', $reagents)
+            ->with('exam', $exam);
+
     }
     
     /**
@@ -116,7 +155,32 @@ class ExamsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        try
+        {
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_careerCampus = $this->getCareersCampuses()->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
+
+            $exam = new ExamHeader($request->all());
+            $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
+            $exam->estado = 'A';
+            $exam->id_sede = (int)\Session::get('idSede');
+            $exam->id_periodo = (int)\Session::get('idPeriodo');
+            $exam->id_periodo_sede = (int)\Session::get('idPeriodoSede');
+            $exam->id_carrera_campus = $id_careerCampus;
+            $exam->creado_por = \Auth::id();
+            $exam->fecha_creacion = date('Y-m-d h:i:s');
+
+            $exam->save();
+            return redirect()->route('exam.exams.detail',['id' => $exam->id, 'id_matter' => 0]);
+        }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ExamsController][store] Request=". implode(", ", $request->all()) ."; Exception: ".$ex);
+            return redirect()->route('exam.exams.create');
+        }
+
     }
 
     /**

@@ -10,7 +10,7 @@ class ExamHeader extends Model
     public $timestamps = false;
 
     protected $fillable =["id_periodo_sede", "id_mencion", "descripcion", "cantidad_reactivos", "fecha_activacion",
-        "es_prueba", "estado"];
+        "es_prueba", "estado", "id_sede", "id_periodo", "id_campus", "id_carrera"];
 
     public function periodLocation(){
         return $this->belongsTo('ReactivosUPS\PeriodLocation');

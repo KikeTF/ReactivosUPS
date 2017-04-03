@@ -52,11 +52,18 @@
                 <div class="col-sm-7">
                     <div class="checkbox">
                         <label>
-                            {!! Form::checkbox('es_prueba', 'S', true, ['class' => 'ace']) !!}
+                            {!! Form::checkbox('es_prueba', 'N', false, ['class' => 'ace']) !!}
                             <span class="lbl"></span>
                         </label>
                     </div>
                 </div>
+            </div>
+
+            <div id="actions-bottons" class="pull-right">
+                <button class="btn btn-success btn-next">
+                    Siguiente
+                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                </button>
             </div>
         </div>
 

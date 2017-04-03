@@ -13,6 +13,16 @@
         ?>
         @include('shared.templates._formbuttons')
 
+        <div class="page-header">
+            <h1>
+                @if(isset($exam->matter))
+                    {{ $exam->matter }}
+                @else
+                    Materia
+                @endif
+            </h1>
+        </div>
+
         <div id="right-menu" class="modal aside" data-body-scroll="false" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="false" tabindex="-1">
             <div class="modal-dialog" style="width: 300px">
                 <div class="modal-content">
@@ -29,7 +39,7 @@
                         <ul class="nav nav-pills nav-stacked" style="padding: 0px; margin: 0px;">
                             @foreach($matters as $matter)
                                 <li>
-                                    <a href="{{ route('exam.exams.reagentsbymatter', ['id_matter' => $matter->id, ' id_career' => 1, 'id_campus' => 1] ) }}" style="padding: 0px;">{{ $matter->descripcion }}</a>
+                                    <a href="{{ route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => $matter->id] ) }}" style="padding: 0px;">{{ $matter->descripcion }}</a>
                                     <hr style="margin: 5px 0 5px 0" />
                                 </li>
                             @endforeach

@@ -145,14 +145,14 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
         'as'    => 'exam.parameters.history'
     ]);
 
-    Route::get('exams/detail', [
+    Route::get('exams/{id}/{id_matter}/detail', [
         'uses'  => 'ExamsController@detail',
         'as'    => 'exam.exams.detail'
     ]);
 
     Route::resource('parameters','ExamParametersController');
 
-    Route::get('exams/{id_matter}/{id_career}/{id_campus}/reagentsbymatter', [
+    Route::get('exams/{id_exam}/{id_matter}/reagentsbymatter', [
         'uses'  => 'ExamsController@getReagentsByMatter',
         'as'    => 'exam.exams.reagentsbymatter'
     ]);
