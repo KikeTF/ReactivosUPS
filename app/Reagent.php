@@ -55,6 +55,14 @@ class Reagent extends Model
         return $this->belongsTo('ReactivosUPS\ReagentState', 'id_estado');
     }
 
+    public function user(){
+        return $this->belongsTo('ReactivosUPS\User', 'creado_por');
+    }
+
+    public function period(){
+        return $this->belongsTo('ReactivosUPS\Period', 'id_periodo');
+    }
+
     public function scopeFilter($query, $id_distributivo){
         return $query
             ->where('id_distributivo', $id_distributivo);

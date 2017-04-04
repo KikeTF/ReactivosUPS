@@ -21,7 +21,7 @@ class ExamHeader extends Model
     }
 
     public function examsDetails(){
-        return $this->hasMany('ReactivosUPS\ExamDetail');
+        return $this->hasMany('ReactivosUPS\ExamDetail', 'id_examen_cab');
     }
 
     public function answersHeaders(){

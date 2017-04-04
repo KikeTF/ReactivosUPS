@@ -5,18 +5,25 @@
 
 @section('contenido')
 
-    <form class="form-horizontal" role="form">
+    {!! Form::open(['id' => 'formulario',
+            'class' => 'form-horizontal',
+            'role' => 'form',
+            'route' => ['exam.exams.update', $exam->id],
+            'method' => 'PUT']) !!}
         <?php
         $btnsave = 1;
         $btnrefresh = route('exam.exams.create');
         $btnclose = route('exam.exams.index');
         ?>
-        @include('shared.templates._formbuttons')
+
+        <div class="pull-left" style="margin-right: 20px;">
+            @include('shared.templates._formbuttons')
+        </div>
 
         <div class="page-header">
             <h1>
-                @if(isset($exam->matter))
-                    {{ $exam->matter }}
+                @if(isset($exam->materia))
+                    {{ $exam->materia }}
                 @else
                     Materia
                 @endif
@@ -53,44 +60,54 @@
             </div><!-- /.modal-dialog -->
         </div>
 
+        {!! Form::hidden('id_materia', $exam->id_materia) !!}
+
         <div>
             @foreach($reagents as $reagent)
-                <?php
-                $mattercareer = \ReactivosUPS\MatterCareer::find($reagent->distributive->id_materia_carrera)
-                ?>
-                <div class="well">
-                    <div class="form-group">
-                        <div class="col-sm-1">
-                            <div class="checkbox">
+                <div class="well" style="padding-bottom: 0;">
+                    <div class="form-group" style="margin-right: 15px;">
+                        <div class="col-sm-1 col-xs-2">
+                            <div class="checkbox" style="padding: 0;">
                                 <label class="block">
-                                    {!! Form::checkbox('estado', 'A', false, ['class' => 'ace input-lg']) !!}
+                                    {!! Form::checkbox('id_reactivo[]', $reagent->id, false, ['class' => 'ace input-lg']) !!}
                                     <span class="lbl bigger-120"></span>
                                 </label>
                             </div>
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-11 col-xs-10">
                             <div class="row">
                                 <div class="pull-left">
-                                    <strong><span class="green smaller lighter">{{ $mattercareer->matter->descripcion }}</span></strong>
+                                    <h5><strong><span class="blue smaller lighter">Cap&iacute;tulo {{ $reagent->contentDetail->capitulo . ": " . $reagent->contentDetail->tema }}</span></strong></h5>
                                 </div>
                                 <div class="pull-right">
-                                    Formato: <strong><span class="green smaller lighter">{{ $reagent->format->nombre }}</span></strong>
+                                    <a href="#my-modal-{{ $reagent->id }}" class="blue" data-toggle="modal">
+                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row" style="min-height: 40px; margin-bottom: 10px;">
+                                {{ $reagent->planteamiento }}
+                            </div>
+                            <div class="row">
+                                <div class="pull-left">
+                                    <strong>Creado por: <span class="grey smaller lighter">{{ $reagent->user->FullName }}</span></strong>
+                                </div>
+                                <div class="pull-right">
+                                    <strong>
+                                        Dificultad:
+                                        <span class="grey smaller lighter">
+                                            {{ ( ( $reagent->dificultad == 'B' ) ? 'Baja' : ( ( $reagent->dificultad == 'M' ) ? 'Media' : 'Alta' ) ) }}
+                                        </span>
+                                    </strong>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="pull-left">
-                                    Contenido: <strong><span class="green smaller lighter">{{ $reagent->contentDetail->capitulo . " " . $reagent->contentDetail->tema }}</span></strong>
+                                    <strong>Periodo: <span class="grey smaller lighter">{{ $reagent->period->descripcion }}</span></strong>
                                 </div>
-                            </div>
-                            <div class="row">
-                                {{ $reagent->planteamiento }}
-                            </div>
-                        </div>
-                        <div class="col-sm-1">
-                            <div class="pull-right">
-                                <a href="#my-modal-{{ $reagent->id }}" class="blue" data-toggle="modal">
-                                    <i class="ace-icon fa fa-eye bigger-130"></i>
-                                </a>
+                                <div class="pull-right">
+                                    <strong>Formato: <span class="grey smaller lighter">{{ $reagent->format->nombre }}</span></strong>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -112,7 +129,7 @@
         </div>
 
 
-    </form>
+    {!! Form::close() !!}
 
 @endsection
 

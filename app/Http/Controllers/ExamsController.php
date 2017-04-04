@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
@@ -81,8 +82,6 @@ class ExamsController extends Controller
     public function detail(Request $request, $id, $id_matter)
     {
         $exam = ExamHeader::find($id);
-        //$matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->get();
-        //$id_materia = (isset($request['id_materia']) ? (int)$request->id_carrera : 0);
 
         $reagents = Reagent::query()
             //->where('id_estado','5')
@@ -105,10 +104,9 @@ class ExamsController extends Controller
         if($id_matter > 0)
         {
             $reagents = $reagents->where('id_materia', $id_matter)->get();
-            $exam->matter = Matter::find($id_matter)->descripcion;
+            $exam->id_materia = $id_matter;
+            $exam->materia = Matter::find($id_matter)->descripcion;
         }
-
-
 
         return view('exam.exams.detail')
             ->with('matters', $mattersList)
@@ -116,37 +114,6 @@ class ExamsController extends Controller
             ->with('exam', $exam);
     }
 
-    public function getReagentsByMatter($id_exam, $id_matter)
-    {
-        $exam = ExamHeader::find($id_exam);
-
-        $reagents = Reagent::query()
-            //->where('id_estado','5')
-            ->where('id_sede', $exam->id_sede)
-            ->where('id_periodo', $exam->id_periodo)
-            ->where('id_campus', $exam->id_campus)
-            ->where('id_carrera', $exam->id_carrera)
-            ->where('id_materia', $id_matter)
-            ->get();
-
-        foreach ($reagents as $mat)
-        {
-            $ids[] = $mat->id_materia;
-        }
-
-        if(isset($ids))
-        {
-            array_unique($ids);
-            $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->get();
-        }
-
-        return view('exam.exams.detail')
-            ->with('matters', $mattersList)
-            ->with('reagents', $reagents)
-            ->with('exam', $exam);
-
-    }
-    
     /**
      * Store a newly created resource in storage.
      *
@@ -214,7 +181,44 @@ class ExamsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+
+        try
+        {
+            $exam = ExamHeader::find($id);
+
+            $examDetails = array();
+            for ($i = 0; $i < sizeof($request->id_reactivo); $i++)
+            {
+                $detail['id_examen_cab'] = $id;
+                $detail['id_reactivo'] = $request->id_reactivo[$i];
+                $detail['estado'] = 'A';
+                $examDet = new ExamDetail($detail);
+                $examDet->creado_por =  \Auth::id();
+                $examDet->fecha_creacion =  date('Y-m-d h:i:s');
+                $examDetails[] = $examDet;
+            }
+
+            \DB::beginTransaction();
+
+            $exam->examsDetails()->saveMany($examDetails);
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }
+        catch (\Exception $ex)
+        {
+            //failed logic here
+            \DB::rollback();
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ExamsController][update] id=" . $id . "; Exception: " . $ex);
+            return redirect()->route('exam.exams.detail', ['id' => $id, 'id_matter' => 0]);
+        }
+        finally
+        {
+            \DB::commit();
+        }
+
+        return redirect()->route('exam.exams.detail', ['id' => $id, 'id_matter' => $id_materia]);
     }
 
     /**

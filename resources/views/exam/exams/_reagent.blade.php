@@ -1,6 +1,6 @@
 <div class="form-group">
     <div class="col-sm-4"><strong>Materia:</strong></div>
-    <div class="col-sm-6">{{ $mattercareer->matter->descripcion }}</div>
+    <div class="col-sm-6">{{ $exam->matter }}</div>
 </div>
 
 <div class="form-group">

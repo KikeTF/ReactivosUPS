@@ -18,4 +18,8 @@ class Period extends Model
     public function periodsLocations(){
         return $this->hasMany('ReactivosUPS\PeriodLocation');
     }
+
+    public function reagents(){
+        return $this->hasMany('ReactivosUPS\Reagent', 'id_periodo');
+    }
 }
