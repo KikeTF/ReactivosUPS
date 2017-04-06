@@ -185,6 +185,21 @@ abstract class Controller extends BaseController
         return $parameters;
     }
 
+    public function getMatterParameters($id_materia, $id_carrera, $id_campus)
+    {
+        $id_careerCampus = $this->getCareersCampuses()
+            ->where('id_carrera', $id_carrera)
+            ->where('id_campus', $id_campus)
+            ->first()->id;
+
+        $matterCareer = $this->getMattersCareers()
+            ->where('id_materia', $id_materia)
+            ->where('id_carrera_campus', $id_careerCampus)
+            ->first();
+
+        return $matterCareer;
+    }
+
     public function isSessionExpire(){
         $result = false;
         try{

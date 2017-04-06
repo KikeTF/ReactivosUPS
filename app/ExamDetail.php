@@ -12,11 +12,11 @@ class ExamDetail extends Model
     protected $fillable =["id_examen_cab", "id_reactivo", "estado"];
 
     public function examHeader(){
-        return $this->belongsTo('ReactivosUPS\ExamHeader');
+        return $this->belongsTo('ReactivosUPS\ExamHeader', 'id_examen_cab');
     }
 
     public function reagent(){
-        return $this->belongsTo('ReactivosUPS\Reagent');
+        return $this->belongsTo('ReactivosUPS\Reagent', 'id_reactivo');
     }
 
     public function answersDetails(){

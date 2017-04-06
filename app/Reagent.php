@@ -48,7 +48,7 @@ class Reagent extends Model
     }
 
     public function examsDetails(){
-        return $this->hasMany('ReactivosUPS\ExamDetail');
+        return $this->hasMany('ReactivosUPS\ExamDetail', 'id_reactivo');
     }
 
     public function state(){

@@ -22,8 +22,8 @@
 
         <div class="page-header">
             <h1>
-                @if(isset($exam->materia))
-                    {{ $exam->materia }}
+                @if(sizeof($matterParameters) > 0)
+                    {{ $matterParameters->matter->descripcion.' (/'.$matterParameters->nro_reactivos_exam.')' }}
                 @else
                     Materia
                 @endif
@@ -60,7 +60,7 @@
             </div><!-- /.modal-dialog -->
         </div>
 
-        {!! Form::hidden('id_materia', $exam->id_materia) !!}
+        {!! Form::hidden('id_materia', $matterParameters->id_materia) !!}
 
         <div>
             @foreach($reagents as $reagent)
@@ -69,7 +69,16 @@
                         <div class="col-sm-1 col-xs-2">
                             <div class="checkbox" style="padding: 0;">
                                 <label class="block">
-                                    {!! Form::checkbox('id_reactivo[]', $reagent->id, false, ['class' => 'ace input-lg']) !!}
+                                    <?php $isChedked = 0; ?>
+                                    @foreach($exam->examsDetails as $det)
+                                        @if($reagent->id == $det->id_reactivo && $det->estado == 'A')
+                                            <?php $isChedked = 1; ?>
+                                            {!! Form::checkbox('id_reactivo[]', $reagent->id, true, ['class' => 'ace input-lg']) !!}
+                                        @endif
+                                    @endforeach
+                                    @if($isChedked == 0)
+                                        {!! Form::checkbox('id_reactivo[]', $reagent->id, false, ['class' => 'ace input-lg']) !!}
+                                    @endif
                                     <span class="lbl bigger-120"></span>
                                 </label>
                             </div>
