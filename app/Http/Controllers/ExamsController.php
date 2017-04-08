@@ -74,25 +74,15 @@ class ExamsController extends Controller
             ->where('id_sede', $exam->id_sede)
             ->where('id_periodo', $exam->id_periodo)
             ->where('id_campus', $exam->id_campus)
-            ->where('id_carrera', $exam->id_carrera);
+            ->where('id_carrera', $exam->id_carrera)
+            ->where('id_materia', $id_materia)->get();
         
-        foreach($reagents->get() as $reg)
-        {
-            $ids[] = $reg->id_materia;
-        }
-
-        if(isset($ids))
-        {
-            array_unique($ids);
-            $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->get();
-        }
-
-        $reagents = $reagents->where('id_materia', $id_materia)->get();
+        $matterParameters = $this->getMatterParameters(0, $exam->id_carrera, $exam->id_campus);
         $cantidadReactivos = 0;
-        $matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
 
         if($id_materia > 0)
         {
+            $selectedMatter = $matterParameters->where('id_materia', $id_materia)->first();
             foreach($exam->examsDetails as $det)
             {
                 $examDet = ExamDetail::find($det->id);
@@ -100,14 +90,17 @@ class ExamsController extends Controller
                     $cantidadReactivos++;
             }
             //$matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
-            $matterParameters->cantidad_reactivos = $cantidadReactivos;
+            $selectedMatter->cantidad_reactivos = $cantidadReactivos;
         }
 
-        if(!isset($matterParameters))
-            $matterParameters = array();
+        if(!isset($selectedMatter))
+        {
+            $selectedMatter = new MatterCareer();
+            $selectedMatter->id_materia = 0;
+        }
 
         return view('exam.exams.detail')
-            ->with('mattersList', $mattersList)
+            ->with('selectedMatter', $selectedMatter)
             ->with('reagents', $reagents)
             ->with('exam', $exam)
             ->with('matterParameters', $matterParameters);

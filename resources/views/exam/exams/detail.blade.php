@@ -12,7 +12,7 @@
             'method' => 'PUT']) !!}
 
     <?php
-    if(sizeof($matterParameters) == 1)
+    if($selectedMatter->id_materia > 0)
     {
         $btnsave = 1;
         $btnlist = route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => 0] );
@@ -27,19 +27,19 @@
 
     <div class="page-header">
         <h1>
-            @if(sizeof($matterParameters) == 1)
-                {{ $matterParameters->matter->descripcion.' ('.$matterParameters->cantidad_reactivos.'/'.$matterParameters->nro_reactivos_exam.')' }}
+            @if($selectedMatter->id_materia > 0)
+                {{ $selectedMatter->matter->descripcion.' ('.$selectedMatter->cantidad_reactivos.'/'.$selectedMatter->nro_reactivos_exam.')' }}
             @else
                 Materia
             @endif
         </h1>
     </div>
 
-    @if(sizeof($matterParameters) > 1)
+    @if($selectedMatter->id_materia == 0)
         <div style="columns: 3;">
             @include('exam.exams._matters')
         </div>
-    @elseif(sizeof($matterParameters) == 1)
+    @else
         <div id="right-menu" class="modal aside" data-body-scroll="false" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="false" tabindex="-1">
             <div class="modal-dialog" style="width: 300px">
                 <div class="modal-content">
@@ -63,7 +63,7 @@
             </div><!-- /.modal-dialog -->
         </div>
 
-        {!! Form::hidden('id_materia', ((sizeof($matterParameters) == 1) ? (int)$matterParameters->id_materia : 0)) !!}
+        {!! Form::hidden('id_materia', $selectedMatter->id_materia) !!}
 
         @foreach($reagents as $reagent)
             <div class="well" style="padding-bottom: 0;">
