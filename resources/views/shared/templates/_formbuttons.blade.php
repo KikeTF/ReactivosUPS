@@ -1,4 +1,10 @@
 <div class="form-group no-margin">
+    @if(isset($btnlist))
+        <button title="Editar" onclick="location.href='{{ $btnlist }}'; return false;" class="btn btn-white btn-primary btn-bold">
+            <i class='ace-icon fa fa-list bigger-110 blue' style="margin: 0"></i>
+        </button>
+    @endif
+
     @if(isset($btnsave))
         <button title="Guardar" type="submit" class="btn btn-white btn-primary btn-bold">
             <i class='ace-icon fa fa-save bigger-110 blue' style="margin: 0"></i>

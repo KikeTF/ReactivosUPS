@@ -190,12 +190,15 @@ abstract class Controller extends BaseController
         $id_careerCampus = $this->getCareersCampuses()
             ->where('id_carrera', $id_carrera)
             ->where('id_campus', $id_campus)
+            ->where('estado', 'A')
             ->first()->id;
 
         $matterCareer = $this->getMattersCareers()
-            ->where('id_materia', $id_materia)
             ->where('id_carrera_campus', $id_careerCampus)
-            ->first();
+            ->where('estado', 'A');
+
+        if($id_materia > 0)
+            $matterCareer = $matterCareer->where('id_materia', $id_materia)->first();
 
         return $matterCareer;
     }

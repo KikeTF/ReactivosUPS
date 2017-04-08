@@ -30,25 +30,10 @@ class ExamsController extends Controller
 
             $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
 
-            if ($id_campus > 0 && $id_carrera > 0 && $id_materia > 0) {
-                $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
-                if ($id_estado == 0)
-                    $reagents = Reagent::filter($id_distributivo)->where('id_estado', '!=', 7);
-                else
-                    $reagents = Reagent::filter2($id_distributivo, $id_estado)->where('id_estado', '!=', 7);
-            } else
-                $reagents = Reagent::query()->where('id_estado', '!=', 7);
-
-            $reagents = $reagents->orderBy('id', 'desc')->get();
+            $exams = ExamHeader::query()->where('estado', '!=', 'E')->get();
 
             return view('exam.exams.index')
-                ->with('reagents', $reagents)
-                ->with('campuses', $this->getCampuses())
-                ->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters(0, 0, 0, 0))
-                ->with('states', $this->getReagentsStates())
-                ->with('statesLabels', $this->getReagentsStatesLabel())
-                ->with('filters', $filters);
+                ->with('exams', $exams);
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ExamsController][index] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
@@ -102,18 +87,27 @@ class ExamsController extends Controller
             $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->get();
         }
 
+        $reagents = $reagents->where('id_materia', $id_materia)->get();
+        $cantidadReactivos = 0;
+        $matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
+
         if($id_materia > 0)
         {
-            $reagents = $reagents->where('id_materia', $id_materia)->get();
-            $matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
-            //dd($exam->examsDetails()->reagent());
+            foreach($exam->examsDetails as $det)
+            {
+                $examDet = ExamDetail::find($det->id);
+                if($examDet->reagent->id_materia == $id_materia)
+                    $cantidadReactivos++;
+            }
+            //$matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
+            $matterParameters->cantidad_reactivos = $cantidadReactivos;
         }
 
         if(!isset($matterParameters))
             $matterParameters = array();
 
         return view('exam.exams.detail')
-            ->with('matters', $mattersList)
+            ->with('mattersList', $mattersList)
             ->with('reagents', $reagents)
             ->with('exam', $exam)
             ->with('matterParameters', $matterParameters);

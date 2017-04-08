@@ -8,10 +8,11 @@
     $usetable = 1;
     //$isReagent = 1;
     $newurl = route('exam.exams.create');
-    $columnas = array("id",  "planteamiento", "estado"); // "capitulo", "tema",
+    $columnas = array("id", "descripcion", "fecha_activacion", "es_prueba", "estado"); // "capitulo", "tema",
     ?>
 
-    {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'reagent.reagents.index','method' => 'GET']) !!}
+    {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'exam.exams.index','method' => 'GET']) !!}
+{{--
 
     <div class="widget-box">
         <div class="widget-header">
@@ -59,6 +60,7 @@
             </div>
         </div>
     </div>
+--}}
 
     {!! Form::close() !!}
 
@@ -67,40 +69,35 @@
             <thead>
             <tr>
                 <th style="text-align: center">C&oacute;digo</th>
-                <th style="text-align: center">Planteamiento</th>
+                <th style="text-align: center">Descripci&oacute;n</th>
+                <th style="text-align: center">Fecha Activaci&oacute;n</th>
+                <th style="text-align: center">¿Es de Prueba?</th>
                 <th style="text-align: center">Estado</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            @if($filters[0] > 0)
-                @foreach($reagents as $reagent)
+            {{--@if($filters[0] > 0)--}}
+                @foreach($exams as $exam)
                     <?php
-                    //$showurl = route('reagent.reagents.show', $reagent->id);
-                    //$editurl = route('reagent.reagents.edit', $reagent->id);
-                    //$destroyurl = route('reagent.reagents.destroy', $reagent->id);
-                    if( in_array($reagent->id_estado, array(1, 4)) )
-                        $urls = array(
-                                'showurl' => route('reagent.reagents.show', $reagent->id),
-                                'editurl' => route('reagent.reagents.edit', $reagent->id),
-                                'destroyurl' => route('reagent.reagents.destroy', $reagent->id)
-                        );
-                    else
-                        $urls = array(
-                                'showurl' => route('reagent.reagents.show', $reagent->id)
-                        );
-
+                    $urls = array(
+                        'showurl' => route('exam.exams.detail', [$exam->id, 0]),
+                        'editurl' => route('exam.exams.edit', $exam->id),
+                        'destroyurl' => route('exam.exams.destroy', $exam->id)
+                    );
                     ?>
                     <tr>
-                        <td align="center">{{ $reagent->id }}</td>
-                        <td>{{ $reagent->planteamiento }}</td>
-                        <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
+                        <td align="center">{{ $exam->id }}</td>
+                        <td>{{ $exam->descripcion }}</td>
+                        <td>{{ $exam->fecha_activacion }}</td>
+                        <td>{{ $exam->es_prueba }}</td>
+                        <td>{{ $exam->estado }}</td>
                         <td>
                             @include('shared.templates._tablebuttons', $urls)
                         </td>
                     </tr>
                 @endforeach
-            @endif
+            {{--@endif--}}
             </tbody>
         </table>
     </div>
