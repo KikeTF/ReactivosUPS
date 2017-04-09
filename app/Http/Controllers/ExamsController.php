@@ -50,60 +50,65 @@ class ExamsController extends Controller
     {
         try {
             return view('exam.exams.create')
-                ->with('campusList', $this->getCampuses())
-                //->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters(0, 0, 0, 0))
-                ->with('mentions', $this->getMentions())
-                ->with('contents', $this->getContentsModel())
-                ->with('fields', $this->getFields())
-                ->with('formats', $this->getFormats());
+                ->with('campusList', $this->getCampuses());
+
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsController][create] Exception: " . $ex);
-            return redirect()->route('reagent.reagents.index');
+            Log::error("[ExamsController][create] Exception: " . $ex);
+            return redirect()->route('exam.exams.index');
         }
     }
 
     public function detail(Request $request, $id, $id_matter)
     {
-        $id_materia = (int)$id_matter;
-        $exam = ExamHeader::find($id);
-
-        $reagents = Reagent::query()
-            //->where('id_estado','5')
-            ->where('id_sede', $exam->id_sede)
-            ->where('id_periodo', $exam->id_periodo)
-            ->where('id_campus', $exam->id_campus)
-            ->where('id_carrera', $exam->id_carrera)
-            ->where('id_materia', $id_materia)->get();
-        
-        $matterParameters = $this->getMatterParameters(0, $exam->id_carrera, $exam->id_campus);
-        $cantidadReactivos = 0;
-
-        if($id_materia > 0)
+        try
         {
-            $selectedMatter = $matterParameters->where('id_materia', $id_materia)->first();
-            foreach($exam->examsDetails as $det)
+            $id_materia = (int)$id_matter;
+            $exam = ExamHeader::find($id);
+
+            $reagents = Reagent::query()
+                //->where('id_estado','5')
+                ->where('id_sede', $exam->id_sede)
+                ->where('id_periodo', $exam->id_periodo)
+                ->where('id_campus', $exam->id_campus)
+                ->where('id_carrera', $exam->id_carrera)
+                ->where('id_materia', $id_materia)->get();
+
+            $matterParameters = $this->getMatterParameters(0, $exam->id_carrera, $exam->id_campus);
+            $cantidadReactivos = 0;
+
+            if($id_materia > 0)
             {
-                $examDet = ExamDetail::find($det->id);
-                if($examDet->reagent->id_materia == $id_materia)
-                    $cantidadReactivos++;
+                $selectedMatter = $matterParameters->where('id_materia', $id_materia)->first();
+                foreach($exam->examsDetails as $det)
+                {
+                    $examDet = ExamDetail::find($det->id);
+                    if($examDet->reagent->id_materia == $id_materia)
+                        $cantidadReactivos++;
+                }
+                //$matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
+                $selectedMatter->cantidad_reactivos = $cantidadReactivos;
             }
-            //$matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
-            $selectedMatter->cantidad_reactivos = $cantidadReactivos;
-        }
 
-        if(!isset($selectedMatter))
+            if(!isset($selectedMatter))
+            {
+                $selectedMatter = new MatterCareer();
+                $selectedMatter->id_materia = 0;
+            }
+
+            return view('exam.exams.detail')
+                ->with('selectedMatter', $selectedMatter)
+                ->with('reagents', $reagents)
+                ->with('exam', $exam)
+                ->with('matterParameters', $matterParameters);
+
+        }
+        catch (\Exception $ex)
         {
-            $selectedMatter = new MatterCareer();
-            $selectedMatter->id_materia = 0;
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ReagentsController][create] Exception: " . $ex);
+            return redirect()->route('exam.exams.edit', $id);
         }
-
-        return view('exam.exams.detail')
-            ->with('selectedMatter', $selectedMatter)
-            ->with('reagents', $reagents)
-            ->with('exam', $exam)
-            ->with('matterParameters', $matterParameters);
     }
 
     /**
@@ -161,7 +166,17 @@ class ExamsController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $exam = ExamHeader::find($id);
+
+            return view('exam.exams.edit')
+                ->with('exam', $exam);
+
+        } catch (\Exception $ex) {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ExamsController][edit] Datos: [id: $id] Exception: " . $ex);
+            return redirect()->route('exam.exams.index');
+        }
     }
 
     /**
@@ -173,93 +188,127 @@ class ExamsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try
+        {
+            $exam = ExamHeader::find($id);
+
+            $exam->descripcion = $request->descripcion;
+            $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
+            $exam->estado = !isset( $request['estado'] ) ? 'A' : 'I';
+
+            \DB::beginTransaction();
+
+            $exam->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            \DB::rollback();
+            Log::error("[ExamsController][update] [id: $id]; Exception: " . $ex);
+        }
+        finally
+        {
+            \DB::commit();
+        }
+
+        return redirect()->route('exam.exams.edit', $id);
+    }
+
+    public function updateDetail(Request $request, $id)
+    {
         $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
 
         try
         {
             $exam = ExamHeader::find($id);
 
-            foreach($exam->examsDetails as $det)
+            $matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
+            $reaCount = isset($request->id_reactivo) ? sizeof($request->id_reactivo) : 0;
+            $reaTotal = $matterParameters->nro_reactivos_exam;
+
+            if($reaCount <= $reaTotal)
             {
-                if($det->estado == 'A' && $det->reagent->id_materia == $id_materia)
-                    $ids[] = $det->id_reactivo;
-            }
-
-            $idsDet = isset($ids) ? $ids : array();
-            $idsReq = isset($request->id_reactivo) ? $request->id_reactivo : array();
-
-            if( !($idsDet == $idsReq) )
-            {
-                $newIdsDet = array_diff($idsReq, $idsDet); //nuevos
-                $delIdsDet = array_diff($idsDet, array_intersect($idsDet, $idsReq)); //eliminados
-
-                if(sizeof($delIdsDet) > 0)
+                foreach($exam->examsDetails as $det)
                 {
-                    foreach($delIdsDet as $det)
-                    {
-                        $examDet = ExamDetail::query()->where('id_examen_cab', $id)->where('id_reactivo', $det)->first();
-                        $examDet->estado = 'E';
-                        $examDet->modificado_por =  \Auth::id();
-                        $examDet->fecha_modificacion =  date('Y-m-d h:i:s');
-                        $examDetails[] = $examDet;
-                    }
+                    if($det->estado == 'A' && $det->reagent->id_materia == $id_materia)
+                        $ids[] = $det->id_reactivo;
                 }
 
-                if(sizeof($newIdsDet) > 0)
+                $idsDet = isset($ids) ? $ids : array();
+                $idsReq = isset($request->id_reactivo) ? $request->id_reactivo : array();
+
+                if( !($idsDet == $idsReq) )
                 {
-                    foreach($newIdsDet as $det)
+                    $newIdsDet = array_diff($idsReq, $idsDet); //nuevos
+                    $delIdsDet = array_diff($idsDet, array_intersect($idsDet, $idsReq)); //eliminados
+
+                    if(sizeof($delIdsDet) > 0)
                     {
-                        if(ExamDetail::query()->where('id_examen_cab', $id)->where('id_reactivo', $det)->count() > 0)
+                        foreach($delIdsDet as $det)
                         {
                             $examDet = ExamDetail::query()->where('id_examen_cab', $id)->where('id_reactivo', $det)->first();
-                            $examDet->estado = 'A';
+                            $examDet->estado = 'E';
                             $examDet->modificado_por =  \Auth::id();
                             $examDet->fecha_modificacion =  date('Y-m-d h:i:s');
+                            $examDetails[] = $examDet;
                         }
-                        else
+                    }
+
+                    if(sizeof($newIdsDet) > 0)
+                    {
+                        foreach($newIdsDet as $det)
                         {
-                            $detail['id_examen_cab'] = $id;
-                            $detail['id_reactivo'] = $det;
-                            $detail['estado'] = 'A';
-                            $examDet = new ExamDetail($detail);
-                            $examDet->creado_por =  \Auth::id();
-                            $examDet->fecha_creacion =  date('Y-m-d h:i:s');
+                            if(ExamDetail::query()->where('id_examen_cab', $id)->where('id_reactivo', $det)->count() > 0)
+                            {
+                                $examDet = ExamDetail::query()->where('id_examen_cab', $id)->where('id_reactivo', $det)->first();
+                                $examDet->estado = 'A';
+                                $examDet->modificado_por =  \Auth::id();
+                                $examDet->fecha_modificacion =  date('Y-m-d h:i:s');
+                            }
+                            else
+                            {
+                                $detail['id_examen_cab'] = $id;
+                                $detail['id_reactivo'] = $det;
+                                $detail['estado'] = 'A';
+                                $examDet = new ExamDetail($detail);
+                                $examDet->creado_por =  \Auth::id();
+                                $examDet->fecha_creacion =  date('Y-m-d h:i:s');
+                            }
+                            $examDetails[] = $examDet;
                         }
-                        $examDetails[] = $examDet;
                     }
                 }
-            }
 
-
-
-            if(isset($examDetails))
-            {
-                try
+                if(isset($examDetails))
                 {
-                    \DB::beginTransaction();
-                    $exam->examsDetails()->saveMany($examDetails);
-                    flash('Transacci&oacuten realizada existosamente', 'success');
+                    try
+                    {
+                        \DB::beginTransaction();
+                        $exam->examsDetails()->saveMany($examDetails);
+                        flash('Transacci&oacuten realizada existosamente', 'success');
+                    }
+                    catch (\Exception $ex)
+                    {
+                        \DB::rollback();
+                        flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+                        Log::error("[ExamsController][updateDetail] [id: $id]; Exception: " . $ex);
+                    }
+                    finally
+                    {
+                        \DB::commit();
+                    }
                 }
-                catch (\Exception $ex)
-                {
-                    \DB::rollback();
-                    flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-                    Log::error("[ExamsController][update] id=" . $id . "; Exception: " . $ex);
-                }
-                finally
-                {
-                    \DB::commit();
-                }
+                else
+                    flash("No se han realizado modificaciones", 'info');
             }
             else
-            {
-                flash("No se han realizado modificaciones", 'info');
-            }
+                flash("Ha excedido el l&iacute;mite de reactivos permitidos para esta materia. Debe seleccionar $reaTotal reactivo(s).", 'danger')->important();
         }
         catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ExamsController][update] id=" . $id . "; Exception: " . $ex);
+            Log::error("[ExamsController][updateDetail] [id: $id]; Exception: " . $ex);
             return redirect()->route('exam.exams.detail', ['id' => $id, 'id_matter' => 0]);
         }
 

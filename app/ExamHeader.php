@@ -13,11 +13,11 @@ class ExamHeader extends Model
         "es_prueba", "estado", "id_sede", "id_periodo", "id_campus", "id_carrera"];
 
     public function periodLocation(){
-        return $this->belongsTo('ReactivosUPS\PeriodLocation');
+        return $this->belongsTo('ReactivosUPS\PeriodLocation', 'id_periodo_sede');
     }
 
-    public function mention(){
-        return $this->belongsTo('ReactivosUPS\Mention');
+    public function careerCampus(){
+        return $this->belongsTo('ReactivosUPS\CareerCampus', 'id_carrera_campus');
     }
 
     public function examsDetails(){

@@ -145,12 +145,17 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
         'as'    => 'exam.parameters.history'
     ]);
 
+    Route::resource('parameters','ExamParametersController');
+
     Route::get('exams/{id}/{id_matter}/detail', [
         'uses'  => 'ExamsController@detail',
         'as'    => 'exam.exams.detail'
     ]);
 
-    Route::resource('parameters','ExamParametersController');
+    Route::put('exams/detail/{detail}', [
+        'uses'  => 'ExamsController@updateDetail',
+        'as'    => 'exam.exams.updateDetail'
+    ]);
 
     Route::resource('exams','ExamsController');
 

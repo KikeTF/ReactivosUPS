@@ -8,7 +8,7 @@
     {!! Form::open(['id' => 'formulario',
             'class' => 'form-horizontal',
             'role' => 'form',
-            'route' => ['exam.exams.update', $exam->id],
+            'route' => ['exam.exams.updateDetail', $exam->id],
             'method' => 'PUT']) !!}
 
     <?php
@@ -30,7 +30,7 @@
             @if($selectedMatter->id_materia > 0)
                 {{ $selectedMatter->matter->descripcion.' ('.$selectedMatter->cantidad_reactivos.'/'.$selectedMatter->nro_reactivos_exam.')' }}
             @else
-                Materia
+                Resumen de Examen
             @endif
         </h1>
     </div>
