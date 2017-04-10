@@ -4,7 +4,7 @@
     $reaTotal = $matter->nro_reactivos_exam;
     ?>
     @foreach($exam->examsDetails as $det)
-        @if($det->reagent->id_materia == $matter->id_materia and $det->estado == 'A')
+        @if($det->reagent->id_materia == $matter->id_materia and $det->estado == 'A' and $matter->nro_reactivos_exam > 0)
             <?php $reaCount++; ?>
         @endif
     @endforeach

@@ -195,6 +195,7 @@ abstract class Controller extends BaseController
 
         $matterCareer = $this->getMattersCareers()
             ->where('id_carrera_campus', $id_careerCampus)
+            ->where('aplica_examen', 'S')
             ->where('estado', 'A');
 
         if($id_materia > 0)

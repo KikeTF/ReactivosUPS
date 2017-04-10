@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
-@section('titulo', 'Reactivos')
-@section('subtitulo', 'Listado de reactivos')
+@section('titulo', 'Examen Complexivo')
+@section('subtitulo', 'Listado de Ex&aacute;menes')
 
 @section('contenido')
     <?php
@@ -65,7 +65,7 @@
     {!! Form::close() !!}
 
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
-        <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
+        <table id="_dataTable" class="table table-striped table-bordered table-hover table-responsive no-wrap" width="100%">
             <thead>
             <tr>
                 <th style="text-align: center">C&oacute;digo</th>
@@ -89,9 +89,23 @@
                     <tr>
                         <td align="center">{{ $exam->id }}</td>
                         <td>{{ $exam->descripcion }}</td>
-                        <td>{{ $exam->fecha_activacion }}</td>
-                        <td>{{ $exam->es_prueba }}</td>
-                        <td>{{ $exam->estado }}</td>
+                        <td align="center">{{ $exam->fecha_activacion }}</td>
+                        <td align="center">
+                            @if($exam->es_prueba == 'S')
+                                <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                                    <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                                </a>
+                            @else
+                                <a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                                    <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                                </a>
+                            @endif
+                        </td>
+                        <td align="center">
+                            <span class="{{ ($exam->estado == 'A') ? 'label label-primary' : 'label' }}">
+                                {{ ($exam->estado == 'A') ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
                         <td>
                             @include('shared.templates._tablebuttons', $urls)
                         </td>

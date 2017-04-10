@@ -80,6 +80,20 @@ class ExamsController extends Controller
             if($id_materia > 0)
             {
                 $selectedMatter = $matterParameters->where('id_materia', $id_materia)->first();
+
+                /*
+                if($selectedMatter->nro_reactivos_exam <= 0)
+                {
+                    flash("No hay reactivos requeridos para la materia seleccionada.", 'danger')->important();
+                    return redirect()->route('exam.exams.detail', ['id' => $id, 'id_matter' => 0]);
+                }
+
+                if($selectedMatter->aplica_examen != 'S')
+                {
+                    flash("La materia seleccionada no aplica para el examen.", 'danger')->important();
+                    return redirect()->route('exam.exams.detail', ['id' => $id, 'id_matter' => 0]);
+                }
+                */
                 foreach($exam->examsDetails as $det)
                 {
                     $examDet = ExamDetail::find($det->id);
@@ -193,8 +207,9 @@ class ExamsController extends Controller
             $exam = ExamHeader::find($id);
 
             $exam->descripcion = $request->descripcion;
+            $exam->fecha_activacion = $request->fecha_activacion;
             $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
-            $exam->estado = !isset( $request['estado'] ) ? 'A' : 'I';
+            $exam->estado = !isset( $request['estado'] ) ? 'I' : 'A';
 
             \DB::beginTransaction();
 

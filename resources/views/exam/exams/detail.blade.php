@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
-@section('titulo', 'Examen')
-@section('subtitulo', 'Generaci&oacute;n de Examen')
+@section('titulo', 'Examen Complexivo')
+@section('subtitulo', 'Detalle de Examen')
 
 @section('contenido')
 
@@ -17,7 +17,7 @@
         $btnsave = 1;
         $btnlist = route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => 0] );
     }
-    $btnrefresh = route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => ((sizeof($matterParameters) == 1) ? (int)$matterParameters->id_materia : 0)] );
+    $btnrefresh = route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => (($selectedMatter->id_materia > 0) ? (int)$selectedMatter->id_materia : 0)] );
     $btnclose = route('exam.exams.index');
     ?>
 

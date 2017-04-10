@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
-@section('titulo', 'Examen')
-@section('subtitulo', 'Generaci&oacute;n de Examen')
+@section('titulo', 'Examen Complexivo')
+@section('subtitulo', 'Editar Examen')
 
 @section('contenido')
 
