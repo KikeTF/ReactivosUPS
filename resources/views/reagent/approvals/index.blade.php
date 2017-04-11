@@ -80,13 +80,9 @@
             </tr>
             </thead>
             <tbody>
-            @if($filters[0] > 0)
+            @if(isset($reagents))
                 @foreach($reagents as $reagent)
-                    <?php
-                    $urls = array(
-                            'showurl' => route('reagent.approvals.show', $reagent->id)
-                    );
-                    ?>
+                    <?php $urls = array('showurl' => route('reagent.approvals.show', $reagent->id)); ?>
                     <tr>
                         @if(isset($isApproval))
                         <td align="center" width="40px">

@@ -33,6 +33,7 @@
             </div>
         </div>
 
+
         <div id="accordion" class="accordion-style1 panel-group">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -112,29 +113,52 @@
                             <div class="col-sm-8">{{ $reagent->planteamiento }}</div>
                         </div>
 
+                        @if($reagent->format->opciones_pregunta == 'S')
                         <div class="form-group">
                             <div class="col-sm-12"><strong>Opciones de Pregunta:</strong></div>
                         </div>
                         <div class="form-group">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <td></td>
-                                    <td><strong>Concepto</strong></td>
-                                    <td><strong>Propiedad</strong></td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($questions as $question)
+                            <div class="col-sm-6">
+                                <table class="table table-hover">
+                                    <thead>
                                     <tr>
-                                        <td>{{ $question->secuencia }}</td>
-                                        <td>{{ $question->concepto }}</td>
-                                        <td>{{ $question->propiedad }}</td>
+                                        <td></td>
+                                        <td><strong>Concepto</strong></td>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($reagent->questionsConcepts as $question)
+                                        <tr>
+                                            <td>{{ $question->numeral }}</td>
+                                            <td>{{ $question->concepto }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            @if($reagent->format->concepto_propiedad == 'S')
+                            <div class="col-sm-6">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <td></td>
+                                            <td><strong>Propiedad</strong></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($reagent->questionsProperties as $question)
+                                            <tr>
+                                                <td>{{ $question->literal }}</td>
+                                                <td>{{ $question->propiedad }}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                         </div>
+                        @endif
 
                         <div class="form-group">
                             <div class="col-sm-12"><strong>Opciones de Respuesta:</strong></div>
@@ -149,9 +173,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($answers as $answer)
+                                @foreach($reagent->answers as $answer)
                                     <tr>
-                                        <td>{{ $answer->secuencia }}</td>
+                                        <td>{{ $answer->numeral }}</td>
                                         <td>{{ $answer->descripcion }}</td>
                                         <td>{{ $answer->argumento }}</td>
                                     </tr>
@@ -230,7 +254,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($comments as $comment)
+                                @foreach($reagent->comments as $comment)
                                     <tr>
                                         <td>{{ $comment->fecha_creacion }}</td>
                                         <td>{{ $users[$comment->creado_por] }}</td>

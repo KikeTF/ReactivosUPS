@@ -63,9 +63,9 @@ class Reagent extends Model
         return $this->belongsTo('ReactivosUPS\Period', 'id_periodo');
     }
 
-    public function scopeFilter($query, $id_distributivo){
+    public function scopeFilter($query, $idDist){
         return $query
-            ->where('id_distributivo', $id_distributivo);
+            ->whereIn('id_distributivo', $idDist);
     }
 
     public function scopeFilter2($query, $id_distributivo, $id_estado){

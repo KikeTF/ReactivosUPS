@@ -274,7 +274,7 @@ class MattersCareersController extends Controller
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
             $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
 
-            if($aprExamen == 'S')
+            if ($aprExamen == 'S')
             {
                 $careersList = Career::query();
             }
@@ -289,6 +289,14 @@ class MattersCareersController extends Controller
                         ->where('id_campus', $id_campus)->first()->id;
 
                 $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+
+                if($dist->count() > 0)
+                {
+                    foreach ($dist as $car)
+                    {
+                        $ids[] = $car->careerCampus->id_carrera;
+                    }
+                }
             }
             else
             {
@@ -297,18 +305,20 @@ class MattersCareersController extends Controller
                     ->where('id_campus', $id_campus)
                     ->where('id_sede', $id_Sede)
                     ->where('id_usuario', \Auth::id())->get();
-            }
 
-            if(isset($dist))
-            {
-                foreach ($dist as $car)
+                if($dist->count() > 0)
                 {
-                    $ids[] = $car->id_carrera;
+                    foreach ($dist as $car)
+                    {
+                        $ids[] = $car->id_carrera;
+                    }
                 }
-
-                if(isset($ids))
-                    $careersList = Career::query()->whereIn('id',$ids);
             }
+
+            $careersList = Career::query();
+
+            if(isset($ids))
+                $careersList = $careersList->whereIn('id',$ids);
 
             $careersList = $careersList->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
 

@@ -150,7 +150,9 @@ abstract class Controller extends BaseController
     public function getDistributive($id_materia, $id_carrera, $id_campus){
         $id_profileUser = (int)Session::get('idPerfilUsuario');
         $id_periodLocation = (int)Session::get('idPeriodoSede');
-
+        $aprReactivo = Session::get('ApruebaReactivo');
+        $aprExamen = Session::get('ApruebaExamen');
+        
         $id_careerCampus = $this->getCareersCampuses()
             ->where('id_carrera', $id_carrera)
             ->where('id_campus', $id_campus)
@@ -162,11 +164,18 @@ abstract class Controller extends BaseController
             ->first()->id;
 
         $distributives = Distributive::query()->where('estado','A')->orderBy('id', 'asc')->get();
+
         $distributive = $distributives
             ->where('id_periodo_sede', $id_periodLocation)
-            ->where('id_materia_carrera', $id_matterCareer)
-            ->where('id_perfil_usuario', $id_profileUser)
-            ->first();
+            ->where('id_materia_carrera', $id_matterCareer);
+
+        if ($aprReactivo == 'N')
+        {
+            $distributive = $distributives
+                ->where('id_periodo_sede', $id_periodLocation)
+                ->where('id_materia_carrera', $id_matterCareer)
+                ->where('id_perfil_usuario', $id_profileUser);
+        }
 
         return $distributive;
     }

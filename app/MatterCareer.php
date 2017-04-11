@@ -46,7 +46,7 @@ class MatterCareer extends Model
 
         if($id_area > 0 )
             $query = $query->where('id_area', $id_area);
-
+        
         return $query->where('estado', '!=', 'E');
     }
 

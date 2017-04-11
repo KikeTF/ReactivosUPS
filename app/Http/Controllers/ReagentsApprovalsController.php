@@ -27,31 +27,81 @@ class ReagentsApprovalsController extends Controller
     public function index(Request $request)
     {
         try{
-            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
-            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
-            $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+            $aprReactivo = \Session::get('ApruebaReactivo');
+            if($aprReactivo == 'S')
+            {
+                $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+                $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+                $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+                $id_careerCampus = 0;
+                $filters = array($id_campus, $id_carrera, $id_materia);
+                $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
+                $id_area = ($area->count() > 0) ? $area->first()->id : 0;
 
-            $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
-            $idJefeArea = ($area->count() > 0) ? $area->first()->id : 0;
+                if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0){
+                    $distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus);
+                    if($distributivo->count() > 0)
+                    {
+                        foreach ($distributivo as $dist)
+                        {
+                            $idsDist[] = $dist->id;
+                        }
+                        $reagents = Reagent::filter($idsDist)->where('id_estado', '!=', 7);
+                    }
+                    else
+                        flash("No se encontro informaci&oacute;n!", 'warning')->important();
 
-            $filters = array($id_campus, $id_carrera, $id_materia);
+                }else
+                {
+                    $reagents = Reagent::query()->where('id_estado','!=',7);
 
-            if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0){
-                $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
-                $reagents = Reagent::filter($id_distributivo)->where('id_estado','!=',7);
-            }else
-                $reagents = Reagent::query()->where('id_estado','!=',7);
+                    if($id_campus > 0 && $id_carrera > 0)
+                        $id_careerCampus = CareerCampus::query()
+                            ->where('estado','A')
+                            ->where('id_carrera', $id_carrera)
+                            ->where('id_campus', $id_campus)->first()->id;
 
-            $reagents = $reagents->orderBy('id', 'asc')->get();
+                    $matters = MatterCareer::filter($id_careerCampus, 0, $id_area)->get();
 
-            return view('reagent.approvals.index')
-                ->with('reagents', $reagents)
-                ->with('campusList', $this->getCampuses())
-                //->with('careers', $this->getCareers())
-                //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
-                ->with('states', $this->getReagentsStates())
-                ->with('statesLabels', $this->getReagentsStatesLabel())
-                ->with('filters', $filters);
+                    if($matters->count() > 0)
+                    {
+                        foreach ($matters as $mat)
+                        {
+                            $idsMat[] = $mat->id_materia;
+                        }
+                        array_unique($idsMat);
+                        $reagents = $reagents->whereIn('id_materia', $idsMat);
+                    }
+                }
+
+            }
+            else
+            {
+                flash("Su perfil no esta autorizado para esta opci&oacute;n!", 'warning')->important();
+                return redirect()->route('index');
+            }
+
+            if(isset($reagents))
+            {
+                $reagents = $reagents->orderBy('id', 'asc')->get();
+                return view('reagent.approvals.index')
+                    ->with('reagents', $reagents)
+                    ->with('campusList', $this->getCampuses())
+                    //->with('careers', $this->getCareers())
+                    //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
+                    ->with('states', $this->getReagentsStates())
+                    ->with('statesLabels', $this->getReagentsStatesLabel())
+                    ->with('filters', $filters);
+            }
+            else
+                return view('reagent.approvals.index')
+                    ->with('campusList', $this->getCampuses())
+                    //->with('careers', $this->getCareers())
+                    //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
+                    ->with('states', $this->getReagentsStates())
+                    ->with('statesLabels', $this->getReagentsStatesLabel())
+                    ->with('filters', $filters);
+
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
@@ -99,25 +149,21 @@ class ReagentsApprovalsController extends Controller
             $reagent->desc_materia = $mattercareer->matter->descripcion;
             $reagent->desc_formato = $reagent->format->nombre;
             $reagent->desc_campo = $reagent->field->nombre;
-            $reagent->desc_contenido = $reagent->contentDetail->capitulo." ".$reagent->contentDetail->tema;
+            $reagent->desc_contenido = $reagent->contentDetail->capitulo . " " . $reagent->contentDetail->tema;
             $reagent->usr_responsable = $this->getUserName($reagent->id_usr_responsable);
             $reagent->dificultad = ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta';
             $reagent->desc_estado = $reagent->state->descripcion;
             $reagent->creado_por = $this->getUserName($reagent->creado_por);
             $reagent->modificado_por = $this->getUserName($reagent->modificado_por);
 
-            $reagentQuestions = ReagentQuestion::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
-            $reagentAnswers = ReagentAnswer::query()->where('id_reactivo', $reagent->id)->orderBy('secuencia','asc')->get();
-            $reagentComments = ReagentComment::query()->where('id_reactivo', $reagent->id)->orderBy('id','desc')->get();
-
             return view('reagent.approvals.show')
                 ->with('reagent', $reagent)
-                ->with('questions', $reagentQuestions)
-                ->with('answers', $reagentAnswers)
-                ->with('comments', $reagentComments)
+                //->with('questions', $reagentQuestions)
+                //->with('answers', $reagentAnswers)
+                //->with('comments', $reagentComments)
                 ->with('states', $this->getReagentsStates())
-                ->with('users', $this->getUsers())
-                ->with('formatParam', $reagent->format);
+                ->with('users', $this->getUsers());
+                //->with('formatParam', $reagent->format);
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
