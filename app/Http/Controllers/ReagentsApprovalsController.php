@@ -46,17 +46,17 @@ class ReagentsApprovalsController extends Controller
 
             return view('reagent.approvals.index')
                 ->with('reagents', $reagents)
-                ->with('campuses', $this->getCampuses())
-                ->with('careers', $this->getCareers())
-                ->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
+                ->with('campusList', $this->getCampuses())
+                //->with('careers', $this->getCareers())
+                //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
                 ->with('states', $this->getReagentsStates())
                 ->with('statesLabels', $this->getReagentsStatesLabel())
                 ->with('filters', $filters);
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsApprovalsController][index] Request=".implode(", ", $request->all())."; Exception: ".$ex);
-            return redirect()->route('index');
+            Log::error("[ReagentsApprovalsController][index] Exception: ".$ex);
+            return redirect()->route('reagent.approvals.index');
         }
     }
 
