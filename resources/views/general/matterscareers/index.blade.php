@@ -109,7 +109,11 @@
                             @endif
                         </td>
                         <td align="center">{{ $matterCareer->nro_reactivos_exam }}</td>
-                        <td align="center">{{ $matterCareer->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                        <td align="center">
+                            <span class="{{ ($matterCareer->estado == 'A') ? 'label label-primary' : 'label' }}">
+                                {{ ($matterCareer->estado == 'A') ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
                         <td>
                             @include('shared.templates._tablebuttons', $urls)
                         </td>
