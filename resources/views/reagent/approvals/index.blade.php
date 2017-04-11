@@ -35,7 +35,7 @@
 
                         <div class="col-sm-3">
                             {!! Form::label('id_carrera', 'Seleccione Carrera:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control', 'placeholder' => '-- Todas las Menciones --']) !!}
+                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control', 'placeholder' => '-- Todas las Carreras --']) !!}
                         </div>
 
                         <div id="listaMaterias" class="col-sm-3">

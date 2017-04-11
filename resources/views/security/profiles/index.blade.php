@@ -36,7 +36,11 @@
                     <td>{{ $profile->descripcion }}</td>
                     <td align="center">{{ $profile->aprueba_reactivo == 'S' ? 'Si' : 'No' }}</td>
                     <td align="center">{{ $profile->aprueba_examen == 'S' ? 'Si' : 'No' }}</td>
-                    <td align="center">{{ $profile->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                    <td align="center">
+                            <span class="{{ ($profile->estado == 'A') ? 'label label-primary' : 'label' }}">
+                                {{ ($profile->estado == 'A') ? 'Activo' : 'Inactivo' }}
+                            </span>
+                    </td>
                     <td>
                         @include('shared.templates._tablebuttons', $urls)
                     </td>

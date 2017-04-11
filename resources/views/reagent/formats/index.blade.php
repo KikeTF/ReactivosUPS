@@ -74,7 +74,11 @@
                             </a>
                         @endif
                     </td>
-                    <td align="center">{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                    <td align="center">
+                            <span class="{{ ($format->estado == 'A') ? 'label label-primary' : 'label' }}">
+                                {{ ($format->estado == 'A') ? 'Activo' : 'Inactivo' }}
+                            </span>
+                    </td>
                     <td>
                         @include('shared.templates._tablebuttons', $urls)
                     </td>

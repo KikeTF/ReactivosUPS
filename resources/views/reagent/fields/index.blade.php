@@ -30,9 +30,13 @@
                 );
                 ?>
                 <tr>
-                    <td>{{ $field->nombre }}</td>
+                    <td align="center">{{ $field->nombre }}</td>
                     <td>{{ $field->descripcion }}</td>
-                    <td align="center">{{ $field->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                    <td align="center">
+                            <span class="{{ ($field->estado == 'A') ? 'label label-primary' : 'label' }}">
+                                {{ ($field->estado == 'A') ? 'Activo' : 'Inactivo' }}
+                            </span>
+                    </td>
                     <td>
                         @include('shared.templates._tablebuttons', $urls)
                     </td>
