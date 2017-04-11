@@ -1,5 +1,5 @@
 <ul class="nav nav-list">
-    <li class="active">
+    <li class="{{ ((strcmp(\Request::route()->getName(), 'index') == 0) ? 'active' : '') }}">
         <a href="/">
             <i class="menu-icon fa fa-home home-icon"></i>
             <span class="menu-text"> Inicio </span>

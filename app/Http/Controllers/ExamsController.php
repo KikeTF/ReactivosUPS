@@ -81,10 +81,9 @@ class ExamsController extends Controller
             {
                 $selectedMatter = $matterParameters->where('id_materia', $id_materia)->first();
 
-                /*
                 if($selectedMatter->nro_reactivos_exam <= 0)
                 {
-                    flash("No hay reactivos requeridos para la materia seleccionada.", 'danger')->important();
+                    flash("No se requieren reactivos para la materia seleccionada.", 'danger')->important();
                     return redirect()->route('exam.exams.detail', ['id' => $id, 'id_matter' => 0]);
                 }
 
@@ -93,7 +92,7 @@ class ExamsController extends Controller
                     flash("La materia seleccionada no aplica para el examen.", 'danger')->important();
                     return redirect()->route('exam.exams.detail', ['id' => $id, 'id_matter' => 0]);
                 }
-                */
+
                 foreach($exam->examsDetails as $det)
                 {
                     $examDet = ExamDetail::find($det->id);

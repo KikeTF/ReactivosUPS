@@ -1,7 +1,15 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Examen Complexivo')
-@section('subtitulo', 'Detalle de Examen')
+
+@if($selectedMatter->id_materia > 0)
+    @section('titulo2')
+        Detalle de Examen <i class="ace-icon fa fa-angle-double-right"></i>
+    @endsection
+    @section('subtitulo', $selectedMatter->matter->descripcion.' ('.$selectedMatter->cantidad_reactivos.'/'.$selectedMatter->nro_reactivos_exam.')')
+@else
+    @section('subtitulo', 'Detalle de Examen')
+@endif
 
 @section('contenido')
 
@@ -20,20 +28,7 @@
     $btnrefresh = route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => (($selectedMatter->id_materia > 0) ? (int)$selectedMatter->id_materia : 0)] );
     $btnclose = route('exam.exams.index');
     ?>
-
-    <div class="pull-left" style="margin-right: 20px;">
-        @include('shared.templates._formbuttons')
-    </div>
-
-    <div class="page-header">
-        <h1>
-            @if($selectedMatter->id_materia > 0)
-                {{ $selectedMatter->matter->descripcion.' ('.$selectedMatter->cantidad_reactivos.'/'.$selectedMatter->nro_reactivos_exam.')' }}
-            @else
-                Resumen de Examen
-            @endif
-        </h1>
-    </div>
+    @include('shared.templates._formbuttons')
 
     @if($selectedMatter->id_materia == 0)
         <div style="columns: 3;">

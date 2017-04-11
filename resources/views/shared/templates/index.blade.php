@@ -191,6 +191,7 @@
                             <small>
                                 @yield('titulo', 'Reactivos UPS')
                                 <i class="ace-icon fa fa-angle-double-right"></i>
+                                @yield('titulo2')
                             </small>
                             @yield('subtitulo', 'Reactivos UPS')
                         </h1>
