@@ -17,6 +17,7 @@
     $btnrefresh = route('reagent.reagents.edit',$reagent->id);
     $btndelete = route('reagent.reagents.destroy', $reagent->id);
     $btnclose = route('reagent.reagents.index');
+    $btnreply = 1;
     ?>
     @include('shared.templates._formbuttons')
 

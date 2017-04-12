@@ -1,4 +1,16 @@
 <script type="text/javascript">
+    function getMentionsByCareer(){
+        filtroMencion = "{{ (isset($filters) ? $filters[2] : 0) }}";
+        $.ajax({
+            url: "{{  route('general.matterscareers.mentions') }}",
+            data: { "id_carrera" : $("#id_carrera").val(), "id_mencion" : filtroMencion },
+            async: false,
+            success: function(result){
+                $('#listaMenciones').empty();
+                $('#listaMenciones').append(result['html']);
+            }
+        });
+    }
     function getMattersByCareer(){
         filtroMateria = "{{ (isset($filters) ? $filters[2] : 0) }}";
         $.ajax({

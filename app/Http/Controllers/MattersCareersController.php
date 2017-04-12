@@ -17,6 +17,7 @@ use ReactivosUPS\Area;
 use ReactivosUPS\CareerCampus;
 use Datatables;
 use Log;
+use ReactivosUPS\Mention;
 use View;
 
 class MattersCareersController extends Controller
@@ -57,11 +58,12 @@ class MattersCareersController extends Controller
             $filters = array($id_campus, $id_carrera, $id_mencion, (($idJefeArea > 0) ? -1 :$id_area));
 
             return view('general.matterscareers.index')
+                ->with('campusList', $this->getCampuses())
                 ->with('mattersCareers', $mattersCareers)
-                ->with('campuses', $this->getCampuses())
-                ->with('careers', $this->getCareers())
-                ->with('areas', $this->getAreas())
-                ->with('mentions', $this->getMentions())
+                //->with('campuses', $this->getCampuses())
+                //->with('careers', $this->getCareers())
+                ->with('areasList', $this->getAreas())
+                //->with('mentions', $this->getMentions())
                 ->with('filters', $filters);
         }catch(\Exception $ex)
         {
@@ -132,13 +134,14 @@ class MattersCareersController extends Controller
     {
         try{
             $mattercareer = MatterCareer::find($id);
-            $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-            $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
-            $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
-            $mattercareer->desc_area = $mattercareer->area->descripcion;
-            $mattercareer->desc_materia = $mattercareer->matter->descripcion;
 
-            return view('general.matterscareers.edit')->with('mattercareer', $mattercareer);
+            $mentionsList = Mention::query()
+                ->where('id_carrera', $mattercareer->careerCampus->id_carrera)
+                ->where('estado', 'A')->lists('descripcion','id');
+
+            return view('general.matterscareers.edit')
+                ->with('mattercareer', $mattercareer)
+                ->with('mentionsList', $mentionsList);
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
@@ -159,6 +162,7 @@ class MattersCareersController extends Controller
         $matterCareer = MatterCareer::find($id);
         try
         {
+            $matterCareer->id_mencion = $request->id_mencion;
             $matterCareer->nro_reactivos_mat = $request->nro_reactivos_mat;
             $matterCareer->nro_reactivos_exam = $request->nro_reactivos_exam;
             $matterCareer->aplica_examen = !isset( $request['aplica_examen'] ) ? 'N' : 'S';
@@ -172,10 +176,10 @@ class MattersCareersController extends Controller
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[MattersCareersController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
-            return redirect()->route('reagent.matterscareers.edit', $id);
+            return redirect()->route('general.matterscareers.edit', $id);
         }
 
-        return redirect()->route('general.matterscareers.index');
+        return redirect()->route('general.matterscareers.edit', $id);
     }
 
     /**
@@ -205,9 +209,38 @@ class MattersCareersController extends Controller
         return redirect()->route('general.matterscareers.index');
     }
 
+    public function getMentionsList(Request $request)
+    {
+        try
+        {
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+
+            $mentionsList = Mention::query()
+                ->where('id_carrera', $id_carrera)
+                ->where('estado', 'A')->lists('descripcion','id');
+
+            if($mentionsList->count() > 0)
+                $html = View::make('shared.optionlists._mentionslist')
+                    ->with('mentionsList', $mentionsList)
+                    ->with('mentionFilter', $id_mencion)
+                    ->render();
+            else
+                $html = View::make('shared.optionlists._mentionslist')->render();
+        }
+        catch (\Exception $ex) {
+            Log::error("[MattersCareersController][getMentionsList] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            $html = View::make('shared.optionlists._mentionslist')->render();
+        }
+        return \Response::json(['html' => $html]);
+
+
+    }
+
     public function getMattersList(Request $request)
     {
-        try {
+        try
+        {
             $aprReactivo = \Session::get('ApruebaReactivo');
             $aprExamen = \Session::get('ApruebaExamen');
             $id_Sede = (int)\Session::get('idSede');
@@ -242,7 +275,7 @@ class MattersCareersController extends Controller
             foreach ($dist as $mat)
             {
                 //if(!isset($ids) || (isset($ids) && !in_array($mat->id_materia, $ids)))
-                    $ids[] = $mat->id_materia;
+                $ids[] = $mat->id_materia;
             }
 
             if(isset($ids))
@@ -256,7 +289,7 @@ class MattersCareersController extends Controller
                 ->with('matterFilter', $id_materia)
                 ->render();
         } catch (\Exception $ex) {
-            Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            Log::error("[MattersCareersController][getMattersList] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
             $html = View::make('shared.optionlists._matterslist')->render();
         }
         return \Response::json(['html' => $html]);

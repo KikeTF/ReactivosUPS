@@ -10,6 +10,7 @@ use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\MatterCareer;
+use ReactivosUPS\Mention;
 use ReactivosUPS\Reagent;
 use Log;
 
@@ -74,6 +75,7 @@ class ExamsController extends Controller
                 ->where('id_carrera', $exam->id_carrera)
                 ->where('id_materia', $id_materia)->get();
 
+            $mentionsList = Mention::query()->where('id_carrera', $exam->id_carrera)->where('estado', 'A')->lists('descripcion','id');
             $matterParameters = $this->getMatterParameters(0, $exam->id_carrera, $exam->id_campus);
             $cantidadReactivos = 0;
 
@@ -113,6 +115,7 @@ class ExamsController extends Controller
                 ->with('selectedMatter', $selectedMatter)
                 ->with('reagents', $reagents)
                 ->with('exam', $exam)
+                ->with('mentionsList', $mentionsList)
                 ->with('matterParameters', $matterParameters);
 
         }

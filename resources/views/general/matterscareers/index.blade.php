@@ -6,9 +6,7 @@
 @section('contenido')
     <?php
     $usetable = 1;
-    //$dataurl = route('general.matterscareers.data');
-    //$newurl = route('general.matterscareers.create');
-    $columnas = array("id_materia", "nivel", "tipo", "nro_reactivos_mat", "aplica_examen", "nro_reactivos_exam", "estado");
+    $columnas = array("id_materia", "nivel", "nro_reactivos_mat", "aplica_examen", "nro_reactivos_exam", "estado");
     ?>
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'general.matterscareers.index','method' => 'GET']) !!}
@@ -34,23 +32,29 @@
                     <div class="col-sm-11">
                         <div class="col-sm-3">
                             {!! Form::label('id_campus', 'Seleccione Campus:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_campus', $campuses, $filters[0], ['class' => 'form-control']) !!}
+                            <div id="listaCampus">
+                                @include('shared.optionlists._campuslist')
+                            </div>
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_carrera', 'Seleccione Carrera:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_carrera', $careers, $filters[1], ['class' => 'form-control']) !!}
+                            <div id="listaCarreras">
+                                @include('shared.optionlists._careerslist')
+                            </div>
                         </div>
 
                         <div class="col-sm-3">
                             {!! Form::label('id_mencion', 'Seleccione Menci&oacute;n:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                            {!! Form::select('id_mencion', $mentions, $filters[2], ['class' => 'form-control', 'placeholder' => '-- Todas las Menciones --']) !!}
+                            <div id="listaMenciones">
+                                @include('shared.optionlists._mentionslist')
+                            </div>
                         </div>
 
                         @if($filters[3] > -1)
                             <div class="col-sm-3">
                                 {!! Form::label('id_area', 'Seleccione &Aacute;rea:', ['class' => 'control-label no-padding-right', 'style' => 'font-size: 12px' ]) !!}
-                                {!! Form::select('id_area', $areas, $filters[3], ['class' => 'form-control', 'placeholder' => '-- Todas las Areas --']) !!}
+                                {!! Form::select('id_area', $areasList, $filters[3], ['class' => 'form-control', 'placeholder' => '-- Todas las Areas --']) !!}
                             </div>
                         @endif
                     </div>
@@ -74,10 +78,9 @@
                 <tr>
                     <th style="text-align: center">Materia</th>
                     <th style="text-align: center">Nivel</th>
-                    <th style="text-align: center">Tipo</th>
-                    <th style="text-align: center">No. Reactivos Entregables</th>
-                    <th style="text-align: center">Aplica Examen</th>
-                    <th style="text-align: center">No. Reactivos en Examen</th>
+                    <th style="text-align: center">No. Reactivos <br/>Entregables</th>
+                    <th style="text-align: center">Aplica <br/>Examen</th>
+                    <th style="text-align: center">No. Reactivos <br/>en Examen</th>
                     <th style="text-align: center">Estado</th>
                     <th></th>
                 </tr>
@@ -93,9 +96,8 @@
                     );
                     ?>
                     <tr>
-                        <td>{{ \ReactivosUPS\Matter::find($matterCareer->id_materia)->descripcion }}</td>
+                        <td>{{ $matterCareer->matter->descripcion }}</td>
                         <td align="center">{{ $matterCareer->nivel }}</td>
-                        <td align="center">{{ $matterCareer->tipo }}</td>
                         <td align="center">{{ $matterCareer->nro_reactivos_mat }}</td>
                         <td align="center">
                             @if($matterCareer->aplica_examen == 'S')
@@ -123,7 +125,15 @@
             </tbody>
         </table>
     </div>
-
-
-
 @endsection
+
+@push('specific-script')
+    @include('shared.optionlists.functions')
+    <script type="text/javascript">
+        $( window ).load(function() {
+            getCareersByCampus();
+            getMattersByCareer();
+            getMentionsByCareer();
+        });
+    </script>
+@endpush

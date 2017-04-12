@@ -115,6 +115,11 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
         'as'    => 'general.matterscareers.careers'
     ]);
 
+    Route::get('matterscareers/mentions', [
+        'uses'  => 'MattersCareersController@getMentionsList',
+        'as'    => 'general.matterscareers.mentions'
+    ]);
+
     Route::get('matterscareers/contents', [
         'uses'  => 'MattersCareersController@getContentsList',
         'as'    => 'general.matterscareers.contents'

@@ -14,39 +14,31 @@
     ?>
     @include('shared.templates._formbuttons')
 
-
     <div class="form-group">
         {!! Form::label('desc_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
-            {!! Form::text('desc_campus', $mattercareer->desc_campus, ['class' => 'form-control', 'readonly']) !!}
+            {!! Form::text('desc_campus', $mattercareer->careerCampus->campus->descripcion, ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('desc_carrera', 'Carrera:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
-            {!! Form::text('desc_carrera', $mattercareer->desc_carrera, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('desc_mencion', 'Menci&oacute;n:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-        <div class="col-sm-8">
-            {!! Form::text('desc_mencion', $mattercareer->desc_mencion, ['class' => 'form-control', 'readonly']) !!}
+            {!! Form::text('desc_carrera', $mattercareer->careerCampus->career->descripcion, ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('desc_area', '&Aacute;rea:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
-            {!! Form::text('desc_area', $mattercareer->desc_area, ['class' => 'form-control', 'readonly']) !!}
+            {!! Form::text('desc_area', $mattercareer->area->descripcion, ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('desc_materia', 'Materia:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
-            {!! Form::text('desc_materia', $mattercareer->desc_materia, ['class' => 'form-control', 'readonly']) !!}
+            {!! Form::text('desc_materia', $mattercareer->matter->descripcion, ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 
@@ -57,13 +49,14 @@
         </div>
     </div>
 
+    @if($mentionsList->count() > 0)
     <div class="form-group">
-        {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('id_mencion', 'Menci&oacute;n:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
-            {!! Form::text('tipo', $mattercareer->tipo, ['class' => 'form-control', 'placeholder' => 'Tipo', 'readonly']) !!}
+            {!! Form::select('id_mencion', $mentionsList, $mattercareer->id_mencion, ['class' => 'form-control']) !!}
         </div>
     </div>
-
+    @endif
 
     <div class="form-group">
         {!! Form::label('nro_reactivos_mat', 'No. de Reactivos Entregables:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}

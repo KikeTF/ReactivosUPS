@@ -151,7 +151,7 @@
                             <li>
                                 <a href="{{ route('auth.logout') }}">
                                     <i class="ace-icon fa fa-power-off"></i>
-                                    Logout
+                                    Salir
                                 </a>
                             </li>
                         </ul>

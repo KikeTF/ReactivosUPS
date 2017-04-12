@@ -31,10 +31,12 @@
     @include('shared.templates._formbuttons')
 
     @if($selectedMatter->id_materia == 0)
-        <div style="columns: 3;">
-            @include('exam.exams._matters')
+        <?php $col = 3 ?>
+        <div style="margin-top: -25px">
+        @include('exam.exams._matters')
         </div>
     @else
+        <?php $col = 1 ?>
         <div id="right-menu" class="modal aside" data-body-scroll="false" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="false" tabindex="-1">
             <div class="modal-dialog" style="width: 300px">
                 <div class="modal-content">
@@ -123,7 +125,10 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3 class="smaller lighter blue no-margin">Detalle de Reactivo</h3>
+                            <h3 class="smaller lighter blue no-margin">
+                                Cap&iacute;tulo {{ $reagent->contentDetail->capitulo . ": " . $reagent->contentDetail->tema }}
+                                <br/><small>{{ $selectedMatter->matter->descripcion }}</small>
+                            </h3>
                         </div>
                         <div class="modal-body">
                             @include('exam.exams._reagent')
