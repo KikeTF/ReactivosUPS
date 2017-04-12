@@ -40,11 +40,11 @@ class ReagentsController extends Controller
             $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
 
             if ($id_campus > 0 && $id_carrera > 0 && $id_materia > 0) {
-                $id_distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus)->id;
+                $ids[] = $this->getDistributive($id_materia, $id_carrera, $id_campus)->first()->id;
                 if ($id_estado == 0)
-                    $reagents = Reagent::filter($id_distributivo)->where('id_estado', '!=', 7);
+                    $reagents = Reagent::filter($ids)->where('id_estado', '!=', 7);
                 else
-                    $reagents = Reagent::filter2($id_distributivo, $id_estado)->where('id_estado', '!=', 7);
+                    $reagents = Reagent::filter2($ids, $id_estado)->where('id_estado', '!=', 7);
             } else
                 $reagents = Reagent::query()->where('id_estado', '!=', 7);
 
