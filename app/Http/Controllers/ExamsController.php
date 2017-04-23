@@ -71,10 +71,12 @@ class ExamsController extends Controller
             $id_materia = (int)$id_matter;
             $exam = ExamHeader::find($id);
 
+            $periodLoc = PeriodLocation::query()->whereIn('id', $exam->examPeriods->pluck('id_periodo_sede')->toArray())->get();
+
             $reagents = Reagent::query()
                 ->where('id_estado','5')
-                ->where('id_sede', $exam->id_sede)
-                ->where('id_periodo', $exam->id_periodo)
+                ->whereIn('id_sede', array_unique($periodLoc->pluck('id_sede')->toArray()))
+                ->whereIn('id_periodo', array_unique($periodLoc->pluck('id_periodo')->toArray()))
                 ->where('id_campus', $exam->id_campus)
                 ->where('id_carrera', $exam->id_carrera)
                 ->where('id_materia', $id_materia)->get();
@@ -101,8 +103,7 @@ class ExamsController extends Controller
 
                 foreach($exam->examsDetails as $det)
                 {
-                    $examDet = ExamDetail::find($det->id);
-                    if($examDet->reagent->id_materia == $id_materia)
+                    if($det->reagent->id_materia == $id_materia)
                         $cantidadReactivos++;
                 }
                 //$matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
@@ -161,6 +162,8 @@ class ExamsController extends Controller
                 $periodsexam[] = new ExamPeriod($periodExam);
             }
 
+            \DB::beginTransaction();
+
             $exam->save();
             $exam->examPeriods()->saveMany($periodsexam);
 
@@ -192,8 +195,13 @@ class ExamsController extends Controller
         catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            \DB::rollback();
             Log::error("[ExamsController][store] Exception: ".$ex);
             return redirect()->route('exam.exams.create');
+        }
+        finally
+        {
+            \DB::commit();
         }
 
     }

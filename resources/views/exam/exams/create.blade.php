@@ -42,7 +42,9 @@
             <select multiple="" name="periodosSede[]" id="periodosSede" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Periodos --" style="display: none;" required>
                 <option value=""></option>
                 @foreach($locationPeriodsList as $locationPeriod)
-                    <option value="{{ $locationPeriod->id }}" >{{ $locationPeriod->period->descripcion }}</option>
+                    <option value="{{ $locationPeriod->id }}" >
+                        ({{ $locationPeriod->period->cod_periodo }}) {{ $locationPeriod->period->descripcion }}
+                    </option>
                 @endforeach
             </select>
         </div>
