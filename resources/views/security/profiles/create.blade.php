@@ -42,7 +42,7 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('aprueba_examen', '¿Activo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('aprueba_examen', '¿Aprueba Examen?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
