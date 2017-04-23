@@ -98,7 +98,7 @@ class UsersController extends Controller
     {
         try{
             $user = User::find($id);
-            $userProfiles = ProfileUser::query()->where('id_usuario', $id)->get();
+            $userProfiles = $user->profilesUsers;
             $profilesList = Profile::query()->where('estado','A')->orderBy('nombre', 'asc')->get();
 
             return view('security.users.edit')

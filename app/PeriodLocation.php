@@ -26,4 +26,8 @@ class PeriodLocation extends Model
     public function ExamsHeaders(){
         return $this->hasMany('ReactivosUPS\ExamHeader', 'id_periodo_sede');
     }
+
+    public function ExamsPeriods(){
+        return $this->hasMany('ReactivosUPS\ExamPeriod', 'id_periodo_sede');
+    }
 }
