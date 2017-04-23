@@ -34,8 +34,28 @@
                 <tr>
                     <td>{{ $profile->nombre }}</td>
                     <td>{{ $profile->descripcion }}</td>
-                    <td align="center">{{ $profile->aprueba_reactivo == 'S' ? 'Si' : 'No' }}</td>
-                    <td align="center">{{ $profile->aprueba_examen == 'S' ? 'Si' : 'No' }}</td>
+                    <td align="center">
+                        @if($profile->aprueba_reactivo == 'S')
+                            <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                                <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                            </a>
+                        @else
+                            <a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                                <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                            </a>
+                        @endif
+                    </td>
+                    <td align="center">
+                        @if($profile->aprueba_examen == 'S')
+                            <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                                <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                            </a>
+                        @else
+                            <a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                                <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                            </a>
+                        @endif
+                    </td>
                     <td align="center">
                             <span class="{{ ($profile->estado == 'A') ? 'label label-primary' : 'label' }}">
                                 {{ ($profile->estado == 'A') ? 'Activo' : 'Inactivo' }}
