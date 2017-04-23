@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
+use ReactivosUPS\ExamPeriod;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Mention;
+use ReactivosUPS\Period;
+use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\Reagent;
 use Log;
 
@@ -51,7 +54,8 @@ class ExamsController extends Controller
     {
         try {
             return view('exam.exams.create')
-                ->with('campusList', $this->getCampuses());
+                ->with('campusList', $this->getCampuses())
+                ->with('locationPeriodsList', $this->getLocationPeriods());
 
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
@@ -67,10 +71,12 @@ class ExamsController extends Controller
             $id_materia = (int)$id_matter;
             $exam = ExamHeader::find($id);
 
+            $periodLoc = PeriodLocation::query()->whereIn('id', $exam->examPeriods->pluck('id_periodo_sede')->toArray())->get();
+
             $reagents = Reagent::query()
-                //->where('id_estado','5')
-                ->where('id_sede', $exam->id_sede)
-                ->where('id_periodo', $exam->id_periodo)
+                ->where('id_estado','5')
+                ->whereIn('id_sede', array_unique($periodLoc->pluck('id_sede')->toArray()))
+                ->whereIn('id_periodo', array_unique($periodLoc->pluck('id_periodo')->toArray()))
                 ->where('id_campus', $exam->id_campus)
                 ->where('id_carrera', $exam->id_carrera)
                 ->where('id_materia', $id_materia)->get();
@@ -97,8 +103,7 @@ class ExamsController extends Controller
 
                 foreach($exam->examsDetails as $det)
                 {
-                    $examDet = ExamDetail::find($det->id);
-                    if($examDet->reagent->id_materia == $id_materia)
+                    if($det->reagent->id_materia == $id_materia)
                         $cantidadReactivos++;
                 }
                 //$matterParameters = $this->getMatterParameters($id_materia, $exam->id_carrera, $exam->id_campus);
@@ -151,14 +156,52 @@ class ExamsController extends Controller
             $exam->creado_por = \Auth::id();
             $exam->fecha_creacion = date('Y-m-d h:i:s');
 
+            $periodsexam = array();
+            foreach ($request->periodosSede as $periodLocation) {
+                $periodExam['id_periodo_sede'] = $periodLocation;
+                $periodsexam[] = new ExamPeriod($periodExam);
+            }
+
+            \DB::beginTransaction();
+
             $exam->save();
+            $exam->examPeriods()->saveMany($periodsexam);
+
+            if( isset($request['es_automatico']) ){
+                try
+                {
+                    $stmt = 'CALL sp_exc_genera_examen('.$exam->id.', '.$exam->id_carrera_campus.', '.\Auth::id().')';
+                    \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+                    $sp = \DB::connection()->getpdo()->prepare($stmt);
+                    $sp->execute();
+                    $spResult = $sp->fetchAll(\DB::connection()->getFetchMode());
+
+                    if(strcmp(strtoupper($spResult[0]->return_message), "OK") !== 0)
+                    {
+                        flash("No fue posible la generaci&oacute;n autom&aacute;tica del examen.", 'warning')->important();
+                        Log::error("[ExamsController][store][Generacion Automatica de Examen] id_examen=".$exam->id."; id_carrera_campus=".$exam->id_carrera_campus."; id_usuario=".\Auth::id()."; Error=".$spResult);
+                    }
+                }
+                catch (\Exception $ex)
+                {
+                    flash("No fue posible la generaci&oacute;n autom&aacute;tica del examen.", 'warning')->important();
+                    Log::error("[ExamsController][store] Request=; Exception: ".$ex);
+                }
+            }
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
             return redirect()->route('exam.exams.detail',['id' => $exam->id, 'id_matter' => 0]);
         }
         catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ExamsController][store] Request=". implode(", ", $request->all()) ."; Exception: ".$ex);
+            \DB::rollback();
+            Log::error("[ExamsController][store] Exception: ".$ex);
             return redirect()->route('exam.exams.create');
+        }
+        finally
+        {
+            \DB::commit();
         }
 
     }

@@ -26,7 +26,7 @@
         $btnlist = route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => 0] );
     }
     $btnrefresh = route('exam.exams.detail', ['id_exam' => $exam->id, 'id_matter' => (($selectedMatter->id_materia > 0) ? (int)$selectedMatter->id_materia : 0)] );
-    $btnclose = route('exam.exams.index');
+    $btnclose = route('exam.exams.edit', $exam->id);
     ?>
     @include('shared.templates._formbuttons')
 

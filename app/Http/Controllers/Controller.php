@@ -50,6 +50,12 @@ abstract class Controller extends BaseController
         return $contents;
     }
 
+    public function getLocationPeriods(){
+        $id_sede = (int)Session::get('idSede');
+        $periods = PeriodLocation::query()->where('id_sede', $id_sede)->where('estado','A')->get();
+        return $periods;
+    }
+
     public function getCampuses(){
         $campus = Campus::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $campus;

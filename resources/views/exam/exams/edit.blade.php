@@ -30,10 +30,17 @@
         </div>
     </div>
 
+    <?php
+    $periodos = '';
+    foreach ($exam->examPeriods as $period)
+    {
+        $periodos = $periodos.'('.$period->periodLocation->period->cod_periodo.') '.$period->periodLocation->period->descripcion.'; ';
+    }
+    ?>
     <div class="form-group">
-        {!! Form::label('descripcion', 'Descripcion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('periodos', 'Periodos:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
-            {!! Form::text('descripcion', $exam->descripcion, ['class' => 'form-control']) !!}
+            {!! Form::text('periodos', $periodos, ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 
@@ -41,6 +48,13 @@
         {!! Form::label('fecha_activacion', 'Fecha Activacion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
             {!! Form::date('fecha_activacion', $exam->fecha_activacion, ['class' => 'form-control']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('descripcion', 'Descripcion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        <div class="col-sm-7">
+            {!! Form::text('descripcion', $exam->descripcion, ['class' => 'form-control']) !!}
         </div>
     </div>
 
