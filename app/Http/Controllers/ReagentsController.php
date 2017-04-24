@@ -46,7 +46,12 @@ class ReagentsController extends Controller
                 else
                     $reagents = Reagent::filter2($ids, $id_estado)->where('id_estado', '!=', 7);
             } else
-                $reagents = Reagent::query()->where('id_estado', '!=', 7);
+            {
+                $idsDist = Distributive::query()->where('id_usuario', \Auth::id())->where('estado', 'A')->get()->pluck('id')->toArray();
+                $reagents = Reagent::query()
+                    ->where('id_estado', '!=', 7)
+                    ->whereIn('id_distributivo', array_unique($idsDist));
+            }
 
             $reagents = $reagents->orderBy('id', 'desc')->get();
 
@@ -271,7 +276,6 @@ class ReagentsController extends Controller
                 ->with('questionsConc', $reagent->questionsConcepts)
                 ->with('questionsProp', $reagent->questionsProperties)
                 ->with('answers', $reagent->answers)
-                ->with('comments',$reagent->comments)
                 ->with('states', $this->getReagentsStates())
                 ->with('users', $this->getUsers())
                 ->with('format', $reagent->format)

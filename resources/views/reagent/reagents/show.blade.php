@@ -236,7 +236,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($reagent->comments as $comment)
+                                @foreach($reagent->comments->sortByDesc('id') as $comment)
                                     <tr>
                                         <td>{{ $comment->fecha_creacion }}</td>
                                         <td>{{ $users[$comment->creado_por] }}</td>

@@ -15,7 +15,7 @@
     <?php
     $btnsave = 1;
     $btnrefresh = route('reagent.reagents.edit',$reagent->id);
-    $btndelete = route('reagent.reagents.destroy', $reagent->id);
+    $btndelete2 = 1;
     $btnclose = route('reagent.reagents.index');
     $btnreply = 1;
     ?>
@@ -178,7 +178,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($comments as $comment)
+                            @foreach($reagent->comments->sortByDesc('id') as $comment)
                                 <tr>
                                     <td>{{ $comment->fecha_creacion }}</td>
                                     <td>{{ $users[$comment->creado_por] }}</td>
@@ -201,9 +201,94 @@
 
 @push('specific-script')
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
+    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     <script type="text/javascript">
         $(window).load(function() {
             inputFileLoad();
         });
+        $("#btn-reenviar").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Enviar',
+                        className: 'btn-info'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("reagent.approvals.comment", $reagent->id) }}",
+                            data: {'comentario':result, 'id_estado':2},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("reagent.reagents.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        $("#btn-eliminar").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Eliminar',
+                        className: 'btn-danger'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("reagent.approvals.comment", $reagent->id) }}",
+                            data: {'comentario':result, 'id_estado':7},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("reagent.reagents.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
     </script>
+
 @endpush

@@ -254,7 +254,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($reagent->comments as $comment)
+                                @foreach($reagent->comments->sortByDesc('id') as $comment)
                                     <tr>
                                         <td>{{ $comment->fecha_creacion }}</td>
                                         <td>{{ $users[$comment->creado_por] }}</td>
@@ -407,10 +407,10 @@
             });
         });
 
-        function result(arg){
-            alert(arg);
-            console.log("Ok");
-        }
+        //function result(arg){
+        //    alert(arg);
+        //    console.log("Ok");
+        //}
     </script>
 
 @endpush

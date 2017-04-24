@@ -38,23 +38,16 @@ class ReagentsApprovalsController extends Controller
                 $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
                 $id_area = ($area->count() > 0) ? $area->first()->id : 0;
 
-                if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0){
-                    $distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus);
-                    if($distributivo->count() > 0)
-                    {
-                        foreach ($distributivo as $dist)
-                        {
-                            $idsDist[] = $dist->id;
-                        }
-                        $reagents = Reagent::filter($idsDist)->where('id_estado', '!=', 7);
-                    }
-                    else
-                        flash("No se encontro informaci&oacute;n!", 'warning')->important();
-
-                }else
+                if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0)
                 {
-                    $reagents = Reagent::query()->where('id_estado','!=',7);
-
+                    $distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus);
+                    $idsDist = array_unique($distributivo->pluck('id')->toArray());
+                    $reagents = Reagent::filter($idsDist)->where('id_estado', '!=', 7);
+                    if($reagents->count() == 0)
+                        flash("No se encontro informaci&oacute;n!", 'warning');
+                }
+                else
+                {
                     if($id_campus > 0 && $id_carrera > 0)
                         $id_careerCampus = CareerCampus::query()
                             ->where('estado','A')
@@ -62,18 +55,9 @@ class ReagentsApprovalsController extends Controller
                             ->where('id_campus', $id_campus)->first()->id;
 
                     $matters = MatterCareer::filter($id_careerCampus, 0, $id_area)->get();
-
-                    if($matters->count() > 0)
-                    {
-                        foreach ($matters as $mat)
-                        {
-                            $idsMat[] = $mat->id_materia;
-                        }
-                        array_unique($idsMat);
-                        $reagents = $reagents->whereIn('id_materia', $idsMat);
-                    }
+                    $idsMat = array_unique($matters->pluck('id_materia')->ToArray());
+                    $reagents = Reagent::query()->where('id_estado','!=',7)->whereIn('id_materia', $idsMat);
                 }
-
             }
             else
             {

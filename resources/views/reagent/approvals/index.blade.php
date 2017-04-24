@@ -80,7 +80,7 @@
             </tr>
             </thead>
             <tbody>
-            @if(isset($reagents))
+            @if(isset($reagents) and $reagents->count() > 0)
                 @foreach($reagents as $reagent)
                     <?php $urls = array('showurl' => route('reagent.approvals.show', $reagent->id)); ?>
                     <tr>
