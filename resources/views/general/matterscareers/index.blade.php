@@ -86,7 +86,7 @@
                 </tr>
             </thead>
             <tbody>
-            @if($filters[0] > 0)
+            @if($mattersCareers->count() > 0)
                 @foreach($mattersCareers as $matterCareer)
                     <?php
                     $urls = array(

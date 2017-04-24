@@ -34,6 +34,7 @@ class MattersCareersController extends Controller
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
             $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+            $id_careerCampus = 0;
 
             $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
             $idJefeArea = ($area->count() > 0) ? $area->first()->id : 0;
@@ -45,8 +46,6 @@ class MattersCareersController extends Controller
                     ->where('id_campus', $id_campus)
                     ->first()->id;
             }
-            else
-                $id_careerCampus = 0;
 
             if( $idJefeArea > 0 )
                 $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $idJefeArea);
@@ -54,6 +53,9 @@ class MattersCareersController extends Controller
                 $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area);
 
             $mattersCareers = $mattersCareers->orderBy('id', 'desc')->get();
+
+            if($mattersCareers->count() == 0)
+                flash("No se encontro informaci&oacute;n!", 'warning');
 
             $filters = array($id_campus, $id_carrera, $id_mencion, (($idJefeArea > 0) ? -1 :$id_area));
 
@@ -258,9 +260,10 @@ class MattersCareersController extends Controller
                 $id_area = ($area->count() > 0) ? $area->first()->id : 0;
 
                 if($id_carrera > 0 && $id_campus > 0)
+                {
                     $id_careerCampus = $this->getCareersCampuses()->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
-
-                $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+                    $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+                }
             }
             else
             {
@@ -272,15 +275,9 @@ class MattersCareersController extends Controller
                     ->where('id_usuario', \Auth::id())->get();
             }
 
-            foreach ($dist as $mat)
+            if(isset($dist))
             {
-                //if(!isset($ids) || (isset($ids) && !in_array($mat->id_materia, $ids)))
-                $ids[] = $mat->id_materia;
-            }
-
-            if(isset($ids))
-            {
-                array_unique($ids);
+                $ids = array_unique($dist->pluck('id_materia')->toArray());
                 $mattersList = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
             }
 

@@ -43,8 +43,6 @@ class ReagentsApprovalsController extends Controller
                     $distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus);
                     $idsDist = array_unique($distributivo->pluck('id')->toArray());
                     $reagents = Reagent::filter($idsDist)->where('id_estado', '!=', 7);
-                    if($reagents->count() == 0)
-                        flash("No se encontro informaci&oacute;n!", 'warning');
                 }
                 else
                 {
@@ -68,6 +66,10 @@ class ReagentsApprovalsController extends Controller
             if(isset($reagents))
             {
                 $reagents = $reagents->orderBy('id', 'asc')->get();
+                
+                if($reagents->count() == 0)
+                    flash("No se encontro informaci&oacute;n!", 'warning');
+                
                 return view('reagent.approvals.index')
                     ->with('reagents', $reagents)
                     ->with('campusList', $this->getCampuses())
