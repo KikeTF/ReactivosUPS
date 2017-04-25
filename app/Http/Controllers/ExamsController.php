@@ -146,6 +146,29 @@ class ExamsController extends Controller
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_careerCampus = $this->getCareersCampuses()->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
 
+            $valStmt = 'CALL sp_exc_valida_reactivos('.$id_careerCampus.', '."'".implode(",", $request->periodosSede)."'".')';
+            \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+            $spVal = \DB::connection()->getpdo()->prepare($valStmt);
+            $spVal->execute();
+            $spValResult = $spVal->fetchAll(\DB::connection()->getFetchMode());
+
+            if(strcmp(strtoupper($spValResult[0]->return_message), "OK") !== 0)
+            {
+                if(strcmp(strtoupper($spValResult[0]->return_message), "ERROR") == 0)
+                {
+                    $msg = "Existen materias que no cumplen con la cantidad de reactivos requeridos, por favor verificar: ".$spValResult[0]->message_detail;
+                    flash($msg, 'warning')->important();
+                    Log::error("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$msg);
+                    return redirect()->route('exam.exams.create');
+                }
+                else
+                {
+                    Log::error("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$spValResult[0]->return_message);
+                    flash('No fue posible completar la transaccion', 'danger')->important();
+                    return redirect()->route('exam.exams.index');
+                }
+            }
+
             $exam = new ExamHeader($request->all());
             $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
             $exam->estado = 'A';
@@ -179,7 +202,7 @@ class ExamsController extends Controller
                     if(strcmp(strtoupper($spResult[0]->return_message), "OK") !== 0)
                     {
                         flash("No fue posible la generaci&oacute;n autom&aacute;tica del examen.", 'warning')->important();
-                        Log::error("[ExamsController][store][Generacion Automatica de Examen] id_examen=".$exam->id."; id_carrera_campus=".$exam->id_carrera_campus."; id_usuario=".\Auth::id()."; Error=".$spResult);
+                        Log::error("[ExamsController][store][Generacion Automatica de Examen] id_examen=".$exam->id."; id_carrera_campus=".$exam->id_carrera_campus."; id_usuario=".\Auth::id()."; Error=".$spResult[0]->return_message);
                     }
                 }
                 catch (\Exception $ex)
