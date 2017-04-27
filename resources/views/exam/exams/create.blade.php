@@ -108,5 +108,9 @@
 @push('specific-script')
 <script type="text/javascript" src="{{ asset('scripts/exam/exams/common.js') }}"></script>
 @include("shared.optionlists.functions")
-
+<script type="text/javascript">
+    $( window ).load(function() {
+        getCareersByCampus();
+    });
+</script>
 @endpush

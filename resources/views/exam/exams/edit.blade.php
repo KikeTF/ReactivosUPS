@@ -38,7 +38,7 @@
     }
     ?>
     <div class="form-group">
-        {!! Form::label('periodos', 'Periodos:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('periodos', 'Periodos Reactivos:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
             {!! Form::text('periodos', $periodos, ['class' => 'form-control', 'readonly']) !!}
         </div>

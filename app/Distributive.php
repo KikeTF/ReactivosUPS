@@ -16,7 +16,7 @@ class Distributive extends Model
     }
 
     public function matterCareer(){
-        return $this->belongsTo('ReactivosUPS\MatterCareer');
+        return $this->belongsTo('ReactivosUPS\MatterCareer', 'id_materia_carrera');
     }
 
     public function profileUser(){

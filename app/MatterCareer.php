@@ -34,7 +34,7 @@ class MatterCareer extends Model
     }
 
     public function distributives(){
-        return $this->hasMany('ReactivosUPS\Distributive');
+        return $this->hasMany('ReactivosUPS\Distributive', 'id_materia_carrera');
     }
 
     public function scopeFilter($query, $id_carrera_campus, $id_mencion, $id_area){

@@ -156,7 +156,8 @@ class ExamsController extends Controller
             {
                 if(strcmp(strtoupper($spValResult[0]->return_message), "ERROR") == 0)
                 {
-                    $msg = "Existen materias que no cumplen con la cantidad de reactivos requeridos, por favor verificar: ".$spValResult[0]->message_detail;
+                    $msg = "Existen materias que no cumplen con la cantidad de reactivos requeridos, por favor verificar: ";
+                    $msg = $msg."<br/><small>".$spValResult[0]->message_detail."</small>";
                     flash($msg, 'warning')->important();
                     Log::error("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$msg);
                     return redirect()->route('exam.exams.create');
@@ -237,7 +238,19 @@ class ExamsController extends Controller
      */
     public function show($id)
     {
-        //
+        try
+        {
+            $exam = ExamHeader::find($id);
+
+            return view('exam.exams.show')
+                ->with('exam', $exam);
+        }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ReagentsController][show] Exception: " . $ex);
+            return redirect()->route('exam.exams.index');
+        }
     }
 
     /**
