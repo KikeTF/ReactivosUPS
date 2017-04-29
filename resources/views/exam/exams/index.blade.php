@@ -110,8 +110,8 @@
                             @endif
                         </td>
                         <td align="center">
-                            <span class="{{ ($exam->estado == 'A') ? 'label label-primary' : 'label' }}">
-                                {{ ($exam->estado == 'A') ? 'Activo' : 'Inactivo' }}
+                            <span class="label label-{{  $exam->state->etiqueta }}">
+                                {{ $exam->state->descripcion }}
                             </span>
                         </td>
                         <td>

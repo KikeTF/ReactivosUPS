@@ -162,7 +162,17 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
         'as'    => 'exam.exams.updateDetail'
     ]);
 
+    Route::get('exams/{id}/history', [
+        'uses'  => 'ExamsController@history',
+        'as'    => 'exam.exams.history'
+    ]);
+
     Route::resource('exams','ExamsController');
+
+    Route::get('exams/{id}/destroy', [
+        'uses'  => 'ExamsController@destroy',
+        'as'    => 'exam.exams.destroy'
+    ]);
 
 });
 

@@ -10,7 +10,7 @@ class ExamHeader extends Model
     public $timestamps = false;
 
     protected $fillable =["id_periodo_sede", "id_mencion", "descripcion", "cantidad_reactivos", "fecha_activacion",
-        "es_prueba", "estado", "id_sede", "id_periodo", "id_campus", "id_carrera"];
+        "es_prueba", "id_estado", "id_sede", "id_periodo", "id_campus", "id_carrera"];
 
     public function periodLocation(){
         return $this->belongsTo('ReactivosUPS\PeriodLocation', 'id_periodo_sede');
@@ -30,5 +30,13 @@ class ExamHeader extends Model
 
     public function examPeriods(){
         return $this->hasMany('ReactivosUPS\ExamPeriod', 'id_examen_cab');
+    }
+
+    public function comments(){
+        return $this->hasMany('ReactivosUPS\ExamComment', 'id_examen_cab');
+    }
+
+    public function state(){
+        return $this->belongsTo('ReactivosUPS\ExamState', 'id_estado');
     }
 }

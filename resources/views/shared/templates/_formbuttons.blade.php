@@ -7,6 +7,13 @@
         <div style="height: 35px; margin: 0 3px -14px 3px; display: inline-block; border: 1px solid #D9D9D9; border-width: 0 1px 0 0"></div>
     @endif
 
+    @if(isset($btnhistory))
+        <button title="Historial" onclick="location.href='{{ $btnhistory }}'; return false;" class="btn btn-white btn-primary btn-bold">
+            <i class='ace-icon fa fa-history bigger-110 blue' style="margin: 0"></i>
+        </button>
+        <div style="height: 35px; margin: 0 3px -14px 3px; display: inline-block; border: 1px solid #D9D9D9; border-width: 0 1px 0 0"></div>
+    @endif
+
     @if(isset($btnreply))
         <button id="btn-reenviar" title="Reenviar" onclick="return false;" class="btn btn-white btn-primary btn-bold">
             <i class='ace-icon fa fa-reply bigger-110 blue' style="margin: 0"></i>

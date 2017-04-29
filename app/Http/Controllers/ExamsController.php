@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\ExamComment;
 use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
 use ReactivosUPS\ExamPeriod;
@@ -34,7 +35,7 @@ class ExamsController extends Controller
 
             $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
 
-            $exams = ExamHeader::query()->where('estado', '!=', 'E')->get();
+            $exams = ExamHeader::query()->where('id_estado', '!=', 5)->get();
 
             return view('exam.exams.index')
                 ->with('exams', $exams);
@@ -172,7 +173,7 @@ class ExamsController extends Controller
 
             $exam = new ExamHeader($request->all());
             $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
-            $exam->estado = 'A';
+            $exam->id_estado = 1;
             $exam->id_sede = (int)\Session::get('idSede');
             $exam->id_periodo = (int)\Session::get('idPeriodo');
             $exam->id_periodo_sede = (int)\Session::get('idPeriodoSede');
@@ -186,10 +187,18 @@ class ExamsController extends Controller
                 $periodsexam[] = new ExamPeriod($periodExam);
             }
 
+            $comment = new ExamComment();
+            $comment->id_estado_anterior = 1;
+            $comment->id_estado_nuevo = 1;
+            $comment->comentario = 'Examen creado: '.(isset($request['es_automatico']) ? 'Proceso Automatico' : 'Proceso Manual');
+            $comment->creado_por = \Auth::id();
+            $comment->fecha_creacion = date('Y-m-d h:i:s');
+
             \DB::beginTransaction();
 
             $exam->save();
             $exam->examPeriods()->saveMany($periodsexam);
+            $exam->comments()->saveMany($comment);
 
             if( isset($request['es_automatico']) ){
                 try
@@ -241,14 +250,34 @@ class ExamsController extends Controller
         try
         {
             $exam = ExamHeader::find($id);
-
+            $mentionsList = Mention::query()->where('id_carrera', $exam->id_carrera)->where('estado', 'A')->lists('descripcion','id');
+            
             return view('exam.exams.show')
+                ->with('mentionsList', $mentionsList)
                 ->with('exam', $exam);
         }
         catch (\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsController][show] Exception: " . $ex);
+            return redirect()->route('exam.exams.index');
+        }
+    }
+
+    public function history($id)
+    {
+        try
+        {
+            $exam = ExamHeader::find($id);
+
+            return view('exam.exams.history')
+                ->with('states', $this->getReagentsStates())
+                ->with('exam', $exam);
+        }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
+            Log::error("[ReagentsController][history] Exception: " . $ex);
             return redirect()->route('exam.exams.index');
         }
     }
@@ -290,11 +319,22 @@ class ExamsController extends Controller
             $exam->descripcion = $request->descripcion;
             $exam->fecha_activacion = $request->fecha_activacion;
             $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
-            $exam->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+            $exam->modificado_por = \Auth::id();
+            $exam->fecha_modificacion = date('Y-m-d h:i:s');
+
+            $comment = new ExamComment();
+            $comment->id_examen_cab = $exam->id;
+            $comment->id_estado_anterior = $exam->id_estado;
+            $comment->id_estado_nuevo = $exam->id_estado;
+            $comment->comentario = 'Examen modificado: Informacion General.';
+            $comment->creado_por = \Auth::id();
+            $comment->fecha_creacion = date('Y-m-d h:i:s');
 
             \DB::beginTransaction();
 
             $exam->save();
+            $comment->save();
+
             flash('Transacci&oacuten realizada existosamente', 'success');
         }
         catch (\Exception $ex)
@@ -314,6 +354,9 @@ class ExamsController extends Controller
     public function updateDetail(Request $request, $id)
     {
         $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+        $desc_materia = Matter::find($id_materia)->descripcion;
+        $rea_nuevos = '';
+        $rea_eliminados = '';
 
         try
         {
@@ -338,6 +381,8 @@ class ExamsController extends Controller
                 {
                     $newIdsDet = array_diff($idsReq, $idsDet); //nuevos
                     $delIdsDet = array_diff($idsDet, array_intersect($idsDet, $idsReq)); //eliminados
+                    $rea_nuevos = implode(',', $newIdsDet);
+                    $rea_eliminados = implode(',', $delIdsDet);
 
                     if(sizeof($delIdsDet) > 0)
                     {
@@ -380,8 +425,19 @@ class ExamsController extends Controller
                 {
                     try
                     {
+                        $comment = new ExamComment();
+                        $comment->id_estado_anterior = $exam->id_estado;
+                        $comment->id_estado_nuevo = $exam->id_estado;
+                        $comment->comentario = 'Examen modificado: Reactivos '.$desc_materia.'. Nuevos: '.$rea_nuevos.'; Eliminados: '.$rea_eliminados;
+                        $comment->creado_por = \Auth::id();
+                        $comment->fecha_creacion = date('Y-m-d h:i:s');
+
                         \DB::beginTransaction();
+                        $exam->modificado_por = \Auth::id();
+                        $exam->fecha_modificacion = date('Y-m-d h:i:s');
+                        $exam->save();
                         $exam->examsDetails()->saveMany($examDetails);
+                        $exam->comments()->saveMany($comment);
                         flash('Transacci&oacuten realizada existosamente', 'success');
                     }
                     catch (\Exception $ex)
@@ -419,6 +475,79 @@ class ExamsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try
+        {
+            $exam = ExamHeader::find($id);
+            $comment = new ExamComment();
+
+            $comment->id_estado_anterior = $exam->id_estado;
+            $comment->id_estado_nuevo = 5;
+            $comment->comentario = 'Examen eliminado.';
+            $comment->creado_por = \Auth::id();
+            $comment->fecha_creacion = date('Y-m-d h:i:s');
+
+            $exam->id_estado = 5;
+            $exam->modificado_por = \Auth::id();
+            $exam->fecha_modificacion = date('Y-m-d h:i:s');
+
+            \DB::beginTransaction();
+
+            $exam->save();
+            $exam->comments()->saveMany($comment);
+        }
+        catch (\Exception $ex)
+        {
+            \DB::rollback();
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ExamsController][destroy] [id: $id]; Exception: " . $ex);
+        }
+        finally
+        {
+            \DB::commit();
+        }
+
+        return redirect()->route('exam.exams.index');
+        
+    }
+
+    public function comment(Request $request, $id)
+    {
+        $valid = true;
+
+        \DB::beginTransaction(); //Start transaction!
+
+        try
+        {
+            $exam = ExamHeader::find($id);
+
+            $comment = new ExamComment();
+            $comment->id_examen_cab = $id;
+            $comment->id_estado_anterior = $exam->id_estado;
+            $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $exam->id_estado : (int)$request->id_estado;
+            $comment->comentario = $request->comentario;
+            $comment->creado_por = \Auth::id();
+            $comment->fecha_creacion = date('Y-m-d h:i:s');
+
+            if( isset( $request['id_estado'] ) ){
+                $exam->id_estado = (int)$request->id_estado;
+                $exam->modificado_por = \Auth::id();
+                $exam->fecha_modificacion = date('Y-m-d h:i:s');
+            }
+
+            $exam->save();
+            $comment->save();
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }
+        catch(\Exception $ex)
+        {
+            //failed logic here
+            \DB::rollback();
+            $valid = false;
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ExamsController][comment] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+        }
+
+        \DB::commit();
+        return array("valid"=>$valid);
     }
 }
