@@ -13,7 +13,8 @@
         "yajra/laravel-datatables-oracle": "6.0.x-dev",
         "laracasts/flash": "^2.0",
         "maatwebsite/excel": "~2.1.0",
-        "monolog/monolog": "^1.22"
+        "monolog/monolog": "^1.22",
+        "ghidev/fpdf": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

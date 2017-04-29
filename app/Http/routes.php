@@ -164,5 +164,22 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
 
     Route::resource('exams','ExamsController');
 
+
+});
+
+Route::get('pdf', function(){
+
+    $pdf = new Ghidev\Fpdf\Fpdf;
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->Cell(19, 10, 'Universidad Politecnica Salesiana', 1, 0, 'C');
+    //$pdf->Cell(50, 10, 'Celda de 50 x 10', 1);
+    $pdf->Ln(10);
+    $pdf->SetFont('Arial', 'I', 12);
+    $pdf->Cell(80, 10, 'Esto es una celda de 40 x 10', 0, 'C');
+    $pdf->Cell(50, 10, 'Celda de 50 x 10', 0);
+    $pdf->Output();
+    exit;
+
 });
 
