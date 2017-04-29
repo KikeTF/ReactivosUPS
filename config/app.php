@@ -155,6 +155,9 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Ghidev\Fpdf\FpdfServiceProvider::class,
+        Ghidev\Fpdf\RotationServiceProvider::class,
+        Ghidev\Fpdf\MC_TableServiceProvider::class,
 
     ],
 
@@ -209,6 +212,9 @@ return [
         'Gate'      => Illuminate\Support\Facades\Gate::class,
         'Datatables'=> Yajra\Datatables\Facades\Datatables::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
+        'Fpdf'      => Ghidev\Fpdf\Facades\Fpdf::class,
+        'Rotation'  => Ghidev\Fpdf\Facades\Rotation::class,
+        'MC_Table'  => Ghidev\Fpdf\Facades\MC_Table::class,
 
 
     ],
