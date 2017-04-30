@@ -11,6 +11,12 @@
         <button title="Historial" onclick="location.href='{{ $btnhistory }}'; return false;" class="btn btn-white btn-primary btn-bold">
             <i class='ace-icon fa fa-history bigger-110 blue' style="margin: 0"></i>
         </button>
+    @endif
+
+    @if(isset($btnprint))
+        <button title="Historial" onclick="location.href='{{ $btnprint }}'; return false;" class="btn btn-white btn-primary btn-bold">
+            <i class='ace-icon fa fa-print bigger-110 blue' style="margin: 0"></i>
+        </button>
         <div style="height: 35px; margin: 0 3px -14px 3px; display: inline-block; border: 1px solid #D9D9D9; border-width: 0 1px 0 0"></div>
     @endif
 

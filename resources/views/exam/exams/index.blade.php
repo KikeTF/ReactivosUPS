@@ -83,7 +83,7 @@
                 @foreach($exams as $exam)
                     <?php
                     $urls = array(
-                        'showurl' => route('exam.exams.show', [$exam->id, 0]),
+                        'showurl' => route('exam.exams.show', $exam->id),
                         'editurl' => route('exam.exams.edit', $exam->id),
                         'destroyurl' => route('exam.exams.destroy', $exam->id)
                     );

@@ -17,6 +17,7 @@ use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\Reagent;
 use Log;
+use Ghidev\Fpdf\Fpdf;
 
 class ExamsController extends Controller
 {
@@ -549,5 +550,78 @@ class ExamsController extends Controller
 
         \DB::commit();
         return array("valid"=>$valid);
+    }
+    
+    public function printReport($id)
+    {
+        $exam = ExamHeader::find($id);
+        $title = utf8_decode('UNIVERSIDAD POLITÉCNICA SALESIANA SEDE '.$exam->periodLocation->location->descripcion);
+        $subtitle = utf8_decode('EXAMEN COMPLEXIVO');
+
+        $pdf = new Fpdf();
+        $pdf->AddPage();
+        //$pdf->Image(asset('image/logo-ups-home.png'), 10, 6, 30);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(19, 1, $title, 0, 1, 'C');
+        $pdf->Ln(0.2);
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->Cell(19, 0, utf8_decode($exam->careerCampus->career->descripcion), 0, 0, 'C');
+        $pdf->Ln(0.7);
+        $pdf->Cell(19, 0, $subtitle, 0, 0, 'C');
+        $pdf->Ln(0.7);
+        $pdf->Cell(19, 0, utf8_decode($exam->periodLocation->period->descripcion), 0, 0, 'C');
+        $pdf->Ln(1);
+
+        $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');
+        foreach($mattersIds as $id)
+            $idsMat[] = $id;
+
+        $mattersCareers = MatterCareer::query()->whereIn('id_materia', array_unique($idsMat))->get();
+
+        foreach($mattersCareers as $matCar)
+        {
+            $matter = $matCar->matter;
+            $pdf->SetFont('Arial', 'B', 14);
+            $pdf->Cell(19, 2, $matter->descripcion, 0, 0, 'L');
+            $pdf->Ln(1);
+            foreach ($exam->examsDetails as $det)
+            {
+                if($det->reagent->id_materia == $matter->id)
+                {
+                    $pdf->SetFont('Arial', '', 10);
+                    $pdf->Cell(19, 2, $det->reagent->planteamiento, 0, 0, 'J');
+                    $pdf->Ln(1);
+
+                    foreach($det->reagent->questionsConcepts as $conc)
+                    {
+                        $pdf->Cell(9.5, 0, $conc->concepto, 0, 0, 'L');
+                        $pdf->Ln(0.5);
+                    }
+
+                    foreach($det->reagent->questionsProperties as $prop)
+                    {
+                        $pdf->Cell(9.5, 0, $conc->propiedad, 0, 0, 'R');
+                        $pdf->Ln(0.5);
+                    }
+
+                    $pdf->Ln(0.5);
+
+                    foreach($det->reagent->answers as $answ)
+                    {
+                        $pdf->Cell(21, 0, $answ->descripcion, 0, 0, 'L');
+                        $pdf->Ln(0.5);
+                    }
+                        //questionsProperties
+                        //answers
+                }
+            }
+            $pdf->Ln(1);
+
+        }
+
+
+
+        $pdf->Output();
+        exit;
     }
 }

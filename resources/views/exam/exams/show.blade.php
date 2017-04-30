@@ -11,6 +11,7 @@
         //if( in_array($reagent->id_estado, array(1, 4)) )
             $btnedit = route('exam.exams.edit', $exam->id);
         $btnhistory = route('exam.exams.history', $exam->id);
+        $btnprint =  route('exam.exams.report', $exam->id);
         $btnclose = route('exam.exams.index');
         ?>
         @include('shared.templates._formbuttons')
