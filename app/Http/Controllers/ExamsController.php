@@ -569,12 +569,11 @@ class ExamsController extends Controller
         $pdf->SetMargins(2,3);
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(19, 1, $title, 0, 1, 'C');
-        $pdf->Ln(0.2);
+        $pdf->Cell(17, 0.7, $title, 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 14);
-        $pdf->Cell(19, 0.7, utf8_decode($exam->careerCampus->career->descripcion), 0, 1, 'C');
-        $pdf->Cell(19, 0.7, $subtitle, 0, 1, 'C');
-        $pdf->Cell(19, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 0, 1, 'C');
+        $pdf->Cell(17, 0.7, utf8_decode($exam->careerCampus->career->descripcion), 0, 1, 'C');
+        $pdf->Cell(17, 0.7, $subtitle, 0, 1, 'C');
+        $pdf->Cell(17, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 0, 1, 'C');
         $pdf->Ln(1);
 
         $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');
@@ -586,29 +585,31 @@ class ExamsController extends Controller
         foreach($mattersCareers as $matCar)
         {
             $matter = $matCar->matter;
+            $arrCountRea = array_count_values($exam->examsDetails->pluck('reagent')->pluck('id_materia')->toArray());
             $pdf->SetFont('Arial', 'B', 14);
-            $pdf->Cell(19, 0.7, $matter->descripcion, 0, 1, 'L');
+            $pdf->Cell(17, 0.7, utf8_decode($matter->descripcion).' ('.$arrCountRea[$matter->id].')', 0, 1, 'L');
+
             $pdf->Ln(0.5);
             foreach ($exam->examsDetails as $det)
             {
                 if($det->reagent->id_materia == $matter->id)
                 {
                     $pdf->SetFont('Arial', '', 10);
-                    $pdf->MultiCell(19, 0.5 , $det->reagent->planteamiento, 0, 'J');
+                    $pdf->MultiCell(17, 0.5 , $det->reagent->planteamiento, 0, 'J');
 
                     if($det->reagent->questionsConcepts->count() > 0)
                     {
                         $pdf->Ln(0.3);
                         foreach($det->reagent->questionsConcepts as $conc)
-                            $pdf->Cell(9.5, 0.5, $conc->concepto, 0, 1, 'L');
+                            $pdf->Cell(8.5, 0.5, $conc->concepto, 0, 1, 'L');
                     }
 
                     foreach($det->reagent->questionsProperties as $prop)
-                        $pdf->Cell(9.5, 0.5, $conc->propiedad, 0, 1, 'R');
+                        $pdf->Cell(8.5, 0.5, $conc->propiedad, 0, 1, 'R');
 
                     $pdf->Ln(0.3);
                     foreach($det->reagent->answers as $answ)
-                        $pdf->Cell(21, 0.5, $answ->descripcion, 0, 1, 'L');
+                        $pdf->Cell(17, 0.5, $answ->descripcion, 0, 1, 'L');
 
                     $pdf->Ln(1);
                 }
