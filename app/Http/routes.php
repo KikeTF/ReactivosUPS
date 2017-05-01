@@ -167,9 +167,9 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
         'as'    => 'exam.exams.history'
     ]);
 
-    Route::get('exams/{id}/history', [
-        'uses'  => 'ExamsController@history',
-        'as'    => 'exam.exams.history'
+    Route::get('exams/{id}/comment', [
+        'uses'  => 'ExamsController@comment',
+        'as'    => 'exam.exams.comment'
     ]);
 
     Route::resource('exams','ExamsController');

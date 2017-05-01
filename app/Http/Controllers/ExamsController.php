@@ -351,7 +351,7 @@ class ExamsController extends Controller
             \DB::commit();
         }
 
-        return redirect()->route('exam.exams.edit', $id);
+        return redirect()->route('exam.exams.show', $id);
     }
 
     public function updateDetail(Request $request, $id)
@@ -491,7 +491,7 @@ class ExamsController extends Controller
             $comment->creado_por = \Auth::id();
             $comment->fecha_creacion = date('Y-m-d h:i:s');
 
-            $exam->id_estado = 5;
+            $exam->id_estado = 6;
             $exam->modificado_por = \Auth::id();
             $exam->fecha_modificacion = date('Y-m-d h:i:s');
 

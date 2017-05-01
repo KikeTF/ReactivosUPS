@@ -206,6 +206,7 @@
         $(window).load(function() {
             inputFileLoad();
         });
+
         $("#btn-reenviar").on('click', function() {
             bootbox.prompt({
                 title: "Ingrese sus comentarios...",

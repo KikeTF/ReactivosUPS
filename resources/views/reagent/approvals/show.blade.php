@@ -6,33 +6,16 @@
 @section('contenido')
 
     <form class="form-horizontal" role="form">
-
-        <div class="form-group">
-            @if($reagent->id_estado == 2)
-                <div id="btn-aprobado" class="btn btn-white btn-primary btn-bold">
-                    <a class="info" title="Aprobar" href="#">
-                        <i class='ace-icon fa fa-thumbs-o-up bigger-110 info'></i>
-                    </a>
-                </div>
-                <div id="btn-rechazado" class="btn btn-white btn-grey btn-bold">
-                    <a class="grey" title="Rechazar" href="#">
-                        <i class='ace-icon fa fa-thumbs-o-down bigger-110 grey'></i>
-                    </a>
-                </div>
-                <div id="btn-comentario" class="btn btn-white btn-warning btn-bold">
-                    <a class="orange2" title="Comentarios" href="#">
-                        <i class='ace-icon fa fa-comment-o bigger-110 orange2'></i>
-                    </a>
-                </div>
-            @endif
-
-            <div class="btn btn-white btn-danger btn-bold">
-                <a class="red" title="Cerrar" href="{{ route('reagent.approvals.index') }}">
-                    <i class='ace-icon fa fa-close bigger-110 red'></i>
-                </a>
-            </div>
-        </div>
-
+        <?php
+        if($reagent->id_estado == 2)
+        {
+            $btnaprove = 1;
+            $btnreject = 1;
+            $btncomment = 1;
+        }
+        $btnclose = route('reagent.approvals.index');
+        ?>
+        @include('shared.templates._formbuttons')
 
         <div id="accordion" class="accordion-style1 panel-group">
             <div class="panel panel-default">

@@ -8,8 +8,19 @@
     <form class="form-horizontal" role="form">
 
         <?php
-        //if( in_array($reagent->id_estado, array(1, 4)) )
+        if($exam->id_estado == 2)
+        {
+            $btnaprove = 1;
+            $btnreject = 1;
+            $btncomment = 1;
+        }
+        elseif (in_array($exam->id_estado, array(1, 3)) )
+        {
+            $btnreply = 1;
             $btnedit = route('exam.exams.edit', $exam->id);
+            $btndelete2 = 1;
+        }
+
         $btnhistory = route('exam.exams.history', $exam->id);
         $btnprint =  route('exam.exams.report', $exam->id);
         $btnclose = route('exam.exams.index');
@@ -178,4 +189,217 @@
 
 @push('specific-script')
     <script type="text/javascript" src="{{ asset('scripts/exam/exams/common.js') }}"></script>
+
+    <script type="text/javascript">
+        $("#btn-aprobado").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese No. Resoluci&oacute;n...",
+                inputType: 'text',
+                buttons: {
+                    'confirm': {
+                        label: 'Aprobar',
+                        className: 'btn-info'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("exam.exams.comment", $exam->id) }}",
+                            data: {'comentario':result, 'id_estado':4},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("exam.exams.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        $("#btn-rechazado").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Rechazar',
+                        className: 'btn-danger'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("exam.exams.comment", $exam->id) }}",
+                            data: {'comentario':result, 'id_estado':5},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("exam.exams.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        $("#btn-comentario").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Enviar',
+                        className: 'btn-info'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("exam.exams.comment", $exam->id) }}",
+                            data: {'comentario':result, 'id_estado':3},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("exam.exams.index") }}");
+                                }
+                                else {
+                                    window.location.replace("{{ Route("exam.exams.show", $exam->id) }}");
+
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        $("#btn-reenviar").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Enviar',
+                        className: 'btn-info'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("exam.exams.comment", $exam->id) }}",
+                            data: {'comentario':result, 'id_estado':2},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("exam.exams.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        $("#btn-eliminar").on('click', function() {
+            bootbox.prompt({
+                title: "Ingrese sus comentarios...",
+                inputType: 'textarea',
+                buttons: {
+                    'confirm': {
+                        label: 'Eliminar',
+                        className: 'btn-danger'
+                    },
+                    'cancel': {
+                        label: 'Cancelar',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result === null) {
+                        console.log("Ok");
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ Route("exam.exams.comment", $exam->id) }}",
+                            data: {'comentario':result, 'id_estado':6},
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            error: function (e) {
+                                console.log(e);
+                            },
+                            success: function (result) {
+                                if (result.valid) {
+                                    window.location.replace("{{ Route("exam.exams.index") }}");
+                                }
+                                else {
+                                    alert('Error');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
 @endpush
