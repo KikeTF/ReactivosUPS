@@ -9,13 +9,13 @@ use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
 use ReactivosUPS\ExamPeriod;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Mention;
 use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\Reagent;
+use ReactivosUPS\Report;
 use Log;
 use Ghidev\Fpdf\Fpdf;
 
@@ -144,8 +144,10 @@ class ExamsController extends Controller
     {
         try
         {
+            $id_sede = (int)\Session::get('idSede');
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_periodo_sede = (isset($request['id_periodo_sede']) ? (int)$request->id_periodo_sede : 0);
             $id_careerCampus = $this->getCareersCampuses()->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
 
             $valStmt = 'CALL sp_exc_valida_reactivos('.$id_careerCampus.', '."'".implode(",", $request->periodosSede)."'".')';
@@ -175,9 +177,9 @@ class ExamsController extends Controller
             $exam = new ExamHeader($request->all());
             $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
             $exam->id_estado = 1;
-            $exam->id_sede = (int)\Session::get('idSede');
-            $exam->id_periodo = (int)\Session::get('idPeriodo');
-            $exam->id_periodo_sede = (int)\Session::get('idPeriodoSede');
+            $exam->id_sede = $id_sede;
+            $exam->id_periodo = PeriodLocation::find($id_periodo_sede)->id_periodo;
+            $exam->id_periodo_sede = $id_periodo_sede;
             $exam->id_carrera_campus = $id_careerCampus;
             $exam->creado_por = \Auth::id();
             $exam->fecha_creacion = date('Y-m-d h:i:s');
@@ -199,7 +201,8 @@ class ExamsController extends Controller
 
             $exam->save();
             $exam->examPeriods()->saveMany($periodsexam);
-            $exam->comments()->saveMany($comment);
+            $comment->id_examen_cab = $exam->id;
+            $comment->save();
 
             if( isset($request['es_automatico']) ){
                 try
@@ -427,6 +430,7 @@ class ExamsController extends Controller
                     try
                     {
                         $comment = new ExamComment();
+                        $comment->id_examen_cab = $exam->id;
                         $comment->id_estado_anterior = $exam->id_estado;
                         $comment->id_estado_nuevo = $exam->id_estado;
                         $comment->comentario = 'Examen modificado: Reactivos '.$desc_materia.'. Nuevos: '.$rea_nuevos.'; Eliminados: '.$rea_eliminados;
@@ -438,7 +442,7 @@ class ExamsController extends Controller
                         $exam->fecha_modificacion = date('Y-m-d h:i:s');
                         $exam->save();
                         $exam->examsDetails()->saveMany($examDetails);
-                        $exam->comments()->saveMany($comment);
+                        $comment->save();
                         flash('Transacci&oacuten realizada existosamente', 'success');
                     }
                     catch (\Exception $ex)
@@ -481,6 +485,7 @@ class ExamsController extends Controller
             $exam = ExamHeader::find($id);
             $comment = new ExamComment();
 
+            $comment->id_examen_cab = $exam->id;
             $comment->id_estado_anterior = $exam->id_estado;
             $comment->id_estado_nuevo = 5;
             $comment->comentario = 'Examen eliminado.';
@@ -494,7 +499,7 @@ class ExamsController extends Controller
             \DB::beginTransaction();
 
             $exam->save();
-            $exam->comments()->saveMany($comment);
+            $comment->save();
         }
         catch (\Exception $ex)
         {
@@ -554,16 +559,18 @@ class ExamsController extends Controller
     
     public function printReport($id)
     {
-
         $exam = ExamHeader::find($id);
         $title = utf8_decode('UNIVERSIDAD POLITÉCNICA SALESIANA SEDE '.$exam->periodLocation->location->descripcion);
         $subtitle = utf8_decode('EXAMEN COMPLEXIVO');
 
-        $pdf = new Fpdf();
+        $pdf = new Report();
+        //$pdf = new Fpdf();
+        $pdf->AliasNbPages();
+        $pdf->SetMargins(2,3);
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(11, 2, $pdf->Image('../public/image/logo-ups-home.png', $pdf->GetX(), $pdf->GetY(), 5), 0, 1, 'L');
         $pdf->Cell(19, 1, $title, 0, 1, 'C');
+        $pdf->Ln(0.2);
         $pdf->SetFont('Arial', 'B', 14);
         $pdf->Cell(19, 0.7, utf8_decode($exam->careerCampus->career->descripcion), 0, 1, 'C');
         $pdf->Cell(19, 0.7, $subtitle, 0, 1, 'C');
@@ -610,11 +617,8 @@ class ExamsController extends Controller
             $pdf->Ln(0.5);
         }
 
-        $pdf->SetY(-1);
-        $pdf->SetFont('Arial','I',8);
-        $pdf->Cell(0,10,utf8_decode('Página ').$pdf->PageNo().'/{nb}',0,0,'R');
 
-        $pdf->AliasNbPages();
+
         $pdf->Output();
         exit;
     }

@@ -1,5 +1,25 @@
 <div class="form-group no-margin">
     <div class="pull-left">
+        <button id="btn-aprobado" title="Aprobar" onclick="return false;" class="btn btn-white btn-primary btn-bold">
+            <i class='ace-icon fa fa-thumbs-o-up bigger-110 blue' style="margin: 0"></i>
+        </button>
+
+        <button id="btn-rechazado" title="Rechazar" onclick="return false;" class="btn btn-white btn-grey btn-bold">
+            <i class='ace-icon fa fa-thumbs-o-down bigger-110 grey' style="margin: 0"></i>
+        </button>
+
+        <div id="btn-rechazado" class="btn btn-white btn-grey btn-bold">
+            <a class="grey" title="Rechazar" href="#">
+                <i class='ace-icon fa fa-thumbs-o-down bigger-110 grey'></i>
+            </a>
+        </div>
+
+        <div id="btn-comentario" class="btn btn-white btn-warning btn-bold">
+            <a class="orange2" title="Comentarios" href="#">
+                <i class='ace-icon fa fa-comment-o bigger-110 orange2'></i>
+            </a>
+        </div>
+
     @if(isset($btnlist))
         <button title="Detalle" onclick="location.href='{{ $btnlist }}'; return false;" class="btn btn-white btn-primary btn-bold">
             <i class='ace-icon fa fa-list bigger-110 blue' style="margin: 0"></i>
