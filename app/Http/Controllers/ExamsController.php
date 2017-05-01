@@ -554,22 +554,20 @@ class ExamsController extends Controller
     
     public function printReport($id)
     {
+
         $exam = ExamHeader::find($id);
         $title = utf8_decode('UNIVERSIDAD POLITÉCNICA SALESIANA SEDE '.$exam->periodLocation->location->descripcion);
         $subtitle = utf8_decode('EXAMEN COMPLEXIVO');
 
         $pdf = new Fpdf();
         $pdf->AddPage();
-        //$pdf->Image(asset('image/logo-ups-home.png'), 10, 6, 30);
         $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(11, 2, $pdf->Image('../public/image/logo-ups-home.png', $pdf->GetX(), $pdf->GetY(), 5), 0, 1, 'L');
         $pdf->Cell(19, 1, $title, 0, 1, 'C');
-        $pdf->Ln(0.2);
         $pdf->SetFont('Arial', 'B', 14);
-        $pdf->Cell(19, 0, utf8_decode($exam->careerCampus->career->descripcion), 0, 0, 'C');
-        $pdf->Ln(0.7);
-        $pdf->Cell(19, 0, $subtitle, 0, 0, 'C');
-        $pdf->Ln(0.7);
-        $pdf->Cell(19, 0, utf8_decode($exam->periodLocation->period->descripcion), 0, 0, 'C');
+        $pdf->Cell(19, 0.7, utf8_decode($exam->careerCampus->career->descripcion), 0, 1, 'C');
+        $pdf->Cell(19, 0.7, $subtitle, 0, 1, 'C');
+        $pdf->Cell(19, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 0, 1, 'C');
         $pdf->Ln(1);
 
         $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');
@@ -582,45 +580,41 @@ class ExamsController extends Controller
         {
             $matter = $matCar->matter;
             $pdf->SetFont('Arial', 'B', 14);
-            $pdf->Cell(19, 2, $matter->descripcion, 0, 0, 'L');
-            $pdf->Ln(1);
+            $pdf->Cell(19, 0.7, $matter->descripcion, 0, 1, 'L');
+            $pdf->Ln(0.5);
             foreach ($exam->examsDetails as $det)
             {
                 if($det->reagent->id_materia == $matter->id)
                 {
                     $pdf->SetFont('Arial', '', 10);
-                    $pdf->Cell(19, 2, $det->reagent->planteamiento, 0, 0, 'J');
-                    $pdf->Ln(1);
+                    $pdf->MultiCell(19, 0.5 , $det->reagent->planteamiento, 0, 'J');
 
-                    foreach($det->reagent->questionsConcepts as $conc)
+                    if($det->reagent->questionsConcepts->count() > 0)
                     {
-                        $pdf->Cell(9.5, 0, $conc->concepto, 0, 0, 'L');
-                        $pdf->Ln(0.5);
+                        $pdf->Ln(0.3);
+                        foreach($det->reagent->questionsConcepts as $conc)
+                            $pdf->Cell(9.5, 0.5, $conc->concepto, 0, 1, 'L');
                     }
 
                     foreach($det->reagent->questionsProperties as $prop)
-                    {
-                        $pdf->Cell(9.5, 0, $conc->propiedad, 0, 0, 'R');
-                        $pdf->Ln(0.5);
-                    }
+                        $pdf->Cell(9.5, 0.5, $conc->propiedad, 0, 1, 'R');
 
-                    $pdf->Ln(0.5);
-
+                    $pdf->Ln(0.3);
                     foreach($det->reagent->answers as $answ)
-                    {
-                        $pdf->Cell(21, 0, $answ->descripcion, 0, 0, 'L');
-                        $pdf->Ln(0.5);
-                    }
-                        //questionsProperties
-                        //answers
+                        $pdf->Cell(21, 0.5, $answ->descripcion, 0, 1, 'L');
+
+                    $pdf->Ln(1);
                 }
             }
-            $pdf->Ln(1);
 
+            $pdf->Ln(0.5);
         }
 
+        $pdf->SetY(-1);
+        $pdf->SetFont('Arial','I',8);
+        $pdf->Cell(0,10,utf8_decode('Página ').$pdf->PageNo().'/{nb}',0,0,'R');
 
-
+        $pdf->AliasNbPages();
         $pdf->Output();
         exit;
     }
