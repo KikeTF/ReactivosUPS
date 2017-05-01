@@ -9,15 +9,14 @@ use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
 use ReactivosUPS\ExamPeriod;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Mention;
 use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\Reagent;
+use ReactivosUPS\Report;
 use Log;
-use Ghidev\Fpdf\Fpdf;
 
 class ExamsController extends Controller
 {
@@ -563,18 +562,20 @@ class ExamsController extends Controller
         $title = utf8_decode('UNIVERSIDAD POLITÉCNICA SALESIANA SEDE '.$exam->periodLocation->location->descripcion);
         $subtitle = utf8_decode('EXAMEN COMPLEXIVO');
 
-        $pdf = new Fpdf();
+        $pdf = new Report();
+        //$pdf = new Fpdf();
+        $pdf->AliasNbPages();
+        $pdf->SetMargins(2,3);
         $pdf->AddPage();
-        //$pdf->Image(asset('image/logo-ups-home.png'), 10, 6, 30);
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(19, 1, $title, 0, 1, 'C');
-        $pdf->Ln(0.2);
+        $pdf->Cell(17, 1, $title, 0, 1, 'C');
+        //$pdf->Ln(0.2);
         $pdf->SetFont('Arial', 'B', 14);
-        $pdf->Cell(19, 0, utf8_decode($exam->careerCampus->career->descripcion), 0, 0, 'C');
+        $pdf->Cell(17, 0, utf8_decode($exam->careerCampus->career->descripcion), 0, 0, 'C');
         $pdf->Ln(0.7);
-        $pdf->Cell(19, 0, $subtitle, 0, 0, 'C');
+        $pdf->Cell(17, 0, $subtitle, 0, 0, 'C');
         $pdf->Ln(0.7);
-        $pdf->Cell(19, 0, utf8_decode($exam->periodLocation->period->descripcion), 0, 0, 'C');
+        $pdf->Cell(17, 0, utf8_decode($exam->periodLocation->period->descripcion), 0, 0, 'C');
         $pdf->Ln(1);
 
         $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');
