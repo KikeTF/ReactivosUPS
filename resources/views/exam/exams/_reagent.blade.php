@@ -1,5 +1,5 @@
 <div class="form-group">
-    <div class="col-sm-12">{{ $reagent->planteamiento }}</div>
+    <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
 </div>
 
 @if($reagent->format->opciones_pregunta == 'S')

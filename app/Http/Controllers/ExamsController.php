@@ -597,17 +597,46 @@ class ExamsController extends Controller
                     $pdf->SetFont('Arial', '', 10);
                     $pdf->MultiCell(17, 0.5 , $det->reagent->planteamiento, 0, 'J');
 
-                    if($det->reagent->questionsConcepts->count() > 0)
+                    $maxOpPreg = max($det->reagent->questionsConcepts->count(), $det->reagent->questionsProperties->count());
+
+                    if($maxOpPreg > 0)
                     {
-                        $pdf->Ln(0.3);
-                        foreach($det->reagent->questionsConcepts as $conc)
-                            $pdf->Cell(8.5, 0.5, $conc->concepto, 0, 1, 'L');
+                        $pdf->Ln(0.5);
+                        for($i = 0; $i < $maxOpPreg; $i++)
+                        {
+                            if($det->reagent->questionsConcepts->count() > $i)
+                            {
+                                $conc = $det->reagent->questionsConcepts[$i];
+                                $x = $pdf->GetX();
+                                $y = $pdf->GetY();
+                                $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
+                                $pdf->SetXY($x+1,$y);
+
+                                $x = $pdf->GetX();
+                                $y = $pdf->GetY();
+                                $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
+                                $pdf->SetXY($x+7.5,$y);
+                            }
+
+                            if($det->reagent->questionsProperties->count() > $i)
+                            {
+                                $prop = $det->reagent->questionsProperties[$i];
+                                $x2 = $pdf->GetX();
+                                $y2 = $pdf->GetY();
+                                $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
+                                $pdf->SetXY($x2+1,$y2);
+
+                                $x2 = $pdf->GetX();
+                                $y2 = $pdf->GetY();
+                                $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
+                                //$pdf->SetXY($x,$y);
+                            }
+
+                            $pdf->Ln(0.5);
+                        }
                     }
 
-                    foreach($det->reagent->questionsProperties as $prop)
-                        $pdf->Cell(8.5, 0.5, $conc->propiedad, 0, 1, 'R');
-
-                    $pdf->Ln(0.3);
+                    $pdf->Ln(0.5);
                     foreach($det->reagent->answers as $answ)
                         $pdf->Cell(17, 0.5, $answ->descripcion, 0, 1, 'L');
 
@@ -617,8 +646,6 @@ class ExamsController extends Controller
 
             $pdf->Ln(0.5);
         }
-
-
 
         $pdf->Output();
         exit;

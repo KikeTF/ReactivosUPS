@@ -8,7 +8,7 @@
     $usetable = 1;
     //$isReagent = 1;
     $newurl = route('exam.exams.create');
-    $columnas = array("id", "campus", "carrera", "periodos", "fecha_activacion", "es_prueba", "estado"); // "capitulo", "tema",
+    $columnas = array("id", "campus", "carrera", "periodo", "resolucion", "fecha_activacion", "es_prueba", "estado");
     ?>
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form','route' => 'exam.exams.index','method' => 'GET']) !!}
@@ -71,7 +71,8 @@
                 <th style="text-align: center">C&oacute;digo</th>
                 <th style="text-align: center">Campus</th>
                 <th style="text-align: center">Carrera</th>
-                <th style="text-align: center">Periodos</th>
+                <th style="text-align: center">Periodo</th>
+                <th style="text-align: center">Resoluci&oacute;n</th>
                 <th style="text-align: center">Fecha Activaci&oacute;n</th>
                 <th style="text-align: center">¿Es de Prueba?</th>
                 <th style="text-align: center">Estado</th>
@@ -82,21 +83,23 @@
             {{--@if($filters[0] > 0)--}}
                 @foreach($exams as $exam)
                     <?php
-                    $urls = array(
-                        'showurl' => route('exam.exams.show', $exam->id),
-                        'editurl' => route('exam.exams.edit', $exam->id),
-                        'destroyurl' => route('exam.exams.destroy', $exam->id)
-                    );
+                    if( in_array($exam->id_estado, array(1, 3)) )
+                        $urls = array(
+                            'showurl' => route('exam.exams.show', $exam->id),
+                            'editurl' => route('exam.exams.edit', $exam->id),
+                            'destroyurl' => route('exam.exams.destroy', $exam->id)
+                        );
+                    else
+                        $urls = array(
+                                'showurl' => route('exam.exams.show', $exam->id)
+                        );
                     ?>
                     <tr>
                         <td align="center">{{ $exam->id }}</td>
                         <td>{{ $exam->careerCampus->campus->descripcion }}</td>
                         <td>{{ $exam->careerCampus->career->descripcion }}</td>
-                        <td>
-                            @foreach($exam->examPeriods as $period)
-                                ({{ $period->periodLocation->period->cod_periodo }}) {{ $period->periodLocation->period->descripcion }};&nbsp;
-                            @endforeach
-                        </td>
+                        <td>{{ '('.$exam->periodLocation->period->cod_periodo.') '.$exam->periodLocation->period->descripcion }}</td>
+                        <td>{{ $exam->resolucion }}</td>
                         <td align="center">{{ $exam->fecha_activacion }}</td>
                         <td align="center">
                             @if($exam->es_prueba == 'S')

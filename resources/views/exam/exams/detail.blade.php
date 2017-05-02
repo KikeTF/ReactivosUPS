@@ -93,7 +93,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="row" style="min-height: 40px; margin-bottom: 10px;">
+                        <div class="row" align="justify" style="min-height: 40px; margin-bottom: 10px;">
                             {{ $reagent->planteamiento }}
                         </div>
                         <div class="row">
