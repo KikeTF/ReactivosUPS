@@ -433,7 +433,7 @@ class ExamsController extends Controller
                         $comment->id_examen_cab = $exam->id;
                         $comment->id_estado_anterior = $exam->id_estado;
                         $comment->id_estado_nuevo = $exam->id_estado;
-                        $comment->comentario = 'Examen modificado: Reactivos '.$desc_materia.'. Nuevos: '.$rea_nuevos.'; Eliminados: '.$rea_eliminados;
+                        $comment->comentario = 'Examen modificado: Reactivos '.$desc_materia.'. Ids nuevos: '.$rea_nuevos.'; Ids eliminados: '.$rea_eliminados;
                         $comment->creado_por = \Auth::id();
                         $comment->fecha_creacion = date('Y-m-d h:i:s');
 
@@ -589,56 +589,71 @@ class ExamsController extends Controller
             $pdf->SetFont('Arial', 'B', 14);
             $pdf->Cell(17, 0.7, utf8_decode($matter->descripcion).' ('.$arrCountRea[$matter->id].')', 0, 1, 'L');
 
-            $pdf->Ln(0.5);
+            $pdf->Ln(0.7);
+            $pdf->SetFont('Arial', '', 10);
+            $iRea = 0;
             foreach ($exam->examsDetails as $det)
             {
                 if($det->reagent->id_materia == $matter->id)
                 {
-                    $pdf->SetFont('Arial', '', 10);
-                    $pdf->MultiCell(17, 0.5 , $det->reagent->planteamiento, 0, 'J');
-
+                    $iRea++;
+                    $x = $pdf->GetX();
+                    $y = $pdf->GetY();
+                    $pdf->MultiCell(1, 0.5 , $iRea.'.', 0, 'L');
+                    $pdf->SetXY($x+0.5,$y);
+                    $pdf->MultiCell(16.5, 0.5 , utf8_decode($det->reagent->planteamiento), 0, 'J');
                     $maxOpPreg = max($det->reagent->questionsConcepts->count(), $det->reagent->questionsProperties->count());
 
                     if($maxOpPreg > 0)
                     {
                         $pdf->Ln(0.5);
+                        $y1 = $pdf->GetY();
+                        $y2 = $pdf->GetY();
                         for($i = 0; $i < $maxOpPreg; $i++)
                         {
+                            if($y1 > 27 || $y2 > 27){
+                                $pdf->AddPage();
+                                $y1 = $pdf->GetY();
+                                $y2 = $pdf->GetY();
+                            }
+
                             if($det->reagent->questionsConcepts->count() > $i)
                             {
                                 $conc = $det->reagent->questionsConcepts[$i];
-                                $x = $pdf->GetX();
-                                $y = $pdf->GetY();
+                                $x1 = $pdf->GetX();
+                                $pdf->SetXY($x1,$y1);
                                 $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
-                                $pdf->SetXY($x+1,$y);
-
-                                $x = $pdf->GetX();
-                                $y = $pdf->GetY();
+                                $pdf->SetXY($x1+1,$y1);
                                 $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
-                                $pdf->SetXY($x+7.5,$y);
+                                $y1 = $pdf->GetY();
                             }
 
                             if($det->reagent->questionsProperties->count() > $i)
                             {
                                 $prop = $det->reagent->questionsProperties[$i];
+                                $pdf->SetXY(10,$y2);
                                 $x2 = $pdf->GetX();
-                                $y2 = $pdf->GetY();
                                 $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
                                 $pdf->SetXY($x2+1,$y2);
-
-                                $x2 = $pdf->GetX();
-                                $y2 = $pdf->GetY();
                                 $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
-                                //$pdf->SetXY($x,$y);
+                                $y2 = $pdf->GetY();
                             }
-
-                            $pdf->Ln(0.5);
                         }
                     }
 
                     $pdf->Ln(0.5);
                     foreach($det->reagent->answers as $answ)
-                        $pdf->Cell(17, 0.5, $answ->descripcion, 0, 1, 'L');
+                    {
+                        $x = $pdf->GetX();
+                        $y = $pdf->GetY();
+                        if($y > 27){
+                            $pdf->AddPage();
+                            $y = $pdf->GetY();
+                        }
+                        $pdf->MultiCell(1, 0.5, $answ->numeral.'.', 0, 'R');
+                        $pdf->SetXY($x+1,$y);
+                        $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
+                    }
 
                     $pdf->Ln(1);
                 }
