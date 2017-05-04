@@ -44,6 +44,11 @@ Route::group(['middleware' => 'auth'], function () {
         'as'    => 'index'
     ]);
 
+    Route::get('dashboard', [
+        'uses'  => 'DashboardController@index',
+        'as'    => 'index'
+    ]);
+
 });
 
 Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
