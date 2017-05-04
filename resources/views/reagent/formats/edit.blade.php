@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Reactivos')
-@section('subtitulo', 'Editar campo de conocimiento: '.$format->nombre)
+@section('subtitulo', 'Editar formato: '.$format->nombre)
 
 @section('contenido')
 
