@@ -535,6 +535,7 @@ class ExamsController extends Controller
             $comment->fecha_creacion = date('Y-m-d h:i:s');
 
             if( isset( $request['id_estado'] ) ){
+                $exam->resolucion = ((int)$request->id_estado == 4) ? strtoupper(trim($request->comentario)) : "";
                 $exam->id_estado = (int)$request->id_estado;
                 $exam->modificado_por = \Auth::id();
                 $exam->fecha_modificacion = date('Y-m-d h:i:s');
@@ -564,7 +565,7 @@ class ExamsController extends Controller
         $subtitle = utf8_decode('EXAMEN COMPLEXIVO');
 
         $pdf = new Report();
-        //$pdf = new Fpdf();
+        $pdf->SetTitle('Examen Complexivo');
         $pdf->AliasNbPages();
         $pdf->SetMargins(2,3);
         $pdf->AddPage();
@@ -574,6 +575,8 @@ class ExamsController extends Controller
         $pdf->Cell(17, 0.7, utf8_decode($exam->careerCampus->career->descripcion), 0, 1, 'C');
         $pdf->Cell(17, 0.7, $subtitle, 0, 1, 'C');
         $pdf->Cell(17, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 0, 1, 'C');
+        if(trim($exam->resolucion) != '')
+            $pdf->Cell(17, 0.7, utf8_decode('RESOLUCIÓN: '.$exam->resolucion), 0, 1, 'C');
         $pdf->Ln(1);
 
         $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');

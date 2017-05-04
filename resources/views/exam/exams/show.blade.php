@@ -50,6 +50,16 @@
                             <div class="col-sm-8">{{ $exam->careerCampus->campus->descripcion }}</div>
                         </div>
 
+                        <div class="form-group">
+                            <div class="col-sm-2"><strong>Periodo:</strong></div>
+                            <div class="col-sm-8">{{ '('.$exam->periodLocation->period->cod_periodo.') '.$exam->periodLocation->period->descripcion }}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2"><strong>Fecha Activacion:</strong></div>
+                            <div class="col-sm-8">{{ $exam->fecha_activacion }}</div>
+                        </div>
+
                         <?php
                         $periodos = '';
                         foreach ($exam->examPeriods as $period)
@@ -58,18 +68,13 @@
                         }
                         ?>
                         <div class="form-group">
-                            <div class="col-sm-2"><strong>Descripcion:</strong></div>
-                            <div class="col-sm-8">{{ $exam->descripcion }}</div>
-                        </div>
-
-                        <div class="form-group">
                             <div class="col-sm-2"><strong>Periodos Reactivos:</strong></div>
                             <div class="col-sm-8">{{ $periodos }}</div>
                         </div>
 
                         <div class="form-group">
-                            <div class="col-sm-2"><strong>Fecha Activacion:</strong></div>
-                            <div class="col-sm-8">{{ $exam->fecha_activacion }}</div>
+                            <div class="col-sm-2"><strong>Descripcion:</strong></div>
+                            <div class="col-sm-8">{{ $exam->descripcion }}</div>
                         </div>
 
                         <div class="form-group">
@@ -81,6 +86,13 @@
                             <div class="col-sm-2"><strong>Estado:</strong></div>
                             <div class="col-sm-8">{{ $exam->state->descripcion }}</div>
                         </div>
+
+                        @if(trim($exam->resolucion) != "")
+                        <div class="form-group">
+                            <div class="col-sm-2"><strong>Resoluci&oacute;n:</strong></div>
+                            <div class="col-sm-8">{{ $exam->resolucion }}</div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

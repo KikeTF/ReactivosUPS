@@ -30,6 +30,20 @@
         </div>
     </div>
 
+    <div class="form-group">
+        {!! Form::label('periodo', 'Periodo:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        <div class="col-sm-7">
+            {!! Form::text('periodo', '('.$exam->periodLocation->period->cod_periodo.') '.$exam->periodLocation->period->descripcion, ['class' => 'form-control', 'readonly']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('fecha_activacion', 'Fecha Activacion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        <div class="col-sm-7">
+            {!! Form::date('fecha_activacion', $exam->fecha_activacion, ['class' => 'form-control']) !!}
+        </div>
+    </div>
+
     <?php
     $periodos = '';
     foreach ($exam->examPeriods as $period)
@@ -41,13 +55,6 @@
         {!! Form::label('periodos', 'Periodos Reactivos:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
             {!! Form::text('periodos', $periodos, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('fecha_activacion', 'Fecha Activacion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-        <div class="col-sm-7">
-            {!! Form::date('fecha_activacion', $exam->fecha_activacion, ['class' => 'form-control']) !!}
         </div>
     </div>
 
