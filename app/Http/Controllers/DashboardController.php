@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\Reagent;
 
 class DashboardController extends Controller
 {
@@ -14,9 +15,36 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard.index');
+        $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+        $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+
+        $id_campus = 1;
+        $id_carrera = 1;
+
+        $mattersCareers = $this->getMatterParameters(0, $id_carrera, $id_campus);
+
+        $data['categories'] = $mattersCareers->pluck('matter')->sortBy('id')->lists('descripcion','id')->toArray();
+        $data['target_series'] = $mattersCareers->sortBy('id_materia')->lists('nro_reactivos_mat','id_materia')->toArray();
+
+        foreach ($mattersCareers->sortBy('id_materia')->pluck('id_materia')->toArray() as $idMat)
+        {
+            $reagents = Reagent::query()
+                ->where('id_estado','5')
+                //->whereIn('id_sede', array_unique($periodLoc->pluck('id_sede')->toArray()))
+                //->whereIn('id_periodo', array_unique($periodLoc->pluck('id_periodo')->toArray()))
+                ->where('id_campus', $id_campus)
+                ->where('id_carrera', $id_carrera)
+                ->where('id_materia', $idMat)->get();
+
+            $data_real[$idMat] = $reagents->count();
+        }
+
+        $data['real_series'] = $data_real;
+
+        return view('dashboard.index')
+            ->with('data', $data);
     }
 
     /**

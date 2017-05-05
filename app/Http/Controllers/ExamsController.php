@@ -263,7 +263,7 @@ class ExamsController extends Controller
         catch (\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsController][show] Exception: " . $ex);
+            Log::error("[ExamsController][show] Exception: " . $ex);
             return redirect()->route('exam.exams.index');
         }
     }
@@ -281,7 +281,7 @@ class ExamsController extends Controller
         catch (\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ReagentsController][history] Exception: " . $ex);
+            Log::error("[ExamsController][history] Exception: " . $ex);
             return redirect()->route('exam.exams.index');
         }
     }
