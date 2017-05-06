@@ -9,7 +9,7 @@ class ReagentState extends Model
     protected $table = "rea_estados";
     public $timestamps = false;
 
-    protected $fillable =["descripcion","etiqueta","estado",'creado_por','fecha_creacion','modificado_por','fecha_modificacion'];
+    protected $fillable =["descripcion","etiqueta","color","estado",'creado_por','fecha_creacion','modificado_por','fecha_modificacion'];
 
     public function reagents(){
         return $this->hasMany('ReactivosUPS\Reagent', 'id_estado');

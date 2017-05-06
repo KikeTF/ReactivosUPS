@@ -8,15 +8,35 @@
 @endpush
 
 @section('contenido')
-    <div id="chart-container" style="min-width: 400px; height: 400px; margin: 0; padding: 0;"></div>
+
+    <div class="col-md-6" style="margin: 10px auto;" align="center">
+        <div class="widget-box">
+            <div class="widget-body">
+                <div class="widget-main">
+                    @include('dashboard._barchart', ['data' => $BarChartData])
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6" style="margin: 10px auto;" align="center">
+        <div class="widget-box">
+            <div class="widget-body">
+                <div class="widget-main">
+                    @include('dashboard._piechart', ['data' => $PieChartData])
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('specific-script')
     <script type="text/javascript" src="{{ asset('highcharts/js/highcharts.js') }}"></script>
     <script type="text/javascript" src="{{ asset('highcharts/js/modules/exporting.js') }}"></script>
     <script type="text/javascript">
-        function decodeString (){
-            var encodedStr = '{{ '"'.implode('","', $data['categories']).'"' }}';
+        function decodeString (encodedStr){
+            //var encodedStr = '';
             var parser = new DOMParser;
             var dom = parser.parseFromString('<!doctype html><body>' + encodedStr, 'text/html');
             var decodedString = dom.body.textContent;
@@ -24,49 +44,5 @@
 
             return jsArray;
         }
-    </script>
-    <script type="text/javascript">
-        Highcharts.chart('chart-container', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Reactivos por Materia'
-            },
-            xAxis: {
-                categories: decodeString()
-            },
-            yAxis: [{
-                min: 0,
-                tickInterval: 2,
-                title: {
-                    text: 'Reactivos'
-                }
-            }],
-            legend: {
-                shadow: false
-            },
-            tooltip: {
-                shared: true
-            },
-            plotOptions: {
-                column: {
-                    grouping: false,
-                    shadow: false,
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                name: 'Reactivos Requeridos',
-                color: 'rgba(165,170,217,1)',
-                data: [{{ implode(',', $data['target_series']) }}],
-                pointPadding: 0.35
-            }, {
-                name: 'Reactivos Aprobados',
-                color: 'rgba(126,86,134,.9)',
-                data: [{{ implode(',', $data['real_series']) }}],
-                pointPadding: 0.4
-            }]
-        });
     </script>
 @endpush

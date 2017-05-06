@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Reagent;
+use ReactivosUPS\ReagentState;
 
 class DashboardController extends Controller
 {
@@ -25,8 +26,8 @@ class DashboardController extends Controller
 
         $mattersCareers = $this->getMatterParameters(0, $id_carrera, $id_campus);
 
-        $data['categories'] = $mattersCareers->pluck('matter')->sortBy('id')->lists('descripcion','id')->toArray();
-        $data['target_series'] = $mattersCareers->sortBy('id_materia')->lists('nro_reactivos_mat','id_materia')->toArray();
+        $BarChartData['categories'] = $mattersCareers->pluck('matter')->sortBy('id')->lists('descripcion','id')->toArray();
+        $BarChartData['target_series'] = $mattersCareers->sortBy('id_materia')->lists('nro_reactivos_mat','id_materia')->toArray();
 
         foreach ($mattersCareers->sortBy('id_materia')->pluck('id_materia')->toArray() as $idMat)
         {
@@ -38,13 +39,32 @@ class DashboardController extends Controller
                 ->where('id_carrera', $id_carrera)
                 ->where('id_materia', $idMat)->get();
 
-            $data_real[$idMat] = $reagents->count();
+            $bardata_real[$idMat] = $reagents->count();
         }
 
-        $data['real_series'] = $data_real;
+        $BarChartData['real_series'] = $bardata_real;
+
+        $reagents = Reagent::query()
+            //->where('id_estado','5')
+            //->whereIn('id_sede', array_unique($periodLoc->pluck('id_sede')->toArray()))
+            //->whereIn('id_periodo', array_unique($periodLoc->pluck('id_periodo')->toArray()))
+            ->where('id_campus', $id_campus)
+            ->where('id_carrera', $id_carrera)->get();
+
+        $states = ReagentState::query()->whereIn('id', array_unique($reagents->pluck('id_estado')->toArray()))->get();
+        foreach ($states as $state)
+        {
+            $reagents = Reagent::query()->where('id_estado', $state->id)->get();
+            $piedata['state'] = $state->descripcion;
+            $piedata['value'] = $reagents->count();
+            $piecolor[] = $state->color;
+            $PieChartData['series'][] = $piedata;
+        }
+        $PieChartData['colors'] = $piecolor;
 
         return view('dashboard.index')
-            ->with('data', $data);
+            ->with('BarChartData', $BarChartData)
+            ->with('PieChartData', $PieChartData);
     }
 
     /**

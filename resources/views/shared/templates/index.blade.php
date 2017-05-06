@@ -301,6 +301,8 @@
 
     <!-- specific scripts -->
     @stack('specific-script')
+    @stack('bar-chart-script')
+    @stack('pie-chart-script')
 
     @if(isset($usetable))
         <script>
