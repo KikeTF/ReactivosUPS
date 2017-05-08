@@ -40,14 +40,7 @@
         {!! Form::label('id_periodo_sede', 'Periodo:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
             <div class="clearfix">
-                <select name="id_periodo_sede" id="id_periodo_sede" class="form-control" required>
-                    <option value="">-- Seleccione Periodos --</option>
-                    @foreach($locationPeriodsList as $locationPeriod)
-                        <option value="{{ $locationPeriod->id }}" >
-                            ({{ $locationPeriod->period->cod_periodo }}) {{ $locationPeriod->period->descripcion }}
-                        </option>
-                    @endforeach
-                </select>
+                {!! Form::select('id_periodo_sede', $locationPeriodsList, null, ['id' => 'id_periodo_sede', 'class' => 'form-control', 'placeholder' => '-- Seleccione Periodo --', 'required'] ) !!}
             </div>
         </div>
     </div>
@@ -62,23 +55,16 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('periodosSede', 'Periodos Reactivos:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('periodosSede[]', 'Periodos Reactivos:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
-            <select multiple="" name="periodosSede[]" id="periodosSede" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Periodos --" style="display: none;" required>
-                <option value=""></option>
-                @foreach($locationPeriodsList as $locationPeriod)
-                    <option value="{{ $locationPeriod->id }}" >
-                        ({{ $locationPeriod->period->cod_periodo }}) {{ $locationPeriod->period->descripcion }}
-                    </option>
-                @endforeach
-            </select>
+            {!! Form::select('periodosSede[]', $locationPeriodsList, null, ['multiple' => '', 'id' => 'periodosSede', 'class' => 'chosen-select form-control tag-input-style', 'data-placeholder' => '-- Seleccione Periodos --', 'style' => 'display: none;', 'required'] ) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('descripcion', 'Descripcion:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
-            {!! Form::text('descripcion', null, ['class' => 'form-control']) !!}
+            {!! Form::text('descripcion', null, ['class' => 'form-control', 'placeholder' => 'Opcional']) !!}
         </div>
     </div>
 

@@ -14,6 +14,7 @@ use ReactivosUPS\Career;
 use ReactivosUPS\ReagentQuestion;
 use ReactivosUPS\ReagentAnswer;
 use ReactivosUPS\ReagentComment;
+use ReactivosUPS\CareerCampus;
 use Datatables;
 use Log;
 

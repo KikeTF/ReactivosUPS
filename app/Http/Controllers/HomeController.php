@@ -21,7 +21,7 @@ class HomeController extends Controller
             if($this->isSessionExpire())
                 return redirect()->guest('auth/login');
 
-            return view('index');
+            return redirect()->route('dashboard.index');
         }catch(\Exception $ex)
         {
             Log::error("[HomeController][index] Exception: ".$ex);

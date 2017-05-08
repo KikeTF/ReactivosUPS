@@ -18,7 +18,7 @@
                 text: 'Reactivos por Estado'
             },
             tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                pointFormat: '{series.name}: <b>{point.y} ( {point.percentage:.1f} % )</b>'
             },
             plotOptions: {
                 pie: {
@@ -35,14 +35,39 @@
                 }
             },
             series: [{
-                name: 'Porcentaje',
+                name: 'Reactivos',
                 //colorByPoint: true,
                 data: [
                     @foreach($data['series'] as $i => $state)
-                        { name: '{{ $state['state'] }}', y: eval('{{ $state['value'] }}') },
+                    {
+                        name: '{{ $state['state'] }}',
+                        y: eval('{{ $state['value'] }}'),
+                        /*drilldown: eval('{{-- $state['id'] --}}')*/
+                    },
                     @endforeach
                 ]
-            }]
+            }],
+            /*
+            drilldown: {
+                series: [
+                {{--
+                    @foreach($data['series'] as $i => $state)
+                        {
+                            name: '{{ $state['state'] }}', id: eval('{{ $state['id'] }}'),
+                            data: [
+                                ['v11.0', 24.13],
+                                ['v8.0', 17.2],
+                                ['v9.0', 8.11],
+                                ['v10.0', 5.33],
+                                ['v6.0', 1.06],
+                                ['v7.0', 0.5]
+                            ]
+                    },
+                    @endforeach
+                --}}
+                ]
+            }
+            */
         });
     </script>
 @endpush

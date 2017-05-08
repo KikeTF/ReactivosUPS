@@ -11,6 +11,10 @@ class Period extends Model
 
     protected $fillable =["cod_periodo", "descripcion", "fecha_inicio", "fecha_fin", "estado"];
 
+    public function getFullDescriptionAttribute(){
+        return '('.$this->attributes['cod_periodo'] .') '. $this->attributes['descripcion'];
+    }
+
     public function location(){
         return $this->belongsTo('ReactivosUPS\Period');
     }

@@ -29,6 +29,9 @@
     {{--<link rel="stylesheet" href="{{ asset('ace/css/jquery.dataTables.min.css') }}" />--}}
     <link rel="stylesheet" href="{{ asset('ace/css/buttons.dataTables.min.css') }}" />
 
+    <!-- common scripts -->
+    <link rel="stylesheet" href="{{ asset('styles/shared/template.css') }}" />
+
     <!--[if lte IE 9]>
     <!--
     <link rel="stylesheet" href="ace/css/ace-part2.min.css" class="ace-main-stylesheet" />

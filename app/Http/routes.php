@@ -32,6 +32,11 @@ Route::get('auth/userprofiles', [
     'as'    => 'auth.userprofiles'
 ]);
 
+Route::get('test', [
+    'uses'  => 'TestsController@index',
+    'as'    => 'test.index'
+]);
+
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [
@@ -46,7 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('dashboard', [
         'uses'  => 'DashboardController@index',
-        'as'    => 'index'
+        'as'    => 'dashboard.index'
     ]);
 
 });

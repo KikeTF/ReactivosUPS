@@ -29,19 +29,19 @@
                 column: {
                     grouping: false,
                     shadow: false,
-                    borderWidth: 0
+                    borderWidth: 1
                 }
             },
             series: [{
                 name: 'Reactivos Requeridos',
                 color: '#DDDDDD',
                 data: [{{ implode(',', $data['target_series']) }}],
-                pointPadding: 0.3
+                pointPadding: 0.2
             }, {
                 name: 'Reactivos Aprobados',
                 color: '#32769F',
                 data: [{{ implode(',', $data['real_series']) }}],
-                pointPadding: 0.35
+                pointPadding: 0.25
             }]
         });
     </script>

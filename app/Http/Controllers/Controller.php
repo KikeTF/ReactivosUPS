@@ -52,8 +52,12 @@ abstract class Controller extends BaseController
 
     public function getLocationPeriods(){
         $id_sede = (int)Session::get('idSede');
-        $periods = PeriodLocation::query()->where('id_sede', $id_sede)->where('estado','A')->get();
-        return $periods;
+        $periodsLocations = PeriodLocation::query()->where('id_sede', $id_sede)->where('estado','A')->get();
+
+        foreach ($periodsLocations as $periodoSede)
+            $periods[$periodoSede->id] = $periodoSede->period->FullDescription;
+        
+        return (isset($periods) ? $periods : array());
     }
 
     public function getCampuses(){
@@ -210,8 +214,7 @@ abstract class Controller extends BaseController
 
         $matterCareer = $this->getMattersCareers()
             ->where('id_carrera_campus', $id_careerCampus)
-            ->where('aplica_examen', 'S')
-            ->where('estado', 'A');
+            ->where('aplica_examen', 'S');
 
         if($id_materia > 0)
             $matterCareer = $matterCareer->where('id_materia', $id_materia)->first();
