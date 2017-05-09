@@ -4,6 +4,10 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\AnswerDetail;
+use ReactivosUPS\AnswerHeader;
+use ReactivosUPS\ExamDetail;
+use ReactivosUPS\ExamHeader;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 
@@ -14,9 +18,11 @@ class TestsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $id_examen = isset($request['id_examen']) ? $request['id_examen'] : 0;
+
+
         return view('test.index');
     }
 
@@ -27,7 +33,7 @@ class TestsController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -38,7 +44,23 @@ class TestsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id_examen = isset($request['id_examen']) ? $request['id_examen'] : 0;
+
+        $id_examen= 1;
+        $examDet = ExamHeader::find(1)->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
+
+    }
+
+    public function question($id_test, $id_question, Request $request)
+    {
+        $test = AnswerHeader::find($id_test);
+        $question = AnswerDetail::find($id_question);
+        $reagent = AnswerDetail::find($id_question)->examDetail->reagent;
+
+        return view('test.question')
+            ->with('test', $test)
+            ->with('question', $question)
+            ->with('reagent', $reagent);
     }
 
     /**

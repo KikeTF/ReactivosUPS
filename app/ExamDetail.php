@@ -20,6 +20,6 @@ class ExamDetail extends Model
     }
 
     public function answersDetails(){
-        return $this->hasMany('ReactivosUPS\AnswerDetail');
+        return $this->hasMany('ReactivosUPS\AnswerDetail', 'id_examen_det');
     }
 }
