@@ -8,6 +8,7 @@ use ReactivosUPS\AnswerDetail;
 use ReactivosUPS\AnswerHeader;
 use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
+use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 
@@ -51,16 +52,19 @@ class TestsController extends Controller
 
     }
 
-    public function question($id_test, $id_question, Request $request)
+    public function question($id, Request $request)
     {
-        $test = AnswerHeader::find($id_test);
-        $question = AnswerDetail::find($id_question);
-        $reagent = AnswerDetail::find($id_question)->examDetail->reagent;
+        
+        $question = AnswerDetail::find($id);
+        $test = AnswerHeader::find($question->id_resultado_cab);
+        $reagent = $question->examDetail->reagent;
+        $parameters = ExamParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
 
         return view('test.question')
             ->with('test', $test)
             ->with('question', $question)
-            ->with('reagent', $reagent);
+            ->with('reagent', $reagent)
+            ->with('parameters', $parameters);
     }
 
     /**
@@ -94,7 +98,10 @@ class TestsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $question = AnswerDetail::find($id);
+        $id_nextQuestion = isset($request['id_nextQuestion']) ? $request['id_nextQuestion'] : 0;
+
+        return redirect()->route('test.question', $id_nextQuestion);
     }
 
     /**

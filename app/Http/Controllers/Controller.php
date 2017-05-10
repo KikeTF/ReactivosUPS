@@ -2,6 +2,7 @@
 
 namespace ReactivosUPS\Http\Controllers;
 
+use ReactivosUPS\ExamState;
 use ReactivosUPS\Option;
 use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
@@ -155,6 +156,14 @@ abstract class Controller extends BaseController
             ->where('id','!=',7)
             ->orderBy('id', 'asc')->lists('etiqueta','id');;
         return $statesLabel;
+    }
+
+    public function getExamsStates(){
+        $examsStates = ExamState::query()
+            ->where('estado','A')
+            ->where('id','!=',6)
+            ->orderBy('id', 'asc')->lists('descripcion','id');;
+        return $examsStates;
     }
 
     public function getDistributive($id_materia, $id_carrera, $id_campus){

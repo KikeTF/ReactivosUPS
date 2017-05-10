@@ -275,7 +275,7 @@ class ExamsController extends Controller
             $exam = ExamHeader::find($id);
 
             return view('exam.exams.history')
-                ->with('states', $this->getReagentsStates())
+                ->with('states', $this->getExamsStates())
                 ->with('exam', $exam);
         }
         catch (\Exception $ex)

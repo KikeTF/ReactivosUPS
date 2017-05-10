@@ -7,19 +7,34 @@
     {!! Form::open(['id' => 'formulario',
             'class' => 'form-horizontal',
             'role' => 'form',
-            //'route' => 'test.store',
-            'method' => 'POST']) !!}
+            'route' => ['test.update', $question->id],
+            'method' => 'PUT']) !!}
 
     <div class="page-header">
         <div class="btn-toolbar" style="margin: 0px">
             <div class="btn-group">
-                <?php $number = 1; ?>
-                @foreach($test->answersDetails as $det)
+                <?php $indexNext = 0; ?>
+                @foreach($test->answersDetails as $index => $det)
+                    <?php if($question->id == $det->id) $indexNext = $index+1; ?>
                     <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : 'btn btn-light') }}"
-                            onclick="location.href='{{ route('test.question', ["id_test" => $det->id_resultado_cab, "id_question" => $det->id]) }}'; return false;">
-                        {{ $number++ }}
-                    </button>
+                            onclick="location.href='{{ route('test.question', ["id_test" => $det->id_resultado_cab, "id_question" => $det->id]) }}'; return false;"
+                            {{ ($det->id_opcion_resp > 0) ? 'disabled' : '' }}>{{ $index+1 }}</button>
                 @endforeach
+            </div>
+            <div class="btn-group pull-right">
+                <?php
+                $idNext = 0;
+                if($indexNext < $test->answersDetails->count())
+                    $idNext = $test->answersDetails[$indexNext]->id;
+                ?>
+                {!! Form::hidden('id_nextQuestion', $idNext) !!}
+                <button type="submit" class="btn btn-success pull-right">
+                    @if($idNext > 0)
+                        Siguiente<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                    @else
+                        Finalizar
+                    @endif
+                </button>
             </div>
         </div>
     </div>
@@ -98,3 +113,8 @@
     {!! Form::close() !!}
 @endsection
 
+@push('specific-script')
+<script type="text/javascript">
+
+</script>
+@endpush

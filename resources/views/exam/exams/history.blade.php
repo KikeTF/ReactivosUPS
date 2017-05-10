@@ -8,8 +8,8 @@
     <form class="form-horizontal" role="form">
 
         <?php
-        //if( in_array($reagent->id_estado, array(1, 4)) )
-        $btnedit = route('exam.exams.edit', $exam->id);
+        if (in_array($exam->id_estado, array(1, 3)) )
+            $btnedit = route('exam.exams.edit', $exam->id);
 
         $btnclose = route('exam.exams.show', $exam->id);
         ?>

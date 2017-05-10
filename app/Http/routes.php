@@ -32,12 +32,12 @@ Route::get('auth/userprofiles', [
     'as'    => 'auth.userprofiles'
 ]);
 
-Route::resource('tests','TestsController');
-
-Route::get('test/{id_test}/{id_question}/question', [
+Route::get('test/{id}/question', [
     'uses'  => 'TestsController@question',
     'as'    => 'test.question'
 ]);
+
+Route::resource('test','TestsController');
 
 Route::group(['middleware' => 'auth'], function () {
 

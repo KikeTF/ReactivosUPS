@@ -76,18 +76,12 @@
         <div class="main-content">
             <div class="main-content-inner">
 
-                <form>
                     <div class="page-content">
-
-
-                            <section>
-                                @include('flash::message')
-                                @yield('contenido')
-                            </section>
-
-
+                        <section>
+                            @include('flash::message')
+                            @yield('contenido')
+                        </section>
                     </div>
-                </form>
 
             </div>
         </div>
