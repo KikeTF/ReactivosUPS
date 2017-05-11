@@ -81,7 +81,7 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('es_automatico', 'Generaci&oacute;n Autom&aacute;tica', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('es_automatico', '¿Generaci&oacute;n Autom&aacute;tica?', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-7">
             <div class="checkbox">
                 <label>
