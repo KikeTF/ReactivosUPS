@@ -102,7 +102,6 @@ class ReagentsController extends Controller
     public function store(Request $request)
     {
         $isValidImage = true;
-
         try
         {
             $id_periodo = (int)Session::get('idPeriodo');
@@ -139,7 +138,7 @@ class ReagentsController extends Controller
                 //$answer['numeral'] = $reqAnswer['numeral'];
                 $answer['descripcion'] = $reqAnswer['descripcion'];
                 $answer['argumento'] = $reqAnswer['argumento'];
-                $answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
+                $answer['opcion_correcta'] = (($i+1) == $request->input('opcion_correcta')) ? 'S' : 'N';
                 $answer['creado_por'] = \Auth::id();
                 $reaAnswer = new ReagentAnswer($answer);
                 $reaAnswers[] = $reaAnswer;
@@ -178,11 +177,16 @@ class ReagentsController extends Controller
             //Reagent::find($reagent->id)
             $reagent->answers()->saveMany($reaAnswers);
 
+
             Log::debug("Reagent create: save questions concepts model");
             $reagent->questionsConcepts()->saveMany($reaQuestionsConc);
 
             Log::debug("Reagent create: save questions properties model");
             $reagent->questionsProperties()->saveMany($reaQuestionsProp);
+
+            Log::debug("Reagent create: save reagent right answer id");
+            $reagent->id_opcion_correcta = $reagent->answers()->where('opcion_correcta', 'S')->first()->id;
+            $reagent->save();
 
             if(!$isValidImage)
                 flash('Transacci&oacuten realizada parcialmente. La imagen no pudo ser procesada!', 'warning')->important();

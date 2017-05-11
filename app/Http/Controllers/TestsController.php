@@ -11,6 +11,7 @@ use ReactivosUPS\ExamHeader;
 use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use Log;
 
 class TestsController extends Controller
 {
@@ -46,7 +47,8 @@ class TestsController extends Controller
     public function store(Request $request)
     {
         $id_examen = isset($request['id_examen']) ? $request['id_examen'] : 0;
-
+        //$comment->creado_por = \Auth::id();
+        //$comment->fecha_creacion = date('Y-m-d h:i:s');
         $id_examen= 1;
         $examDet = ExamHeader::find(1)->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
 
@@ -59,6 +61,7 @@ class TestsController extends Controller
         $test = AnswerHeader::find($question->id_resultado_cab);
         $reagent = $question->examDetail->reagent;
         $parameters = ExamParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
+
 
         return view('test.question')
             ->with('test', $test)
@@ -98,10 +101,36 @@ class TestsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $question = AnswerDetail::find($id);
-        $id_nextQuestion = isset($request['id_nextQuestion']) ? $request['id_nextQuestion'] : 0;
+        try
+        {
+            $id_nextQuestion = isset($request['id_nextQuestion']) ? (int)$request['id_nextQuestion'] : 0;
+            $id_opcion_resp = isset($request['id_opcion_resp']) ? (int)$request['id_opcion_resp'] : 0;
+            $question = AnswerDetail::find($id);
 
-        return redirect()->route('test.question', $id_nextQuestion);
+            if ( $id_opcion_resp > 0 )
+            {
+                $question->id_opcion_resp = $id_opcion_resp;
+                $question->save();
+            }
+
+            if ( $id_nextQuestion > 0 )
+                return redirect()->route('test.question', $id_nextQuestion);
+            else
+            {
+                $question->answerHeader->estado = 'F';
+                $question->answerHeader->modificado_por = \Auth::id();
+                $question->answerHeader->fecha_modificacion = date('Y-m-d h:i:s');
+                $question->answerHeader->save();
+                dd('Examen Finalizado');
+            }
+
+        }
+        catch(\Exception $ex)
+        {
+            flash("No se pudo procesar la respuesta!", 'danger')->important();
+            Log::error("[TestsController][update] id: ".$id);
+            return redirect()->route('test.index');
+        }
     }
 
     /**

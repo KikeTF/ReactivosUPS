@@ -10,6 +10,7 @@
             'route' => ['test.update', $question->id],
             'method' => 'PUT']) !!}
 
+    {{--location.href='{{ route('test.question', ["id" => $det->id]) }}'; return false;--}}
     <div class="page-header">
         <div class="btn-toolbar" style="margin: 0px">
             <div class="btn-group">
@@ -17,8 +18,8 @@
                 @foreach($test->answersDetails as $index => $det)
                     <?php if($question->id == $det->id) $indexNext = $index+1; ?>
                     <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : 'btn btn-light') }}"
-                            onclick="location.href='{{ route('test.question', ["id_test" => $det->id_resultado_cab, "id_question" => $det->id]) }}'; return false;"
-                            {{ ($det->id_opcion_resp > 0) ? 'disabled' : '' }}>{{ $index+1 }}</button>
+                            onclick="processAnswer();"
+                            {{ ($question->id != $det->id && $det->id_opcion_resp == 0 || $parameters->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
                 @endforeach
             </div>
             <div class="btn-group pull-right">
@@ -27,8 +28,7 @@
                 if($indexNext < $test->answersDetails->count())
                     $idNext = $test->answersDetails[$indexNext]->id;
                 ?>
-                {!! Form::hidden('id_nextQuestion', $idNext) !!}
-                <button type="submit" class="btn btn-success pull-right">
+                <button class="btn btn-success pull-right" onclick="processAnswer();return false;">
                     @if($idNext > 0)
                         Siguiente<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                     @else
@@ -38,6 +38,8 @@
             </div>
         </div>
     </div>
+
+    {!! Form::hidden('id_nextQuestion', $idNext, ['id' => 'id_nextQuestion']) !!}
 
     <div class="row form-group">
         <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
@@ -53,9 +55,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($reagent->questionsConcepts as $question)
+                    @foreach($reagent->questionsConcepts as $conc)
                         <tr>
-                            <td>{{ $question->numeral.'.'}}&nbsp;&nbsp;&nbsp;{{ $question->concepto }}</td>
+                            <td>{{ $conc->numeral.'.'}}&nbsp;&nbsp;&nbsp;{{ $conc->concepto }}</td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -71,9 +73,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($reagent->questionsProperties as $question)
+                        @foreach($reagent->questionsProperties as $prop)
                             <tr>
-                                <td>{{ $question->literal.'.' }}&nbsp;&nbsp;&nbsp;{{ $question->propiedad }}</td>
+                                <td>{{ $prop->literal.'.' }}&nbsp;&nbsp;&nbsp;{{ $prop->propiedad }}</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -95,9 +97,12 @@
                 @foreach($reagent->answers as $answer)
                     <tr>
                         <td style="width: 50px">
-                            <div class="radio" style="margin: 0;">
+                            <div class="radio" style="margin: 0; padding: 0; min-height: 0;">
                                 <label>
-                                    {!! Form::radio('id_opcion_resp', $answer->id, (($answer->id == $question->id_opcion_resp) ? true : false), ['class' => 'ace', 'id' => 'id_opcion_resp' ]) !!}
+                                    {!! Form::radio('id_opcion_resp', $answer->id, (($answer->id == $question->id_opcion_resp) ? true : false),
+                                        ['class' => 'ace',
+                                        'id' => 'id_opcion_resp_'.$answer->id,
+                                         ($parameters->editar_respuestas == 'N' && $question->id_opcion_resp > 0) ? 'disabled' : '' ]) !!}
                                     <span class="lbl"></span>
                                 </label>
                             </div>
@@ -113,8 +118,51 @@
     {!! Form::close() !!}
 @endsection
 
-@push('specific-script')
-<script type="text/javascript">
 
-</script>
+@push('specific-script')
+    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
+    <script type="text/javascript">
+        function processAnswer() {
+            var idResp = '0';
+            var answerIsChecked = false;
+            try {
+                idResp = $("input[name=id_opcion_resp]:checked").val().toString();
+                answerIsChecked = $(('#id_opcion_resp_'+idResp)).is(':checked');
+            }
+            catch(err) {
+                answerIsChecked = false;
+            }
+
+            if( answerIsChecked ){
+                if( $("#id_nextQuestion").val() > 0 )
+                    $("#formulario").submit();
+                else {
+                    bootbox.confirm({
+                        message: "Desea finalizar su examen?",
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn-success'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn-danger'
+                            }
+                        }
+                    });
+                }
+            }
+            else {
+                bootbox.alert({
+                    message: "Seleccione una respuesta para continuar!",
+                    buttons: {
+                        'ok': {
+                            label: 'Cerrar',
+                            className: 'btn-danger'
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 @endpush

@@ -112,7 +112,7 @@
                                     <tbody>
                                     @foreach($reagent->questionsConcepts as $question)
                                         <tr>
-                                            <td>{{ $question->numeral }}</td>
+                                            <td style="width: 40px;">{{ $question->numeral.'.' }}</td>
                                             <td>{{ $question->concepto }}</td>
                                         </tr>
                                     @endforeach
@@ -132,7 +132,7 @@
                                         <tbody>
                                         @foreach($reagent->questionsProperties as $question)
                                             <tr>
-                                                <td>{{ $question->literal }}</td>
+                                                <td style="width: 40px;">{{ $question->literal.'.' }}</td>
                                                 <td>{{ $question->propiedad }}</td>
                                             </tr>
                                         @endforeach
@@ -150,15 +150,20 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <td></td>
+                                    <td colspan="2"></td>
                                     <td><strong>Descripcion</strong></td>
                                     <td><strong>Argumento</strong></td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($reagent->answers as $answer)
-                                    <tr>
-                                        <td>{{ $answer->numeral }}</td>
+                                    <tr style="{{ ($answer->opcion_correcta == 'S') ? 'background-color: #dff0d8;' : '' }}">
+                                        <td style="width: 35px;">
+                                            @if($answer->opcion_correcta == 'S')
+                                                <i class="fa fa-check green" aria-hidden="true"></i>
+                                            @endif
+                                        </td>
+                                        <td style="width: 40px;">{{ $answer->numeral.'.' }}</td>
                                         <td>{{ $answer->descripcion }}</td>
                                         <td>{{ $answer->argumento }}</td>
                                     </tr>

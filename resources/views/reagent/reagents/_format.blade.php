@@ -150,7 +150,7 @@
                                         {!! Form::radio('opcion_correcta',
                                             ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : ($i+1)),
                                             ((isset($answers) && $i < $answers->count()) ? (($answers[$i]->opcion_correcta == 'S') ? true : false) : false),
-                                            ['class' => 'ace', 'id' => 'opcion_correcta_'.$i, ($i >= $min_resp) ? 'disabled' : '', 'required' ]) !!}
+                                            ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i >= $min_resp) ? 'disabled' : '', 'required' ]) !!}
                                         <span class="lbl"></span>
                                     </label>
                                 </div>

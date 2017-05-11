@@ -101,5 +101,7 @@
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
     <script src="{{ asset('ace/js/ace.min.js') }}"></script>
+
+    @stack('specific-script')
 </body>
 </html>
