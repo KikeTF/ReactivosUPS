@@ -3,6 +3,7 @@
 namespace ReactivosUPS\Http\Controllers;
 
 use ReactivosUPS\ExamState;
+use ReactivosUPS\Location;
 use ReactivosUPS\Option;
 use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
@@ -61,6 +62,11 @@ abstract class Controller extends BaseController
         return (isset($periods) ? $periods : array());
     }
 
+    public function getLocations(){
+        $locations = Location::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
+        return $locations;
+    }
+    
     public function getCampuses(){
         $campus = Campus::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $campus;

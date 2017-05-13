@@ -294,7 +294,8 @@ class MattersCareersController extends Controller
 
     public function getCareersList(Request $request)
     {
-        try {
+        try 
+        {
             $aprReactivo = \Session::get('ApruebaReactivo');
             $aprExamen = \Session::get('ApruebaExamen');
             $id_Sede = (int)\Session::get('idSede');

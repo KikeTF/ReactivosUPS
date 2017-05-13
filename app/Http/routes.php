@@ -32,6 +32,11 @@ Route::get('auth/userprofiles', [
     'as'    => 'auth.userprofiles'
 ]);
 
+Route::get('test/lists', [
+    'uses'  => 'TestsController@getLists',
+    'as'    => 'test.lists'
+]);
+
 Route::get('test/{id}/question', [
     'uses'  => 'TestsController@question',
     'as'    => 'test.question'

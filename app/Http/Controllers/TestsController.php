@@ -12,6 +12,7 @@ use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Log;
+use View;
 
 class TestsController extends Controller
 {
@@ -35,7 +36,8 @@ class TestsController extends Controller
      */
     public function create()
     {
-
+        return view('test.create')
+            ->with('locationsList', $this->getLocations());
     }
 
     /**
@@ -141,6 +143,54 @@ class TestsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //throw
+    }
+
+    public function getLists(Request $request)
+    {
+        //dd($request->all());
+        try
+        {
+            $id_sede = (isset($request['id_sede']) ? (int)$request->id_sede : 0);
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
+
+            $campusList = $this->getCampuses();
+            if($id_sede > 0)
+                $html = View::make('shared.optionlists._campuslist')
+                    ->with('campusList', $campusList)
+                    //->with('careerFilter', $id_carrera)
+                    ->render();
+
+                /*
+            $id_careerCampus = CareerCampus::query()
+                ->where('estado','A')
+                ->where('id_campus', $id_campus)->first()->id;
+
+            $dist = MatterCareer::filter($id_careerCampus, $id_mencion, 0)->get();
+
+                if($dist->count() > 0)
+                {
+                    foreach ($dist as $car)
+                    {
+                        $ids[] = $car->id_carrera;
+                    }
+                }
+
+            $careersList = Career::query();
+
+            if(isset($ids))
+                $careersList = $careersList->whereIn('id',$ids);
+
+            $careersList = $careersList->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
+
+                */
+
+        } catch (\Exception $ex) {
+            Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            $html = View::make('shared.optionlists._careerslist')->render();
+        }
+        return \Response::json(['html' => $html]);
     }
 }
