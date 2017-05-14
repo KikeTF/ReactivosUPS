@@ -6,12 +6,16 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\AnswerDetail;
 use ReactivosUPS\AnswerHeader;
+use ReactivosUPS\Campus;
+use ReactivosUPS\CareerCampus;
 use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
 use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use Log;
+use ReactivosUPS\Location;
+use ReactivosUPS\Mention;
 use View;
 
 class TestsController extends Controller
@@ -48,6 +52,7 @@ class TestsController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $id_examen = isset($request['id_examen']) ? $request['id_examen'] : 0;
         //$comment->creado_por = \Auth::id();
         //$comment->fecha_creacion = date('Y-m-d h:i:s');
@@ -151,45 +156,71 @@ class TestsController extends Controller
         //dd($request->all());
         try
         {
+            $lista = (isset($request['lista']) ? $request->lista : "");
             $id_sede = (isset($request['id_sede']) ? (int)$request->id_sede : 0);
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
 
-            $campusList = $this->getCampuses();
-            if($id_sede > 0)
-                $html = View::make('shared.optionlists._campuslist')
+            //$locations = Location::find($id_sede);
+
+
+            if ($lista == "campus")
+            {
+                $route = 'shared.optionlists._campuslist';
+
+                $campusList = Campus::query()
+                    ->where('id_sede', $id_sede)
+                    ->where('estado','A')
+                    ->orderBy('descripcion', 'asc')
+                    ->lists('descripcion','id');
+
+                $html = View::make($route)
                     ->with('campusList', $campusList)
-                    //->with('careerFilter', $id_carrera)
+                    ->render();
+            }
+            elseif ($lista == "carrera")
+            {
+                $route = 'shared.optionlists._careerslist';
+
+                $careersList = CareerCampus::query()
+                    ->where('estado','A')
+                    ->where('id_campus', $id_campus)
+                    ->get()->pluck('career')
+                    ->sortBy('descripcion')
+                    ->lists('descripcion','id');
+
+                $html = View::make($route)
+                    ->with('careersList', $careersList)
+                    ->with('careerFilter', null)
                     ->render();
 
-                /*
-            $id_careerCampus = CareerCampus::query()
-                ->where('estado','A')
-                ->where('id_campus', $id_campus)->first()->id;
+            }
+            elseif ($lista == "mencion")
+            {
+                $route = 'shared.optionlists._mentionslist';
 
-            $dist = MatterCareer::filter($id_careerCampus, $id_mencion, 0)->get();
+                $mentionsList = Mention::query()
+                    ->where('id_carrera', $id_carrera)
+                    ->where('id', '!=', 1)
+                    ->where('estado', 'A')
+                    ->lists('descripcion','id');
 
-                if($dist->count() > 0)
-                {
-                    foreach ($dist as $car)
-                    {
-                        $ids[] = $car->id_carrera;
-                    }
-                }
-
-            $careersList = Career::query();
-
-            if(isset($ids))
-                $careersList = $careersList->whereIn('id',$ids);
-
-            $careersList = $careersList->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
-
-                */
+                if($mentionsList->count() > 0)
+                    $html = View::make($route)
+                        ->with('mentionsList', $mentionsList)
+                        ->with('mentionFilter', $id_mencion)
+                        ->render();
+                else
+                    $html = View::make($route)->render();
+            }
 
         } catch (\Exception $ex) {
-            Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
-            $html = View::make('shared.optionlists._careerslist')->render();
+            Log::error("[TestsController][getList] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            if (isset($route))
+                $html = View::make($route)->render();
+            else
+                $html = '<select></select>';
         }
         return \Response::json(['html' => $html]);
     }

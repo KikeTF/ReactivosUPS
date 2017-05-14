@@ -14,7 +14,12 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('*', 'ReactivosUPS\Http\ViewComposers\OptionsComposer');
+        View::composer('*', function ($view){
+            $isTestView = strpos($view->getName(), 'test.');
+        });
+
+        if (isset($isTestView) && $isTestView === false)
+            View::composer('*', 'ReactivosUPS\Http\ViewComposers\OptionsComposer');
     }
 
     /**
