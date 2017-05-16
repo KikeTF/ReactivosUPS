@@ -9,7 +9,7 @@ class AnswerDetail extends Model
     protected $table = "exc_resultados_det";
     public $timestamps = false;
 
-    protected $fillable =["id_resultado_cab", "id_examen_det", "id_opcion_resp", "resp_correcta", "estado"];
+    protected $fillable =["id_resultado_cab", "id_examen_det", "id_opcion_resp", "resp_correcta", "estado", "creado_por", "fecha_creacion"];
 
     public function answerHeader(){
         return $this->belongsTo('ReactivosUPS\AnswerHeader', 'id_resultado_cab');

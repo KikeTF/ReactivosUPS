@@ -5,7 +5,7 @@
         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <span class="user-info">
                                 <small>Bienvenido,</small>
-
+                                {{ $question->answerHeader->nombres }}
                             </span>
 
             <i class="ace-icon fa fa-caret-down"></i>
@@ -35,7 +35,7 @@
         <div class="btn-toolbar" style="margin: 0px">
             <div class="btn-group">
                 <?php $indexNext = 0; ?>
-                @foreach($test->answersDetails as $index => $det)
+                @foreach($test->answersDetails->sortBy('id') as $index => $det)
                     <?php if($question->id == $det->id) $indexNext = $index+1; ?>
                     <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : 'btn btn-light') }}"
                             onclick="processAnswer();"

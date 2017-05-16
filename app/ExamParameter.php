@@ -9,5 +9,5 @@ class ExamParameter extends Model
     protected $table = "exc_parametros";
     public $timestamps = false;
 
-    protected $fillable =["nro_preguntas", "duracion_examen", "id_examen_act", "editar_respuestas", "estado"];
+    protected $fillable =["id_carrera_campus", "duracion_examen", "id_examen_real", "id_examen_test", "editar_respuestas", "estado"];
 }

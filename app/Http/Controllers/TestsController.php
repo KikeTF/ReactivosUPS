@@ -52,18 +52,72 @@ class TestsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
-        $id_examen = isset($request['id_examen']) ? $request['id_examen'] : 0;
-        //$comment->creado_por = \Auth::id();
-        //$comment->fecha_creacion = date('Y-m-d h:i:s');
-        $id_examen= 1;
-        $examDet = ExamHeader::find(1)->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
+        $id_firstQuestion = 0;
+        try
+        {
+            $id_campus = isset($request['id_campus']) ? $request['id_campus'] : 0;
+            $id_carrera = isset($request['id_carrera']) ? $request['id_carrera'] : 0;
 
+            $test = new AnswerHeader($request->all());
+
+            $id_careerCampus = CareerCampus::query()
+                ->where('id_carrera', $id_carrera)
+                ->where('id_campus', $id_campus)
+                ->where('estado', 'A')
+                ->first()->id;
+
+            $id_examen_test = ExamParameter::query()
+                ->where('id_carrera_campus', $id_careerCampus)
+                ->where('estado', 'A')
+                ->orderBy('id', 'desc')->first()->id_examen_test;
+
+            $test->id_examen_cab = $id_examen_test;
+            $test->creado_por = 0;
+            $test->fecha_creacion = date('Y-m-d h:i:s');
+
+            $idsExamDet = ExamHeader::find($id_examen_test)
+                ->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
+
+            foreach ($idsExamDet as $idDet)
+            {
+                $det["id_examen_det"] = $idDet;
+                $det["creado_por"] = 0;
+                $det["fecha_creacion"] = date('Y-m-d h:i:s');
+                $testDet[] = new AnswerDetail($det);
+            }
+
+            if ( isset($testDet) )
+            {
+                \DB::beginTransaction(); //Start transaction!
+
+                $test->save();
+                $test->answersDetails()->saveMany($testDet);
+
+                $id_firstQuestion = $test->answersDetails->first()->id;
+            }
+            else
+            {
+                flash("No se pudo procesar la solicitud", 'danger')->important();
+                return redirect()->route('test.index');
+            }
+        }
+        catch(\Exception $ex)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            \DB::rollback();
+            Log::error("[TestsController][store] Request: ".implode(',', $request->all())."; Exception: ".$ex);
+            return redirect()->route('test.index');
+        }
+        finally
+        {
+            \DB::commit();
+        }
+
+        return redirect()->route('test.question', $id_firstQuestion);
     }
 
     public function question($id, Request $request)
     {
-        
         $question = AnswerDetail::find($id);
         $test = AnswerHeader::find($question->id_resultado_cab);
         $reagent = $question->examDetail->reagent;
@@ -77,6 +131,17 @@ class TestsController extends Controller
             ->with('parameters', $parameters);
     }
 
+    public function result($id)
+    {
+        $test = AnswerHeader::find($id);
+        
+        return view('test.result')
+            ->with('test', $test);
+        //->with('question', $question)
+        //  ->with('reagent', $reagent)
+        //  ->with('parameters', $parameters);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -85,7 +150,7 @@ class TestsController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -128,7 +193,8 @@ class TestsController extends Controller
                 $question->answerHeader->modificado_por = \Auth::id();
                 $question->answerHeader->fecha_modificacion = date('Y-m-d h:i:s');
                 $question->answerHeader->save();
-                dd('Examen Finalizado');
+
+                return redirect()->route('test.result', $question->answerHeader->id);
             }
 
         }

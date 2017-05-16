@@ -42,6 +42,11 @@ Route::get('test/{id}/question', [
     'as'    => 'test.question'
 ]);
 
+Route::get('test/{id}/result', [
+    'uses'  => 'TestsController@result',
+    'as'    => 'test.result'
+]);
+
 Route::resource('test','TestsController');
 
 Route::group(['middleware' => 'auth'], function () {
