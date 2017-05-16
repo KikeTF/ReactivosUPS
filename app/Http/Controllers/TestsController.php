@@ -75,8 +75,8 @@ class TestsController extends Controller
             $test->creado_por = 0;
             $test->fecha_creacion = date('Y-m-d h:i:s');
 
-            $idsExamDet = ExamHeader::find($id_examen_test)
-                ->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
+            $idsExamDet = ExamHeader::find($id_examen_test)->examsDetails()
+                ->orderByRaw("RAND()")->get()->pluck('id')->toArray();
 
             foreach ($idsExamDet as $idDet)
             {
@@ -120,9 +120,15 @@ class TestsController extends Controller
     {
         $question = AnswerDetail::find($id);
         $test = AnswerHeader::find($question->id_resultado_cab);
-        $reagent = $question->examDetail->reagent;
-        $parameters = ExamParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
 
+        if($test->estado != 'A')
+            return redirect()->route('test.index');
+
+        $reagent = $question->examDetail->reagent;
+        $parameters = ExamParameter::query()
+            ->where('id_carrera_campus', $test->examHeader->id_carrera_campus)
+            ->where('estado', 'A')
+            ->orderBy('id', 'desc')->first();
 
         return view('test.question')
             ->with('test', $test)
@@ -134,6 +140,8 @@ class TestsController extends Controller
     public function result($id)
     {
         $test = AnswerHeader::find($id);
+
+        //Validar Tiempo
         
         return view('test.result')
             ->with('test', $test);
@@ -182,6 +190,7 @@ class TestsController extends Controller
             if ( $id_opcion_resp > 0 )
             {
                 $question->id_opcion_resp = $id_opcion_resp;
+                $question->resp_correcta = ($question->examDetail->reagent->id_opcion_correcta == $id_opcion_resp) ? 'S' : 'N';
                 $question->save();
             }
 

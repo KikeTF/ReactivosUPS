@@ -38,7 +38,7 @@
                 @foreach($test->answersDetails->sortBy('id') as $index => $det)
                     <?php if($question->id == $det->id) $indexNext = $index+1; ?>
                     <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : 'btn btn-light') }}"
-                            onclick="processAnswer();"
+                            onclick="processAnswer({{ $det->id }});"
                             {{ ($question->id != $det->id && $det->id_opcion_resp == 0 || $parameters->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
                 @endforeach
             </div>
@@ -48,7 +48,7 @@
                 if($indexNext < $test->answersDetails->count())
                     $idNext = $test->answersDetails[$indexNext]->id;
                 ?>
-                <button class="btn btn-success pull-right" onclick="processAnswer();return false;">
+                <button class="btn btn-success pull-right" onclick="processAnswer({{ $idNext }});return false;">
                     @if($idNext > 0)
                         Siguiente<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                     @else
@@ -114,7 +114,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($reagent->answers as $answer)
+                @foreach($reagent->answers()->orderByRaw("RAND()")->get() as $answer)
                     <tr>
                         <td style="width: 50px">
                             <div class="radio" style="margin: 0; padding: 0; min-height: 0;">
@@ -127,7 +127,7 @@
                                 </label>
                             </div>
                         </td>
-                        <td>{{ $answer->numeral.'.' }}&nbsp;&nbsp;&nbsp;{{ $answer->descripcion }}</td>
+                        <td>{{ $answer->descripcion }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -142,7 +142,10 @@
 @push('specific-script')
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     <script type="text/javascript">
-        function processAnswer() {
+        function processAnswer(idQuestion) {
+            if (idQuestion > 0)
+                $("#id_nextQuestion").val(idQuestion);
+
             var idResp = '0';
             var answerIsChecked = false;
             try {

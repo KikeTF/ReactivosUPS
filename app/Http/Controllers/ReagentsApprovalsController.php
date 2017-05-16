@@ -61,7 +61,7 @@ class ReagentsApprovalsController extends Controller
             else
             {
                 flash("Su perfil no esta autorizado para esta opci&oacute;n!", 'warning')->important();
-                return redirect()->route('index');
+                return redirect()->route('dashboard.index');
             }
 
             if(isset($reagents))

@@ -20,40 +20,37 @@ class OptionsComposer extends Controller
 {
     public function compose(View $view)
     {
-        $options = [];
-        $suboptions = [];
-        try{
-            $idPerfil = (int)Session::get('idPerfil');
-            $idPerfilUsuario = (int)Session::get('idPerfilUsuario');
+        try
+        {
+            $viewNameStart = substr(strtolower($view->getName()), 0, 4);
+            $isTestView = ($viewNameStart === 'test') ? true : false;
+            
+            if ($isTestView === false)
+            {
+                $idPerfilUsuario = (int)Session::get('idPerfilUsuario');
 
-            $perfilUsuario = ProfileUser::find($idPerfilUsuario);
-            if($perfilUsuario->optionsUsers->count() == 0){
-                $perfil = Profile::find($idPerfil);
-                if($perfil->optionsProfiles->count() > 0){
-                    foreach($perfil->optionsProfiles as $optionProfile){
-                        $subIds[] = $optionProfile->id_opcion;
-                    }
+                $perfilUsuario = ProfileUser::find($idPerfilUsuario);
+                if($perfilUsuario->optionsUsers->count() == 0){
+                    if($perfilUsuario->profile->optionsProfiles->count() > 0)
+                        $subIds = $perfilUsuario->profile->optionsProfiles->pluck('id_opcion')->toArray();
+                }else
+                    $subIds = $perfilUsuario->profile->optionsUsers->pluck('id_opcion')->toArray();
+
+                if( isset($subIds) ){
+                    $suboptions = Option::find($subIds)->where('estado','A');
+                    $ids = $suboptions->pluck('id_padre')->toArray();
+                    $options = Option::find(array_unique($ids))->where('estado', 'A')->where('id_padre', 0);
                 }
-            }else{
-                foreach($perfilUsuario->optionsUsers as $optionUser){
-                    $subIds[] = $optionUser->id_opcion;
-                }
+
+                $view->with('navOptions', $options)->with('navSuboptions', $suboptions);
             }
-
-            if( isset($subIds) ){
-                $suboptions = Option::find($subIds)->where('estado','A');
-                foreach($suboptions as $suboption){
-                    if( !(isset($ids) && in_array($suboption->id_padre, $ids)) ) {
-                            $ids[] = $suboption->id_padre;
-                    }
-                }
-                $options = Option::find($ids)->where('estado', 'A')->where('id_padre', 0);
-            }
-
-        }catch (\Exception $ex){
+        }
+        catch (\Exception $ex)
+        {
             Log::error("[OptionsComposer][compose] Exception: ".$ex);
+
         }
 
-        $view->with('navOptions', $options)->with('navSuboptions', $suboptions);
+        $view;
     }
 }
