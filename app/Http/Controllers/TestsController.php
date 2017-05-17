@@ -72,11 +72,12 @@ class TestsController extends Controller
                 ->orderBy('id', 'desc')->first()->id_examen_test;
 
             $test->id_examen_cab = $id_examen_test;
+            $test->estado = 'A';
             $test->creado_por = 0;
             $test->fecha_creacion = date('Y-m-d h:i:s');
 
-            $idsExamDet = ExamHeader::find($id_examen_test)->examsDetails()
-                ->orderByRaw("RAND()")->get()->pluck('id')->toArray();
+            $idsExamDet = ExamHeader::find($id_examen_test)
+                ->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
 
             foreach ($idsExamDet as $idDet)
             {
@@ -137,18 +138,6 @@ class TestsController extends Controller
             ->with('parameters', $parameters);
     }
 
-    public function result($id)
-    {
-        $test = AnswerHeader::find($id);
-
-        //Validar Tiempo
-        
-        return view('test.result')
-            ->with('test', $test);
-        //->with('question', $question)
-        //  ->with('reagent', $reagent)
-        //  ->with('parameters', $parameters);
-    }
 
     /**
      * Display the specified resource.
@@ -201,8 +190,9 @@ class TestsController extends Controller
                 $question->answerHeader->estado = 'F';
                 $question->answerHeader->modificado_por = \Auth::id();
                 $question->answerHeader->fecha_modificacion = date('Y-m-d h:i:s');
+                $question->answerHeader->reactivos_acertados = $question->answerHeader->answersDetails()->where('resp_correcta', 'S')->count();
+                $question->answerHeader->reactivos_errados = $question->answerHeader->answersDetails()->where('resp_correcta', 'N')->count();
                 $question->answerHeader->save();
-
                 return redirect()->route('test.result', $question->answerHeader->id);
             }
 
@@ -213,6 +203,20 @@ class TestsController extends Controller
             Log::error("[TestsController][update] id: ".$id);
             return redirect()->route('test.index');
         }
+    }
+
+
+    public function result($id)
+    {
+        $test = AnswerHeader::find($id);
+
+        //Validar Tiempo
+
+        return view('test.result')
+            ->with('test', $test);
+        //->with('question', $question)
+        //  ->with('reagent', $reagent)
+        //  ->with('parameters', $parameters);
     }
 
     /**

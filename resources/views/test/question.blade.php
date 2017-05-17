@@ -38,8 +38,8 @@
                 @foreach($test->answersDetails->sortBy('id') as $index => $det)
                     <?php if($question->id == $det->id) $indexNext = $index+1; ?>
                     <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : 'btn btn-light') }}"
-                            onclick="processAnswer({{ $det->id }});"
-                            {{ ($question->id != $det->id && $det->id_opcion_resp == 0 || $parameters->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
+                            onclick="processAnswer({{ $det->id }}); return false;"
+                                {{ (($question->id != $det->id && $det->id_opcion_resp == 0) || $parameters->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
                 @endforeach
             </div>
             <div class="btn-group pull-right">
@@ -48,7 +48,7 @@
                 if($indexNext < $test->answersDetails->count())
                     $idNext = $test->answersDetails[$indexNext]->id;
                 ?>
-                <button class="btn btn-success pull-right" onclick="processAnswer({{ $idNext }});return false;">
+                <button class="btn btn-success pull-right" onclick="processAnswer({{ $idNext }}); return false;">
                     @if($idNext > 0)
                         Siguiente<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                     @else

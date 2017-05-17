@@ -22,13 +22,13 @@ class OptionsComposer extends Controller
     {
         try
         {
+
             $viewNameStart = substr(strtolower($view->getName()), 0, 4);
-            $isTestView = ($viewNameStart === 'test') ? true : false;
-            
-            if ($isTestView === false)
+            $isAdminView = (bool)(($viewNameStart !== 'test') && ($viewNameStart !== 'auth'));
+
+            if ( $isAdminView )
             {
                 $idPerfilUsuario = (int)Session::get('idPerfilUsuario');
-
                 $perfilUsuario = ProfileUser::find($idPerfilUsuario);
                 if($perfilUsuario->optionsUsers->count() == 0){
                     if($perfilUsuario->profile->optionsProfiles->count() > 0)
