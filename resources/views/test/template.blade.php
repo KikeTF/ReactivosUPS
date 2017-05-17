@@ -22,6 +22,9 @@
     <!-- ace styles -->
     <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" />
 
+    <!-- specific styles -->
+    @stack('specific-styles')
+
 </head>
 
 <body class="no-skin">
@@ -82,6 +85,7 @@
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
     <script src="{{ asset('ace/js/ace.min.js') }}"></script>
+
     <script src="{{ asset('ace/js/jquery.knob.min.js') }}"></script>
 
     @stack('specific-script')

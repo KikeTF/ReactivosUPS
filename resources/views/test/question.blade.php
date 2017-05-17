@@ -3,10 +3,10 @@
 @section('usuario')
     <li class="light-blue">
         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <span class="user-info">
-                                <small>Bienvenido,</small>
-                                {{ $question->answerHeader->nombres }}
-                            </span>
+            <span class="user-info">
+                <small>Bienvenido,</small>
+                {{ $question->answerHeader->nombres }}
+            </span>
 
             <i class="ace-icon fa fa-caret-down"></i>
         </a>
@@ -39,10 +39,11 @@
                     <?php if($question->id == $det->id) $indexNext = $index+1; ?>
                     <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : 'btn btn-light') }}"
                             onclick="processAnswer({{ $det->id }}); return false;"
-                                {{ (($question->id != $det->id && $det->id_opcion_resp == 0) || $parameters->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
+                                {{ (($question->id != $det->id && $det->id_opcion_resp == 0) || $test->parameter->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
                 @endforeach
             </div>
-            <div class="btn-group pull-right">
+
+            <div class="btn-group">
                 <?php
                 $idNext = 0;
                 if($indexNext < $test->answersDetails->count())
@@ -56,10 +57,16 @@
                     @endif
                 </button>
             </div>
+
+            <div id="countdown" class="btn-group pull-right" style="padding: 6px 12px; font-size: 16px;"></div>
         </div>
     </div>
 
+
+
     {!! Form::hidden('id_nextQuestion', $idNext, ['id' => 'id_nextQuestion']) !!}
+    {!! Form::hidden('duracion', $test->parameter->duracion_examen, ['id' => 'duracion']) !!}
+    {!! Form::hidden('fecha_inicio', $test->fecha_inicio, ['id' => 'fecha_inicio']) !!}
 
     <div class="row form-group">
         <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
@@ -122,7 +129,7 @@
                                     {!! Form::radio('id_opcion_resp', $answer->id, (($answer->id == $question->id_opcion_resp) ? true : false),
                                         ['class' => 'ace',
                                         'id' => 'id_opcion_resp_'.$answer->id,
-                                         ($parameters->editar_respuestas == 'N' && $question->id_opcion_resp > 0) ? 'disabled' : '' ]) !!}
+                                         ($test->parameter->editar_respuestas == 'N' && $question->id_opcion_resp > 0) ? 'disabled' : '' ]) !!}
                                     <span class="lbl"></span>
                                 </label>
                             </div>
@@ -138,10 +145,49 @@
     {!! Form::close() !!}
 @endsection
 
+@push('specific-styles')
+    <link rel="stylesheet" href="{{ asset('countdown/css/jquery.countdown.css') }}" />
+@endpush
 
 @push('specific-script')
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
+    <script src="{{ asset('countdown/js/jquery.plugin.min.js') }}"></script>
+    <script src="{{ asset('countdown/js/jquery.countdown.min.js') }}"></script>
+    <script src="{{ asset('countdown/js/jquery.countdown-es.js') }}"></script>
     <script type="text/javascript">
+        //$.countdown.setDefaults($.countdown.regionalOptions['']);
+        $('#l10n').countdown($.countdown.regionalOptions['es']);
+        $('#l10n').countdown($.extend({}, $.countdown.regionalOptions['es']));
+        //$('#defaultCountdown').countdown({until: getLeftTime(), format: 'HMS'});
+
+        $(function () {
+            var d = $('#fecha_inicio').val();
+            var d1 = d.split(" ");
+            var date = d1[0].split("-");
+            var time = d1[1].split(":");
+            var yyyy = date[0];
+            var mm = date[1];
+            var dd = date[2];
+            var hh = time[0];
+            var min = time[1];
+            var ss = time[2];
+            var startTime = new Date(yyyy, mm-1, dd, hh, min, ss);
+
+            var limitTimeMS = $('#duracion').val()*60000;
+            var currentTime = new Date();
+            var elapsedTimeMS = (currentTime - startTime);
+            var leftTimeMS = limitTimeMS - elapsedTimeMS;
+
+            var endTime = currentTime;
+            endTime.setMilliseconds(endTime.getMilliseconds() + leftTimeMS);
+
+            $('#countdown').countdown({
+                until: endTime,
+                format: 'HMS',
+                layout: "<span>{hnn} : {mnn} : {snn}</span>"
+            });
+        });
+
         function processAnswer(idQuestion) {
             if (idQuestion > 0)
                 $("#id_nextQuestion").val(idQuestion);

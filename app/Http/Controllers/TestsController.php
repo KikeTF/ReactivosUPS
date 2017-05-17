@@ -66,24 +66,19 @@ class TestsController extends Controller
                 ->where('estado', 'A')
                 ->first()->id;
 
-            $id_examen_test = ExamParameter::query()
+            $parameters = ExamParameter::query()
                 ->where('id_carrera_campus', $id_careerCampus)
                 ->where('estado', 'A')
-                ->orderBy('id', 'desc')->first()->id_examen_test;
+                ->orderBy('id', 'desc')->first();
 
-            $test->id_examen_cab = $id_examen_test;
-            $test->estado = 'A';
-            $test->creado_por = 0;
-            $test->fecha_creacion = date('Y-m-d h:i:s');
-
-            $idsExamDet = ExamHeader::find($id_examen_test)
+            $idsExamDet = ExamHeader::find($parameters->id_examen_test)
                 ->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
 
             foreach ($idsExamDet as $idDet)
             {
                 $det["id_examen_det"] = $idDet;
                 $det["creado_por"] = 0;
-                $det["fecha_creacion"] = date('Y-m-d h:i:s');
+                $det["fecha_creacion"] = date('Y-m-d H:i:s');
                 $testDet[] = new AnswerDetail($det);
             }
 
@@ -91,6 +86,12 @@ class TestsController extends Controller
             {
                 \DB::beginTransaction(); //Start transaction!
 
+                $test->id_examen_cab = $parameters->id_examen_test;
+                $test->id_parametro = $parameters->id;
+                $test->fecha_inicio = date('Y-m-d H:i:s');
+                $test->estado = 'A';
+                $test->creado_por = 0;
+                $test->fecha_creacion = date('Y-m-d H:i:s');
                 $test->save();
                 $test->answersDetails()->saveMany($testDet);
 
@@ -122,20 +123,28 @@ class TestsController extends Controller
         $question = AnswerDetail::find($id);
         $test = AnswerHeader::find($question->id_resultado_cab);
 
+
+        $limitTime = (float)$test->parameter->duracion_examen;
+        $startTime = strtotime($test->fecha_inicio);
+        //$endTime = strtotime($test->fecha_fin);
+        $currentTime = strtotime(date('Y-m-d H:i:s'));
+        $elapsedTime = round(($currentTime - $startTime)/60, 8);
+        $leftTime = $limitTime - $elapsedTime;
+        $hours = (int)floor($leftTime / 60);
+        $minutes = (int)($leftTime % 60);
+        $seconds = ($leftTime - floor($leftTime)) * 60;
+        //dd(date('Y-m-d').' '.date('H:i:s', mktime(0,$minutes,$seconds)));
+
+
         if($test->estado != 'A')
             return redirect()->route('test.index');
 
         $reagent = $question->examDetail->reagent;
-        $parameters = ExamParameter::query()
-            ->where('id_carrera_campus', $test->examHeader->id_carrera_campus)
-            ->where('estado', 'A')
-            ->orderBy('id', 'desc')->first();
 
         return view('test.question')
             ->with('test', $test)
             ->with('question', $question)
-            ->with('reagent', $reagent)
-            ->with('parameters', $parameters);
+            ->with('reagent', $reagent);
     }
 
 
@@ -189,9 +198,10 @@ class TestsController extends Controller
             {
                 $question->answerHeader->estado = 'F';
                 $question->answerHeader->modificado_por = \Auth::id();
-                $question->answerHeader->fecha_modificacion = date('Y-m-d h:i:s');
+                $question->answerHeader->fecha_modificacion = date('Y-m-d H:i:s');
                 $question->answerHeader->reactivos_acertados = $question->answerHeader->answersDetails()->where('resp_correcta', 'S')->count();
                 $question->answerHeader->reactivos_errados = $question->answerHeader->answersDetails()->where('resp_correcta', 'N')->count();
+                $question->answerHeader->fecha_fin = date('Y-m-d H:i:s');
                 $question->answerHeader->save();
                 return redirect()->route('test.result', $question->answerHeader->id);
             }
@@ -208,15 +218,27 @@ class TestsController extends Controller
 
     public function result($id)
     {
-        $test = AnswerHeader::find($id);
+        try
+        {
+            $test = AnswerHeader::find($id);
 
-        //Validar Tiempo
 
-        return view('test.result')
-            ->with('test', $test);
-        //->with('question', $question)
-        //  ->with('reagent', $reagent)
-        //  ->with('parameters', $parameters);
+            $endTime = strtotime($test->fecha_fin);
+            $currentTime = strtotime(date('Y-m-d H:i:s'));
+            $time = round(($currentTime - $endTime)/60, 2);
+
+            if( $time > 10 )
+                return redirect()->route('test.index');
+
+            return view('test.result')
+                ->with('test', $test);
+        }
+        catch (\Exception $ex)
+        {
+            flash("Problemas al cargar la pagina. Consulte el administrador.", 'danger')->important();
+            Log::error("[TestsController][result] id: ".$id);
+            return redirect()->route('test.index');
+        }
     }
 
     /**
