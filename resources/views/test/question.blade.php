@@ -162,15 +162,16 @@
 
         var endTime;
         $('#countdown').countdown({
-            until: setEndTime(),
+            until: getLeftTime(),
             format: 'HMS',
-            compact: true,
-            layout: '<strong><span>{hnn}{sep}{mnn}{sep}{snn}</span></strong>',
-            onExpiry: countDownExpiry,
-            onTick: finalCountDown
+            //compact: true,
+            layout: '<strong><span id="countdown-format">{hnn}{sep}{mnn}{sep}{snn}</span></strong>',
+            description: 'red',
+            onTick: finalCountDown,
+            onExpiry: countDownExpiry
         });
 
-        function setEndTime() {
+        function getLeftTime() {
             var d = $('#fecha_inicio').val();
             var d1 = d.split(" ");
             var date = d1[0].split("-");
@@ -195,20 +196,13 @@
         }
 
         function finalCountDown(time){
-            if (time[5] < 5)
-            {
-                $('#countdown').countdown('option',{
-                    //until: endTime,
-                    //format: 'HMS',
-                    layout: '<strong><span class="red">{hnn}{sep}{mnn}{sep}{snn}</span></strong>'//,
-                //  onExpiry: countDownExpiry,
-                //  onTick: finalCountDown*/
-                });
-            }
+            if (time[5] < 4)
+                $('#countdown-format').addClass('red');
         }
 
         function countDownExpiry(){
-            alert('Se acabo el tiempo! :(');
+            $("#id_nextQuestion").val(0)
+            $("#formulario").submit();
         }
 
         function processAnswer(idQuestion) {
