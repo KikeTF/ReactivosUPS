@@ -31,7 +31,6 @@ class OptionsComposer extends Controller
 
             if ( $isAdminView )
             {
-                dd($viewNameStart);
                 $idPerfilUsuario = (int)Session::get('idPerfilUsuario');
                 $perfilUsuario = ProfileUser::find($idPerfilUsuario);
                 if($perfilUsuario->optionsUsers->count() == 0){

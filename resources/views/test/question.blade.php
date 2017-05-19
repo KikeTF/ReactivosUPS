@@ -160,7 +160,17 @@
         $('#l10n').countdown($.extend({}, $.countdown.regionalOptions['es']));
         //$('#defaultCountdown').countdown({until: getLeftTime(), format: 'HMS'});
 
-        $(function () {
+        var endTime;
+        $('#countdown').countdown({
+            until: setEndTime(),
+            format: 'HMS',
+            compact: true,
+            layout: '<strong><span>{hnn}{sep}{mnn}{sep}{snn}</span></strong>',
+            onExpiry: countDownExpiry,
+            onTick: finalCountDown
+        });
+
+        function setEndTime() {
             var d = $('#fecha_inicio').val();
             var d1 = d.split(" ");
             var date = d1[0].split("-");
@@ -178,15 +188,28 @@
             var elapsedTimeMS = (currentTime - startTime);
             var leftTimeMS = limitTimeMS - elapsedTimeMS;
 
-            var endTime = currentTime;
+            endTime = currentTime;
             endTime.setMilliseconds(endTime.getMilliseconds() + leftTimeMS);
 
-            $('#countdown').countdown({
-                until: endTime,
-                format: 'HMS',
-                layout: "<span>{hnn} : {mnn} : {snn}</span>"
-            });
-        });
+            return endTime;
+        }
+
+        function finalCountDown(time){
+            if (time[5] < 5)
+            {
+                $('#countdown').countdown('option',{
+                    //until: endTime,
+                    //format: 'HMS',
+                    layout: '<strong><span class="red">{hnn}{sep}{mnn}{sep}{snn}</span></strong>'//,
+                //  onExpiry: countDownExpiry,
+                //  onTick: finalCountDown*/
+                });
+            }
+        }
+
+        function countDownExpiry(){
+            alert('Se acabo el tiempo! :(');
+        }
 
         function processAnswer(idQuestion) {
             if (idQuestion > 0)
