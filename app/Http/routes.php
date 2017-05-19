@@ -37,6 +37,11 @@ Route::get('test/lists', [
     'as'    => 'test.lists'
 ]);
 
+Route::get('test/{id}/instruction', [
+    'uses'  => 'TestsController@instruction',
+    'as'    => 'test.instruction'
+]);
+
 Route::get('test/{id}/question', [
     'uses'  => 'TestsController@question',
     'as'    => 'test.question'
@@ -48,6 +53,11 @@ Route::get('test/{id}/result', [
 ]);
 
 Route::resource('test','TestsController');
+
+Route::get('test/{id}/destroy', [
+    'uses'  => 'TestsController@destroy',
+    'as'    => 'test.destroy'
+]);
 
 Route::group(['middleware' => 'auth'], function () {
 

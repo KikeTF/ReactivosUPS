@@ -9,7 +9,7 @@ class ExamParameter extends Model
     protected $table = "exc_parametros";
     public $timestamps = false;
 
-    protected $fillable =["id_carrera_campus", "duracion_examen", "id_examen_real", "id_examen_test", "editar_respuestas", "estado"];
+    protected $fillable =["id_carrera_campus", "duracion_examen", "id_examen_real", "id_examen_test", "editar_respuestas", "instrucciones", "estado"];
 
     public function answersHeaders(){
         return $this->hasMany('ReactivosUPS\ExamParameter', 'id_parametro');

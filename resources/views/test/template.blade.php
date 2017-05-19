@@ -39,7 +39,7 @@
                 <a href="/" class="navbar-brand">
                     <small>
                         <i class="fa fa-graduation-cap"></i>
-                        Reactivos UPS
+                        Simulador de Examen Complexivo
                     </small>
                 </a>
             </div>

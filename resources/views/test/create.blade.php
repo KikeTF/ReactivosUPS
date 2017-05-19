@@ -12,6 +12,8 @@
             <h4 style="padding: 0; margin: 0;">Complete la informaci&oacute;n:</h4>
         </div>
 
+        {!! Form::hidden('NewTest', 1) !!}
+
         <div class="row">
             <div class="col-md-4 col-sm-3" ></div>
             <div class="col-md-4 col-sm-5" >

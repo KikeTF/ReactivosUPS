@@ -13,7 +13,7 @@
 
         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
             <li>
-                <a href="{{ route('auth.login') }}">
+                <a href="{{ route('test.destroy', $test->id) }}">
                     <i class="ace-icon fa fa-power-off"></i>
                     Salir
                 </a>
