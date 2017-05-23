@@ -97,15 +97,19 @@ class TestsController extends Controller
                 $id = isset($request['id']) ? $request['id'] : 0;
                 $test = AnswerHeader::find($id);
 
-                $idsExamDet = ExamHeader::find($test->parameter->id_examen_test)
-                    ->examsDetails()->orderByRaw("RAND()")->get()->pluck('id')->toArray();
+                $ExamDet = ExamHeader::find($test->parameter->id_examen_test)
+                    ->examsDetails()->orderByRaw("RAND()")->get();//->pluck('id')->toArray();
 
-                foreach ($idsExamDet as $idDet)
+                foreach ($ExamDet as $exDet)
                 {
-                    $det["id_examen_det"] = $idDet;
-                    $det["creado_por"] = 0;
-                    $det["fecha_creacion"] = date('Y-m-d H:i:s');
-                    $testDet[] = new AnswerDetail($det);
+                    $idMenc = $exDet->reagent->distributive->mattercareer->id_mencion;
+                    if ($idMenc == $test->id_mencion || $idMenc == 1)
+                    {
+                        $det["id_examen_det"] = $exDet->id;
+                        $det["creado_por"] = 0;
+                        $det["fecha_creacion"] = date('Y-m-d H:i:s');
+                        $testDet[] = new AnswerDetail($det);
+                    }
                 }
 
                 if ( isset($testDet) )

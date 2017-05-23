@@ -5,6 +5,7 @@
     {!! Form::open(['id' => 'formulario',
             'class' => 'form-horizontal',
             'role' => 'form',
+            'autocomplete' => 'off',
             'route' => 'test.store',
             'method' => 'POST']) !!}
 
@@ -84,7 +85,7 @@
                     {!! Form::label('correo', 'Correo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                     <div class="col-sm-10">
                         <div class="clearfix">
-                            {!! Form::text('correo', null, ['class' => 'form-control', 'required']) !!}
+                            {!! Form::email('correo', null, ['class' => 'form-control', 'placeholder' => 'ejemplo@est.ups.edu.ec', 'required']) !!}
                         </div>
                     </div>
                 </div>
