@@ -124,33 +124,32 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        \DB::beginTransaction(); //Start transaction!
+
 
         try
         {
-            if(!is_null($request->password) and  $request->password != "")
-                $user->password = \Hash::make($request->password);
+            \DB::beginTransaction(); //Start transaction!
 
-            $profiles = array();
-            foreach ($request->perfiles as $perfil) {
-                if(User::find($user->id)->profilesUsers()->where('id_perfil', $perfil)->count() == 0){
-                    $profile['id_perfil'] = $perfil;
-                    $profile['id_usuario'] = $id;
-                    $profile['creado_por'] = \Auth::id();
-                    $profile['fecha_creacion'] = date('Y-m-d h:i:s');
-                    $profiles[] = new ProfileUser($profile);
-                }
-            }
-
-            $user->username = $request->username;
-            $user->tipo = $request->tipo;
             $user->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $user->modificado_por = \Auth::id();
             $user->fecha_modificacion = date('Y-m-d h:i:s');
-
             $user->save();
-            User::find($user->id)->profilesUsers()->saveMany($profiles);
-            User::find($user->id)->profilesUsers()->whereNotIn('id_perfil', $request->perfiles)->delete();
+
+            if (isset($request->perfiles))
+            {
+                $profiles = array();
+                foreach ($request->perfiles as $perfil) {
+                    if(User::find($user->id)->profilesUsers()->where('id_perfil', $perfil)->count() == 0){
+                        $profile['id_perfil'] = $perfil;
+                        $profile['id_usuario'] = $id;
+                        $profile['creado_por'] = \Auth::id();
+                        $profile['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $profiles[] = new ProfileUser($profile);
+                    }
+                }
+                $user->profilesUsers()->saveMany($profiles);
+                $user->profilesUsers()->whereNotIn('id_perfil', $request->perfiles)->delete();
+            }
 
             flash('Transacci&oacuten realizada existosamente', 'success');
         }
@@ -158,12 +157,15 @@ class UsersController extends Controller
         {
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[UsersController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+            Log::error("[UsersController][update] id=".$id."; Exception: ".$ex);
             return redirect()->route('security.users.edit', $id);
         }
+        finally
+        {
+            \DB::commit();
+        }
 
-        \DB::commit();
-        return redirect()->route('security.users.index');
+        return redirect()->route('security.users.edit', $id);
     }
 
     /**

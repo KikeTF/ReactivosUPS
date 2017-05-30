@@ -17,21 +17,21 @@
     <div class="form-group">
         {!! Form::label('nombres', 'Nombres:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('nombres', $user->nombres, ['class' => 'form-control', 'placeholder' => 'Nombres', 'disabled']) !!}
+            {!! Form::text('nombres', $user->nombres, ['class' => 'form-control', 'placeholder' => 'Nombres', 'readonly']) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('apellidos', 'Apellidos:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('apellidos', $user->apellidos, ['class' => 'form-control', 'placeholder' => 'Apellidos', 'disabled']) !!}
+            {!! Form::text('apellidos', $user->apellidos, ['class' => 'form-control', 'placeholder' => 'Apellidos', 'readonly']) !!}
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('email', 'Email:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            {!! Form::text('email', $user->email, ['class' => 'form-control', 'placeholder' => 'Correo Electr&oacute;nico', 'disabled']) !!}
+            {!! Form::text('email', $user->email, ['class' => 'form-control', 'placeholder' => 'Correo Electr&oacute;nico', 'readonly']) !!}
         </div>
     </div>
 
@@ -39,16 +39,7 @@
         {!! Form::label('username', 'Usuario:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="clearfix">
-                {!! Form::text('username', $user->username, ['class' => 'form-control', 'placeholder' => 'Usuario', 'required']) !!}
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('password', 'Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            <div class="clearfix">
-                {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Ingrese la nueva contrase&ntilde;a', 'required']) !!}
+                {!! Form::text('username', $user->username, ['class' => 'form-control', 'placeholder' => 'Usuario', 'readonly']) !!}
             </div>
         </div>
     </div>
@@ -56,10 +47,7 @@
     <div class="form-group">
         {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select id="tipo" name="tipo" class="form-control">
-                <option value="D">Docente</option>
-                <option value="E">Estudiante</option>
-            </select>
+            {!! Form::text('tipo', ($user->tipo == 'D' ? 'Docente' : 'Estudiante'), ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 

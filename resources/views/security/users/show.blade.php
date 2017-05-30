@@ -36,13 +36,13 @@
             </tr>
             <tr>
                 <td><strong>Tipo:</strong></td>
-                <td>{{ $user->tipo == 'D' ? 'Docente' : 'Estado' }}</td>
+                <td>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante' }}</td>
             </tr>
             <tr>
                 <td><strong>Perfiles:</strong></td>
                 <td colspan="3">
                     @foreach($profiles as $profile)
-                        {{$profile->nombre}}<span>; </span>
+                        {{ $profile->nombre }}<span>; </span>
                     @endforeach
                 </td>
             </tr>

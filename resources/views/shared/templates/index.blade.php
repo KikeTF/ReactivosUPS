@@ -293,6 +293,7 @@
     <script src="{{ asset('ace/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('ace/js/spin.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.validate.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
 
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
@@ -330,22 +331,24 @@
                     @if( !isset($newurl) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                     @else // Con boton de agregar nuevo
-                        dom: '<"clearfix"<"dataTableButtons"<"pull-left tableTools-container"<"btn-group btn-overlap"B>>><"dataTableButtons"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                        dom: '<"clearfix"<"pull-left tableTools-container"B><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                         buttons: {
                             dom: {
                                 container: {
-                                    tag: 'div'
+                                    tag: 'div',
+                                    className: 'btn-group btn-overlap'
                                 },
                                 buttonContainer: {
                                     tag: 'div',
-                                    className: 'btn btn-white btn-primary btn-bold'
+                                    className: 'DTTT_container'
                                 },
                                 button: {
                                     tag: 'a',
-                                    className: 'blue'
+                                    className: 'DTTT_button btn btn-white btn-primary btn-bold'
                                 }
                             },
                             buttons: [{
+                                name: 'ToolTables__dataTable_5',
                                 text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
                                 titleAttr: "Nuevo",
                                 action: function ( e, dt, node, config ) {
@@ -390,12 +393,22 @@
                                 sToolTip: "Vista de Impresión",
                                 sButtonClass: "btn btn-white btn-primary  btn-bold",
                                 sButtonText: "<i class='fa fa-print bigger-110 grey'></i>",
-
+                                //sAutoPrint: true//,
                                 sMessage: "<div class='navbar navbar-default'><div class='navbar-header pull-left'><a class='navbar-brand' href='#'><small></small></a></div></div>",
 
                                 sInfo: "<h3 class='no-margin-top'>Vista de Impresión</h3>\
                                           <p>Por favor utilice la función de impresión de su navegador para imprimir esta tabla.\
-                                          <br />Oprima <b>esc</b> cuando finalize.</p>",
+                                            <br />Oprima <b>esc</b> cuando finalize.</p>",
+                                fnClick: function ( e, dt, node, config ) {
+                                    $('.page-header').css("display", "none");
+                                    $('#_dataTable_wrapper .clearfix').css("display", "none");
+                                    $('#_dataTable_wrapper .dataTables_wrapper .row').css("display", "none");
+                                    //oSettings[0]._iDisplayLength = oSettings[0].fnRecordsTotal();
+                                    //set display length of dataTables settings to the total records available
+                                    //oTable.draw();  //
+
+                                    window.print();
+                                }
                             }
                         ]
                     },
