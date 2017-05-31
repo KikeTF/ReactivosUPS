@@ -191,7 +191,7 @@
                 <div class="page-content">
                     <div class="page-header">
                         <h1>
-                            <small>
+                            <small id="small-title">
                                 @yield('titulo', 'Reactivos UPS')
                                 <i class="ace-icon fa fa-angle-double-right"></i>
                                 @yield('titulo2')
@@ -393,21 +393,25 @@
                                 sToolTip: "Vista de Impresión",
                                 sButtonClass: "btn btn-white btn-primary  btn-bold",
                                 sButtonText: "<i class='fa fa-print bigger-110 grey'></i>",
-                                //sAutoPrint: true//,
+                                bShowAll: true,
                                 sMessage: "<div class='navbar navbar-default'><div class='navbar-header pull-left'><a class='navbar-brand' href='#'><small></small></a></div></div>",
 
                                 sInfo: "<h3 class='no-margin-top'>Vista de Impresión</h3>\
                                           <p>Por favor utilice la función de impresión de su navegador para imprimir esta tabla.\
                                             <br />Oprima <b>esc</b> cuando finalize.</p>",
                                 fnClick: function ( e, dt, node, config ) {
-                                    $('.page-header').css("display", "none");
+                                    var f = this.s.dt;
+                                    $('#small-title').css("display", "none");
                                     $('#_dataTable_wrapper .clearfix').css("display", "none");
                                     $('#_dataTable_wrapper .dataTables_wrapper .row').css("display", "none");
-                                    //oSettings[0]._iDisplayLength = oSettings[0].fnRecordsTotal();
-                                    //set display length of dataTables settings to the total records available
-                                    //oTable.draw();  //
-
+                                    f._iDisplayLength = f.fnRecordsDisplay();
+                                    f.oApi._fnDraw(f);
                                     window.print();
+                                    $('#small-title').css("display", "inline-block");
+                                    $('#_dataTable_wrapper .clearfix').css("display", "block");
+                                    $('#_dataTable_wrapper .dataTables_wrapper .row').css("display", "block");
+                                    f._iDisplayLength = 10;
+                                    f.oApi._fnDraw(f);
                                 }
                             }
                         ]
