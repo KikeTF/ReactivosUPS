@@ -227,8 +227,12 @@
                 },
                 success: function (r) {
                     if (r.valid) {
-                        $("#perfiles").attr('hidden', false);
                         var p = r.profiles;
+
+                        if(p.length > 1)
+                            $("#perfiles").attr('hidden', false);
+
+                        $("#profile").find('option').remove();
                         for(var i = 0; i < p.length; i++){
                             $("#profile").append('<option value="'+p[i].id+'">'+p[i].nombre+'</option>');
                         }

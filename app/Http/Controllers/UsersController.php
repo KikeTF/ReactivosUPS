@@ -123,12 +123,22 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-
-
         try
         {
+            $user = User::find($id);
+
             \DB::beginTransaction(); //Start transaction!
+
+            if ( !($request->password === '' && $request->password_confirm === '') )
+            {
+                if ($request->password === $request->password_confirm)
+                    $user->setPasswordAttribute($request->password);
+                else
+                {
+                    flash("La contrase&ntilde;a no coincide! Por favor verifique.", 'danger')->important();
+                    return redirect()->route('security.users.edit', $id);
+                }
+            }
 
             $user->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $user->modificado_por = \Auth::id();

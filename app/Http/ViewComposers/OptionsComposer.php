@@ -45,7 +45,8 @@ class OptionsComposer extends Controller
                     $options = Option::find(array_unique($ids))->where('estado', 'A')->where('id_padre', 0);
                 }
 
-                $view->with('navOptions', $options)->with('navSuboptions', $suboptions);
+                if (isset($options) && isset($suboptions))
+                    $view->with('navOptions', $options)->with('navSuboptions', $suboptions);
             }
         }
         catch (\Exception $ex)

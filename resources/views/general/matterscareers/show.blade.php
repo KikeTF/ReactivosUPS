@@ -42,10 +42,6 @@
                 <td colspan="3">{{ $mattercareer->nivel }}</td>
             </tr>
             <tr>
-                <td><strong>Tipo:</strong></td>
-                <td colspan="3">{{ $mattercareer->tipo }}</td>
-            </tr>
-            <tr>
                 <td><strong>No. Reactivos Entregables:</strong></td>
                 <td colspan="3">{{ $mattercareer->nro_reactivos_mat }}</td>
             </tr>

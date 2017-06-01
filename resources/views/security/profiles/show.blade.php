@@ -26,6 +26,14 @@
                 <td colspan="3">{{ $profile->descripcion }}</td>
             </tr>
             <tr>
+                <td><strong>¿Aprueba Reactivo?</strong></td>
+                <td>{{ $profile->aprueba_reactivo == 'S' ? 'Si' : 'No' }}</td>
+            </tr>
+            <tr>
+                <td><strong>¿Aprueba Examen?</strong></td>
+                <td>{{ $profile->aprueba_examen == 'S' ? 'Si' : 'No' }}</td>
+            </tr>
+            <tr>
                 <td><strong>Accesos:</strong></td>
                 <td colspan="3">
                     @foreach($optionsProfiles as $option)
