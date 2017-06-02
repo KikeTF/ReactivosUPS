@@ -235,44 +235,15 @@
     </div><!-- /.main-container -->
 
     <!-- basic scripts -->
-
-    <!--[if !IE]> -->
     <script src="{{ asset('ace/js/jquery.2.1.1.min.js') }}"></script>
-
-    <!-- <![endif]-->
-
-    <!--[if IE]>
-    <!--
-    <script src="ace/js/jquery.1.11.1.min.js"></script>
-    -->
-    <!--[endif]-->
-
-    <!--[if !IE]> -->
     <script type="text/javascript">
         window.jQuery || document.write("<script src='ace/js/jquery.min.js'>"+"<"+"/script>");
     </script>
-
-    <!-- <![endif]-->
-
-    <!--[if IE]>
-    <!--
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='ace/js/jquery1x.min.js'>"+"<"+"/script>");
-    </script>
-    -->
-    <!--[endif]-->
     <script type="text/javascript">
         if('ontouchstart' in document.documentElement) document.write("<script src='ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
     <script src="{{ asset('ace/js/bootstrap.min.js') }}"></script>
 
-    <!-- page specific plugin scripts -->
-
-    <!--[if lte IE 8]>
-    <!--
-    <script src="ace/js/excanvas.min.js"></script>
-    -->
-    <!--[endif]-->
     <script src="{{ asset('ace/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery-ui.custom.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.ui.touch-punch.min.js') }}"></script>
@@ -293,7 +264,7 @@
     <script src="{{ asset('ace/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('ace/js/spin.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.validate.min.js') }}"></script>
-    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
+    {{--<script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>--}}
 
     <!-- ace scripts -->
     <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>

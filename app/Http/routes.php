@@ -27,6 +27,11 @@ Route::get('auth/logout', [
     'as'    => 'auth.logout'
 ]);
 
+Route::post('auth/forgot', [
+    'uses'  => 'Auth\AuthController@postForgotPassword',
+    'as'    => 'auth.forgot'
+]);
+
 Route::get('auth/userprofiles', [
     'uses'  => 'Auth\AuthController@getUserProfiles',
     'as'    => 'auth.userprofiles'

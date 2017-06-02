@@ -43,6 +43,9 @@
     <script src="ace/js/respond.min.js"></script>
     -->
     <!--[endif]-->
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
 
 <body class="login-layout light-login">
@@ -57,6 +60,10 @@
                         </div>
 
                         <div class="space-6"></div>
+
+                        <div class="center">
+                            @include('flash::message')
+                        </div>
 
                         <div class="position-relative">
                             <div id="login-box" class="login-box visible widget-box no-border">
@@ -102,7 +109,7 @@
                                                 </div>
 
                                                 <div class="clearfix">
-                                                    <label class="inline">
+                                                    <label style="display: none;">
                                                         <input id="rememberMe" name="rememberMe" type="checkbox" class="ace" />
                                                         <span class="lbl">Recu&eacute;rdame</span>
                                                     </label>
@@ -143,23 +150,23 @@
                                             Ingrese su Correo Institucional
                                         </p>
 
-                                        <form>
+                                        {!! Form::open(['class' => 'form-horizontal', 'role' => 'form','route' => 'auth.forgot','method' => 'POST']) !!}
                                             <fieldset>
                                                 <label class="block clearfix">
                                                     <span class="block input-icon input-icon-right">
-                                                        <input type="email" class="form-control" placeholder="Correo Institucional" />
+                                                        <input id="username2" name="username2" type="email" class="form-control" placeholder="Correo Institucional" />
                                                         <i class="ace-icon fa fa-envelope"></i>
                                                     </span>
                                                 </label>
 
                                                 <div class="clearfix">
-                                                    <button type="button" class="width-35 pull-right btn btn-sm btn-danger">
+                                                    <button id="btnSend" type="submit" class="width-35 pull-right btn btn-sm btn-danger">
                                                         <i class="ace-icon fa fa-lightbulb-o"></i>
                                                         <span class="bigger-110">Enviar</span>
                                                     </button>
                                                 </div>
                                             </fieldset>
-                                        </form>
+                                        {!! Form::close() !!}
                                     </div><!-- /.widget-main -->
 
                                     <div class="toolbar center">
@@ -180,35 +187,14 @@
     </div><!-- /.main-container -->
 
     <!-- basic scripts -->
-
-    <!--[if !IE]> -->
     <script src="{{ asset('ace/js/jquery.2.1.1.min.js') }}"></script>
-
-    <!-- <![endif]-->
-
-    <!--[if IE]>
-    <!--
-    <script src="ace/js/jquery.1.11.1.min.js"></script>
-    -->
-    <!--[endif]-->
-
-    <!--[if !IE]> -->
     <script type="text/javascript">
         window.jQuery || document.write("<script src='ace/js/jquery.min.js'>"+"<"+"/script>");
     </script>
-
-    <!-- <![endif]-->
-
-    <!--[if IE]>
-    <!--
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='ace/js/jquery1x.min.js'>"+"<"+"/script>");
-    </script>
-    -->
-    <!--[endif]-->
     <script type="text/javascript">
         if('ontouchstart' in document.documentElement) document.write("<script src='ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
+    <script src="{{ asset('ace/js/bootstrap.min.js') }}"></script>
 
     <!-- inline scripts related to this page -->
     <script src="{{ asset('scripts/login/index.js') }}"></script>

@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers\Auth;
 
 use Auth;
 use Dompdf\Exception;
+use ReactivosUPS\Notification;
 use ReactivosUPS\Profile;
 use Session;
 use View;
@@ -11,6 +12,7 @@ use ReactivosUPS\User;
 use Validator;
 use ReactivosUPS\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Log;
 
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use ReactivosUPS\Http\Requests;
@@ -82,7 +84,7 @@ class AuthController extends Controller
         $username = $request->username;
         $password = $request->password;
         $idProfile = (int)$request->profile;
-        $rememberMe = !isset( $request['rememberMe'] ) ? false : true;
+        $rememberMe = (bool)(isset( $request['rememberMe'] ) ? true : false);
         $errMessage = "";
         //dd(\Hash::make($password));
 
@@ -101,6 +103,49 @@ class AuthController extends Controller
 
     public function getLogout(){
         Auth::logout();
+        return redirect()->guest('auth/login');
+    }
+
+    public function postForgotPassword(Request $request){
+        try
+        {
+            $user = User::query()
+                ->where('username', $request->username2)->first();
+
+            if( !is_null($user) )
+            {
+                $notification = Notification::query()
+                    ->where('id_usuario', $user->id)->where('tipo', 'PWD')->where('estado', 'A')->first();
+
+                if( is_null($notification))
+                {
+                    $notif = ['id_usuario' => $user->id, 'fecha' => date('Y-m-d h:i:s'), 'tipo' => 'PWD', 'veces' => 1, 'estado' => 'A'];
+                    $notification = new Notification($notif);
+                    flash("Solicitud de contrase&ntilde;a enviada!")->important();
+                }
+                else
+                {
+                    $notification->modificado_por = $user->id;
+                    $notification->fecha_modificacion = date('Y-m-d h:i:s');
+                    $notification->veces = ((int)$notification->veces)+1;
+                    flash("Ya existe una solicitud de contrase&ntilde;a en tramite!")->important();
+                }
+
+                $notification->save();
+            }
+            else
+            {
+                flash("El usuario no se encuentra registrado!", "danger")->important();
+                Log::alert("[AuthController][postForgotPassword] username=".$request->username2."; El usuario no se encuentra registrado.");
+            }
+
+        }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo enviar la solicitud de contrase&ntilde;a. Por favor contacte al administrador!", "danger")->important();
+            Log::error("[AuthController][postForgotPassword] username=".$request->username2."; Exception: ".$ex);
+        }
+
         return redirect()->guest('auth/login');
     }
 
