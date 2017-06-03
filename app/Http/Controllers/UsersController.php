@@ -69,17 +69,8 @@ class UsersController extends Controller
             $user->creado_por = $this->getUserName($user->creado_por);
             $user->modificado_por = $this->getUserName($user->modificado_por);
 
-            foreach ($user->profilesUsers as $profileUsers) {
-                $ids[] = $profileUsers->id_perfil;
-            }
-
-            $profiles = [];
-            if (isset($ids))
-                $profiles = Profile::find($ids);
-
             return view('security.users.show')
-                ->with('user', $user)
-                ->with('profiles', $profiles);
+                ->with('user', $user);
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();

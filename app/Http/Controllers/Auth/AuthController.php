@@ -39,7 +39,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => array('getLogout', 'userProfile')]);
     }
 
     public function getLogin()
@@ -147,6 +147,14 @@ class AuthController extends Controller
         }
 
         return redirect()->guest('auth/login');
+    }
+
+    public function userProfile()
+    {
+        $user = User::find(Auth::id());
+
+        return view('security.userProfile')
+            ->with('user', $user);
     }
 
     protected $redirectPath = '/';

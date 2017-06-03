@@ -41,7 +41,7 @@
             <tr>
                 <td><strong>Perfiles:</strong></td>
                 <td colspan="3">
-                    @foreach($profiles as $profile)
+                    @foreach($user->profilesUsers->pluck('profile') as $profile)
                         {{ $profile->nombre }}<span>; </span>
                     @endforeach
                 </td>

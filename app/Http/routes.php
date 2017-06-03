@@ -85,6 +85,16 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
 
+    Route::get('changepassword', [
+        'uses'  => 'Auth\PasswordController@change',
+        'as'    => 'security.changePassword'
+    ]);
+
+    Route::get('userprofile', [
+        'uses'  => 'Auth\AuthController@userProfile',
+        'as'    => 'security.userProfile'
+    ]);
+    
     Route::resource('users','UsersController');
 
     Route::get('users/{id}/destroy', [
@@ -100,8 +110,6 @@ Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
     ]);
 
 });
-
-
 
 Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 

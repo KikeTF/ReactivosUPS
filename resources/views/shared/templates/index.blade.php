@@ -152,6 +152,19 @@
 
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
+                                <a href="{{ route('security.userProfile') }}">
+                                    <i class="ace-icon fa fa-user"></i>
+                                    Perfil de Usuario
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('security.changePassword') }}">
+                                    <i class="ace-icon fa fa-key"></i>
+                                    Cambio de Contrase&ntilde;a
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
                                 <a href="{{ route('auth.logout') }}">
                                     <i class="ace-icon fa fa-power-off"></i>
                                     Salir
