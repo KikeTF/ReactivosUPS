@@ -1,7 +1,15 @@
 @extends('shared.templates.index')
 
-@section('titulo', 'Usuario')
-@section('subtitulo', 'Perfil de Usuario')
+@section('titulo', 'Perfil de Usuario')
+@section('subtitulo', $user->FullName)
+
+@push('specific-styles')
+    <style>
+        .profile-info-name{
+            width: 130px !important;
+        }
+    </style>
+@endpush
 
 @section('contenido')
 
@@ -12,37 +20,33 @@
         ?>
         @include('shared.templates._formbuttons')
 
-        <table class="table table-hover">
-            <tr>
-                <td><strong>Usuario:</strong></td>
-                <td colspan="3">{{ $user->username }}</td>
-            </tr>
+        <div class="profile-user-info profile-user-info-striped">
+            <div class="profile-info-row">
+                <div class="profile-info-name">Usuario</div>
+                <div class="profile-info-value"><span>{{ $user->username }}</span></div>
+            </div>
 
-            <tr>
-                <td><strong>Nombre Completo:</strong></td>
-                <td colspan="3">{{ $user->nombres.' '.$user->apellidos }}</td>
-            </tr>
-            <tr>
-                <td><strong>Email:</strong></td>
-                <td colspan="3">{{ $user->email }}</td>
-            </tr>
-            <tr>
-                <td><strong>Tipo:</strong></td>
-                <td>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante' }}</td>
-            </tr>
-            <tr>
-                <td><strong>Perfiles:</strong></td>
-                <td colspan="3">
-                    @foreach($user->profilesUsers->pluck('profile') as $profile)
-                        {{ $profile->nombre }}<span>; </span>
-                    @endforeach
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4"></td>
-            </tr>
-        </table>
+            <div class="profile-info-row">
+                <div class="profile-info-name">Correo</div>
+                <div class="profile-info-value"><span>{{ $user->email }}</span></div>
+            </div>
 
+            <div class="profile-info-row">
+                <div class="profile-info-name">Tipo</div>
+                <div class="profile-info-value"><span>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Perfiles de Acceso</div>
+                <div class="profile-info-value">
+                    <span>
+                        @foreach($user->profilesUsers->pluck('profile') as $profile)
+                            {{ $profile->nombre }}<span>; </span>
+                        @endforeach
+                    </span>
+                </div>
+            </div>
+        </div>
     </form>
 
 @endsection

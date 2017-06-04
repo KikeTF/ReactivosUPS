@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
-@section('titulo', 'Usuario')
-@section('subtitulo', 'Cambio de Contrase&ntilde;a')
+@section('titulo', 'Cambio de Contrase&ntilde;a')
+@section('subtitulo', Auth::user()->FullName)
 
 @section('contenido')
 
