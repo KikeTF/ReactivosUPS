@@ -151,10 +151,7 @@ class AuthController extends Controller
 
     public function userProfile()
     {
-        $user = User::find(Auth::id());
-
-        return view('security.userProfile')
-            ->with('user', $user);
+        return view('security.userProfile');
     }
 
     protected $redirectPath = '/';

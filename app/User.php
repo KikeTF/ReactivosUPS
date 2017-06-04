@@ -26,23 +26,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token'];
 
-    public function getAuthPassword()
-    {
-        // TODO: Implement getAuthPassword() method.
-        return $this->password;
-    }
-
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['password'] = \Hash::make($password);
-    }
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = ['username', 'password', 'email', 'cod_usuario', 'nombres', 'apellidos', 'id_sede', 'tipo', 'estado'];
+
+
+    public function getPasswordAttribute()
+    {
+        return $this->attributes['password'];
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = \Hash::make($password);
+    }
 
     public function getFullNameAttribute(){
         return $this->attributes['nombres'] .' '. $this->attributes['apellidos'];

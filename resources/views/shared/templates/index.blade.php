@@ -216,14 +216,10 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <!-- PAGE CONTENT BEGINS -->
-                            <div class="col-sm-12">
-
-                                <section>
-                                    @include('flash::message')
-                                    @yield('contenido')
-                                </section>
-
-                            </div><!-- /.row -->
+                            <section>
+                                @include('flash::message')
+                                @yield('contenido')
+                            </section>
                             <!-- PAGE CONTENT ENDS -->
                         </div><!-- /.col -->
                     </div><!-- /.row -->

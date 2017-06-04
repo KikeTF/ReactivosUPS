@@ -86,7 +86,12 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
 
     Route::get('changepassword', [
-        'uses'  => 'Auth\PasswordController@change',
+        'uses'  => 'Auth\PasswordController@getChange',
+        'as'    => 'security.changePassword'
+    ]);
+
+    Route::post('changepassword', [
+        'uses'  => 'Auth\PasswordController@postchange',
         'as'    => 'security.changePassword'
     ]);
 

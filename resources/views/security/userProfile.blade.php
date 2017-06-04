@@ -1,12 +1,18 @@
 @extends('shared.templates.index')
 
-@section('titulo', 'Perfil de Usuario')
-@section('subtitulo', $user->FullName)
+@section('titulo')
+    <i class="ace-icon fa fa-user"></i><span> Perfil de Usuario</span>
+@endsection
+@section('subtitulo', \Auth::user()->FullName)
 
 @push('specific-styles')
     <style>
+        .profile-user-info{
+            width: 100% !important;
+        }
         .profile-info-name{
             width: 130px !important;
+            vertical-align: top !important;
         }
     </style>
 @endpush
@@ -23,25 +29,25 @@
         <div class="profile-user-info profile-user-info-striped">
             <div class="profile-info-row">
                 <div class="profile-info-name">Usuario</div>
-                <div class="profile-info-value"><span>{{ $user->username }}</span></div>
+                <div class="profile-info-value"><span>{{ \Auth::user()->username }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Correo</div>
-                <div class="profile-info-value"><span>{{ $user->email }}</span></div>
+                <div class="profile-info-value"><span>{{ \Auth::user()->email }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Tipo</div>
-                <div class="profile-info-value"><span>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante' }}</span></div>
+                <div class="profile-info-value"><span>{{ \Auth::user()->tipo == 'D' ? 'Docente' : 'Estudiante' }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Perfiles de Acceso</div>
                 <div class="profile-info-value">
                     <span>
-                        @foreach($user->profilesUsers->pluck('profile') as $profile)
-                            {{ $profile->nombre }}<span>; </span>
+                        @foreach(\Auth::user()->profilesUsers->pluck('profile') as $profile)
+                            {{ $profile->nombre }}<br/>
                         @endforeach
                     </span>
                 </div>
