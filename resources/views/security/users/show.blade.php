@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Seguridad')
-@section('subtitulo', 'Detalle de usuario: '.$user->nombres.' '.$user->apellidos)
+@section('subtitulo', 'Detalle de usuario: '.$user->FullName)
 
 @section('contenido')
 
@@ -27,8 +27,8 @@
                 <td colspan="3">********</td>
             </tr>
             <tr>
-                <td><strong>Nombres y Apellidos:</strong></td>
-                <td colspan="3">{{ $user->nombres.' '.$user->apellidos }}</td>
+                <td><strong>Sede:</strong></td>
+                <td>{{ $user->location->descripcion }}</td>
             </tr>
             <tr>
                 <td><strong>Email:</strong></td>
@@ -38,8 +38,9 @@
                 <td><strong>Tipo:</strong></td>
                 <td>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante' }}</td>
             </tr>
+
             <tr>
-                <td><strong>Perfiles:</strong></td>
+                <td><strong>Perfiles de Acceso:</strong></td>
                 <td colspan="3">
                     @foreach($user->profilesUsers->pluck('profile') as $profile)
                         {{ $profile->nombre }}<span>; </span>

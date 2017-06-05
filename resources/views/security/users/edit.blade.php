@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Seguridad')
-@section('subtitulo', 'Editar usuario: '.$user->nombres.' '.$user->apellidos)
+@section('subtitulo', 'Editar usuario: '.$user->FullName)
 
 @section('contenido')
 
@@ -15,39 +15,11 @@
     @include('shared.templates._formbuttons')
 
     <div class="form-group">
-        {!! Form::label('nombres', 'Nombres:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::text('nombres', $user->nombres, ['class' => 'form-control', 'placeholder' => 'Nombres', 'readonly']) !!}
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('apellidos', 'Apellidos:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::text('apellidos', $user->apellidos, ['class' => 'form-control', 'placeholder' => 'Apellidos', 'readonly']) !!}
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('email', 'Email:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::text('email', $user->email, ['class' => 'form-control', 'placeholder' => 'Correo Electr&oacute;nico', 'readonly']) !!}
-        </div>
-    </div>
-
-    <div class="form-group">
         {!! Form::label('username', 'Usuario:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="clearfix">
                 {!! Form::text('username', $user->username, ['class' => 'form-control', 'placeholder' => 'Usuario', 'readonly']) !!}
             </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            {!! Form::text('tipo', ($user->tipo == 'D' ? 'Docente' : 'Estudiante'), ['class' => 'form-control', 'readonly']) !!}
         </div>
     </div>
 
@@ -69,9 +41,41 @@
         </div>
     </div>
 
+    <div class="form-group">
+        {!! Form::label('cambiar_password', '¿Requiere Cambio de Contrase&ntilde;a?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('cambiar_password', $user->cambiar_password, ($user->cambiar_password == 'S') ? true : false, ['class' => 'ace', 'disabled']) !!}
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
-        {!! Form::label('perfiles', 'Perfiles:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('tipo', 'Sede:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            {!! Form::text('tipo', $user->location->descripcion, ['class' => 'form-control', 'readonly']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email', 'Email:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            {!! Form::text('email', $user->email, ['class' => 'form-control', 'placeholder' => 'Correo Electr&oacute;nico', 'readonly']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('tipo', 'Tipo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            {!! Form::text('tipo', ($user->tipo == 'D' ? 'Docente' : 'Estudiante'), ['class' => 'form-control', 'readonly']) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('perfiles', 'Perfiles de Acceso:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <select multiple="" name="perfiles[]" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Perfiles --" style="display: none;" required>
                 <option value=""></option>
@@ -91,7 +95,6 @@
                     <span class="lbl"></span>
                 </label>
             </div>
-
         </div>
     </div>
 

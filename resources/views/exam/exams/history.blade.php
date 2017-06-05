@@ -28,46 +28,59 @@
 
                 <div class="panel-collapse collapse" id="collapse0">
                     <div class="panel-body">
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>C&oacute;digo:</strong></div>
-                            <div class="col-sm-8">{{ $exam->id }}</div>
-                        </div>
+                        <div class="profile-user-info profile-user-info-striped">
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">C&oacute;digo</div>
+                                <div class="profile-info-value"><span>{{ $exam->id }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Campus:</strong></div>
-                            <div class="col-sm-8">{{ $exam->careerCampus->campus->descripcion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Campus</div>
+                                <div class="profile-info-value"><span>{{ $exam->careerCampus->campus->descripcion }}</span></div>
+                            </div>
 
-                        <?php
-                        $periodos = '';
-                        foreach ($exam->examPeriods as $period)
-                        {
-                            $periodos = $periodos.'('.$period->periodLocation->period->cod_periodo.') '.$period->periodLocation->period->descripcion.'; ';
-                        }
-                        ?>
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Descripcion:</strong></div>
-                            <div class="col-sm-8">{{ $exam->descripcion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Periodo</div>
+                                <div class="profile-info-value"><span>{{ '('.$exam->periodLocation->period->cod_periodo.') '.$exam->periodLocation->period->descripcion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Periodos Reactivos:</strong></div>
-                            <div class="col-sm-8">{{ $periodos }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Fecha Activaci&oacute;n</div>
+                                <div class="profile-info-value"><span>{{ $exam->fecha_activacion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Fecha Activacion:</strong></div>
-                            <div class="col-sm-8">{{ $exam->fecha_activacion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Periodos Reactivos</div>
+                                <div class="profile-info-value">
+                                    <span>
+                                        @foreach($exam->examPeriods as $period)
+                                            {{ '('.$period->periodLocation->period->cod_periodo.') '.$period->periodLocation->period->descripcion }}<br/>
+                                        @endforeach
+                                    </span>
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>¿Es de prueba?</strong></div>
-                            <div class="col-sm-8">{{ ($exam->es_prueba == 'S' ? 'Si' : 'No') }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Descripcio&oacute;n</div>
+                                <div class="profile-info-value"><span>{{ $exam->descripcion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Estado:</strong></div>
-                            <div class="col-sm-8">{{ $exam->state->descripcion }}</div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">¿Es de prueba?</div>
+                                <div class="profile-info-value"><span>{{ ($exam->es_prueba == 'S' ? 'Si' : 'No') }}</span></div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Estado</div>
+                                <div class="profile-info-value"><span>{{ $exam->state->descripcion }}</span></div>
+                            </div>
+
+                            @if(trim($exam->resolucion) != "")
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name">Resoluci&oacute;n</div>
+                                    <div class="profile-info-value"><span>{{ $exam->resolucion }}</span></div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -86,14 +99,13 @@
                 <div class="panel-collapse collapse in" id="collapseTwo">
                     <div class="panel-body">
                         <div class="form-group">
-                            <table class="table table-hover">
+                            <table id="table-show" class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <td><strong>Fecha</strong></td>
-                                    <td><strong>Creado por</strong></td>
-                                    <td><strong>Comentario</strong></td>
-                                    <td><strong>Estado Nuevo</strong></td>
-                                    <td><strong>Estado Anterior</strong></td>
+                                    <td>Fecha</td>
+                                    <td>Creado por</td>
+                                    <td>Comentario</td>
+                                    <td>Estado</td>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -103,7 +115,6 @@
                                         <td>{{ $comment->user->FullName }}</td>
                                         <td>{{ $comment->comentario }}</td>
                                         <td>{{ $states[$comment->id_estado_nuevo] }}</td>
-                                        <td>{{ $states[$comment->id_estado_anterior] }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

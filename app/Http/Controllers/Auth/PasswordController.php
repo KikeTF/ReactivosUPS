@@ -46,7 +46,7 @@ class PasswordController extends Controller
                 if( \Hash::check($request->old_password, \Auth::user()->Password) )
                 {
                     \Auth::user()->setPasswordAttribute($request->new_password);
-                    //$user->estado = !isset( $request['estado'] ) ? 'I' : 'A';
+                    \Auth::user()->cambiar_password = 'N';
                     \Auth::user()->modificado_por = \Auth::id();
                     \Auth::user()->fecha_modificacion = date('Y-m-d h:i:s');
                     \Auth::user()->save();

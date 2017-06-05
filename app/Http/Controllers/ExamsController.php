@@ -558,114 +558,162 @@ class ExamsController extends Controller
         return array("valid"=>$valid);
     }
     
-    public function printReport($id)
+    public function printReport(Request $request, $id)
     {
-        $exam = ExamHeader::find($id);
-        $title = utf8_decode('UNIVERSIDAD POLITÉCNICA SALESIANA SEDE '.$exam->periodLocation->location->descripcion);
-        $subtitle = utf8_decode('EXAMEN COMPLEXIVO');
+        try{
+            $id_mencion = (isset($request['mencion']) ? (int)$request->mencion : 0);
+            $exam = ExamHeader::find($id);
 
-        $pdf = new Report();
-        $pdf->SetTitle('Examen Complexivo');
-        $pdf->AliasNbPages();
-        $pdf->SetMargins(2,3);
-        $pdf->AddPage();
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(17, 0.7, $title, 0, 1, 'C');
-        $pdf->SetFont('Arial', 'B', 14);
-        $pdf->Cell(17, 0.7, utf8_decode($exam->careerCampus->career->descripcion), 0, 1, 'C');
-        $pdf->Cell(17, 0.7, $subtitle, 0, 1, 'C');
-        $pdf->Cell(17, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 0, 1, 'C');
-        if(trim($exam->resolucion) != '')
-            $pdf->Cell(17, 0.7, utf8_decode('RESOLUCIÓN: '.$exam->resolucion), 0, 1, 'C');
-        $pdf->Ln(1);
+            $pdf = new Report();
+            $pdf->headerTitle = utf8_decode('EXAMEN COMPLEXIVO');
+            $pdf->headerSubtitle = utf8_decode($exam->careerCampus->career->descripcion);
+            $pdf->headerSubtitle2 = utf8_decode((($id_mencion == 0) ? '' : Mention::find($id_mencion)->descripcion));
+            $pdf->SetTitle('Examen Complexivo');
+            $pdf->AliasNbPages();
+            $pdf->SetMargins(2,3);
+            $pdf->AddPage();
+            //$pdf->SetFont('Arial', 'B', 16);
+            $pdf->SetFont('Arial', 'B', 12);
 
-        $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');
-        foreach($mattersIds as $id)
-            $idsMat[] = $id;
+            $posY = $pdf->GetY();
+            $pdf->MultiCell(4, 0.7, 'PERIODO', 1, 'L');
+            $pdf->SetXY($pdf->GetX()+4, $posY);
+            $pdf->MultiCell(13, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 1, 'L');
 
-        $mattersCareers = MatterCareer::query()->whereIn('id_materia', array_unique($idsMat))->get();
-
-        foreach($mattersCareers as $matCar)
-        {
-            $matter = $matCar->matter;
-            $arrCountRea = array_count_values($exam->examsDetails->pluck('reagent')->pluck('id_materia')->toArray());
-            $pdf->SetFont('Arial', 'B', 14);
-            $pdf->Cell(17, 0.7, utf8_decode($matter->descripcion).' ('.$arrCountRea[$matter->id].')', 0, 1, 'L');
-
-            $pdf->Ln(0.7);
-            $pdf->SetFont('Arial', '', 10);
-            $iRea = 0;
-            foreach ($exam->examsDetails as $det)
+            $posY = $pdf->GetY();
+            $pdf->MultiCell(4, 0.7, utf8_decode('RESOLUCIÓN'), 1, 'L');
+            if(trim($exam->resolucion) != '')
             {
-                if($det->reagent->id_materia == $matter->id)
-                {
-                    $iRea++;
-                    $x = $pdf->GetX();
-                    $y = $pdf->GetY();
-                    $pdf->MultiCell(1, 0.5 , $iRea.'.', 0, 'L');
-                    $pdf->SetXY($x+0.5,$y);
-                    $pdf->MultiCell(16.5, 0.5 , utf8_decode($det->reagent->planteamiento), 0, 'J');
-                    $maxOpPreg = max($det->reagent->questionsConcepts->count(), $det->reagent->questionsProperties->count());
-
-                    if($maxOpPreg > 0)
-                    {
-                        $pdf->Ln(0.5);
-                        $y1 = $pdf->GetY();
-                        $y2 = $pdf->GetY();
-                        for($i = 0; $i < $maxOpPreg; $i++)
-                        {
-                            if($y1 > 27 || $y2 > 27){
-                                $pdf->AddPage();
-                                $y1 = $pdf->GetY();
-                                $y2 = $pdf->GetY();
-                            }
-
-                            if($det->reagent->questionsConcepts->count() > $i)
-                            {
-                                $conc = $det->reagent->questionsConcepts[$i];
-                                $x1 = $pdf->GetX();
-                                $pdf->SetXY($x1,$y1);
-                                $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
-                                $pdf->SetXY($x1+1,$y1);
-                                $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
-                                $y1 = $pdf->GetY();
-                            }
-
-                            if($det->reagent->questionsProperties->count() > $i)
-                            {
-                                $prop = $det->reagent->questionsProperties[$i];
-                                $pdf->SetXY(10,$y2);
-                                $x2 = $pdf->GetX();
-                                $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
-                                $pdf->SetXY($x2+1,$y2);
-                                $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
-                                $y2 = $pdf->GetY();
-                            }
-                        }
-                    }
-
-                    $pdf->Ln(0.5);
-                    foreach($det->reagent->answers as $answ)
-                    {
-                        $x = $pdf->GetX();
-                        $y = $pdf->GetY();
-                        if($y > 27){
-                            $pdf->AddPage();
-                            $y = $pdf->GetY();
-                        }
-                        $pdf->MultiCell(1, 0.5, $answ->numeral.'.', 0, 'R');
-                        $pdf->SetXY($x+1,$y);
-                        $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
-                    }
-
-                    $pdf->Ln(1);
-                }
+                $pdf->SetXY($pdf->GetX()+4, $posY);
+                $pdf->MultiCell(13, 0.7, utf8_decode($exam->resolucion), 1, 'L');
             }
 
-            $pdf->Ln(0.5);
-        }
+            $pdf->Ln(1);
 
-        $pdf->Output();
-        exit;
+            $idsMat = $exam->examsDetails->pluck('reagent')->pluck('id_materia')->toArray();
+
+            $mattersCareers = MatterCareer::query();
+
+            if($id_mencion > 0)
+                $mattersCareers = $mattersCareers->whereIn('id_mencion', array(1, $id_mencion));
+
+            $mattersCareers = $mattersCareers->whereIn('id_materia', array_unique($idsMat))->get();
+
+            $iRea = 0;
+            $iMat = 0;
+            foreach($mattersCareers as $matCar)
+            {
+                $iMat++;
+
+                $matter = $matCar->matter;
+                $arrCountRea = array_count_values($exam->examsDetails->pluck('reagent')->pluck('id_materia')->toArray());
+                $pdf->SetFont('Arial', 'B', 14);
+                $pdf->Cell(17, 0.7, utf8_decode($matter->descripcion).' ('.$arrCountRea[$matter->id].')', 0, 1, 'L');
+
+                $pdf->Ln(0.7);
+                $pdf->SetFont('Arial', '', 10);
+
+                if($id_mencion == 0)
+                    $totRea = $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->count();
+                else
+                    $totRea = $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->where('id_mencion', 1)->count()
+                        + $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->where('id_mencion', $id_mencion)->count();
+
+                foreach ($exam->examsDetails as $det)
+                {
+                    $posY = $pdf->GetY();
+                    if($posY > 27)
+                        $pdf->AddPage();
+
+                    if($det->reagent->id_materia == $matter->id)
+                    {
+                        $iRea++;
+
+                        $x = $pdf->GetX();
+                        $y = $pdf->GetY();
+                        $pdf->MultiCell(1, 0.5 , $iRea.'.', 0, 'L');
+                        $pdf->SetXY($x+0.5,$y);
+                        $pdf->MultiCell(16.5, 0.5 , utf8_decode($det->reagent->planteamiento), 0, 'J');
+                        $maxOpPreg = max($det->reagent->questionsConcepts->count(), $det->reagent->questionsProperties->count());
+
+                        if($maxOpPreg > 0)
+                        {
+                            $pdf->Ln(0.5);
+                            $y1 = $pdf->GetY();
+                            $y2 = $pdf->GetY();
+                            for($i = 0; $i < $maxOpPreg; $i++)
+                            {
+                                if($y1 > 27 || $y2 > 27){
+                                    $pdf->AddPage();
+                                    $y1 = $pdf->GetY();
+                                    $y2 = $pdf->GetY();
+                                }
+
+                                if($det->reagent->questionsConcepts->count() > $i)
+                                {
+                                    $conc = $det->reagent->questionsConcepts[$i];
+                                    $x1 = $pdf->GetX();
+                                    $pdf->SetXY($x1,$y1);
+                                    $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
+                                    $pdf->SetXY($x1+1,$y1);
+                                    $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
+                                    $y1 = $pdf->GetY();
+                                }
+
+                                if($det->reagent->questionsProperties->count() > $i)
+                                {
+                                    $prop = $det->reagent->questionsProperties[$i];
+                                    $pdf->SetXY(10,$y2);
+                                    $x2 = $pdf->GetX();
+                                    $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
+                                    $pdf->SetXY($x2+1,$y2);
+                                    $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
+                                    $y2 = $pdf->GetY();
+                                }
+                            }
+                        }
+
+                        $pdf->Ln(0.5);
+                        foreach($det->reagent->answers as $answ)
+                        {
+                            $x = $pdf->GetX();
+                            $y = $pdf->GetY();
+                            if($y > 27){
+                                $pdf->AddPage();
+                                $y = $pdf->GetY();
+                            }
+
+                            if($answ->opcion_correcta == 'S')
+                            {
+                                $pdf->SetFont('Arial', 'B', 10);
+                                $pdf->SetTextColor(38, 121, 181);
+                            }
+
+                            $pdf->MultiCell(1, 0.5, $answ->numeral.'.', 0, 'R');
+                            $pdf->SetXY($x+1,$y);
+                            $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
+
+                            $pdf->SetFont('Arial', '', 10);
+                            $pdf->SetTextColor(0, 0, 0);
+                        }
+
+                        if($iRea < $totRea)
+                            $pdf->Ln(1);
+                    }
+                }
+
+                if($iMat < $mattersCareers->count())
+                    $pdf->Ln(0.5);
+            }
+
+            $pdf->Output();
+            exit;
+        }
+        catch(\Exception $ex)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ExamsController][comment] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+            return redirect()->route('exam.exams.show', $id);
+        }
     }
 }

@@ -167,7 +167,7 @@
                             <li>
                                 <a href="{{ route('auth.logout') }}">
                                     <i class="ace-icon fa fa-power-off"></i>
-                                    Salir
+                                    Cerrar Sesi&oacute;n
                                 </a>
                             </li>
                         </ul>

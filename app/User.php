@@ -31,7 +31,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['username', 'password', 'email', 'cod_usuario', 'nombres', 'apellidos', 'id_sede', 'tipo', 'estado'];
+    protected $fillable = ['username', 'password', 'email', 'cod_usuario', 'nombres', 'apellidos', 'id_sede', 'tipo', 'estado', 'cambiar_password'];
 
 
     public function getPasswordAttribute()
@@ -52,11 +52,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('ReactivosUPS\ProfileUser', 'id_usuario');
     }
 
+    public function location(){
+        return $this->belongsTo('ReactivosUPS\Location', 'id_sede');
+    }
+
     public function raegents(){
         return $this->hasMany('ReactivosUPS\Reagent', 'creado_por');
     }
 
     public function examsComments(){
-        return $this->belongsTo('ReactivosUPS\ExamComment', 'creado_por');
+        return $this->hasMany('ReactivosUPS\ExamComment', 'creado_por');
     }
 }

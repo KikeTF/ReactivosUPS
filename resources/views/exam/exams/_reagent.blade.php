@@ -4,15 +4,12 @@
 
 @if($reagent->format->opciones_pregunta == 'S')
     <div class="form-group">
-        <div class="col-sm-12"><strong>Opciones de Pregunta:</strong></div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-6">
-            <table class="table table-hover">
+        <div class="{{ ($reagent->format->concepto_propiedad == 'S') ? 'col-sm-6' : 'col-sm-12' }}">
+            <table id="table-show" class="table">
                 <thead>
                 <tr>
                     <td></td>
-                    <td><strong>Concepto</strong></td>
+                    <td>Concepto</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,11 +25,11 @@
 
         @if($reagent->format->concepto_propiedad == 'S')
             <div class="col-sm-6">
-                <table class="table table-hover">
+                <table id="table-show" class="table">
                     <thead>
                     <tr>
                         <td></td>
-                        <td><strong>Propiedad</strong></td>
+                        <td>Propiedad</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -49,17 +46,16 @@
     </div>
 @endif
 
-<div class="form-group">
-    <div class="col-sm-12"><strong>Opciones de Respuesta:</strong></div>
-</div>
+<h5 class="header smaller blue">Opciones de Respuesta</h5>
+
 <div class="form-group">
     <div class="col-sm-12">
-        <table class="table table-hover">
+        <table id="table-show" class="table">
             <thead>
             <tr>
                 <td colspan="2"></td>
-                <td><strong>Descripcion</strong></td>
-                <td><strong>Argumento</strong></td>
+                <td>Descripcion</td>
+                <td>Argumento</td>
             </tr>
             </thead>
             <tbody>
@@ -80,12 +76,15 @@
     </div>
 </div>
 
-<div class="form-group">
-    <div class="col-sm-4"><strong>Campo de Conocimiento:</strong></div>
-    <div class="col-sm-8">{{ $reagent->field->nombre }}</div>
-</div>
-<div class="form-group">
-    <div class="col-sm-4"><strong>Operacion Cognitiva:</strong></div>
-    <div class="col-sm-8">{{ $reagent->descripcion }}</div>
+<div class="profile-user-info profile-user-info-striped">
+    <div class="profile-info-row">
+        <div class="profile-info-name">Campo de Conocimiento</div>
+        <div class="profile-info-value"><span>{{ $reagent->field->nombre }}</span></div>
+    </div>
+
+    <div class="profile-info-row">
+        <div class="profile-info-name">Operaci&oacute;n Cognitiva</div>
+        <div class="profile-info-value"><span>{{ $reagent->descripcion }}</span></div>
+    </div>
 </div>
 

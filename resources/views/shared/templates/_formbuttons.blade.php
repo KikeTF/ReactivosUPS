@@ -46,6 +46,13 @@
         <div style="height: 35px; margin: 0 3px -14px 3px; display: inline-block; border: 1px solid #D9D9D9; border-width: 0 1px 0 0"></div>
     @endif
 
+    @if(isset($btnprint2))
+        <button title="Imprimir" onclick="printReport(); return false;" class="btn btn-white btn-primary btn-bold">
+            <i class='ace-icon fa fa-print bigger-110 blue' style="margin: 0"></i>
+        </button>
+        <div style="height: 35px; margin: 0 3px -14px 3px; display: inline-block; border: 1px solid #D9D9D9; border-width: 0 1px 0 0"></div>
+    @endif
+
     @if(isset($btnsave))
         <button title="Guardar" type="submit" class="btn btn-white btn-primary btn-bold">
             <i class='ace-icon fa fa-save bigger-110 blue' style="margin: 0"></i>

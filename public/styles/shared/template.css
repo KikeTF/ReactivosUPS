@@ -1,7 +1,24 @@
-.chosen-container-multi .chosen-choices{
+.chosen-container-multi .chosen-choices {
     border:1px solid #d5d5d5;
 }
 .help-block {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
+}
+#table-show > thead > tr {
+    color: #336199;
+    background-color: #EDF3F4;
+    font-weight: 400;
+    background: #EDF3F4;
+    background-image: -webkit-linear-gradient(top,#f8f8f8 0,#EDF3F4 100%);
+    background-image: -o-linear-gradient(top,#f8f8f8 0,#EDF3F4 100%);
+    background-image: linear-gradient(to bottom,#f8f8f8 0,#EDF3F4 100%);
+}
+.profile-user-info{
+    width: 100% !important;
+}
+.profile-info-name{
+    width: 170px !important;
+    vertical-align: top !important;
+    text-align: left;
 }

@@ -5,18 +5,6 @@
 @endsection
 @section('subtitulo', \Auth::user()->FullName)
 
-@push('specific-styles')
-    <style>
-        .profile-user-info{
-            width: 100% !important;
-        }
-        .profile-info-name{
-            width: 130px !important;
-            vertical-align: top !important;
-        }
-    </style>
-@endpush
-
 @section('contenido')
 
     <form class="form-horizontal" role="form">
@@ -30,6 +18,11 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">Usuario</div>
                 <div class="profile-info-value"><span>{{ \Auth::user()->username }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Sede</div>
+                <div class="profile-info-value"><span>{{ \Auth::user()->location->descripcion }}</span></div>
             </div>
 
             <div class="profile-info-row">
