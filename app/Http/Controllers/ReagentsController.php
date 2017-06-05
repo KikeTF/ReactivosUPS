@@ -219,30 +219,10 @@ class ReagentsController extends Controller
     {
         try {
             $reagent = Reagent::find($id);
-            $mattercareer = MatterCareer::find($reagent->distributive->id_materia_carrera);
-
-            $reagent->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-            $reagent->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
-            $reagent->desc_mencion = $mattercareer->mention->descripcion;
-            $reagent->desc_materia = $mattercareer->matter->descripcion;
-            $reagent->desc_formato = $reagent->format->nombre;
-            $reagent->desc_campo = $reagent->field->nombre;
-            $reagent->desc_contenido = $reagent->contentDetail->capitulo . " " . $reagent->contentDetail->tema;
-            $reagent->usr_responsable = $this->getUserName($reagent->id_usr_responsable);
-            $reagent->dificultad = ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta';
-            $reagent->desc_estado = $reagent->state->descripcion;
-            $reagent->creado_por = $this->getUserName($reagent->creado_por);
-            $reagent->modificado_por = $this->getUserName($reagent->modificado_por);
 
             return view('reagent.reagents.show')
-                ->with('reagent', $reagent)
-                //->with('questionsConc', $reagent->questionsConcepts)
-                //->with('questionsProp', $reagent->questionsProperties)
-                //->with('answers', $reagent->answers)
-                //->with('comments', $reagent->comments)
-                ->with('states', $this->getReagentsStates())
-                ->with('users', $this->getUsers());
-                //->with('formatParam', $reagent->format);
+                ->with('reagent', $reagent);
+            
         } catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsController][show] id=" . $id . ". Exception: " . $ex);

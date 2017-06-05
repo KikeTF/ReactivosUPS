@@ -83,23 +83,27 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'security','middleware' => 'auth'], function () {
+Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
 
     Route::get('changepassword', [
         'uses'  => 'Auth\PasswordController@getChange',
-        'as'    => 'security.changePassword'
+        'as'    => 'account.changePassword'
     ]);
 
     Route::post('changepassword', [
         'uses'  => 'Auth\PasswordController@postchange',
-        'as'    => 'security.changePassword'
+        'as'    => 'account.changePassword'
     ]);
 
     Route::get('userprofile', [
         'uses'  => 'Auth\AuthController@userProfile',
-        'as'    => 'security.userProfile'
+        'as'    => 'account.userProfile'
     ]);
-    
+
+});
+
+Route::group(['prefix' => 'security', 'middleware' => 'auth'], function () {
+
     Route::resource('users','UsersController');
 
     Route::get('users/{id}/destroy', [

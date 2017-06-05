@@ -14,4 +14,12 @@ class ReagentComment extends Model
     public function reagent(){
         return $this->belongsTo('ReactivosUPS\Reagent', 'id_reactivo');
     }
+
+    public function user(){
+        return $this->belongsTo('ReactivosUPS\User', 'creado_por');
+    }
+
+    public function state(){
+        return $this->belongsTo('ReactivosUPS\ReagentState', 'id_estado_nuevo');
+    }
 }

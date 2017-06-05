@@ -21,6 +21,9 @@ class HomeController extends Controller
             if($this->isSessionExpire())
                 return redirect()->guest('auth/login');
 
+            if(\Auth::user()->cambiar_password == 'S')
+                return redirect()->route('account.changePassword');
+
             return redirect()->route('dashboard.index');
         }catch(\Exception $ex)
         {

@@ -152,13 +152,13 @@
 
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
-                                <a href="{{ route('security.userProfile') }}">
+                                <a href="{{ route('account.userProfile') }}">
                                     <i class="ace-icon fa fa-user"></i>
                                     Perfil de Usuario
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('security.changePassword') }}">
+                                <a href="{{ route('account.changePassword') }}">
                                     <i class="ace-icon fa fa-key"></i>
                                     Cambio de Contrase&ntilde;a
                                 </a>

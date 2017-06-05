@@ -7,7 +7,7 @@
 
 @section('contenido')
 
-    {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form', 'route' => 'security.changePassword', 'method' => 'POST']) !!}
+    {!! Form::open(['id' => 'formulario', 'class' => 'form-horizontal', 'role' => 'form', 'route' => 'account.changePassword', 'method' => 'POST']) !!}
 
         <?php
         $btnclose = route('index');

@@ -59,6 +59,10 @@ class Reagent extends Model
         return $this->belongsTo('ReactivosUPS\User', 'creado_por');
     }
 
+    public function updaterUser(){
+        return $this->belongsTo('ReactivosUPS\User', 'modificado_por');
+    }
+
     public function period(){
         return $this->belongsTo('ReactivosUPS\Period', 'id_periodo');
     }

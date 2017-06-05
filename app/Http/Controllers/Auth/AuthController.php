@@ -151,7 +151,7 @@ class AuthController extends Controller
 
     public function userProfile()
     {
-        return view('security.userProfile');
+        return view('account.userProfile');
     }
 
     protected $redirectPath = '/';

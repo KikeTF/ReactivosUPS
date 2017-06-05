@@ -36,7 +36,7 @@ class ExamsController extends Controller
 
             $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
 
-            $exams = ExamHeader::query()->where('id_estado', '!=', 5)->get();
+            $exams = ExamHeader::query()->where('id_estado', '!=', 6)->get();
 
             return view('exam.exams.index')
                 ->with('exams', $exams);
@@ -246,7 +246,7 @@ class ExamsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $id 
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -487,7 +487,7 @@ class ExamsController extends Controller
 
             $comment->id_examen_cab = $exam->id;
             $comment->id_estado_anterior = $exam->id_estado;
-            $comment->id_estado_nuevo = 5;
+            $comment->id_estado_nuevo = 6;
             $comment->comentario = 'Examen eliminado.';
             $comment->creado_por = \Auth::id();
             $comment->fecha_creacion = date('Y-m-d h:i:s');

@@ -23,7 +23,7 @@
 
         $btnhistory = route('exam.exams.history', $exam->id);
 
-        if($mentionsList->count() > 0)
+        if($mentionsList->count() > 1)
             $btnprint2 =  1;
         else
             $btnprint =  route("exam.exams.report", $exam->id);

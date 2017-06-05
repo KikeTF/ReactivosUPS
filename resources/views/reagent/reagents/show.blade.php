@@ -20,7 +20,7 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                            <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                            <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
                             &nbsp;Informaci&oacute;n General
                         </a>
                     </h4>
@@ -35,32 +35,32 @@
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Campus:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_campus }}</div>
+                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->careerCampus->campus->descripcion }}</div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Carrera:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_carrera }}</div>
+                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->careerCampus->career->descripcion }}</div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Menci&oacute;n:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_mencion }}</div>
+                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->mention->descripcion }}</div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Materia:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_materia }}</div>
+                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->matter->descripcion }}</div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Responsable:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->usr_responsable }}</div>
+                            <div class="col-sm-8">{{ $reagent->user->FullName }}</div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Estado:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_estado }}</div>
+                            <div class="col-sm-8">{{ $reagent->state->descripcion }}</div>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                            <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                            <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
                             &nbsp;Informaci&oacute;n de Reactivo
                         </a>
                     </h4>
@@ -80,12 +80,12 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Formato:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_formato }}</div>
+                            <div class="col-sm-8">{{ $reagent->format->nombre }}</div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Contenido:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_contenido }}</div>
+                            <div class="col-sm-8">{{ $reagent->contentDetail->ContentDescription }}</div>
                         </div>
 
                         <div class="form-group">
@@ -99,11 +99,11 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-6">
-                                <table class="table table-hover">
+                                <table id="table-show" class="table">
                                     <thead>
                                     <tr>
                                         <td></td>
-                                        <td><strong>Concepto</strong></td>
+                                        <td>Concepto</td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -119,11 +119,11 @@
 
                             @if($reagent->format->concepto_propiedad == 'S')
                             <div class="col-sm-6">
-                                <table class="table table-hover">
+                                <table id="table-show" class="table">
                                     <thead>
                                     <tr>
                                         <td></td>
-                                        <td><strong>Propiedad</strong></td>
+                                        <td>Propiedad</td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -145,12 +145,12 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <table class="table table-hover">
+                                <table id="table-show" class="table">
                                     <thead>
                                     <tr>
                                         <td colspan="2"></td>
-                                        <td><strong>Descripcion</strong></td>
-                                        <td><strong>Argumento</strong></td>
+                                        <td>Descripcion</td>
+                                        <td>Argumento</td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -188,8 +188,14 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Campo de Conocimiento:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->desc_campo }}</div>
+                            <div class="col-sm-8">{{ $reagent->field->nombre }}</div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2"><strong>Dificultad:</strong></div>
+                            <div class="col-sm-8">{{ ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta' }}</div>
+                        </div>
+
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Operacion Cognitiva:</strong></div>
                             <div class="col-sm-8">{{ $reagent->descripcion }}</div>
@@ -202,14 +208,14 @@
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Creado por:</strong></div>
-                            <div class="col-sm-4">{{ $reagent->creado_por }}</div>
+                            <div class="col-sm-4">{{ $reagent->user->FullName }}</div>
                             <div class="col-sm-2"><strong>Fecha de creación:</strong></div>
                             <div class="col-sm-4">{{ $reagent->fecha_creacion }}</div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Modificado por:</strong></div>
-                            <div class="col-sm-4">{{ $reagent->modificado_por }}</div>
+                            <div class="col-sm-4">{{ isset($reagent->updaterUser->FullName) ? $reagent->updaterUser->FullName : '' }}</div>
                             <div class="col-sm-2"><strong>Fecha de modificación:</strong></div>
                             <div class="col-sm-4">{{ $reagent->fecha_modificacion }}</div>
                         </div>
@@ -230,24 +236,22 @@
                 <div class="panel-collapse collapse" id="collapseFour">
                     <div class="panel-body">
                         <div class="form-group">
-                            <table class="table table-hover">
+                            <table id="table-show" class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <td><strong>Fecha</strong></td>
-                                    <td><strong>Creado por</strong></td>
-                                    <td><strong>Comentario</strong></td>
-                                    <td><strong>Estado Nuevo</strong></td>
-                                    <td><strong>Estado Anterior</strong></td>
+                                    <td>Fecha</td>
+                                    <td>Creado por</td>
+                                    <td>Comentario</td>
+                                    <td>Estado</td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($reagent->comments->sortByDesc('id') as $comment)
                                     <tr>
                                         <td>{{ $comment->fecha_creacion }}</td>
-                                        <td>{{ $users[$comment->creado_por] }}</td>
-                                        <td>{{ $comment->comentario }}</td>
-                                        <td>{{ $states[$comment->id_estado_nuevo] }}</td>
-                                        <td>{{ $states[$comment->id_estado_anterior] }}</td>
+                                        <td>{{ $comment->user->FullName }}</td>
+                                        <td class="col-sm-5">{{ $comment->comentario }}</td>
+                                        <td>{{ $comment->state->descripcion }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

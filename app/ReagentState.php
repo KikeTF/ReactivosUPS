@@ -14,4 +14,12 @@ class ReagentState extends Model
     public function reagents(){
         return $this->hasMany('ReactivosUPS\Reagent', 'id_estado');
     }
+
+    public function comments(){
+        return $this->hasMany('ReactivosUPS\ReagentComment', 'id_estado_nuevo');
+    }
+
+    public function user(){
+        return $this->belongsTo('ReactivosUPS\User', 'creado_por');
+    }
 }
