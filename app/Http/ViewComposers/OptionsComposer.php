@@ -22,8 +22,6 @@ class OptionsComposer extends Controller
     {
         try
         {
-            $currentRoute = substr(\Request::route()->getName(), 0, strripos(\Request::route()->getName(),'.'));
-
             $viewNameStart = substr(strtolower($view->getName()), 0, 4);
             $isAdminView = (bool)(($viewNameStart !== 'test')
                 && ($viewNameStart !== 'auth')
@@ -37,43 +35,23 @@ class OptionsComposer extends Controller
                 if($perfilUsuario->optionsUsers->count() == 0)
                 {
                     if($perfilUsuario->profile->optionsProfiles->count() > 0)
-                        $subIds = $perfilUsuario->profile->optionsProfiles->pluck('id_opcion')->toArray();
+                        $suboptions = $perfilUsuario->profile->optionsProfiles->pluck('option')->where('estado', 'A');
                 }
                 else
-                    $subIds = $perfilUsuario->profile->optionsUsers->pluck('id_opcion')->toArray();
+                    $suboptions = $perfilUsuario->profile->optionsUsers->pluck('option')->where('estado', 'A');
 
-                if( isset($subIds) )
+                if( isset($suboptions) )
                 {
-                    $suboptions = Option::find($subIds)->where('estado','A');
-                    $ids = $suboptions->pluck('id_padre')->toArray();
-                    $options = Option::find(array_unique($ids))->where('estado', 'A')->where('id_padre', 0);
+                    $options = Option::find(array_unique($suboptions->pluck('id_padre')->toArray()))
+                        ->where('estado', 'A')->where('id_padre', 0);
 
-                    if ( isset($options) && isset($suboptions) )
-                    {
-                        // Valida si ruta es permitida
-                        $isValidRoute = (bool)false;
-                        foreach ($suboptions->pluck('ruta')->toArray() as $key => $route)
-                        {
-                            $isValidRoute = (bool)($currentRoute === substr($route, 0, strripos($route,'.')));
-                            if($isValidRoute)
-                                break;
-                        }
-
-                        if ( $isValidRoute )
-                            $view->with('navOptions', $options)->with('navSuboptions', $suboptions);
-                        else
-                            dd(123);
-                    }
-
+                    $view->with('navOptions', $options)->with('navSuboptions', $suboptions);
                 }
             }
         }
         catch (\Exception $ex)
         {
             Log::error("[OptionsComposer][compose] Exception: ".$ex);
-
         }
-
-        $view;
     }
 }

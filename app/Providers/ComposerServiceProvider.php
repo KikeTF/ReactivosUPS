@@ -14,6 +14,10 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        View::composer('auth.login', function ($view){
+            $view;
+        });
+
         View::composer('*', 'ReactivosUPS\Http\ViewComposers\OptionsComposer');
     }
 

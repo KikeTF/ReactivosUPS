@@ -58,13 +58,13 @@ class PasswordController extends Controller
             else
                 flash('Contrase&ntilde;a de confirmaci&oacute;n no coincide', 'danger')->important();
 
-            return view('account.changePassword');
+            return redirect()->route('account.changePassword');
         }
         catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[PasswordController][postChange] UserId=".\Auth::id()."; Exception: ".$ex);
-            return view('account.changePassword');
+            return redirect()->route('account.changePassword');
         }
     }
     

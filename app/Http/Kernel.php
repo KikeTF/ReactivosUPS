@@ -29,5 +29,6 @@ class Kernel extends HttpKernel
         'auth' => \ReactivosUPS\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \ReactivosUPS\Http\Middleware\RedirectIfAuthenticated::class,
+        'admin' => \ReactivosUPS\Http\Middleware\Admin::class,
     ];
 }

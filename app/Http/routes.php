@@ -37,32 +37,36 @@ Route::get('auth/userprofiles', [
     'as'    => 'auth.userprofiles'
 ]);
 
-Route::get('test/lists', [
-    'uses'  => 'TestsController@getLists',
-    'as'    => 'test.lists'
-]);
 
-Route::get('test/{id}/instruction', [
-    'uses'  => 'TestsController@instruction',
-    'as'    => 'test.instruction'
-]);
+Route::group(['middleware' => 'guest'], function () {
 
-Route::get('test/{id}/question', [
-    'uses'  => 'TestsController@question',
-    'as'    => 'test.question'
-]);
+    Route::get('test/lists', [
+        'uses'  => 'TestsController@getLists',
+        'as'    => 'test.lists'
+    ]);
 
-Route::get('test/{id}/result', [
-    'uses'  => 'TestsController@result',
-    'as'    => 'test.result'
-]);
+    Route::get('test/{id}/instruction', [
+        'uses'  => 'TestsController@instruction',
+        'as'    => 'test.instruction'
+    ]);
 
-Route::resource('test','TestsController');
+    Route::get('test/{id}/question', [
+        'uses'  => 'TestsController@question',
+        'as'    => 'test.question'
+    ]);
 
-Route::get('test/{id}/destroy', [
-    'uses'  => 'TestsController@destroy',
-    'as'    => 'test.destroy'
-]);
+    Route::get('test/{id}/result', [
+        'uses'  => 'TestsController@result',
+        'as'    => 'test.result'
+    ]);
+
+    Route::resource('test','TestsController');
+
+    Route::get('test/{id}/destroy', [
+        'uses'  => 'TestsController@destroy',
+        'as'    => 'test.destroy'
+    ]);
+});
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -102,7 +106,7 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'security', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'security', 'middleware' => ['auth', 'admin']], function () {
 
     Route::resource('users','UsersController');
 
@@ -120,7 +124,7 @@ Route::group(['prefix' => 'security', 'middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
+Route::group(['prefix' => 'reagent','middleware' => ['auth', 'admin']], function () {
 
     Route::resource('fields','FieldsController');
 
@@ -157,7 +161,7 @@ Route::group(['prefix' => 'reagent','middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
+Route::group(['prefix' => 'general','middleware' => ['auth', 'admin']], function () {
 
     Route::get('matterscareers/matters', [
         'uses'  => 'MattersCareersController@getMattersList',
@@ -197,7 +201,7 @@ Route::group(['prefix' => 'general','middleware' => 'auth'], function () {
     ]);
 });
 
-Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
+Route::group(['prefix' => 'exam','middleware' => ['auth', 'admin']], function () {
 
     Route::get('parameters/history', [
         'uses'  => 'ExamParametersController@history',
@@ -238,4 +242,5 @@ Route::group(['prefix' => 'exam','middleware' => 'auth'], function () {
         'as'    => 'exam.exams.report'
     ]);
 });
+
 

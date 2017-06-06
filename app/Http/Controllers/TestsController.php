@@ -20,6 +20,11 @@ use View;
 
 class TestsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
     /**
      * Display a listing of the resource.
      *
