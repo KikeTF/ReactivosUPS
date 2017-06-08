@@ -22,3 +22,6 @@
     vertical-align: top !important;
     text-align: left;
 }
+.ace-file-container{
+    height: 34px !important;
+}

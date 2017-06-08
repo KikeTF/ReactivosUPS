@@ -5,7 +5,7 @@
 
 @section('contenido')
 
-    {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => ['general.matterscareers.update',$mattercareer->id],'method' => 'PUT']) !!}
+    {!! Form::open(['id' => 'formulario','class' => 'form-horizontal', 'role' => 'form','route' => ['general.matterscareers.update', $mattercareer->id],'method' => 'PUT', 'files' => true]) !!}
     <?php
     $btnsave = 1;
     $btnrefresh = route('general.matterscareers.edit',$mattercareer->id);
@@ -101,10 +101,43 @@
                     <span class="lbl"></span>
                 </label>
             </div>
-
         </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('archivo_contenido', 'Material de Apoyo:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        <div class="col-sm-6">
+            {!! Form::file('archivo_contenido', ['id' => 'archivo_contenido', 'class' => 'input-file form-control']) !!}
+        </div>
+        @if($mattercareer->archivo_contenido == 'S')
+        <div class="col-sm-2">
+            <button onclick="location.href='{{ route('general.matterscareers.download', $mattercareer->id) }}'; return false;" class="btn btn-sm btn-success pull-left">
+                Descargar Archivo
+            </button>
+        </div>
+        @endif
     </div>
 
     {!! Form::close() !!}
 
 @endsection
+
+@push('specific-script')
+    <script type="text/javascript">
+        //function inputFileLoad(){
+            $('.input-file').ace_file_input({
+                no_file:'Cargar archivo PFD...',
+                btn_choose:'Seleccionar',
+                btn_change:'Cambiar',
+                droppable:false,
+                onchange:null,
+                thumbnail:false, //| true | large
+                whitelist:'pdf',
+                allowExt: ["pdf"]
+                //blacklist:'exe|php'
+                //onchange:''
+                //
+            });
+        //}
+    </script>
+@endpush

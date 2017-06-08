@@ -182,7 +182,12 @@ Route::group(['prefix' => 'general','middleware' => ['auth', 'admin']], function
         'uses'  => 'MattersCareersController@getContentsList',
         'as'    => 'general.matterscareers.contents'
     ]);
-
+    
+    Route::get('matterscareers/{id}/download', [
+        'uses'  => 'MattersCareersController@download',
+        'as'    => 'general.matterscareers.download'
+    ]);
+    
     Route::resource('matterscareers','MattersCareersController');
 
     Route::get('matterscareers/{id}/destroy', [

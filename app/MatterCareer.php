@@ -11,7 +11,7 @@ class MatterCareer extends Model
 
     protected $fillable =["id_carrera_campus", "id_materia", "id_area", "id_mencion", "nivel", "tipo",
                         "nro_reactivos_mat", "aplica_examen", "nro_reactivos_exam", "id_usr_responsable",
-                        "estado", "creado_por", "fecha_creacion", "modificado_por", "fecha_modificacion"];
+                        "estado", "archivo_contenido", "creado_por", "fecha_creacion", "modificado_por", "fecha_modificacion"];
 
     public function careerCampus(){
         return $this->belongsTo('ReactivosUPS\CareerCampus', 'id_carrera_campus');

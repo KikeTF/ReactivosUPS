@@ -134,9 +134,10 @@ class MattersCareersController extends Controller
      */
     public function edit($id)
     {
-        try{
+        try
+        {
             $mattercareer = MatterCareer::find($id);
-
+            
             $mentionsList = Mention::query()
                 ->where('id_carrera', $mattercareer->careerCampus->id_carrera)
                 ->where('estado', 'A')->lists('descripcion','id');
@@ -152,6 +153,13 @@ class MattersCareersController extends Controller
         }
     }
 
+    public function download($id){
+        //PDF file is stored under project/public/download/info.pdf
+        $file="./uploads/matters/".$id.".pdf";
+
+        return \Response::download($file);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -161,9 +169,12 @@ class MattersCareersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $matterCareer = MatterCareer::find($id);
         try
         {
+            $matterCareer = MatterCareer::find($id);
+
+            \DB::beginTransaction(); //Start transaction!
+
             $matterCareer->id_mencion = $request->id_mencion;
             $matterCareer->nro_reactivos_mat = $request->nro_reactivos_mat;
             $matterCareer->nro_reactivos_exam = $request->nro_reactivos_exam;
@@ -171,14 +182,37 @@ class MattersCareersController extends Controller
             $matterCareer->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $matterCareer->modificado_por = \Auth::id();
             $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
+
+            $matterCareer->archivo_contenido = 'N';
+            $isValidFile = (bool)false;
+            if ( isset($request['archivo_contenido']) && $request->hasFile('archivo_contenido') )
+            {
+                $file = $request->file('archivo_contenido');
+                if ( $file->isValid() )
+                {
+                    $fileName = $id . '.' . $file->getClientOriginalExtension();
+                    $matterCareer->archivo_contenido = 'S';
+                    $isValidFile = (bool)true;
+                }
+            }
+
             $matterCareer->save();
 
+            if ( $isValidFile )
+                $request->file('archivo_contenido')->move(public_path() . '/uploads/matters/', $fileName);
+
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
+            \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[MattersCareersController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+            Log::error("[MattersCareersController][update] id=".$id."; Exception: ".$ex);
             return redirect()->route('general.matterscareers.edit', $id);
+        }
+        finally
+        {
+            \DB::commit();
         }
 
         return redirect()->route('general.matterscareers.edit', $id);
