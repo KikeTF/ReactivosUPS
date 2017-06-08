@@ -14,9 +14,9 @@
             </li>
 
             <?php $currentRoute = substr(\Request::route()->getName(), 0, strripos(\Request::route()->getName(),'.')); ?>
-            @foreach($navOptions as $option)
+            @foreach($navOptions->sortBy('orden') as $option)
                 <?php $isOpen = 0; ?>
-                @foreach($navSuboptions->where('id_padre', $option->id) as $suboption)
+                @foreach($navSuboptions->where('id_padre', $option->id)->sortBy('orden') as $suboption)
                         <?php $route = substr($suboption->ruta, 0, strripos($suboption->ruta,'.')); ?>
                     @if(strcmp($currentRoute, $route) == 0)
                         <?php $isOpen = 1 ?>
@@ -31,7 +31,7 @@
                     <b class="arrow"></b>
 
                     <ul class="submenu">
-                        @foreach($navSuboptions->where('id_padre', $option->id) as $suboption)
+                        @foreach($navSuboptions->where('id_padre', $option->id)->sortBy('orden') as $suboption)
                             <?php $route = substr($suboption->ruta, 0, strripos($suboption->ruta,'.')); ?>
                             <li class="{{ ( (strcmp($currentRoute, $route) == 0) ? 'active' : '' ) }}">
                                 <a href="{{ route($suboption->ruta) }}">

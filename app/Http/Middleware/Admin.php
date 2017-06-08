@@ -5,6 +5,7 @@ namespace ReactivosUPS\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use ReactivosUPS\ProfileUser;
+use Log;
 
 class Admin
 {

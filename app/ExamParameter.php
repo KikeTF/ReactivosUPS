@@ -15,4 +15,11 @@ class ExamParameter extends Model
         return $this->hasMany('ReactivosUPS\ExamParameter', 'id_parametro');
     }
 
+    public function careerCampus(){
+        return $this->belongsTo('ReactivosUPS\CareerCampus', 'id_carrera_campus');
+    }
+
+    public function user(){
+        return $this->belongsTo('ReactivosUPS\User', 'creado_por');
+    }
 }

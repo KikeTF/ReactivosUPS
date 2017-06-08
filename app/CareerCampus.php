@@ -26,4 +26,8 @@ class CareerCampus extends Model
     public function ExamsHeaders(){
         return $this->hasMany('ReactivosUPS\ExamHeader', 'id_carrera_campus');
     }
+
+    public function examsParameters(){
+        return $this->hasMany('ReactivosUPS\ExamParameter', 'id_carrera_campus');
+    }
 }

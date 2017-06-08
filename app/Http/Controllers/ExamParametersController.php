@@ -16,43 +16,45 @@ class ExamParametersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        try{
-            $parameter = ExamParameter::query()->where('estado', 'A')->orderBy('id', 'desc')->first();
+        try
+        {
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $filters = array($id_campus, $id_carrera, 0, 0);
 
-            if( is_null($parameter) ){
-                return view('exam.parameters.create');
-            }else{
-                return view('exam.parameters.index')->with('parameter', $parameter);
+            $parameter = ExamParameter::query()->where('estado', 'A');
+            if($id_carrera > 0 && $id_campus > 0)
+            {
+                $id_careerCampus = $this->getCareersCampuses()
+                    ->where('id_carrera', $id_carrera)
+                    ->where('id_campus', $id_campus)
+                    ->first()->id;
+
+                $parameter = $parameter->where('id_carrera_campus', $id_careerCampus);
             }
-        }catch(\Exception $ex)
+
+            $parameter = $parameter->orderBy('id', 'desc');
+
+            //dd($parameter);
+
+            if( $parameter->orderBy('id', 'desc')->get()->count() == 0 )
+                return redirect()->route('exam.parameters.create');
+            else
+                return view('exam.parameters.index')
+                    ->with('history', $parameter->get())
+                    ->with('parameter', $parameter->first())
+                    ->with('campusList', $this->getCampuses())
+                    ->with('filters', $filters);
+
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ExamParametersController][index] Exception: ".$ex);
             return redirect()->route('index');
         }
-    }
-
-    public function history()
-    {
-        try{
-            $parameter = ExamParameter::query()->where('estado', 'A')->get();
-            return view('exam.parameters.history')->with('parameter', $parameter);
-        }catch(\Exception $ex)
-        {
-            flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ExamParametersController][index] Exception: ".$ex);
-            return redirect()->route('exam.parameters.index');
-        }
-    }
-
-    public function data()
-    {
-        $parameters = ExamParameter::query()->where('estado','A')->get();
-        //dd($mattersCareers);
-        return Datatables::of($parameters)
-            ->make(true);
     }
 
     /**
@@ -62,7 +64,8 @@ class ExamParametersController extends Controller
      */
     public function create()
     {
-        //si
+        return view('exam.parameters.create')
+            ->with('campusList', $this->getCampuses());
     }
 
     /**
@@ -73,15 +76,41 @@ class ExamParametersController extends Controller
      */
     public function store(Request $request)
     {
-        $parameter = new ExamParameter($request->all());
+        try
+        {
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_careerCampus = 0;
 
-        if( !isset( $request['estado'] ) )
-            $parameter->estado = 'I';
+            if($id_carrera > 0 && $id_campus > 0)
+            {
+                $id_careerCampus = $this->getCareersCampuses()
+                    ->where('id_carrera', $id_carrera)
+                    ->where('id_campus', $id_campus)
+                    ->first()->id;
+            }
 
-        $parameter->creado_por = \Auth::id();
-        $parameter->fecha_creacion = date('Y-m-d h:i:s');
-        $parameter->save();
+            if ($id_careerCampus > 0) {
+                $parameter = new ExamParameter($request->all());
+                $parameter->id_carrera_campus = $id_careerCampus;
+                $parameter->id_examen_real = 0;
+                $parameter->estado = 'A';
+                $parameter->creado_por = \Auth::id();
+                $parameter->fecha_creacion = date('Y-m-d h:i:s');
+                $parameter->save();
 
+                flash('Transacci&oacuten realizada existosamente', 'success');
+            }
+            else
+                flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+
+        }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ExamParametersController][store] Exception: ".$ex);
+            return redirect()->route('exam.parameters.index');
+        }
 
         return redirect()->route('exam.parameters.index');
     }
@@ -94,7 +123,7 @@ class ExamParametersController extends Controller
      */
     public function show($id)
     {
-        //si
+        return redirect()->route('index');
     }
 
     /**
@@ -105,8 +134,7 @@ class ExamParametersController extends Controller
      */
     public function edit($id)
     {
-        $parameter = ExamParameter::find($id);
-        return view('exam.parameters.edit')->with('parameter', $parameter);
+        return redirect()->route('index');
     }
 
     /**
@@ -118,7 +146,7 @@ class ExamParametersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        return redirect()->route('index');
     }
 
     /**
@@ -129,6 +157,6 @@ class ExamParametersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return redirect()->route('index');
     }
 }

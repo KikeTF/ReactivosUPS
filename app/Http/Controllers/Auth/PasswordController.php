@@ -51,6 +51,8 @@ class PasswordController extends Controller
                     \Auth::user()->fecha_modificacion = date('Y-m-d h:i:s');
                     \Auth::user()->save();
                     flash('Contrase&ntilde;a cambiada existosamente', 'success');
+
+                    return redirect()->route('index');
                 }
                 else
                     flash('Contrase&ntilde;a actual no es valida', 'danger')->important();

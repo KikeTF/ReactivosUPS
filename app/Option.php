@@ -9,7 +9,7 @@ class Option extends Model
     protected $table = "seg_opciones";
     public $timestamps = false;
 
-    protected $fillable =["descripcion", "id_padre", "ruta", "estado"];
+    protected $fillable =["descripcion", "id_padre", "ruta", "orden", "estado"];
 
     public function optionsUsers(){
         return $this->hasMany('ReactivosUPS\OptionUser', 'id_opcion');
