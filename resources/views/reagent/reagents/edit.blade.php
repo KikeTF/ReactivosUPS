@@ -112,6 +112,7 @@
                         </div>
                     </div>
 
+
                     @include('reagent.reagents._format')
 
                 </div>

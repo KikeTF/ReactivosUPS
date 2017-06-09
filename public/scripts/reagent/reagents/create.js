@@ -24,17 +24,19 @@ jQuery(function($) {
                     e.preventDefault();
                 });
             } else if(info.step == 3){
-                $("#finishMessage").attr("hidden", false);
-                $("#validateMessage").attr("hidden", true);
+
+                $('#finishMessage').empty();
+                $('#finishMessage').append('<h4>Presione <strong class="green">"Finalizar"</strong> para solicitar aprobaci&oacute;n!</h4>');
             }
         })
         .on('finished.fu.wizard', function(e) {
             $("#id_estado").val(2);
             if(!isUpperCase()){
+                clearErrors();
                 $("#formulario").submit();
             }
-            $("#finishMessage").attr("hidden", true);
-            $("#validateMessage").attr("hidden", false);
+            //$("#finishMessage").attr("hidden", true);
+            //$("#validateMessage").attr("hidden", false);
         }).on('stepclicked.fu.wizard', function(e, info){
             $('.chosen-select').each(function() {
                     var $this = $(this);

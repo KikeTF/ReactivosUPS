@@ -101,7 +101,6 @@ class ReagentsController extends Controller
      */
     public function store(Request $request)
     {
-        $isValidImage = true;
         try
         {
             $id_periodo = (int)Session::get('idPeriodo');
@@ -110,6 +109,7 @@ class ReagentsController extends Controller
             $reagent = new Reagent($request->all());
             $reagent->id_periodo = (int)Session::get('idPeriodo');
             $reagent->id_sede = (int)Session::get('idSede');
+            $reagent->creado_por = \Auth::id();
 
             $reagent->id_distributivo = Distributive::query()
                 ->where('estado','A')
@@ -120,15 +120,6 @@ class ReagentsController extends Controller
                 ->where('id_materia', $request->id_materia)
                 ->where('id_usuario', \Auth::id())
                 ->first()->id;
-
-            $reagent->creado_por = \Auth::id();
-            //$reagent->id_opcion_correcta = $request->input('id_opcion_correcta');
-            //$reagent->imagen = $request->file('imagen');
-
-            if( $request->file('imagen') != '' && $request->hasFile('imagen') && $request->file('imagen')->isValid() )
-                $reagent->imagen = $request->file('imagen');
-            else
-                $isValidImage = false;
 
             Log::debug("Reagent create: answers create");
             $reaAnswers = array();
@@ -168,6 +159,18 @@ class ReagentsController extends Controller
                 $reaQuestionsProp[] = $reaQuestion;
             }
 
+            $reagent->imagen = 'N';
+            $isValidImage = (bool)false;
+            if ( isset($request['imagen']) && $request->hasFile('imagen') )
+            {
+                $file = $request->file('imagen');
+                if ( $file->isValid() )
+                {
+                    $reagent->imagen = 'S';
+                    $isValidImage = (bool)true;
+                }
+            }
+
             \DB::beginTransaction(); //Start transaction!
 
             Log::debug("Reagent create: save reagent model");
@@ -188,10 +191,13 @@ class ReagentsController extends Controller
             $reagent->id_opcion_correcta = $reagent->answers()->where('opcion_correcta', 'S')->first()->id;
             $reagent->save();
 
-            if(!$isValidImage)
-                flash('Transacci&oacuten realizada parcialmente. La imagen no pudo ser procesada!', 'warning')->important();
-            else
-                flash('Transacci&oacuten realizada existosamente', 'success');
+            if ( $isValidImage )
+            {
+                $fileName = 'UPS-REA-'.$reagent->id.'.'.$request->file('imagen')->getClientOriginalExtension();
+                $request->file('imagen')->move(base_path().'/storage/files/reagents/', $fileName);
+            }
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
         }
         catch (\Exception $ex)
         {

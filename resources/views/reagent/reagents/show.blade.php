@@ -3,6 +3,10 @@
 @section('titulo', 'Reactivos')
 @section('subtitulo', 'Detalle de reactivo')
 
+@push('specific-styles')
+    <link rel="stylesheet" href="{{ asset('ace/css/colorbox.min.css') }}" />
+@endpush
+
 @section('contenido')
 
     <form class="form-horizontal" role="form">
@@ -91,6 +95,25 @@
                         <div class="form-group">
                             <div class="col-sm-2"><strong>Planteamiento:</strong></div>
                             <div class="col-sm-8">{{ $reagent->planteamiento }}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-2">
+                                <ul class="ace-thumbnails clearfix">
+                                    <li>
+                                        <a href="{{ asset('UPS-REA-10.jpg') }}" data-rel="colorbox">
+                                            <img class="img-responsive" src="{{ asset('UPS-REA-10.jpg') }}" style="max-width: 450px; width: 100%;" />
+                                        </a>
+
+                                        <div class="tools tools-bottom">
+                                            <a href="#"><i class="ace-icon fa fa-link"></i></a>
+                                            <a href="#"><i class="ace-icon fa fa-paperclip"></i></a>
+                                            <a href="#"><i class="ace-icon fa fa-pencil"></i></a>
+                                            <a href="#"><i class="ace-icon fa fa-times red"></i></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
 
                         @if($reagent->format->opciones_pregunta == 'S')
@@ -265,3 +288,42 @@
     </form>
 
 @endsection
+
+@push('specific-script')
+    <script src="{{ asset('ace/js/jquery.colorbox.min.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(function($) {
+            var $overflow = '';
+            var colorbox_params = {
+                rel: 'colorbox',
+                reposition:true,
+                scalePhotos:true,
+                scrolling:false,
+                previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                close:'&times;',
+                current:'{current} of {total}',
+                maxWidth:'100%',
+                maxHeight:'100%',
+                onOpen:function(){
+                    $overflow = document.body.style.overflow;
+                    document.body.style.overflow = 'hidden';
+                },
+                onClosed:function(){
+                    document.body.style.overflow = $overflow;
+                },
+                onComplete:function(){
+                    $.colorbox.resize();
+                }
+            };
+
+            $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+            $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");//let's add a custom loading icon
+
+
+            $(document).one('ajaxloadstart.page', function(e) {
+                $('#colorbox, #cboxOverlay').remove();
+            });
+        })
+    </script>
+@endpush

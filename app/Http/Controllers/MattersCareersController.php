@@ -211,10 +211,8 @@ class MattersCareersController extends Controller
             $isValidFile = (bool)false;
             if ( isset($request['archivo_contenido']) && $request->hasFile('archivo_contenido') )
             {
-                $file = $request->file('archivo_contenido');
-                if ( $file->isValid() )
+                if ( $request->file('archivo_contenido')->isValid() )
                 {
-                    $fileName = 'UPS-MAT-'.$id.'.'.$file->getClientOriginalExtension();
                     $matterCareer->archivo_contenido = 'S';
                     $isValidFile = (bool)true;
                 }
@@ -223,7 +221,10 @@ class MattersCareersController extends Controller
             $matterCareer->save();
 
             if ( $isValidFile )
+            {
+                $fileName = 'UPS-MAT-'.$id.'.'.$request->file('archivo_contenido')->getClientOriginalExtension();
                 $request->file('archivo_contenido')->move(base_path().'/storage/files/matters/', $fileName);
+            }
 
             flash('Transacci&oacuten realizada existosamente', 'success');
         }
@@ -293,8 +294,6 @@ class MattersCareersController extends Controller
             $html = View::make('shared.optionlists._mentionslist')->render();
         }
         return \Response::json(['html' => $html]);
-
-
     }
 
     public function getMattersList(Request $request)

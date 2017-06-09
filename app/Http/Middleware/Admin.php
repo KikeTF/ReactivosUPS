@@ -35,11 +35,19 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
+        $route = \Request::route()->getName();
+        $routeExceptions = [
+            'general.matterscareers.careers',
+            'general.matterscareers.contents',
+            'general.matterscareers.matters',
+            'general.matterscareers.mentions'
+        ];
+
         try
         {
             if ($this->auth->user()->cambiar_password === 'N')
             {
-                $currentRoute = substr(\Request::route()->getName(), 0, strripos(\Request::route()->getName(),'.')).'.index';
+                $currentRoute = substr($route, 0, strripos($route,'.')).'.index';
                 $idPerfilUsuario = (int)\Session::get('idPerfilUsuario');
                 $perfilUsuario = ProfileUser::find($idPerfilUsuario);
 
@@ -51,7 +59,7 @@ class Admin
                 else
                     $userRoutes = $perfilUsuario->profile->optionsUsers->pluck('option')->where('estado', 'A')->pluck('ruta')->toArray();
 
-                if( isset($userRoutes) && in_array($currentRoute, array_unique($userRoutes)) )
+                if( (isset($userRoutes) && in_array($currentRoute, array_unique($userRoutes))) || in_array($route, $routeExceptions)  )
                 {
                     return $next($request);
                 }

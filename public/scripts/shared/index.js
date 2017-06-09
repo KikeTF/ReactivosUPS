@@ -28,7 +28,7 @@ jQuery.extend(jQuery.validator.messages, {
     min: jQuery.validator.format("Por favor ingrese un numero mayor o igual a {0}.")
 });
 
-$('#formulario').validate({
+var validator = $('#formulario').validate({
     errorElement: 'div',
     errorClass: 'help-block',
     focusInvalid: false,
@@ -75,8 +75,10 @@ $('#formulario').validate({
     errorPlacement: function (error, element) {
         if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
             var controls = element.closest('div[class*="col-"]');
-            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
-            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            if(controls.find(':checkbox,:radio').length > 1)
+                controls.append(error);
+            else
+                error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
         }
         else if(element.is('.select2')) {
             error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
@@ -84,7 +86,11 @@ $('#formulario').validate({
         else if(element.is('.chosen-select')) {
             error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
         }
-        else error.insertAfter(element.parent());
+        else {
+            error.insertAfter(element.parent());
+        }
+        $('#finishMessage').empty();
+        $('#finishMessage').append('<h4 class="red">Registro incompleto. Por favor verificar!</h4>');
     }//,
 
     //submitHandler: function (form) {
@@ -92,6 +98,11 @@ $('#formulario').validate({
     //invalidHandler: function (form) {
     //}
 });
+
+function clearErrors(){
+    $('#formulario .form-group').removeClass('has-error');
+    $('#id_campo-error').remove()
+}
 
 jQuery(function($) {
     if(!ace.vars['touch']) {

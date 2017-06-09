@@ -13,15 +13,18 @@
     }
     function getMattersByCareer(){
         filtroMateria = "{{ (isset($filters) ? $filters[2] : 0) }}";
-        $.ajax({
-            url: "{{  route('general.matterscareers.matters') }}",
-            data: { "id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val(), "id_materia" : filtroMateria },
-            async: false,
-            success: function(result){
-                $('#listaMaterias').empty();
-                $('#listaMaterias').append(result['html']);
-            }
-        });
+        if($("#id_campus").val() > 0 && $("#id_carrera").val() > 0)
+        {
+            $.ajax({
+                url: "{{  route('general.matterscareers.matters') }}",
+                data: { "id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val(), "id_materia" : filtroMateria },
+                async: false,
+                success: function(result){
+                    $('#listaMaterias').empty();
+                    $('#listaMaterias').append(result['html']);
+                }
+            });
+        }
     }
     function getCareersByCampus() {
         filtroCarrera = "{{ (isset($filters) ? $filters[1] : 0) }}";
