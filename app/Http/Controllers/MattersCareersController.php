@@ -145,7 +145,8 @@ class MattersCareersController extends Controller
             return view('general.matterscareers.edit')
                 ->with('mattercareer', $mattercareer)
                 ->with('mentionsList', $mentionsList);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[MattersCareersController][edit] Datos: id=".$id.". Exception: ".$ex);
@@ -153,11 +154,34 @@ class MattersCareersController extends Controller
         }
     }
 
-    public function download($id){
-        //PDF file is stored under project/public/download/info.pdf
-        $file="./uploads/matters/".$id.".pdf";
+    public function download($id)
+    {
+        try
+        {
+            $matterCareer = MatterCareer::find($id);
 
-        return \Response::download($file);
+            $file= base_path().'/storage/files/matters/UPS-MAT-'.$id.'.pdf';
+
+            if ( file_exists($file) )
+            {
+                $filename = 'UPS-'.$matterCareer->matter->descripcion.'-'.$id.'.pdf';
+                $headers = array('Content-Type: application/pdf',);
+                return \Response::download($file, $filename, $headers);
+            }
+            else
+            {
+                flash("No se encontro el archivo!", 'warning')->important();
+                $matterCareer->archivo_contenido = 'N';
+                $matterCareer->save();
+                return redirect()->route('general.matterscareers.edit', $id);
+            }
+        }
+        catch(\Exception $ex)
+        {
+            flash("No se pudo descargar el archivo!", 'danger')->important();
+            Log::error("[MattersCareersController][download] id=".$id.". Exception: ".$ex);
+            return redirect()->route('general.matterscareers.edit', $id);
+        }
     }
 
     /**
@@ -190,7 +214,7 @@ class MattersCareersController extends Controller
                 $file = $request->file('archivo_contenido');
                 if ( $file->isValid() )
                 {
-                    $fileName = $id . '.' . $file->getClientOriginalExtension();
+                    $fileName = 'UPS-MAT-'.$id.'.'.$file->getClientOriginalExtension();
                     $matterCareer->archivo_contenido = 'S';
                     $isValidFile = (bool)true;
                 }
@@ -199,7 +223,7 @@ class MattersCareersController extends Controller
             $matterCareer->save();
 
             if ( $isValidFile )
-                $request->file('archivo_contenido')->move(public_path() . '/uploads/matters/', $fileName);
+                $request->file('archivo_contenido')->move(base_path().'/storage/files/matters/', $fileName);
 
             flash('Transacci&oacuten realizada existosamente', 'success');
         }

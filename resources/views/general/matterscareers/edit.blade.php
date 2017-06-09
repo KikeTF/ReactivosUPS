@@ -109,13 +109,12 @@
         <div class="col-sm-6">
             {!! Form::file('archivo_contenido', ['id' => 'archivo_contenido', 'class' => 'input-file form-control']) !!}
         </div>
-        @if($mattercareer->archivo_contenido == 'S')
         <div class="col-sm-2">
-            <button onclick="location.href='{{ route('general.matterscareers.download', $mattercareer->id) }}'; return false;" class="btn btn-sm btn-success pull-left">
-                Descargar Archivo
+            <button onclick="location.href='{{ route('general.matterscareers.download', $mattercareer->id) }}'; return false;"
+                    class="btn btn-sm btn-primary pull-left" {{ $mattercareer->archivo_contenido == 'S' ? '' : 'disabled' }} >
+                <i class="ace-icon fa fa-download bigger-110" aria-hidden="true"></i> Descargar Archivo
             </button>
         </div>
-        @endif
     </div>
 
     {!! Form::close() !!}

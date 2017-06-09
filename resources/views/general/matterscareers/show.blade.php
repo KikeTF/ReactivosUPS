@@ -15,7 +15,13 @@
         <table class="table table-hover">
             <tr>
                 <td><strong>C&oacute;digo:</strong></td>
-                <td colspan="3">{{ $mattercareer->id }}</td>
+                <td>{{ $mattercareer->id }}</td>
+                <td colspan="2">
+                    <button onclick="location.href='{{ route('general.matterscareers.download', $mattercareer->id) }}'; return false;"
+                            class="btn btn-white btn-primary btn-sm" {{ $mattercareer->archivo_contenido == 'S' ? '' : 'disabled' }} >
+                        <i class="ace-icon fa fa-download bigger-110" aria-hidden="true"></i> Descargar Archivo
+                    </button>
+                </td>
             </tr>
             <tr>
                 <td><strong>Campus:</strong></td>
