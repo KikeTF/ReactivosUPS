@@ -1,6 +1,6 @@
 @extends('shared.templates.index')
 
-@section('titulo', 'Reactivos')
+@section('titulo', 'Administraci&oacute;n')
 @section('subtitulo', 'Nuevo formato de reactivo')
 
 @section('contenido')
