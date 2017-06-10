@@ -99,7 +99,7 @@
                     ?>
                     <tr>
                         <td align="center">{{ $reagent->id }}</td>
-                        <td>{{ $reagent->planteamiento }}</td>
+                        <td align="justify">{{ $reagent->planteamiento }}</td>
                         <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
                         <td>
                             @include('shared.templates._tablebuttons', $urls)

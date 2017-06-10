@@ -37,42 +37,42 @@
                     <div class="form-group">
                         {!! Form::label('desc_campus', 'Campus:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
-                            {!! Form::text('desc_campus', $reagent->desc_campus, ['class' => 'form-control', 'readonly']) !!}
+                            {!! Form::text('desc_campus', $reagent->distributive->matterCareer->careerCampus->campus->descripcion, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('desc_carrera', 'Carrera:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
-                            {!! Form::text('desc_carrera', $reagent->desc_carrera, ['class' => 'form-control', 'readonly']) !!}
+                            {!! Form::text('desc_carrera', $reagent->distributive->matterCareer->careerCampus->career->descripcion, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('desc_mencion', 'Menci&oacute;n:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
-                            {!! Form::text('desc_mencion', $reagent->desc_mencion, ['class' => 'form-control', 'readonly']) !!}
+                            {!! Form::text('desc_mencion', $reagent->distributive->matterCareer->mention->descripcion, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('desc_materia', 'Materia:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
-                            {!! Form::text('desc_materia', $reagent->desc_materia, ['class' => 'form-control', 'readonly']) !!}
+                            {!! Form::text('desc_materia', $reagent->distributive->matterCareer->matter->descripcion, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('usr_responsable', 'Responsable:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
-                            {!! Form::text('usr_responsable', $reagent->usr_responsable, ['class' => 'form-control', 'readonly']) !!}
+                            {!! Form::text('usr_responsable', $reagent->user->FullName, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('desc_estado', 'Estado:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
-                            {!! Form::text('desc_estado', $reagent->desc_estado, ['class' => 'form-control', 'readonly']) !!}
+                            {!! Form::text('desc_estado', $reagent->state->descripcion, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                     <div class="form-group">
                         {!! Form::label('desc_formato', 'Formato:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
                         <div class="col-sm-9">
-                            {!! Form::text('desc_formato', $reagent->desc_formato, ['class' => 'form-control', 'readonly']) !!}
+                            {!! Form::text('desc_formato', $reagent->format->nombre, ['class' => 'form-control', 'readonly']) !!}
                         </div>
                     </div>
 
@@ -111,7 +111,23 @@
                             {!! Form::textarea('planteamiento', $reagent->planteamiento, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                         </div>
                     </div>
-
+                    @if($reagent->imagen == 'S')
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-2">
+                            <ul class="ace-thumbnails clearfix">
+                                <li style="border: 1px solid #d5d5d5 !important;">
+                                    <a href="#" data-rel="colorbox">
+                                        <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 600px; width: 100%;" />
+                                    </a>
+                                    <div class="tools tools-bottom">
+                                        <a href="#"><i class="ace-icon fa fa-pencil"></i></a>
+                                        <a href="#"><i class="ace-icon fa fa-times red"></i></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    @endif
 
                     @include('reagent.reagents._format')
 
@@ -135,6 +151,13 @@
                         {!! Form::label('id_campo', 'Campo de Conocimiento:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
                             {!! Form::select('id_campo', $fields, $reagent->id_campo, ['class' => 'form-control'] ) !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {!! Form::label('dificultad', 'Dificultad:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                        <div class="col-sm-8">
+                            {!! Form::select('dificultad', ['B' => 'Baja', 'M' => 'Media', 'A' => 'Alta'], $reagent->dificultad, ['class' => 'form-control'] ) !!}
                         </div>
                     </div>
 

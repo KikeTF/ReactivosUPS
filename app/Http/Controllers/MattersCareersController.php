@@ -160,7 +160,7 @@ class MattersCareersController extends Controller
         {
             $matterCareer = MatterCareer::find($id);
 
-            $file= base_path().'/storage/files/matters/UPS-MAT-'.$id.'.pdf';
+            $file= storage_path().'/files/matters/UPS-MAT-'.$id.'.pdf';
 
             if ( file_exists($file) )
             {
@@ -223,7 +223,7 @@ class MattersCareersController extends Controller
             if ( $isValidFile )
             {
                 $fileName = 'UPS-MAT-'.$id.'.'.$request->file('archivo_contenido')->getClientOriginalExtension();
-                $request->file('archivo_contenido')->move(base_path().'/storage/files/matters/', $fileName);
+                $request->file('archivo_contenido')->move(storage_path().'/files/matters/', $fileName);
             }
 
             flash('Transacci&oacuten realizada existosamente', 'success');

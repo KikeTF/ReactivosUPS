@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades;
+
 // Authentication routes...
 Route::get('auth/login', [
     'uses'  => 'Auth\AuthController@getLogin',
@@ -86,6 +88,42 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
 
 });
+
+Route::get('reagent/reagents/{id}/image', function ($id) {
+
+    $extensionList = array('gif','png','jpg','jpeg','bmp');
+    $isValidPath = (bool)false;
+
+    foreach ($extensionList as $ext)
+    {
+        $path = storage_path('files/reagents/UPS-REA-'.$id.'.'.$ext);
+        if ( File::exists($path) ) {
+            $isValidPath = (bool)true;
+            break;
+        }
+    }
+
+    if( $isValidPath && isset($path))
+    {
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+    }
+    else
+    {
+        $path = public_path('image/missing-image.png');
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+    }
+
+    return $response;
+
+})->name('reagent.reagents.image');
 
 Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
 

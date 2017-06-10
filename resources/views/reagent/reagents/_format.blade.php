@@ -1,9 +1,9 @@
 @if($format->opciones_resp_min > 0)
     @if($format->imagenes == 'S')
         <div class="form-group">
-            {!! Form::label('imagen','Cargar Imagen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+            {!! Form::label('file','Cargar Imagen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
             <div class="col-sm-9">
-                {!! Form::file('imagen', ['id' => 'imagen', 'class' => 'input-file form-control']) !!}
+                {!! Form::file('file', ['id' => 'file', 'class' => 'input-file form-control']) !!}
             </div>
         </div>
     @endif

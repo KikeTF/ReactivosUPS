@@ -82,117 +82,116 @@
 
                 <div class="panel-collapse collapse in" id="collapseTwo">
                     <div class="panel-body">
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Formato:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->format->nombre }}</div>
-                        </div>
+                        <div class="profile-user-info profile-user-info-striped">
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Formato</div>
+                                <div class="profile-info-value"><span>{{ $reagent->format->nombre }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Contenido:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->contentDetail->ContentDescription }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Contenido</div>
+                                <div class="profile-info-value"><span>{{ $reagent->contentDetail->ContentDescription }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Planteamiento:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->planteamiento }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Planteamiento</div>
+                                <div class="profile-info-value" style="text-align: justify;">
+                                    <span >{{ $reagent->planteamiento }}</span>
 
-                        <div class="form-group">
-                            <div class="col-sm-12 col-sm-offset-2">
-                                <ul class="ace-thumbnails clearfix">
-                                    <li>
-                                        <a href="{{ asset('UPS-REA-10.jpg') }}" data-rel="colorbox">
-                                            <img class="img-responsive" src="{{ asset('UPS-REA-10.jpg') }}" style="max-width: 450px; width: 100%;" />
-                                        </a>
+                                    @if($reagent->imagen == 'S')
+                                        <div class="space-6"></div>
+                                        <ul class="ace-thumbnails clearfix">
+                                            <li>
+                                                <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 600px; width: 100%;" />
+                                            </li>
+                                        </ul>
+                                        <div class="space-4"></div>
+                                    @endif
 
-                                        <div class="tools tools-bottom">
-                                            <a href="#"><i class="ace-icon fa fa-link"></i></a>
-                                            <a href="#"><i class="ace-icon fa fa-paperclip"></i></a>
-                                            <a href="#"><i class="ace-icon fa fa-pencil"></i></a>
-                                            <a href="#"><i class="ace-icon fa fa-times red"></i></a>
+                                    @if($reagent->format->opciones_pregunta == 'S')
+                                        <div class="space-6"></div>
+                                        <div class="form-group" style="margin-bottom: 0px;">
+                                            <div class="col-sm-6">
+                                                <table id="table-show" class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>Concepto</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($reagent->questionsConcepts as $question)
+                                                        <tr>
+                                                            <td style="width: 40px;">{{ $question->numeral.'.' }}</td>
+                                                            <td>{{ $question->concepto }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            @if($reagent->format->concepto_propiedad == 'S')
+                                                <div class="col-sm-6">
+                                                    <table id="table-show" class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>Propiedad</td>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @foreach($reagent->questionsProperties as $question)
+                                                            <tr>
+                                                                <td style="width: 40px;">{{ $question->literal.'.' }}</td>
+                                                                <td>{{ $question->propiedad }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            @endif
                                         </div>
-                                    </li>
-                                </ul>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">
+                                    Opciones de Respuesta<br/>
+                                    (<i class="fa fa-check green" aria-hidden="true"></i>) Opci&oacute;n Correcta
+                                </div>
+                                <div class="profile-info-value">
+                                    <div class="form-group" style="margin-bottom: 0px;">
+                                        <div class="col-sm-12">
+                                            <table id="table-show" class="table">
+                                                <thead>
+                                                <tr>
+                                                    <td colspan="2"></td>
+                                                    <td>Descripcion</td>
+                                                    <td>Argumento</td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($reagent->answers as $answer)
+                                                    <tr style="{{ ($answer->opcion_correcta == 'S') ? 'background-color: #dff0d8;' : '' }}">
+                                                        <td style="width: 35px;">
+                                                            @if($answer->opcion_correcta == 'S')
+                                                                <i class="fa fa-check green" aria-hidden="true"></i>
+                                                            @endif
+                                                        </td>
+                                                        <td style="width: 40px;">{{ $answer->numeral.'.' }}</td>
+                                                        <td>{{ $answer->descripcion }}</td>
+                                                        <td>{{ $answer->argumento }}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        @if($reagent->format->opciones_pregunta == 'S')
-                        <div class="form-group">
-                            <div class="col-sm-12"><strong>Opciones de Pregunta:</strong></div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <table id="table-show" class="table">
-                                    <thead>
-                                    <tr>
-                                        <td></td>
-                                        <td>Concepto</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($reagent->questionsConcepts as $question)
-                                        <tr>
-                                            <td style="width: 40px;">{{ $question->numeral.'.' }}</td>
-                                            <td>{{ $question->concepto }}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            @if($reagent->format->concepto_propiedad == 'S')
-                            <div class="col-sm-6">
-                                <table id="table-show" class="table">
-                                    <thead>
-                                    <tr>
-                                        <td></td>
-                                        <td>Propiedad</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($reagent->questionsProperties as $question)
-                                        <tr>
-                                            <td style="width: 40px;">{{ $question->literal.'.' }}</td>
-                                            <td>{{ $question->propiedad }}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            @endif
-                        </div>
-                        @endif
-
-                        <div class="form-group">
-                            <div class="col-sm-12"><strong>Opciones de Respuesta:</strong></div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <table id="table-show" class="table">
-                                    <thead>
-                                    <tr>
-                                        <td colspan="2"></td>
-                                        <td>Descripcion</td>
-                                        <td>Argumento</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($reagent->answers as $answer)
-                                        <tr style="{{ ($answer->opcion_correcta == 'S') ? 'background-color: #dff0d8;' : '' }}">
-                                            <td style="width: 35px;">
-                                                @if($answer->opcion_correcta == 'S')
-                                                    <i class="fa fa-check green" aria-hidden="true"></i>
-                                                @endif
-                                            </td>
-                                            <td style="width: 40px;">{{ $answer->numeral.'.' }}</td>
-                                            <td>{{ $answer->descripcion }}</td>
-                                            <td>{{ $answer->argumento }}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

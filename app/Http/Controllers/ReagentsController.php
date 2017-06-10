@@ -161,15 +161,17 @@ class ReagentsController extends Controller
 
             $reagent->imagen = 'N';
             $isValidImage = (bool)false;
-            if ( isset($request['imagen']) && $request->hasFile('imagen') )
+            if ( isset($request['file']) && $request->hasFile('file') )
             {
-                $file = $request->file('imagen');
+                $file = $request->file('file');
                 if ( $file->isValid() )
                 {
                     $reagent->imagen = 'S';
                     $isValidImage = (bool)true;
                 }
             }
+
+            $reagent->fecha_creacion = date('Y-m-d h:i:s');
 
             \DB::beginTransaction(); //Start transaction!
 
@@ -193,8 +195,8 @@ class ReagentsController extends Controller
 
             if ( $isValidImage )
             {
-                $fileName = 'UPS-REA-'.$reagent->id.'.'.$request->file('imagen')->getClientOriginalExtension();
-                $request->file('imagen')->move(base_path().'/storage/files/reagents/', $fileName);
+                $fileName = 'UPS-REA-'.$reagent->id.'.'.$request->file('file')->getClientOriginalExtension();
+                $request->file('file')->move(base_path().'/storage/files/reagents/', $fileName);
             }
 
             flash('Transacci&oacuten realizada existosamente', 'success');
@@ -247,19 +249,6 @@ class ReagentsController extends Controller
         try {
             $reagent = Reagent::find($id);
 
-            $mattercareer = MatterCareer::find($reagent->distributive->id_materia_carrera);
-
-            $reagent->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-            $reagent->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
-            $reagent->desc_mencion = $mattercareer->mention->descripcion;
-            $reagent->desc_materia = $mattercareer->matter->descripcion;
-            $reagent->desc_estado = $reagent->state->descripcion;
-            $reagent->desc_formato = $reagent->format->nombre;
-            $reagent->desc_campo = $reagent->field->nombre;
-            $reagent->desc_contenido = $reagent->contentDetail->capitulo . " " . $reagent->contentDetail->tema;
-            $reagent->usr_responsable = $this->getUserName($reagent->id_usr_responsable);
-            $reagent->creado_por = $this->getUserName($reagent->creado_por);
-            $reagent->modificado_por = $this->getUserName($reagent->modificado_por);
 
             return view('reagent.reagents.edit')
                 ->with('reagent', $reagent)
@@ -273,7 +262,9 @@ class ReagentsController extends Controller
                 ->with('fields', $this->getFields())
                 ->with('abc', $this->abc);
 
-        } catch (\Exception $ex) {
+        } 
+        catch (\Exception $ex) 
+        {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsController][edit] id=" . $id . ". Exception: " . $ex);
             return redirect()->route('reagent.reagents.index');

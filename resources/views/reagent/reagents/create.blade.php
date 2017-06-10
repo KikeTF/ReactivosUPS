@@ -114,9 +114,7 @@
                                     </div>
                                 </div>
 
-                                <div id="contenedorFormato">
-
-                                </div>
+                                <div id="contenedorFormato"></div>
                             </div>
                         </div>
 

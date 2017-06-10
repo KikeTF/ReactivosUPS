@@ -5,6 +5,9 @@
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
+#table-show {
+    border: 1px solid #DCEBF7 !important;
+}
 #table-show > thead > tr {
     color: #336199;
     background-color: #EDF3F4;
@@ -24,4 +27,7 @@
 }
 .ace-file-container{
     height: 34px !important;
+}
+.ace-thumbnails > li{
+    border: 1px solid #DCEBF7 !important;
 }
