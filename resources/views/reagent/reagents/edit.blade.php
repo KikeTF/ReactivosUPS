@@ -3,6 +3,10 @@
 @section('titulo', 'Reactivos')
 @section('subtitulo', 'Editar reactivo')
 
+@push('specific-styles')
+    <link rel="stylesheet" href="{{ asset('ace/css/colorbox.min.css') }}" />
+@endpush
+
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario',
@@ -111,17 +115,18 @@
                             {!! Form::textarea('planteamiento', $reagent->planteamiento, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                         </div>
                     </div>
+
+                    {!! Form::hidden('imagen', $reagent->imagen, ['id' => 'imagen']) !!}
                     @if($reagent->imagen == 'S')
-                    <div class="form-group">
+                    <div id="image-container" class="form-group">
                         <div class="col-sm-12 col-sm-offset-2">
                             <ul class="ace-thumbnails clearfix">
                                 <li style="border: 1px solid #d5d5d5 !important;">
-                                    <a href="#" data-rel="colorbox">
-                                        <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 600px; width: 100%;" />
+                                    <a href="{{ route('reagent.reagents.image', $reagent->id) }}" data-rel="colorbox">
+                                        <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 300px; width: 100%;" />
                                     </a>
                                     <div class="tools tools-bottom">
-                                        <a href="#"><i class="ace-icon fa fa-pencil"></i></a>
-                                        <a href="#"><i class="ace-icon fa fa-times red"></i></a>
+                                        <a id="no-image" href="#"><i class="ace-icon fa fa-times red"></i></a>
                                     </div>
                                 </li>
                             </ul>
@@ -197,18 +202,16 @@
                                 <td><strong>Fecha</strong></td>
                                 <td><strong>Creado por</strong></td>
                                 <td><strong>Comentario</strong></td>
-                                <td><strong>Estado Nuevo</strong></td>
-                                <td><strong>Estado Anterior</strong></td>
+                                <td><strong>Estado</strong></td>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($reagent->comments->sortByDesc('id') as $comment)
                                 <tr>
                                     <td>{{ $comment->fecha_creacion }}</td>
-                                    <td>{{ $users[$comment->creado_por] }}</td>
+                                    <td>{{ $comment->user->FullName }}</td>
                                     <td>{{ $comment->comentario }}</td>
-                                    <td>{{ $states[$comment->id_estado_nuevo] }}</td>
-                                    <td>{{ $states[$comment->id_estado_anterior] }}</td>
+                                    <td>{{ $comment->state->descripcion }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -224,8 +227,9 @@
 @endsection
 
 @push('specific-script')
-    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
+    <script src="{{ asset('ace/js/jquery.colorbox.min.js') }}"></script>
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
     <script type="text/javascript">
         $(window).load(function() {
             inputFileLoad();
@@ -314,6 +318,10 @@
                 }
             });
         });
-    </script>
 
+        $("#no-image").on('click', function() {
+            $("#imagen").val("N");
+            $("#image-container").attr('hidden', true)
+        })
+    </script>
 @endpush

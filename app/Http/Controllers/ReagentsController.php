@@ -19,6 +19,7 @@ use ReactivosUPS\ReagentQuestionConcept;
 use ReactivosUPS\ReagentQuestionProperty;
 use View;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\File;
 use Session;
 
 
@@ -249,14 +250,11 @@ class ReagentsController extends Controller
         try {
             $reagent = Reagent::find($id);
 
-
             return view('reagent.reagents.edit')
                 ->with('reagent', $reagent)
                 ->with('questionsConc', $reagent->questionsConcepts)
                 ->with('questionsProp', $reagent->questionsProperties)
                 ->with('answers', $reagent->answers)
-                ->with('states', $this->getReagentsStates())
-                ->with('users', $this->getUsers())
                 ->with('format', $reagent->format)
                 ->with('contents', $this->getContents())
                 ->with('fields', $this->getFields())
@@ -280,20 +278,13 @@ class ReagentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request->all());
-        $reagent = Reagent::find($id);
-        $isValidImage = true;
         try
         {
+            $reagent = Reagent::find($id);
+
             Log::debug("Reagent update: fill request");
             $reagent->fill($request->all());
-            if( $request->hasFile('imagen') && $request->file('imagen')->isValid() )
-                $reagent->imagen = $request->file('imagen');
-            else
-                $isValidImage = !isset($request->imagen) ? true : false;
-
-            $reagent->modificado_por = \Auth::id();
-
+            
             Log::debug("Reagent update: answers update");
             $reaAnswers = array();
             for ($i = 0; $i < sizeof($request->answers); $i++)
@@ -307,6 +298,7 @@ class ReagentsController extends Controller
                     $reaAnswer->argumento = $reqAnswer['argumento'];
                     $reaAnswer->opcion_correcta = ($reqAnswer['numeral'] == $request->input('opcion_correcta')) ? 'S' : 'N';
                     $reaAnswer->modificado_por = \Auth::id();
+                    $reaAnswer->fecha_modificacion = date('Y-m-d h:i:s');
                 }
                 else
                 {
@@ -317,6 +309,7 @@ class ReagentsController extends Controller
                     $answer['argumento'] = $reqAnswer['argumento'];
                     $answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
                     $answer['creado_por'] = \Auth::id();
+                    $answer['fecha_creacion'] = date('Y-m-d h:i:s');
                     $reaAnswer = new ReagentAnswer($answer);
                 }
                 if(isset($reaAnswer))
@@ -333,6 +326,7 @@ class ReagentsController extends Controller
                     //$reaQuestion->numeral = $reqQuestion['numeral'];
                     $reaQuestion->concepto = $reqQuestion['concepto'];
                     $reaQuestion->modificado_por = \Auth::id();
+                    $reaQuestion->fecha_modificacion = date('Y-m-d h:i:s');
                 }
                 else
                 {
@@ -341,6 +335,7 @@ class ReagentsController extends Controller
                     //$question['numeral'] = $reqQuestion['numeral'];
                     $question['concepto'] = $reqQuestion['concepto'];
                     $question['creado_por'] = \Auth::id();
+                    $question['fecha_creacion'] = date('Y-m-d h:i:s');
                     $reaQuestion = new ReagentQuestionConcept($question);
                 }
                 if(isset($reaQuestion))
@@ -358,6 +353,7 @@ class ReagentsController extends Controller
                     //$reaQuestion->literal = $reqQuestion['literal'];
                     $reaQuestion->propiedad = $reqQuestion['propiedad'];
                     $reaQuestion->modificado_por = \Auth::id();
+                    $reaQuestion->fecha_modificacion = date('Y-m-d h:i:s');
                 }
                 else
                 {
@@ -366,11 +362,26 @@ class ReagentsController extends Controller
                     //$question['literal'] = $reqQuestion['literal'];
                     $question['propiedad'] = $reqQuestion['propiedad'];
                     $question['creado_por'] = \Auth::id();
+                    $question['fecha_creacion'] = date('Y-m-d h:i:s');
                     $reaQuestion = new ReagentQuestionProperty($question);
                 }
                 if(isset($reaQuestion))
                     $reaQuestionsProp[] = $reaQuestion;
             }
+
+            $isValidImage = (bool)false;
+            if ( isset($request['file']) && $request->hasFile('file') )
+            {
+                $file = $request->file('file');
+                if ( $file->isValid() )
+                {
+                    $reagent->imagen = 'S';
+                    $isValidImage = (bool)true;
+                }
+            }
+
+            $reagent->modificado_por = \Auth::id();
+            $reagent->fecha_modificacion = date('Y-m-d h:i:s');
 
             \DB::beginTransaction(); //Start transaction!
 
@@ -387,10 +398,29 @@ class ReagentsController extends Controller
             Log::debug("Reagent update: save questions properties model");
             $reagent->questionsProperties()->saveMany($reaQuestionsProp);
 
-            if(!$isValidImage)
-                flash('Transacci&oacuten realizada parcialmente. La imagen no pudo ser procesada!', 'warning')->important();
-            else
-                flash('Transacci&oacuten realizada existosamente', 'success');
+            Log::debug("Reagent create: save reagent right answer id");
+            $reagent->id_opcion_correcta = $reagent->answers()->where('opcion_correcta', 'S')->first()->id;
+            $reagent->save();
+
+            if ( $isValidImage )
+            {
+                $fileName = 'UPS-REA-'.$reagent->id.'.'.$request->file('file')->getClientOriginalExtension();
+                $request->file('file')->move(base_path().'/storage/files/reagents/', $fileName);
+            }
+            elseif ($reagent->imagen == 'N')
+            {
+                $extensionList = array('gif','png','jpg','jpeg','bmp');
+                foreach ($extensionList as $ext)
+                {
+                    $file = storage_path('files/reagents/UPS-REA-'.$id.'.'.$ext);
+                    if ( File::exists($file) ) {
+                        File::delete($file);
+                        break;
+                    }
+                }
+            }
+
+            flash('Transacci&oacuten realizada existosamente', 'success');
         }
         catch (\Exception $ex)
         {

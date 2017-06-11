@@ -102,7 +102,9 @@
                                         <div class="space-6"></div>
                                         <ul class="ace-thumbnails clearfix">
                                             <li>
-                                                <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 600px; width: 100%;" />
+                                                <a href="{{ route('reagent.reagents.image', $reagent->id) }}" data-rel="colorbox">
+                                                    <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 300px; width: 100%;" />
+                                                </a>
                                             </li>
                                         </ul>
                                         <div class="space-4"></div>
@@ -290,39 +292,5 @@
 
 @push('specific-script')
     <script src="{{ asset('ace/js/jquery.colorbox.min.js') }}"></script>
-    <script type="text/javascript">
-        jQuery(function($) {
-            var $overflow = '';
-            var colorbox_params = {
-                rel: 'colorbox',
-                reposition:true,
-                scalePhotos:true,
-                scrolling:false,
-                previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-                next:'<i class="ace-icon fa fa-arrow-right"></i>',
-                close:'&times;',
-                current:'{current} of {total}',
-                maxWidth:'100%',
-                maxHeight:'100%',
-                onOpen:function(){
-                    $overflow = document.body.style.overflow;
-                    document.body.style.overflow = 'hidden';
-                },
-                onClosed:function(){
-                    document.body.style.overflow = $overflow;
-                },
-                onComplete:function(){
-                    $.colorbox.resize();
-                }
-            };
-
-            $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
-            $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");//let's add a custom loading icon
-
-
-            $(document).one('ajaxloadstart.page', function(e) {
-                $('#colorbox, #cboxOverlay').remove();
-            });
-        })
-    </script>
+    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
 @endpush
