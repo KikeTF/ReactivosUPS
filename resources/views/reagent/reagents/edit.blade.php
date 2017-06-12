@@ -126,7 +126,7 @@
                                         <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 300px; width: 100%;" />
                                     </a>
                                     <div class="tools tools-bottom">
-                                        <a id="no-image" href="#"><i class="ace-icon fa fa-times red"></i></a>
+                                        <a id="no-image"><i class="ace-icon fa fa-times red" style="cursor: pointer;"></i></a>
                                     </div>
                                 </li>
                             </ul>
@@ -233,6 +233,7 @@
     <script type="text/javascript">
         $(window).load(function() {
             inputFileLoad();
+            imagePropertiesLoad();
         });
 
         $("#btn-reenviar").on('click', function() {

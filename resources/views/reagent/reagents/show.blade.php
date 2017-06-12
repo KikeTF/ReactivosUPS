@@ -293,4 +293,9 @@
 @push('specific-script')
     <script src="{{ asset('ace/js/jquery.colorbox.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
+    <script type="text/javascript">
+        $(window).load(function() {
+            imagePropertiesLoad();
+        });
+    </script >
 @endpush

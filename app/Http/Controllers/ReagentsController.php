@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Career;
 use ReactivosUPS\Campus;
+use ReactivosUPS\ContentDetail;
+use ReactivosUPS\ContentHeader;
 use ReactivosUPS\Format;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
@@ -249,6 +251,13 @@ class ReagentsController extends Controller
     {
         try {
             $reagent = Reagent::find($id);
+            $matterContent = ContentHeader::query()
+                ->where('estado','A')
+                ->where('id_materia_carrera', $reagent->distributive->id_materia_carrera)
+                ->first()->contentsDetails
+                    ->where('estado','A')
+                    ->sortBy('capitulo')
+                    ->lists('ContentDescription', 'id');
 
             return view('reagent.reagents.edit')
                 ->with('reagent', $reagent)
@@ -256,7 +265,7 @@ class ReagentsController extends Controller
                 ->with('questionsProp', $reagent->questionsProperties)
                 ->with('answers', $reagent->answers)
                 ->with('format', $reagent->format)
-                ->with('contents', $this->getContents())
+                ->with('contents', $matterContent)
                 ->with('fields', $this->getFields())
                 ->with('abc', $this->abc);
 
@@ -284,89 +293,101 @@ class ReagentsController extends Controller
 
             Log::debug("Reagent update: fill request");
             $reagent->fill($request->all());
-            
-            Log::debug("Reagent update: answers update");
-            $reaAnswers = array();
-            for ($i = 0; $i < sizeof($request->answers); $i++)
+
+            if ( isset($request->answers) )
             {
-                $reqAnswer = $request->answers[$i];
-                if ($reaAnswer = ReagentAnswer::find($reqAnswer['id']))
+                Log::debug("Reagent update: answers update");
+                foreach($request->answers as $i => $reqAnswer)
                 {
-                    Log::debug("Reagent update: answer update id: ".$reqAnswer['id']);
-                    //$reaAnswer->numeral = $reqAnswer['numeral'];
-                    $reaAnswer->descripcion = $reqAnswer['descripcion'];
-                    $reaAnswer->argumento = $reqAnswer['argumento'];
-                    $reaAnswer->opcion_correcta = ($reqAnswer['numeral'] == $request->input('opcion_correcta')) ? 'S' : 'N';
-                    $reaAnswer->modificado_por = \Auth::id();
-                    $reaAnswer->fecha_modificacion = date('Y-m-d h:i:s');
+                    $reaAnswer = (isset($reqAnswer['id']) && ($reqAnswer['id'] != "")) ? ReagentAnswer::find($reqAnswer['id']) : null;
+                    if ($reaAnswer != null)
+                    {
+                        Log::debug("Reagent update: answer update id: ".$reqAnswer['id']);
+                        //$reaAnswer->numeral = $reqAnswer['numeral'];
+                        $reaAnswer->descripcion = $reqAnswer['descripcion'];
+                        $reaAnswer->argumento = $reqAnswer['argumento'];
+                        //$reaAnswer->opcion_correcta = ($reqAnswer['numeral'] == $request->input('opcion_correcta')) ? 'S' : 'N';
+                        $reaAnswer->opcion_correcta = (($i+1) == $request->input('opcion_correcta')) ? 'S' : 'N';
+                        $reaAnswer->modificado_por = \Auth::id();
+                        $reaAnswer->fecha_modificacion = date('Y-m-d h:i:s');
+                    }
+                    elseif (isset($reqAnswer['descripcion']) && isset($reqAnswer['argumento']))
+                    {
+                        Log::debug("Reagent update: new answer create");
+                        $answer['id_reactivo'] = $id;
+                        //$answer['numeral'] = $reqAnswer['numeral'];
+                        $answer['descripcion'] = $reqAnswer['descripcion'];
+                        $answer['argumento'] = $reqAnswer['argumento'];
+                        $answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
+                        $answer['opcion_correcta'] = (($i+1) == $request->input('opcion_correcta')) ? 'S' : 'N';
+                        $answer['creado_por'] = \Auth::id();
+                        $answer['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $reaAnswer = new ReagentAnswer($answer);
+                    }
+
+                    if(isset($reaAnswer))
+                        $reaAnswers[] = $reaAnswer;
                 }
-                else
-                {
-                    Log::debug("Reagent update: new answer create");
-                    $answer['id_reactivo'] = $id;
-                    //$answer['numeral'] = $reqAnswer['numeral'];
-                    $answer['descripcion'] = $reqAnswer['descripcion'];
-                    $answer['argumento'] = $reqAnswer['argumento'];
-                    $answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
-                    $answer['creado_por'] = \Auth::id();
-                    $answer['fecha_creacion'] = date('Y-m-d h:i:s');
-                    $reaAnswer = new ReagentAnswer($answer);
-                }
-                if(isset($reaAnswer))
-                    $reaAnswers[] = $reaAnswer;
             }
 
-            Log::debug("Reagent update: questions concepts update");
-            $reaQuestionsConc = array();
-            for ($i = 0; $i < sizeof($request->questionsConc); $i++)
+            if ( isset($request->questionsConc) )
             {
-                $reqQuestion = $request->questionsConc[$i];
-                if ($reaQuestion = ReagentQuestionConcept::find($reqQuestion['id'])) {
-                    Log::debug("Reagent update: question concept update id: ".$reqQuestion['id']);
-                    //$reaQuestion->numeral = $reqQuestion['numeral'];
-                    $reaQuestion->concepto = $reqQuestion['concepto'];
-                    $reaQuestion->modificado_por = \Auth::id();
-                    $reaQuestion->fecha_modificacion = date('Y-m-d h:i:s');
-                }
-                else
+                Log::debug("Reagent update: questions concepts update");
+                foreach($request->questionsConc as $i => $reqQuestion)
                 {
-                    Log::debug("Reagent update: new question concept create");
-                    $question['id_reactivo'] = $id;
-                    //$question['numeral'] = $reqQuestion['numeral'];
-                    $question['concepto'] = $reqQuestion['concepto'];
-                    $question['creado_por'] = \Auth::id();
-                    $question['fecha_creacion'] = date('Y-m-d h:i:s');
-                    $reaQuestion = new ReagentQuestionConcept($question);
+                    $reaQuestionConc = (isset($reqQuestion['id']) && ($reqQuestion['id'] != "")) ? ReagentQuestionConcept::find($reqQuestion['id']) : null;
+                    if ($reaQuestionConc != null)
+                    {
+                        Log::debug("Reagent update: question concept update id: ".$reqQuestion['id']);
+                        //$reaQuestion->numeral = $reqQuestion['numeral'];
+                        $reaQuestionConc->concepto = $reqQuestion['concepto'];
+                        $reaQuestionConc->modificado_por = \Auth::id();
+                        $reaQuestionConc->fecha_modificacion = date('Y-m-d h:i:s');
+                    }
+                    elseif (isset($reqQuestion['concepto']))
+                    {
+                        Log::debug("Reagent update: new question concept create");
+                        $question['id_reactivo'] = $id;
+                        //$question['numeral'] = $reqQuestion['numeral'];
+                        $question['concepto'] = $reqQuestion['concepto'];
+                        $question['creado_por'] = \Auth::id();
+                        $question['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $reaQuestionConc = new ReagentQuestionConcept($question);
+                    }
+
+                    if(isset($reaQuestionConc))
+                        $reaQuestionsConc[] = $reaQuestionConc;
                 }
-                if(isset($reaQuestion))
-                    $reaQuestionsConc[] = $reaQuestion;
             }
 
-            Log::debug("Reagent update: questions properties update");
-            $reaQuestionsProp = array();
-            for ($i = 0; $i < sizeof($request->questionsProp); $i++)
+            if ( isset($request->questionsProp) )
             {
-                $reqQuestion = $request->questionsProp[$i];
-                if ($reaQuestion = ReagentQuestionProperty::find($reqQuestion['id']))
+                Log::debug("Reagent update: questions properties update");
+                foreach($request->questionsProp as $i => $reqQuestion)
                 {
-                    Log::debug("Reagent update: question property update id: ".$reqQuestion['id']);
-                    //$reaQuestion->literal = $reqQuestion['literal'];
-                    $reaQuestion->propiedad = $reqQuestion['propiedad'];
-                    $reaQuestion->modificado_por = \Auth::id();
-                    $reaQuestion->fecha_modificacion = date('Y-m-d h:i:s');
+                    $reaQuestionProp = (isset($reqQuestion['id']) && ($reqQuestion['id'] != "")) ? ReagentQuestionProperty::find($reqQuestion['id']) : null;
+                    if ($reaQuestionProp != null)
+                    {
+                        Log::debug("Reagent update: question property update id: ".$reqQuestion['id']);
+                        //$reaQuestion->literal = $reqQuestion['literal'];
+                        $reaQuestionProp->propiedad = $reqQuestion['propiedad'];
+                        $reaQuestionProp->modificado_por = \Auth::id();
+                        $reaQuestionProp->fecha_modificacion = date('Y-m-d h:i:s');
+                    }
+                    elseif (isset($reqQuestion['propiedad']))
+                    {
+                        Log::debug("Reagent update: new question property create");
+                        $question['id_reactivo'] = $id;
+                        //$question['literal'] = $reqQuestion['literal'];
+                        $question['propiedad'] = $reqQuestion['propiedad'];
+                        $question['creado_por'] = \Auth::id();
+                        $question['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $reaQuestionProp = new ReagentQuestionProperty($question);
+                    }
+
+                    if(isset($reaQuestionProp))
+                        $reaQuestionsProp[] = $reaQuestionProp;
                 }
-                else
-                {
-                    Log::debug("Reagent update: new question property create");
-                    $question['id_reactivo'] = $id;
-                    //$question['literal'] = $reqQuestion['literal'];
-                    $question['propiedad'] = $reqQuestion['propiedad'];
-                    $question['creado_por'] = \Auth::id();
-                    $question['fecha_creacion'] = date('Y-m-d h:i:s');
-                    $reaQuestion = new ReagentQuestionProperty($question);
-                }
-                if(isset($reaQuestion))
-                    $reaQuestionsProp[] = $reaQuestion;
             }
 
             $isValidImage = (bool)false;
@@ -388,15 +409,26 @@ class ReagentsController extends Controller
             Log::debug("Reagent update: save reagent model");
             $reagent->save();
 
-            Log::debug("Reagent update: save reagent answers model");
-            $reagent->answers()->saveMany($reaAnswers);
-            //$reagent->answers()->whereNotIn('id_opcion', $request->optionsprofile)->delete();
+            if(isset($reaAnswers))
+            {
+                Log::debug("Reagent update: save reagent answers model");
+                $reagent->answers()->saveMany($reaAnswers);
+                $reagent->answers()->whereNotIn('id', array_pluck($reaAnswers, 'id'))->delete();
+            }
 
-            Log::debug("Reagent update: save questions concepts model");
-            $reagent->questionsConcepts()->saveMany($reaQuestionsConc);
+            if(isset($reaQuestionsConc))
+            {
+                Log::debug("Reagent update: save questions concepts model");
+                $reagent->questionsConcepts()->saveMany($reaQuestionsConc);
+                $reagent->questionsConcepts()->whereNotIn('id', array_pluck($reaQuestionsConc, 'id'))->delete();
+            }
 
-            Log::debug("Reagent update: save questions properties model");
-            $reagent->questionsProperties()->saveMany($reaQuestionsProp);
+            if(isset($reaQuestionsProp))
+            {
+                Log::debug("Reagent update: save questions properties model");
+                $reagent->questionsProperties()->saveMany($reaQuestionsProp);
+                $reagent->questionsProperties()->whereNotIn('id', array_pluck($reaQuestionsProp, 'id'))->delete();
+            }
 
             Log::debug("Reagent create: save reagent right answer id");
             $reagent->id_opcion_correcta = $reagent->answers()->where('opcion_correcta', 'S')->first()->id;

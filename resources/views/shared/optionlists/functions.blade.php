@@ -49,6 +49,7 @@
             success: function(result){
                 $('#listaContenidos').empty();
                 $('#listaContenidos').append(result['html']);
+                $("#id_contenido_det").chosen().change();
             }
         });
     }

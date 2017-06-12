@@ -207,7 +207,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Form'      => Collective\Html\FormFacade::class,
-        'Html'      => Collective\Html\HtmlFacade::class,
+        'HTML'      => Collective\Html\HtmlFacade::class,
         'Flash'     => Laracasts\Flash\Flash::class,
         'Gate'      => Illuminate\Support\Facades\Gate::class,
         'Datatables'=> Yajra\Datatables\Facades\Datatables::class,

@@ -422,7 +422,8 @@ class MattersCareersController extends Controller
 
     public function getContentsList(Request $request)
     {
-        try {
+        try 
+        {
             $id_Sede = (int)\Session::get('idSede');
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);

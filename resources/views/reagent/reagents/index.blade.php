@@ -100,7 +100,7 @@
                     <tr>
                         <td align="center">{{ $reagent->id }}</td>
                         <td align="justify">{{ $reagent->planteamiento }}</td>
-                        <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
+                        <td align="center"><span class="label label-{{ $reagent->state->etiqueta }}">{{ $reagent->state->descripcion }}</span></td>
                         <td>
                             @include('shared.templates._tablebuttons', $urls)
                         </td>

@@ -30,7 +30,7 @@ class MatterCareer extends Model
     }
 
     public function contentsHeaders(){
-        return $this->hasMany('ReactivosUPS\ContentHeader');
+        return $this->hasMany('ReactivosUPS\ContentHeader', 'id_materia_carrera');
     }
 
     public function distributives(){

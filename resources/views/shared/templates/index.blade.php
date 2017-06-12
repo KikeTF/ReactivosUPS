@@ -22,7 +22,8 @@
 
     <!-- ace styles -->
     <link rel="stylesheet" href="{{ asset('ace/css/select2.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ace/css/chosen.min.css') }}" />
+    {{--<link rel="stylesheet" href="{{ asset('ace/css/chosen.min.css') }}" />--}}
+    {!! HTML::style('ace/css/chosen.min.css') !!}
     <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
 
     <!-- datatable styles -->
@@ -248,7 +249,8 @@
     <script src="{{ asset('ace/js/jquery.flot.pie.min.js') }}"></script>
     <script src="{{ asset('ace/js/jquery.flot.resize.min.js') }}"></script>
     <script src="{{ asset('ace/js/select2.min.js') }}"></script>
-    <script src="{{ asset('ace/js/chosen.jquery.min.js') }}"></script>
+{{--    <script src="{{ asset('ace/js/chosen.jquery.min.js') }}"></script>--}}
+    {!! HTML::script('ace/js/chosen.jquery.min.js') !!}
 
     {{--@stack('datatable-script')--}}
     {{--<script src="{{ asset('ace/js/jquery-1.12.3.js') }}"></script>--}}

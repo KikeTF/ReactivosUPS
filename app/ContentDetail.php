@@ -16,7 +16,7 @@ class ContentDetail extends Model
     }
 
     public function contentHeader(){
-        return $this->belongsTo('ReactivosUPS\ContentHeader');
+        return $this->belongsTo('ReactivosUPS\ContentHeader', 'id_contenido_cab');
     }
 
     public function reagents(){

@@ -61,12 +61,12 @@
                                         <div class="action-buttons">
                                             <div id="conc_activa_op_preg_{{ $i }}" {{($i < $min_conc) ? 'hidden' : ''}}>
                                                 <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'C', 1)" title="Activar">
-                                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                                    <i class="ace-icon fa fa-check bigger-120" style="cursor: pointer;"></i>
                                                 </label>
                                             </div>
                                             <div id="conc_desactiva_op_preg_{{ $i }}" {{($i < $min_conc) ? '' : 'hidden'}}>
                                                 <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'C', 0)" title="Desactivar">
-                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                    <i class="ace-icon fa fa-times bigger-120" style="cursor: pointer;"></i>
                                                 </label>
                                             </div>
                                         </div>
@@ -104,12 +104,12 @@
                                         <div class="action-buttons">
                                             <div id="prop_activa_op_preg_{{ $i }}" {{($i < $min_prop) ? 'hidden' : ''}}>
                                                 <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'P', 1)" title="Activar">
-                                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                                    <i class="ace-icon fa fa-check bigger-120" style="cursor: pointer;"></i>
                                                 </label>
                                             </div>
                                             <div id="prop_desactiva_op_preg_{{ $i }}" {{($i < $min_prop) ? '' : 'hidden'}}>
                                                 <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'P', 0)" title="Desactivar">
-                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                    <i class="ace-icon fa fa-times bigger-120" style="cursor: pointer;"></i>
                                                 </label>
                                             </div>
                                         </div>
@@ -182,12 +182,12 @@
                                 <div class="action-buttons">
                                     <div id="activa_op_resp_{{ $i }}" {{($i < $min_resp) ? 'hidden' : ''}}>
                                         <label class="control-label green" onclick="formatOptionAction('{{ $i }}', 'A', 1)" title="Activar">
-                                            <i class="ace-icon fa fa-check bigger-120"></i>
+                                            <i class="ace-icon fa fa-check bigger-120" style="cursor: pointer;"></i>
                                         </label>
                                     </div>
                                     <div id="desactiva_op_resp_{{ $i }}" {{($i < $min_resp) ? '' : 'hidden'}}>
                                         <label class="control-label red" onclick="formatOptionAction('{{ $i }}', 'A', 0)" title="Desactivar">
-                                            <i class="ace-icon fa fa-times bigger-120"></i>
+                                            <i class="ace-icon fa fa-times bigger-120" style="cursor: pointer;"></i>
                                         </label>
                                     </div>
                                 </div>
