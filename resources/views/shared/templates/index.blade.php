@@ -292,14 +292,12 @@
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
                     @if(isset($isApproval))
-                        sorting: [[1, 'asc']],
+                        sorting: [[1, 'desc']],
                     @elseif(isset($isReagent))
                         sorting: [[0, 'desc']],
                     @endif
-                    @if( !isset($newurl) ) // Sin botones adicionales
-                        dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
-                    @else // Con boton de agregar nuevo
-                        dom: '<"clearfix"<"pull-left tableTools-container"B><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                    @if( isset($newurl) ) // Sin botones adicionales
+                        dom: '<"clearfix"<"pull-left tableTools-container"<"btn-group btn-overlap"B>><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                         buttons: {
                             dom: {
                                 container: {
@@ -324,6 +322,159 @@
                                 }
                             }]
                         },
+                    @elseif( isset($isApproval) ) // Sin botones adicionales
+                        dom: '<"clearfix"<"pull-left tableTools-container"B><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                        buttons: {
+                            dom: {
+                                container: {
+                                    tag: 'div',
+                                    className: 'DTTT_container'
+                                },
+                                //buttonContainer: {
+                                //    tag: 'div',
+                                //    className: 'DTTT_container'
+                                //},
+                                button: {
+                                    tag: 'a',
+                                    className: 'DTTT_button btn btn-white btn-primary btn-bold'
+                                }
+                            },
+                            buttons: [{
+                                    name: 'ToolTables__dataTable_5',
+                                    text: "<i class='ace-icon fa fa-thumbs-o-up bigger-110 blue'></i>",
+                                    titleAttr: "Aprobar",
+                                    action: function ( e, dt, node, config ) {
+                                        var ids = new Array();;
+                                        $("input:checkbox[name=id]:checked").each(function(){
+                                            ids.push($(this).val());
+                                        });
+
+                                        if(ids.length > 0)
+                                        {
+                                            bootbox.prompt({
+                                                title: "Ingrese sus comentarios...",
+                                                inputType: 'textarea',
+                                                buttons: {
+                                                    'confirm': {
+                                                        label: 'Aprobar',
+                                                        className: 'btn-info'
+                                                    },
+                                                    'cancel': {
+                                                        label: 'Cancelar',
+                                                        className: 'btn-default'
+                                                    }
+                                                },
+                                                callback: function (result) {
+                                                    if (result === null) {
+                                                        console.log("Ok");
+                                                    } else {
+                                                        $.ajax({
+                                                            type: 'GET',
+                                                            url: "{{ Route("reagent.approvals.comment", 0) }}",
+                                                            data: {'comentario':result, 'id_estado':5, 'ids':ids},
+                                                            dataType: "json",
+                                                            async: true,
+                                                            cache: false,
+                                                            error: function (e) {
+                                                                console.log(e);
+                                                            },
+                                                            success: function (result) {
+                                                                if (result.valid) {
+                                                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
+                                                                }
+                                                                else {
+                                                                    alert('Error');
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else
+                                        {
+                                            bootbox.alert({
+                                                message: "Seleccione al menos un reactivo para continuar!",
+                                                buttons: {
+                                                    'ok': {
+                                                        label: 'Cerrar',
+                                                        className: 'btn-danger'
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                },
+                                {
+                                    name: 'ToolTables__dataTable_5',
+                                    text: "<i class='ace-icon fa fa-print bigger-110 blue'></i>",
+                                    titleAttr: "Imprimir",
+                                    action: function ( e, dt, node, config ) {
+                                        var ids = new Array();;
+                                        $("input:checkbox[name=id]:checked").each(function(){
+                                            ids.push($(this).val());
+                                        });
+
+                                        if(ids.length > 0)
+                                        {
+                                            bootbox.prompt({
+                                                title: "Ingrese sus comentarios...",
+                                                inputType: 'textarea',
+                                                buttons: {
+                                                    'confirm': {
+                                                        label: 'Aprobar',
+                                                        className: 'btn-info'
+                                                    },
+                                                    'cancel': {
+                                                        label: 'Cancelar',
+                                                        className: 'btn-default'
+                                                    }
+                                                },
+                                                callback: function (result) {
+                                                    if (result === null) {
+                                                        console.log("Ok");
+                                                    } else {
+                                                        $.ajax({
+                                                            type: 'GET',
+                                                            url: "{{ Route("reagent.approvals.comment", 0) }}",
+                                                            data: {'comentario':result, 'id_estado':5, 'ids':ids},
+                                                            dataType: "json",
+                                                            async: true,
+                                                            cache: false,
+                                                            error: function (e) {
+                                                                console.log(e);
+                                                            },
+                                                            success: function (result) {
+                                                                if (result.valid) {
+                                                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
+                                                                }
+                                                                else {
+                                                                    alert('Error');
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else
+                                        {
+                                            bootbox.alert({
+                                                message: "Seleccione al menos un reactivo para continuar!",
+                                                buttons: {
+                                                    'ok': {
+                                                        label: 'Cerrar',
+                                                        className: 'btn-danger'
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                    @else // Con boton de agregar nuevo
+                        dom: '<"clearfix"<"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                     @endif
                     tableTools: {
                         sSwfPath: "{{ asset('ace/swf/copy_csv_xls_pdf.swf') }}",
@@ -355,7 +506,7 @@
                                 sButtonClass: "btn btn-white btn-primary  btn-bold",
                                 sButtonText: "<i class='fa fa-file-pdf-o bigger-110 red'></i>"
                             },
-
+                            /*
                             {
                                 sExtends: "print",
                                 sToolTip: "Vista de Impresión",
@@ -382,6 +533,7 @@
                                     f.oApi._fnDraw(f);
                                 }
                             }
+                            */
                         ]
                     },
                     language: {

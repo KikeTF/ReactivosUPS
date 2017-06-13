@@ -264,9 +264,7 @@
 @endsection
 
 @push('specific-script')
-
     <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
-
     <script type="text/javascript">
         $("#btn-aprobado").on('click', function() {
             bootbox.prompt({
@@ -400,5 +398,4 @@
         //    console.log("Ok");
         //}
     </script>
-
 @endpush

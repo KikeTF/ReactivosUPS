@@ -27,7 +27,8 @@ class ReagentsApprovalsController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try
+        {
             $aprReactivo = \Session::get('ApruebaReactivo');
             if($aprReactivo == 'S')
             {
@@ -74,19 +75,11 @@ class ReagentsApprovalsController extends Controller
                 return view('reagent.approvals.index')
                     ->with('reagents', $reagents)
                     ->with('campusList', $this->getCampuses())
-                    //->with('careers', $this->getCareers())
-                    //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
-                    ->with('states', $this->getReagentsStates())
-                    ->with('statesLabels', $this->getReagentsStatesLabel())
                     ->with('filters', $filters);
             }
             else
                 return view('reagent.approvals.index')
                     ->with('campusList', $this->getCampuses())
-                    //->with('careers', $this->getCareers())
-                    //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, $idJefeArea))
-                    ->with('states', $this->getReagentsStates())
-                    ->with('statesLabels', $this->getReagentsStatesLabel())
                     ->with('filters', $filters);
 
         }catch(\Exception $ex)
@@ -196,28 +189,34 @@ class ReagentsApprovalsController extends Controller
     public function comment(Request $request, $id)
     {
         $valid = true;
-        $reagent = Reagent::find($id);
-
-        \DB::beginTransaction(); //Start transaction!
-
         try
         {
-            $comment = new ReagentComment();
-            $comment->id_reactivo = $id;
-            $comment->id_estado_anterior = $reagent->id_estado;
-            $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $reagent->id_estado : (int)$request->id_estado;
-            $comment->comentario = $request->comentario;
-            $comment->creado_por = \Auth::id();
-            $comment->fecha_creacion = date('Y-m-d h:i:s');
+            $ids = ($id > 0) ? array($id) : $request->ids;
 
-            if( isset( $request['id_estado'] ) ){
-                $reagent->id_estado = (int)$request->id_estado;
-                $reagent->modificado_por = \Auth::id();
-                $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+            \DB::beginTransaction(); //Start transaction!
+
+            foreach ($ids as $ReaId)
+            {
+                $reagent = Reagent::find($ReaId);
+
+                $comment = new ReagentComment();
+                $comment->id_reactivo = $ReaId;
+                $comment->id_estado_anterior = $reagent->id_estado;
+                $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $reagent->id_estado : (int)$request->id_estado;
+                $comment->comentario = $request->comentario;
+                $comment->creado_por = \Auth::id();
+                $comment->fecha_creacion = date('Y-m-d h:i:s');
+
+                if( isset( $request['id_estado'] ) ){
+                    $reagent->id_estado = (int)$request->id_estado;
+                    $reagent->modificado_por = \Auth::id();
+                    $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+                }
+
+                $reagent->save();
+                $comment->save();
             }
 
-            $reagent->save();
-            $comment->save();
             flash('Transacci&oacuten realizada existosamente', 'success');
         }
         catch(\Exception $ex)
@@ -226,7 +225,7 @@ class ReagentsApprovalsController extends Controller
             \DB::rollback();
             $valid = false;
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ReagentsApprovalsController][comment] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+            Log::error("[ReagentsApprovalsController][comment] id=".$id."; Exception: ".$ex);
         }
 
         \DB::commit();

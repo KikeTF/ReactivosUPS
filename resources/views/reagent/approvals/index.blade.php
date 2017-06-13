@@ -6,7 +6,8 @@
 @section('contenido')
     <?php
     $usetable = 1;
-    $isApproval = 1;
+    if(\Session::get('ApruebaReactivo') == 'S')
+        $isApproval = 1;
     //$newurl = route('reagent.approvals.create');
     $columnas = array("id",  "planteamiento", "estado","creado_por", "modificado_por"); // "capitulo", "tema",
     ?>
@@ -86,17 +87,19 @@
                     <tr>
                         @if(isset($isApproval))
                         <td align="center" width="40px">
+                            @if($reagent->id_estado == 2)
                             <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
                                 <label>
                                     {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace']) !!}
                                     <span class="lbl"></span>
                                 </label>
                             </div>
+                            @endif
                         </td>
                         @endif
                         <td align="center">{{ $reagent->id }}</td>
-                        <td>{{ $reagent->planteamiento }}</td>
-                        <td align="center"><span class="label label-{{ $statesLabels[$reagent->id_estado] }}">{{ $states[$reagent->id_estado] }}</span></td>
+                        <td align="justify">{{ $reagent->planteamiento }}</td>
+                        <td align="center"><span class="label label-{{ $reagent->state->etiqueta }}">{{ $reagent->state->descripcion }}</span></td>
                         <td align="center">{{ \ReactivosUPS\User::find($reagent->creado_por)->FullName }}</td>
                         <td align="center">{{ ( ($reagent->modificado_por == "") ? "": \ReactivosUPS\User::find($reagent->modificado_por)->FullName ) }}</td>
                         <td>
@@ -111,11 +114,14 @@
 @endsection
 
 @push('specific-script')
-@include('shared.optionlists.functions')
-<script type="text/javascript">
-    $( window ).load(function() {
-        getCareersByCampus();
-        getMattersByCareer();
-    });
-</script>
+    @include('shared.optionlists.functions')
+    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
+    <script type="text/javascript">
+
+
+        $( window ).load(function() {
+            getCareersByCampus();
+            getMattersByCareer();
+        });
+    </script>
 @endpush
