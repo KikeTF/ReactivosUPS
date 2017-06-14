@@ -560,7 +560,8 @@ class ExamsController extends Controller
     
     public function printReport(Request $request, $id)
     {
-        try{
+        try
+        {
             $id_mencion = (isset($request['mencion']) ? (int)$request->mencion : 0);
             $exam = ExamHeader::find($id);
 
@@ -712,7 +713,7 @@ class ExamsController extends Controller
         catch(\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ExamsController][comment] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+            Log::error("[ExamsController][printReport] id=".$id."; Exception: ".$ex);
             return redirect()->route('exam.exams.show', $id);
         }
     }

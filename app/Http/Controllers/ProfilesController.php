@@ -71,6 +71,7 @@ class ProfilesController extends Controller
             $profile = new Profile($request->all());
             $profile->aprueba_reactivo = !isset( $request['aprueba_reactivo'] ) ? 'N' : 'S';
             $profile->aprueba_examen = !isset( $request['aprueba_examen'] ) ? 'N' : 'S';
+            $profile->aprueba_reactivos_masivo = !isset( $request['aprueba_reactivos_masivo'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->creado_por = \Auth::id();
             $profile->fecha_creacion = date('Y-m-d h:i:s');
@@ -190,6 +191,7 @@ class ProfilesController extends Controller
             $profile->nombre = $request->nombre;
             $profile->descripcion = $request->descripcion;
             $profile->aprueba_reactivo = !isset( $request['aprueba_reactivo'] ) ? 'N' : 'S';
+            $profile->aprueba_reactivos_masivo = !isset( $request['aprueba_reactivos_masivo'] ) ? 'N' : 'S';
             $profile->aprueba_examen = !isset( $request['aprueba_examen'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->modificado_por = \Auth::id();

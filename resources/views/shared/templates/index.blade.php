@@ -283,7 +283,7 @@
                     processing: true,
                     responsive: true,
                     columns: [
-                        @if(isset($isApproval))
+                        @if(isset($isApproval) or isset($isReagent))
                             { data: 'check', name: 'check', orderable: false, searchable: false },
                         @endif
                         @foreach ($columnas as $col)
@@ -291,39 +291,11 @@
                         @endforeach
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
-                    @if(isset($isApproval))
+                    @if(isset($isApproval) or isset($isReagent))
                         sorting: [[1, 'desc']],
-                    @elseif(isset($isReagent))
-                        sorting: [[0, 'desc']],
                     @endif
                     @if( isset($newurl) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-left tableTools-container"<"btn-group btn-overlap"B>><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
-                        buttons: {
-                            dom: {
-                                container: {
-                                    tag: 'div',
-                                    className: 'btn-group btn-overlap'
-                                },
-                                buttonContainer: {
-                                    tag: 'div',
-                                    className: 'DTTT_container'
-                                },
-                                button: {
-                                    tag: 'a',
-                                    className: 'DTTT_button btn btn-white btn-primary btn-bold'
-                                }
-                            },
-                            buttons: [{
-                                name: 'ToolTables__dataTable_5',
-                                text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
-                                titleAttr: "Nuevo",
-                                action: function ( e, dt, node, config ) {
-                                    window.location.href = "{{ $newurl }}";
-                                }
-                            }]
-                        },
-                    @elseif( isset($isApproval) ) // Sin botones adicionales
-                        dom: '<"clearfix"<"pull-left tableTools-container"B><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                         buttons: {
                             dom: {
                                 container: {
@@ -339,14 +311,24 @@
                                     className: 'DTTT_button btn btn-white btn-primary btn-bold'
                                 }
                             },
-                            buttons: [{
+                            buttons: [
+                                {
                                     name: 'ToolTables__dataTable_5',
-                                    text: "<i class='ace-icon fa fa-thumbs-o-up bigger-110 blue'></i>",
-                                    titleAttr: "Aprobar",
+                                    text: "<i class='ace-icon fa fa-plus bigger-110 blue'></i>",
+                                    titleAttr: "Nuevo",
+                                    action: function ( e, dt, node, config ) {
+                                        window.location.href = "{{ $newurl }}";
+                                    }
+                                },
+                                {
+                                    name: 'ToolTables__dataTable_6',
+                                    text: "<i class='ace-icon fa fa-print bigger-110 blue'></i>",
+                                    titleAttr: "Imprimir",
                                     action: function ( e, dt, node, config ) {
                                         var ids = new Array();;
                                         $("input:checkbox[name=id]:checked").each(function(){
-                                            ids.push($(this).val());
+                                            if($(this).data("approve") === 'S')
+                                                ids.push($(this).val());
                                         });
 
                                         if(ids.length > 0)
@@ -404,15 +386,118 @@
                                             });
                                         }
                                     }
+                                }
+                            ]
+                        },
+                    @elseif( isset($isApproval) ) // Sin botones adicionales
+                        dom: '<"clearfix"<"pull-left tableTools-container"<"btn-group btn-overlap"B>><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
+                        buttons: {
+                            dom: {
+                                container: {
+                                    tag: 'div',
+                                    className: 'DTTT_container'
                                 },
+                                //buttonContainer: {
+                                //    tag: 'div',
+                                //    className: 'DTTT_container'
+                                //},
+                                button: {
+                                    tag: 'a',
+                                    className: 'DTTT_button btn btn-white btn-primary btn-bold'
+                                }
+                            },
+                            buttons: [
                                 {
                                     name: 'ToolTables__dataTable_5',
+                                    text: "<i class='ace-icon fa fa-thumbs-o-up bigger-110 blue'></i>",
+                                    titleAttr: "Aprobar",
+                                    action: function ( e, dt, node, config ) {
+                                        var ids = new Array();
+                                        var noApproveReaCount = 0;
+                                        $("input:checkbox[name=id]:checked").each(function(){
+                                            if($(this).data("approve") === 'S')
+                                                ids.push($(this).val());
+                                            else
+                                                noApproveReaCount++;
+                                        });
+
+                                        if(noApproveReaCount > 0)
+                                        {
+                                            bootbox.alert({
+                                                message: "Seleccione unicamente reactivos en estado \"Enviado\" para continuar!",
+                                                buttons: {
+                                                    'ok': {
+                                                        label: 'Cerrar',
+                                                        className: 'btn-danger'
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else if(ids.length > 0)
+                                        {
+                                            bootbox.prompt({
+                                                title: "Ingrese sus comentarios...",
+                                                inputType: 'textarea',
+                                                buttons: {
+                                                    'confirm': {
+                                                        label: 'Aprobar',
+                                                        className: 'btn-info'
+                                                    },
+                                                    'cancel': {
+                                                        label: 'Cancelar',
+                                                        className: 'btn-default'
+                                                    }
+                                                },
+                                                callback: function (result) {
+                                                    if (result === null) {
+                                                        console.log("Ok");
+                                                    } else {
+                                                        $.ajax({
+                                                            type: 'GET',
+                                                            url: "{{ Route("reagent.approvals.comment", 0) }}",
+                                                            data: {'comentario':result, 'id_estado':5, 'ids':ids},
+                                                            dataType: "json",
+                                                            async: true,
+                                                            cache: false,
+                                                            error: function (e) {
+                                                                console.log(e);
+                                                            },
+                                                            success: function (result) {
+                                                                if (result.valid) {
+                                                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
+                                                                }
+                                                                else {
+                                                                    alert('Error');
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else
+                                        {
+                                            bootbox.alert({
+                                                message: "Seleccione al menos un reactivo para continuar!",
+                                                buttons: {
+                                                    'ok': {
+                                                        label: 'Cerrar',
+                                                        className: 'btn-danger'
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                },
+                                {
+                                    name: 'ToolTables__dataTable_6',
                                     text: "<i class='ace-icon fa fa-print bigger-110 blue'></i>",
                                     titleAttr: "Imprimir",
                                     action: function ( e, dt, node, config ) {
                                         var ids = new Array();;
                                         $("input:checkbox[name=id]:checked").each(function(){
-                                            ids.push($(this).val());
+                                            if($(this).data("approve") === 'S')
+                                                ids.push($(this).val());
                                         });
 
                                         if(ids.length > 0)

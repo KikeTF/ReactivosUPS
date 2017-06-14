@@ -40,7 +40,8 @@ class Admin
             'general.matterscareers.careers',
             'general.matterscareers.contents',
             'general.matterscareers.matters',
-            'general.matterscareers.mentions'
+            'general.matterscareers.mentions',
+            'reagent.approvals.comment'
         ];
 
         try

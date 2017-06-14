@@ -266,7 +266,7 @@
                             },
                             success: function (result) {
                                 if (result.valid) {
-                                    window.location.replace("{{ Route("reagent.reagents.index") }}");
+                                    window.location.replace("{{ Route("reagent.reagents.show", $reagent->id) }}");
                                 }
                                 else {
                                     alert('Error');

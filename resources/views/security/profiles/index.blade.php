@@ -17,6 +17,7 @@
                 <th style="text-align:center">Nombre</th>
                 <th style="text-align:center">Descripci&oacute;n</th>
                 <th style="text-align:center">¿Aprueba Reactivos?</th>
+                <th style="text-align:center">¿Aprobaci&oacute;n Masiva de Reactivos?</th>
                 <th style="text-align:center">¿Aprueba Examen?</th>
                 <th style="text-align:center">Estado</th>
                 <th></th>
@@ -36,6 +37,17 @@
                     <td>{{ $profile->descripcion }}</td>
                     <td align="center">
                         @if($profile->aprueba_reactivo == 'S')
+                            <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
+                                <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
+                            </a>
+                        @else
+                            <a class="btn btn-xs btn-danger"  style="padding: 0px 4px 0px 4px">
+                                <i class="ace-icon fa fa-times  bigger-110" style="margin: 0"></i>
+                            </a>
+                        @endif
+                    </td>
+                    <td align="center">
+                        @if($profile->aprueba_reactivos_masivo == 'S')
                             <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">
                                 <i class="ace-icon fa fa-check bigger-110" style="margin: 0"></i>
                             </a>

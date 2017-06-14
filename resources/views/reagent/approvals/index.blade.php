@@ -6,7 +6,7 @@
 @section('contenido')
     <?php
     $usetable = 1;
-    if(\Session::get('ApruebaReactivo') == 'S')
+    if(\Session::get('ApruebaReactivosMasivos') == 'S')
         $isApproval = 1;
     //$newurl = route('reagent.approvals.create');
     $columnas = array("id",  "planteamiento", "estado","creado_por", "modificado_por"); // "capitulo", "tema",
@@ -87,14 +87,12 @@
                     <tr>
                         @if(isset($isApproval))
                         <td align="center" width="40px">
-                            @if($reagent->id_estado == 2)
                             <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
                                 <label>
-                                    {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace']) !!}
+                                    {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace', 'data-approve' => ($reagent->id_estado == 2) ? 'S' : 'N']) !!}
                                     <span class="lbl"></span>
                                 </label>
                             </div>
-                            @endif
                         </td>
                         @endif
                         <td align="center">{{ $reagent->id }}</td>

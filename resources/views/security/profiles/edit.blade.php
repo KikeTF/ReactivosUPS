@@ -43,6 +43,18 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('aprueba_reactivos_masivo', '¿Aprobaci&oacute;n Masiva de Reactivos?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('aprueba_reactivos_masivo', $profile->aprueba_reactivos_masivo, ($profile->aprueba_reactivos_masivo == 'S') ? true : false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
         {!! Form::label('aprueba_examen', '¿Aprueba Examen?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="checkbox">

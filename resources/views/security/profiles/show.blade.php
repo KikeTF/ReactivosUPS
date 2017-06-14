@@ -30,6 +30,10 @@
                 <td>{{ $profile->aprueba_reactivo == 'S' ? 'Si' : 'No' }}</td>
             </tr>
             <tr>
+                <td><strong>¿Aprobaci&oacute;n Masiva de Reactivos?</strong></td>
+                <td>{{ $profile->aprueba_reactivos_masivo == 'S' ? 'Si' : 'No' }}</td>
+            </tr>
+            <tr>
                 <td><strong>¿Aprueba Examen?</strong></td>
                 <td>{{ $profile->aprueba_examen == 'S' ? 'Si' : 'No' }}</td>
             </tr>

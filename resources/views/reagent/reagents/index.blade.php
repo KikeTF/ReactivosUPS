@@ -72,6 +72,7 @@
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
             <tr>
+                <th></th>
                 <th style="text-align: center">C&oacute;digo</th>
                 <th style="text-align: center">Planteamiento</th>
                 <th style="text-align: center">Estado</th>
@@ -98,6 +99,14 @@
 
                     ?>
                     <tr>
+                        <td align="center" width="40px">
+                            <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
+                                <label>
+                                    {!! Form::checkbox('id', $reagent->id, false, ['class' => 'ace']) !!}
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+                        </td>
                         <td align="center">{{ $reagent->id }}</td>
                         <td align="justify">{{ $reagent->planteamiento }}</td>
                         <td align="center"><span class="label label-{{ $reagent->state->etiqueta }}">{{ $reagent->state->descripcion }}</span></td>

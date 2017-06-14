@@ -34,7 +34,20 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('aprueba_reactivo', 'S', true, ['class' => 'ace']) !!}
+                    {!! Form::checkbox('aprueba_reactivo', 'S', false, ['class' => 'ace']) !!}
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        {!! Form::label('aprueba_reactivos_masivo', '¿Aprobaci&oacute;n Masiva de Reactivos?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {!! Form::checkbox('aprueba_reactivos_masivo', 'S', false, ['class' => 'ace']) !!}
                     <span class="lbl"></span>
                 </label>
             </div>
@@ -46,7 +59,7 @@
         <div class="col-sm-10">
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('aprueba_examen', 'S', true, ['class' => 'ace']) !!}
+                    {!! Form::checkbox('aprueba_examen', 'S', false, ['class' => 'ace']) !!}
                     <span class="lbl"></span>
                 </label>
             </div>

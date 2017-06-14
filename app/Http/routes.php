@@ -162,7 +162,7 @@ Route::group(['prefix' => 'security', 'middleware' => ['auth', 'admin']], functi
 
 });
 
-Route::group(['prefix' => 'reagent','middleware' => ['auth', 'admin']], function () {
+Route::group(['prefix' => 'reagent', 'middleware' => ['auth', 'admin']], function () {
 
     Route::resource('fields','FieldsController');
 
@@ -184,6 +184,11 @@ Route::group(['prefix' => 'reagent','middleware' => ['auth', 'admin']], function
     ]);
 
     Route::resource('reagents','ReagentsController');
+
+    Route::get('reagents/{id}/report', [
+        'uses'  => 'ReagentsController@printReport',
+        'as'    => 'reagent.reagents.report'
+    ]);
 
     Route::get('reagents/{id}/destroy', [
         'uses'  => 'ReagentsController@destroy',

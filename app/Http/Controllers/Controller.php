@@ -274,6 +274,7 @@ abstract class Controller extends BaseController
 
             $perfil = Profile::find($idPerfil);
             $aprReactivo = $perfil->aprueba_reactivo;
+            $aprReactivosMasivo = $perfil->aprueba_reactivos_masivo;
             $aprExamen = $perfil->aprueba_examen;
 
             Session::put('idUsuario', $idUsuario);
@@ -283,6 +284,7 @@ abstract class Controller extends BaseController
             Session::put('idPerfil', $idPerfil);
             Session::put('idPerfilUsuario', $idPerfilUsuario);
             Session::put('ApruebaReactivo', $aprReactivo);
+            Session::put('ApruebaReactivosMasivos', $aprReactivosMasivo);
             Session::put('ApruebaExamen', $aprExamen);
             $result = true;
         }catch (\Exception $ex){
