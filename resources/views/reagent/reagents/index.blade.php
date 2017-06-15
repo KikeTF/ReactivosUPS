@@ -7,6 +7,7 @@
     <?php
     $usetable = 1;
     $isReagent = 1;
+    $indexPrint = 1;
     $newurl = route('reagent.reagents.create');
     $columnas = array("id",  "planteamiento", "estado"); // "capitulo", "tema",
     ?>
@@ -123,6 +124,7 @@
 @endsection
 
 @push('specific-script')
+    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     @include('shared.optionlists.functions')
     <script type="text/javascript">
         $( window ).load(function() {

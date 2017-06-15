@@ -283,7 +283,7 @@
                     processing: true,
                     responsive: true,
                     columns: [
-                        @if(isset($isApproval) or isset($isReagent))
+                        @if( isset($isReagent) )
                             { data: 'check', name: 'check', orderable: false, searchable: false },
                         @endif
                         @foreach ($columnas as $col)
@@ -291,7 +291,7 @@
                         @endforeach
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
-                    @if(isset($isApproval) or isset($isReagent))
+                    @if( isset($isReagent) )
                         sorting: [[1, 'desc']],
                     @endif
                     @if( isset($newurl) ) // Sin botones adicionales
@@ -320,58 +320,21 @@
                                         window.location.href = "{{ $newurl }}";
                                     }
                                 },
+                                @if( isset($indexPrint) )
                                 {
                                     name: 'ToolTables__dataTable_6',
                                     text: "<i class='ace-icon fa fa-print bigger-110 blue'></i>",
                                     titleAttr: "Imprimir",
                                     action: function ( e, dt, node, config ) {
-                                        var ids = new Array();;
+                                        var ids = new Array();
                                         $("input:checkbox[name=id]:checked").each(function(){
-                                            if($(this).data("approve") === 'S')
-                                                ids.push($(this).val());
+                                            ids.push($(this).val());
                                         });
 
                                         if(ids.length > 0)
                                         {
-                                            bootbox.prompt({
-                                                title: "Ingrese sus comentarios...",
-                                                inputType: 'textarea',
-                                                buttons: {
-                                                    'confirm': {
-                                                        label: 'Aprobar',
-                                                        className: 'btn-info'
-                                                    },
-                                                    'cancel': {
-                                                        label: 'Cancelar',
-                                                        className: 'btn-default'
-                                                    }
-                                                },
-                                                callback: function (result) {
-                                                    if (result === null) {
-                                                        console.log("Ok");
-                                                    } else {
-                                                        $.ajax({
-                                                            type: 'GET',
-                                                            url: "{{ Route("reagent.approvals.comment", 0) }}",
-                                                            data: {'comentario':result, 'id_estado':5, 'ids':ids},
-                                                            dataType: "json",
-                                                            async: true,
-                                                            cache: false,
-                                                            error: function (e) {
-                                                                console.log(e);
-                                                            },
-                                                            success: function (result) {
-                                                                if (result.valid) {
-                                                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
-                                                                }
-                                                                else {
-                                                                    alert('Error');
-                                                                }
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            });
+                                            window.open("{{ Route("reagent.reagents.report", 0) }}?ids=["+ids+"]",'_blank');
+                                            //window.location.replace("{{ Route("reagent.reagents.report", 0) }}");
                                         }
                                         else
                                         {
@@ -387,9 +350,10 @@
                                         }
                                     }
                                 }
+                                @endif
                             ]
                         },
-                    @elseif( isset($isApproval) ) // Sin botones adicionales
+                    @elseif( isset($isReagent) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-left tableTools-container"<"btn-group btn-overlap"B>><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',
                         buttons: {
                             dom: {
@@ -407,6 +371,7 @@
                                 }
                             },
                             buttons: [
+                                @if( isset($isApproval) )
                                 {
                                     name: 'ToolTables__dataTable_5',
                                     text: "<i class='ace-icon fa fa-thumbs-o-up bigger-110 blue'></i>",
@@ -489,58 +454,22 @@
                                         }
                                     }
                                 },
+                                @endif
+                                @if( isset($indexPrint) )
                                 {
                                     name: 'ToolTables__dataTable_6',
                                     text: "<i class='ace-icon fa fa-print bigger-110 blue'></i>",
                                     titleAttr: "Imprimir",
                                     action: function ( e, dt, node, config ) {
-                                        var ids = new Array();;
+                                        var ids = new Array();
                                         $("input:checkbox[name=id]:checked").each(function(){
-                                            if($(this).data("approve") === 'S')
-                                                ids.push($(this).val());
+                                            ids.push($(this).val());
                                         });
 
                                         if(ids.length > 0)
                                         {
-                                            bootbox.prompt({
-                                                title: "Ingrese sus comentarios...",
-                                                inputType: 'textarea',
-                                                buttons: {
-                                                    'confirm': {
-                                                        label: 'Aprobar',
-                                                        className: 'btn-info'
-                                                    },
-                                                    'cancel': {
-                                                        label: 'Cancelar',
-                                                        className: 'btn-default'
-                                                    }
-                                                },
-                                                callback: function (result) {
-                                                    if (result === null) {
-                                                        console.log("Ok");
-                                                    } else {
-                                                        $.ajax({
-                                                            type: 'GET',
-                                                            url: "{{ Route("reagent.approvals.comment", 0) }}",
-                                                            data: {'comentario':result, 'id_estado':5, 'ids':ids},
-                                                            dataType: "json",
-                                                            async: true,
-                                                            cache: false,
-                                                            error: function (e) {
-                                                                console.log(e);
-                                                            },
-                                                            success: function (result) {
-                                                                if (result.valid) {
-                                                                    window.location.replace("{{ Route("reagent.approvals.index") }}");
-                                                                }
-                                                                else {
-                                                                    alert('Error');
-                                                                }
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            });
+                                            window.open("{{ Route("reagent.reagents.report", 0) }}?ids=["+ids+"]",'_blank');
+                                            //window.location.replace("{{ Route("reagent.reagents.report", 0) }}");
                                         }
                                         else
                                         {
@@ -555,7 +484,8 @@
                                             });
                                         }
                                     }
-                                }
+                                },
+                                @endif
                             ]
                         },
                     @else // Con boton de agregar nuevo

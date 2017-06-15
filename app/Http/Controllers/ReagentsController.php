@@ -516,7 +516,7 @@ class ReagentsController extends Controller
     {
         try
         {
-            $reagent = Reagent::find($id);
+            $ids = ($id > 0) ? array($id) : (isset($request->ids) ? explode(",", substr($request->ids,1,strlen($request->ids)-2)) : array());
 
             $pdf = new Report();
             $pdf->headerTitle = utf8_decode('REACTIVOS');
@@ -526,149 +526,207 @@ class ReagentsController extends Controller
             $pdf->AliasNbPages();
             $pdf->SetMargins(2,3);
             $pdf->AddPage();
-            //$pdf->SetFont('Arial', 'B', 16);
             $pdf->SetFont('Arial', 'B', 12);
 
-            $pdf->Ln(1);
+            //$pdf->Ln(0.5);
 
-            //foreach ($exam->examsDetails as $det)
-            //{
-                $posY = $pdf->GetY();
-                if($posY > 27)
-                    $pdf->AddPage();
-
-            $pdf->SetFont('Arial', 'B', 14);
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->distributive->matterCareer->matter->descripcion), 0, 1, 'L');
-
-            $pdf->Ln(0.7);
-            $pdf->SetFont('Arial', '', 10);
-
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->contentDetail->ContentDescription), 0, 1, 'L');
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->format->nombre), 0, 1, 'L');
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->state->descripcion), 0, 1, 'L');
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->user->FullName), 0, 1, 'L');
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->field->nombre), 0, 1, 'L');
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->dificultad), 0, 1, 'L');
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->descripcion), 0, 1, 'L');
-            $pdf->Cell(17, 0.7, utf8_decode($reagent->referencia), 0, 1, 'L');
-
-            if ($reagent->imagen == 'S')
+            foreach ($ids as $iRea => $ReaId)
             {
-                $extensionList = array('gif','png','jpg','jpeg','bmp');
-                $isValidPath = (bool)false;
+                $reagent = Reagent::find($ReaId);
 
-                foreach ($extensionList as $ext)
+                if ($reagent == null)
                 {
-                    $path = storage_path('files/reagents/UPS-REA-'.$id.'.'.$ext);
-                    if ( File::exists($path) ) {
-                        $isValidPath = (bool)true;
-                        break;
+                    flash("No se pudo cargar el reporte", 'danger')->important();
+                    return redirect()->route('reagent.reagents.index');
+                }
+
+                //$pdf->SetFont('Arial', 'B', 14);
+                //$pdf->Cell(17, 0.7, utf8_decode("REACTIVO NO. ".$reagent->id), 0, 1, 'L');
+
+                //$pdf->Ln(0.3);
+
+                $AnchoCol1 = 4;
+                $AnchoCol2 = 17-$AnchoCol1;
+
+                $pdf->SetFont('Arial', 'B', 10);
+                $posX = $pdf->GetX();
+                $posY = $pdf->GetY();
+                $pdf->MultiCell($AnchoCol1, 0.7, 'MATERIA', 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->SetXY($posX+$AnchoCol1, $posY);
+                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->distributive->matterCareer->matter->descripcion), 1, 'L');
+
+                $pdf->SetFont('Arial', 'B', 10);
+                $posX = $pdf->GetX();
+                $posY = $pdf->GetY();
+                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('RESPONSABLE'), 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->SetXY($posX+$AnchoCol1, $posY);
+                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->user->FullName), 1, 'L');
+
+                $pdf->SetFont('Arial', 'B', 10);
+                $posX = $pdf->GetX();
+                $posY = $pdf->GetY();
+                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('ESTADO'), 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->SetXY($posX+$AnchoCol1, $posY);
+                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->state->descripcion), 1, 'L');
+
+                $pdf->SetFont('Arial', 'B', 10);
+                $posX = $pdf->GetX();
+                $posY = $pdf->GetY();
+                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('FORMATO'), 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->SetXY($posX+$AnchoCol1, $posY);
+                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->format->nombre), 1, 'L');
+
+                $pdf->SetFont('Arial', 'B', 10);
+                $posX = $pdf->GetX();
+                $posY = $pdf->GetY();
+                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('CONTENIDO'), 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->SetXY($posX+$AnchoCol1, $posY);
+                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->contentDetail->ContentDescription), 1, 'L');
+
+                $pdf->Ln(0.5);
+
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->MultiCell(17, 0.7, 'PLANTEAMIENTO', 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Ln(0.2);
+                $pdf->MultiCell(17, 0.5, utf8_decode($reagent->planteamiento), 0, 'J');
+
+                $pdf->Ln(0.3);
+
+                if ($reagent->imagen == 'S')
+                {
+                    $extensionList = array('gif','png','jpg','jpeg','bmp');
+                    $isValidPath = (bool)false;
+
+                    foreach ($extensionList as $ext)
+                    {
+                        $path = storage_path('files/reagents/UPS-REA-'.$ReaId.'.'.$ext);
+                        if ( File::exists($path) ) {
+                            $isValidPath = (bool)true;
+                            break;
+                        }
+                    }
+
+                    $posY = $pdf->GetY();
+                    if ($isValidPath)
+                    {
+                        list($w, $h) = getimagesize($path);
+                        $posX = (17-($w*10/$h))/2+2;
+                        $pdf->MultiCell(17, 10, $pdf->Image($path, $posX, $posY, 0, 10), 0, 'C');
                     }
                 }
 
-                //dd(getimagesize($path)[1]);
+                //$pdf->Cell(17, 0.7, utf8_decode($reagent->field->nombre), 0, 1, 'L');
+                //$pdf->Cell(17, 0.7, utf8_decode($reagent->dificultad), 0, 1, 'L');
+                //$pdf->Cell(17, 0.7, utf8_decode($reagent->descripcion), 0, 1, 'L');
+                //$pdf->Cell(17, 0.7, utf8_decode($reagent->referencia), 0, 1, 'L');
 
                 $posY = $pdf->GetY();
-                if ($isValidPath)
-                    $pdf->Cell(17, 10.5, $pdf->Image($path, 2.1, $posY, 0, 10), 0, 1, 'C');
-            }
+                if($posY > 26.5)
+                    $pdf->AddPage();
 
-
-            $posY = $pdf->GetY();
-            if($posY > 27)
-                $pdf->AddPage();
-            
-            $x = $pdf->GetX();
-            $y = $pdf->GetY();
-            if($y > 27){
-                $pdf->AddPage();
-                $y = $pdf->GetY();
-            }
-            //$reagent->
-
-            $iRea  = 0;
-
-                $x = $pdf->GetX();
-                $y = $pdf->GetY();
-                $pdf->MultiCell(1, 0.5 , $iRea.'.', 0, 'L');
-                $pdf->SetXY($x+0.5,$y);
-                $pdf->MultiCell(16.5, 0.5 , utf8_decode($reagent->planteamiento), 0, 'J');
                 $maxOpPreg = max($reagent->questionsConcepts->count(), $reagent->questionsProperties->count());
 
-                    if($maxOpPreg > 0)
-                    {
-                        $pdf->Ln(0.5);
-                        $y1 = $pdf->GetY();
-                        $y2 = $pdf->GetY();
-                        for($i = 0; $i < $maxOpPreg; $i++)
-                        {
-                            if($y1 > 27 || $y2 > 27){
-                                $pdf->AddPage();
-                                $y1 = $pdf->GetY();
-                                $y2 = $pdf->GetY();
-                            }
-
-                            if($reagent->questionsConcepts->count() > $i)
-                            {
-                                $conc = $reagent->questionsConcepts[$i];
-                                $x1 = $pdf->GetX();
-                                $pdf->SetXY($x1,$y1);
-                                $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
-                                $pdf->SetXY($x1+1,$y1);
-                                $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
-                                $y1 = $pdf->GetY();
-                            }
-
-                            if($reagent->questionsProperties->count() > $i)
-                            {
-                                $prop = $reagent->questionsProperties[$i];
-                                $pdf->SetXY(10,$y2);
-                                $x2 = $pdf->GetX();
-                                $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
-                                $pdf->SetXY($x2+1,$y2);
-                                $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
-                                $y2 = $pdf->GetY();
-                            }
-                        }
-                    }
-
+                if($maxOpPreg > 0)
+                {
                     $pdf->Ln(0.5);
-                    foreach($reagent->answers as $answ)
+                    $y1 = $pdf->GetY();
+                    $y2 = $y1;
+                    for($i = 0; $i < $maxOpPreg; $i++)
                     {
-                        $x = $pdf->GetX();
-                        $y = $pdf->GetY();
-                        if($y > 27){
-                            $pdf->AddPage();
-                            $y = $pdf->GetY();
-                        }
+                        $currentPage = $pdf->PageNo();
 
-                        if($answ->opcion_correcta == 'S')
+                        if($y1 > 26.5 && $y2 > 26.5)
                         {
-                            $pdf->SetFont('Arial', 'B', 10);
-                            $pdf->SetTextColor(38, 121, 181);
+                            $pdf->AddPage();
+                            $y1 = $pdf->GetY();
+                            $y2 = $y1;
                         }
 
-                        $pdf->MultiCell(1, 0.5, $answ->numeral.'.', 0, 'R');
-                        $pdf->SetXY($x+1,$y);
-                        $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
+                        if($reagent->questionsConcepts->count() > $i)
+                        {
+                            $conc = $reagent->questionsConcepts[$i];
+                            $x1 = $pdf->GetX();
+                            $pdf->SetXY($x1,$y1);
+                            $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
+                            $pdf->SetXY($x1+1,$y1);
+                            $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
+                            $y1 = $pdf->GetY();
+                        }
 
-                        $pdf->SetFont('Arial', '', 10);
-                        $pdf->SetTextColor(0, 0, 0);
+                        if($currentPage != $pdf->PageNo())
+                        {
+                            $y2 = 3.5;
+                            $currentPage = $pdf->PageNo();
+                        }
+
+                        if($reagent->questionsProperties->count() > $i)
+                        {
+                            $prop = $reagent->questionsProperties[$i];
+                            $pdf->SetXY(10,$y2);
+                            $x2 = $pdf->GetX();
+                            $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
+                            $pdf->SetXY($x2+1,$y2);
+                            $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
+                            $y2 = $pdf->GetY();
+                        }
+
+                        if($currentPage != $pdf->PageNo())
+                            $y1 = 3.5;
+                    }
+                }
+
+                $pdf->Ln(0.5);
+
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->MultiCell(17, 0.7, 'RESPUESTA', 1, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Ln(0.2);
+
+                foreach($reagent->answers as $answ)
+                {
+                    $x = $pdf->GetX();
+                    $y = $pdf->GetY();
+                    if($y > 26.5)
+                    {
+                        $pdf->AddPage();
+                        $y = $pdf->GetY();
                     }
 
-            //}
+                    if($answ->opcion_correcta == 'S')
+                    {
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->SetTextColor(38, 121, 181);
+                    }
 
-            //if($iMat < $mattersCareers->count())
-            //    $pdf->Ln(0.5);
+                    $pdf->MultiCell(1, 0.5, $answ->numeral.'.', 0, 'R');
+                    $pdf->SetXY($x+1,$y);
+                    $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
 
+                    $pdf->SetFont('Arial', '', 10);
+                    $pdf->SetTextColor(0, 0, 0);
+                }
+
+                //$posY = $pdf->GetY();
+                if($iRea < count($ids)-1)
+                    $pdf->AddPage();
+
+
+            }
             $pdf->Output();
             exit;
         }
         catch(\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ReagentsController][printReport] id=".$id."; Exception: ".$ex);
-            return redirect()->route('reagent.reagents.index', $id);
+            $ids = ($id > 0) ? $id : (isset($request->ids) ? $request->ids : "");
+            Log::error("[ReagentsController][printReport] $ids=".$ids."; Exception: ".$ex);
+            return redirect()->route('reagent.reagents.index');
         }
     }
 }

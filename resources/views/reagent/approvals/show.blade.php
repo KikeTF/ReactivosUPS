@@ -13,6 +13,7 @@
             $btnreject = 1;
             $btncomment = 1;
         }
+        $btnprint =  route("reagent.reagents.report", $reagent->id);
         $btnclose = route('reagent.approvals.index');
         ?>
         @include('shared.templates._formbuttons')

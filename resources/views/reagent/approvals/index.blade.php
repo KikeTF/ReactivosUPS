@@ -6,6 +6,8 @@
 @section('contenido')
     <?php
     $usetable = 1;
+    $isReagent = 1;
+    $indexPrint = 1;
     if(\Session::get('ApruebaReactivosMasivos') == 'S')
         $isApproval = 1;
     //$newurl = route('reagent.approvals.create');
@@ -69,9 +71,7 @@
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
             <tr>
-                @if(isset($isApproval))
                 <th></th>
-                @endif
                 <th style="text-align: center">C&oacute;digo</th>
                 <th style="text-align: center">Planteamiento</th>
                 <th style="text-align: center">Estado</th>
@@ -85,7 +85,6 @@
                 @foreach($reagents as $reagent)
                     <?php $urls = array('showurl' => route('reagent.approvals.show', $reagent->id)); ?>
                     <tr>
-                        @if(isset($isApproval))
                         <td align="center" width="40px">
                             <div class="checkbox" style="margin-top: 0; margin-bottom: 0;">
                                 <label>
@@ -94,7 +93,6 @@
                                 </label>
                             </div>
                         </td>
-                        @endif
                         <td align="center">{{ $reagent->id }}</td>
                         <td align="justify">{{ $reagent->planteamiento }}</td>
                         <td align="center"><span class="label label-{{ $reagent->state->etiqueta }}">{{ $reagent->state->descripcion }}</span></td>

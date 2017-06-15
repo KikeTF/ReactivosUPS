@@ -12,7 +12,7 @@ class ContentDetail extends Model
     protected $fillable =["id_contenido_cab", "cod_contenido_det", "cod_contenido_cab", "capitulo", "tema", "estado"];
 
     public function getContentDescriptionAttribute(){
-        return $this->attributes['capitulo'] .' '. $this->attributes['tema'];
+        return $this->attributes['capitulo'] .'. '. $this->attributes['tema'];
     }
 
     public function contentHeader(){

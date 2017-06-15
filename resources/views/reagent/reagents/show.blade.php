@@ -15,6 +15,7 @@
             if( in_array($reagent->id_estado, array(1, 4)) )
                 $btnedit = route('reagent.reagents.edit', $reagent->id);
 
+            $btnprint =  route("reagent.reagents.report", $reagent->id);
             $btnclose = route('reagent.reagents.index');
         ?>
         @include('shared.templates._formbuttons')
