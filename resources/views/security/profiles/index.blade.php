@@ -7,7 +7,7 @@
     <?php
     $usetable = 1;
     $newurl = route('security.profiles.create');
-    $columnas = array("nombre", "descripcion", "aprueba_reactivo", "aprueba_examen", "estado");
+    $columnas = array("nombre", "descripcion", "aprueba_reactivo", "aprueba_reactivos_masivo", "aprueba_examen", "estado");
     ?>
 
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">

@@ -12,46 +12,41 @@
         ?>
         @include('shared.templates._formbuttons')
 
-        <table class="table table-hover">
-            <tr>
-                <td><strong>Código:</strong></td>
-                <td colspan="3">{{ $field->id }}</td>
-            </tr>
-            <tr>
-                <td><strong>Nombre:</strong></td>
-                <td colspan="3">{{ $field->nombre }}</td>
-            </tr>
-            <tr>
-                <td><strong>Descripci&oacute;n:</strong></td>
-                <td colspan="3">{{ $field->descripcion }}</td>
-            </tr>
-            <tr>
-                <td><strong>Estado:</strong></td>
-                <td colspan="3">
-                    @if($field->estado == 'A')
-                        Activo
-                    @elseif($field->estado == 'I')
-                        Inactivo
-                    @endif
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Creado por:</strong></td>
-                <td>{{ $field->creado_por }}</td>
-                <td><strong>Fecha de creación:</strong></td>
-                <td>{{ $field->fecha_creacion }}</td>
-            </tr>
-            <tr>
-                <td><strong>Modificado por:</strong></td>
-                <td>{{ $field->modificado_por }}</td>
-                <td><strong>Fecha de modificación:</strong></td>
-                <td>{{ $field->fecha_modificacion }}</td>
-            </tr>
-            <tr>
-                <td colspan="4"></td>
-            </tr>
-        </table>
+        <div class="profile-user-info profile-user-info-striped">
+            <div class="profile-info-row">
+                <div class="profile-info-name">C&oacute;digo</div>
+                <div class="profile-info-value"><span>{{ $field->id }}</span></div>
+            </div>
 
+            <div class="profile-info-row">
+                <div class="profile-info-name">Nombre</div>
+                <div class="profile-info-value"><span>{{ $field->nombre }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Descripci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $field->descripcion }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Estado</div>
+                <div class="profile-info-value"><span>{{ $field->estado == 'A' ? 'Activo' : 'Inactivo' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Creado por</div>
+                <div class="profile-info-value"><span>{{ $field->creado_por }}</span></div>
+                <div class="profile-info-name">Fecha de creaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $field->fecha_creacion }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Modificado por</div>
+                <div class="profile-info-value"><span>{{ $field->modificado_por }}</span></div>
+                <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $field->fecha_modificacion }}</span></div>
+            </div>
+        </div>
     </form>
 
 @endsection

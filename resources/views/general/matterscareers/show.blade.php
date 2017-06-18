@@ -12,78 +12,90 @@
         ?>
         @include('shared.templates._formbuttons')
 
-        <table class="table table-hover">
-            <tr>
-                <td><strong>C&oacute;digo:</strong></td>
-                <td>{{ $mattercareer->id }}</td>
-                <td colspan="2">
+        <div class="profile-user-info profile-user-info-striped">
+            <div class="profile-info-row">
+                <div class="profile-info-name">C&oacute;digo</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->id }}</span></div>
+                <div class="profile-info-value">
+                    <span>
                     <button onclick="location.href='{{ route('general.matterscareers.download', $mattercareer->id) }}'; return false;"
-                            class="btn btn-white btn-primary btn-sm" {{ $mattercareer->archivo_contenido == 'S' ? '' : 'disabled' }} >
+                        class="btn btn-white btn-primary btn-sm" {{ $mattercareer->archivo_contenido == 'S' ? '' : 'disabled' }} >
                         <i class="ace-icon fa fa-download bigger-110" aria-hidden="true"></i> Descargar Archivo
                     </button>
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Campus:</strong></td>
-                <td colspan="3">{{ $mattercareer->desc_campus }}</td>
-            </tr>
-            <tr>
-                <td><strong>Carrera:</strong></td>
-                <td colspan="3">{{ $mattercareer->desc_carrera }}</td>
-            </tr>
-            <tr>
-                <td><strong>Menci&oacute;n:</strong></td>
-                <td colspan="3">{{ $mattercareer->desc_mencion }}</td>
-            </tr>
-            <tr>
-                <td><strong>&Aacute;rea:</strong></td>
-                <td colspan="3">{{ $mattercareer->desc_area }}</td>
-            </tr>
-            <tr>
-                <td><strong>Materia:</strong></td>
-                <td colspan="3">{{ $mattercareer->desc_materia }}</td>
-            </tr>
-            <tr>
-                <td><strong>Nivel:</strong></td>
-                <td colspan="3">{{ $mattercareer->nivel }}</td>
-            </tr>
-            <tr>
-                <td><strong>No. Reactivos Entregables:</strong></td>
-                <td colspan="3">{{ $mattercareer->nro_reactivos_mat }}</td>
-            </tr>
-            <tr>
-                <td><strong>¿Aplica Examen?:</strong></td>
-                <td colspan="3">{{ $mattercareer->aplica_examen }}</td>
-            </tr>
-            <tr>
-                <td><strong>No. Reactvos en Examen:</strong></td>
-                <td colspan="3">{{ $mattercareer->nro_reactivos_exam }}</td>
-            </tr>
-            <tr>
-                <td><strong>Responsable:</strong></td>
-                <td colspan="3">{{ $mattercareer->usr_responsable }}</td>
-            </tr>
-            <tr>
-                <td><strong>Estado:</strong></td>
-                <td colspan="3">{{ $mattercareer->estado }}</td>
-            </tr>
-            <tr>
-                <td><strong>Creado por:</strong></td>
-                <td>{{ $mattercareer->creado_por }}</td>
-                <td><strong>Fecha de creación:</strong></td>
-                <td>{{ $mattercareer->fecha_creacion }}</td>
-            </tr>
-            <tr>
-                <td><strong>Modificado por:</strong></td>
-                <td>{{ $mattercareer->modificado_por }}</td>
-                <td><strong>Fecha de modificación:</strong></td>
-                <td>{{ $mattercareer->fecha_modificacion }}</td>
-            </tr>
-            <tr>
-                <td colspan="4"></td>
-            </tr>
-        </table>
+                    </span>
+                </div>
+            </div>
 
+            <div class="profile-info-row">
+                <div class="profile-info-name">Campus</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->desc_campus }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Carrera</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->desc_carrera }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Menci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->desc_mencion }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">&Aacute;rea</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->desc_area }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Materia</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->desc_materia }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Nivel</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->nivel }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. Reactivos Entregables</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->nro_reactivos_mat }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">¿Aplica a Examen?</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->aplica_examen }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. Reactvos en Examen</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->nro_reactivos_exam }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Responsable</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->usr_responsable }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Estado</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->estado == 'A' ? 'Activo' : 'Inactivo' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Creado por</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->creado_por }}</span></div>
+                <div class="profile-info-name">Fecha de creaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->fecha_creacion }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Modificado por</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->modificado_por }}</span></div>
+                <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $mattercareer->fecha_modificacion }}</span></div>
+            </div>
+
+        </div>
     </form>
 
 @endsection

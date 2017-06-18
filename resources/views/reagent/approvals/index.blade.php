@@ -111,7 +111,6 @@
 
 @push('specific-script')
     @include('shared.optionlists.functions')
-    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     <script type="text/javascript">
 
 

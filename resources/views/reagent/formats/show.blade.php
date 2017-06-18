@@ -12,70 +12,76 @@
         ?>
         @include('shared.templates._formbuttons')
 
-        <table class="table table-hover">
-            <tr>
-                <td><strong>Código:</strong></td>
-                <td colspan="3">{{ $format->id }}</td>
-            </tr>
-            <tr>
-                <td><strong>Nombre:</strong></td>
-                <td colspan="3">{{ $format->nombre }}</td>
-            </tr>
-            <tr>
-                <td><strong>Descripción:</strong></td>
-                <td colspan="3">{{ $format->descripcion }}</td>
-            </tr>
-            <tr>
-                <td><strong>No. de respuesta m&iacute;nimo:</strong></td>
-                <td colspan="3">{{ $format->opciones_resp_min }}</td>
-            </tr>
-            <tr>
-                <td><strong>No. de respuesta m&aacute;ximo:</strong></td>
-                <td colspan="3">{{ $format->opciones_resp_max }}</td>
-            </tr>
-            <tr>
-                <td><strong>¿Opciones de Pregunta?:</strong></td>
-                <td colspan="3">{{ $format->opciones_pregunta == 'S' ? 'Si' : 'No' }}</td>
-            </tr>
-            <tr>
-                <td><strong>¿Opciones Concepto/Propiedad?:</strong></td>
-                <td colspan="3">{{ $format->concepto_propiedad == 'S' ? 'Si' : 'No' }}</td>
-            </tr>
-            <tr>
-                <td><strong>No. de preguntas m&iacute;nimo:</strong></td>
-                <td colspan="3">{{ $format->opciones_preg_min }}</td>
-            </tr>
-            <tr>
-                <td><strong>No. de preguntas m&aacute;ximo:</strong></td>
-                <td colspan="3">{{ $format->opciones_preg_max }}</td>
-            </tr>
-            <tr>
-                <td><strong>¿Im&aacute;genes?:</strong></td>
-                <td colspan="3">{{ $format->imagenes == 'S' ? 'Si' : 'No' }}</td>
-            </tr>
+        <div class="profile-user-info profile-user-info-striped">
+            <div class="profile-info-row">
+                <div class="profile-info-name">C&oacute;digo</div>
+                <div class="profile-info-value"><span>{{ $format->id }}</span></div>
+            </div>
 
-            <tr>
-                <td><strong>Estado:</strong></td>
-                <td>{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
-            </tr>
+            <div class="profile-info-row">
+                <div class="profile-info-name">Nombre</div>
+                <div class="profile-info-value"><span>{{ $format->nombre }}</span></div>
+            </div>
 
-            <tr>
-                <td><strong>Creado por:</strong></td>
-                <td>{{ $format->creado_por }}</td>
-                <td><strong>Fecha de creación:</strong></td>
-                <td>{{ $format->fecha_creacion }}</td>
-            </tr>
-            <tr>
-                <td><strong>Modificado por:</strong></td>
-                <td>{{ $format->modificado_por }}</td>
-                <td><strong>Fecha de modificación:</strong></td>
-                <td>{{ $format->fecha_modificacion }}</td>
-            </tr>
-            <tr>
-                <td colspan="4"></td>
-            </tr>
-        </table>
+            <div class="profile-info-row">
+                <div class="profile-info-name">Descripci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $format->descripcion }}</span></div>
+            </div>
 
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. de respuesta m&iacute;nimo:</div>
+                <div class="profile-info-value"><span>{{ $format->opciones_resp_min }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. de respuesta m&aacute;ximo</div>
+                <div class="profile-info-value"><span>{{ $format->opciones_resp_max }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">¿Opciones de Pregunta?</div>
+                <div class="profile-info-value"><span>{{ $format->opciones_pregunta == 'S' ? 'Si' : 'No' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">¿Opciones Concepto/Propiedad?</div>
+                <div class="profile-info-value"><span>{{ $format->concepto_propiedad == 'S' ? 'Si' : 'No' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. de preguntas m&iacute;nimo</div>
+                <div class="profile-info-value"><span>{{ $format->opciones_preg_min }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. de preguntas m&aacute;ximo</div>
+                <div class="profile-info-value"><span>{{ $format->opciones_preg_max }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">¿Im&aacute;genes?</div>
+                <div class="profile-info-value"><span>{{ $format->imagenes == 'S' ? 'Si' : 'No' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Estado</div>
+                <div class="profile-info-value"><span>{{ $format->estado == 'A' ? 'Activo' : 'Inactivo' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Creado por</div>
+                <div class="profile-info-value"><span>{{ $format->creado_por }}</span></div>
+                <div class="profile-info-name">Fecha de creaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $format->fecha_creacion }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Modificado por</div>
+                <div class="profile-info-value"><span>{{ $format->modificado_por }}</span></div>
+                <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $format->fecha_modificacion }}</span></div>
+            </div>
+        </div>
     </form>
 
 @endsection
