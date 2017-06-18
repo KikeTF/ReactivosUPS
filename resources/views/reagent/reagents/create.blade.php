@@ -192,7 +192,6 @@
 
 @push('specific-script')
     <script src="{{ asset('ace/js/fuelux.wizard.min.js') }}"></script>
-    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
     <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script>
     <script type="text/javascript">

@@ -13,60 +13,68 @@
         ?>
         @include('shared.templates._formbuttons')
 
-        <table class="table table-hover">
-            <tr>
-                <td><strong>Código:</strong></td>
-                <td colspan="3">{{ $user->id }}</td>
-            </tr>
-            <tr>
-                <td><strong>Usuario:</strong></td>
-                <td colspan="3">{{ $user->username }}</td>
-            </tr>
-            <tr>
-                <td><strong>Password:</strong></td>
-                <td colspan="3">********</td>
-            </tr>
-            <tr>
-                <td><strong>Sede:</strong></td>
-                <td>{{ $user->location->descripcion }}</td>
-            </tr>
-            <tr>
-                <td><strong>Email:</strong></td>
-                <td colspan="3">{{ $user->email }}</td>
-            </tr>
-            <tr>
-                <td><strong>Tipo:</strong></td>
-                <td>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante' }}</td>
-            </tr>
+        <div class="profile-user-info profile-user-info-striped">
+            <div class="profile-info-row">
+                <div class="profile-info-name">C&oacute;digo</div>
+                <div class="profile-info-value"><span>{{ $user->id }}</span></div>
+            </div>
 
-            <tr>
-                <td><strong>Perfiles de Acceso:</strong></td>
-                <td colspan="3">
-                    @foreach($user->profilesUsers->pluck('profile') as $profile)
-                        {{ $profile->nombre }}<span>; </span>
-                    @endforeach
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Estado:</strong></td>
-                <td>{{ $user->estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
-            </tr>
-            <tr>
-                <td><strong>Creado por:</strong></td>
-                <td>{{ $user->creado_por }}</td>
-                <td><strong>Fecha de creación:</strong></td>
-                <td>{{ $user->fecha_creacion }}</td>
-            </tr>
-            <tr>
-                <td><strong>Modificado por:</strong></td>
-                <td>{{ $user->modificado_por }}</td>
-                <td><strong>Fecha de modificación:</strong></td>
-                <td>{{ $user->fecha_modificacion }}</td>
-            </tr>
-            <tr>
-                <td colspan="4"></td>
-            </tr>
-        </table>
+            <div class="profile-info-row">
+                <div class="profile-info-name">Usuario</div>
+                <div class="profile-info-value"><span>{{ $user->username }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Contrase&ntilde;a</div>
+                <div class="profile-info-value"><span>******</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Sede</div>
+                <div class="profile-info-value"><span>{{ $user->location->descripcion }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Correo</div>
+                <div class="profile-info-value"><span>{{ $user->email }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Tipo</div>
+                <div class="profile-info-value"><span>{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Perfiles de Acceso</div>
+                <div class="profile-info-value">
+                    <span>
+                        @foreach($user->profilesUsers->pluck('profile') as $profile)
+                            {{ $profile->nombre }}<br/>
+                        @endforeach
+                    </span>
+                </div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Estado</div>
+                <div class="profile-info-value"><span>{{ $user->estado == 'A' ? 'Activo' : 'Inactivo' }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Creado por</div>
+                <div class="profile-info-value"><span>{{ $user->creado_por }}</span></div>
+                <div class="profile-info-name">Fecha de creaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $user->fecha_creacion }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Modificado por</div>
+                <div class="profile-info-value"><span>{{ $user->modificado_por }}</span></div>
+                <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
+                <div class="profile-info-value"><span>{{ $user->fecha_modificacion }}</span></div>
+            </div>
+
+        </div>
 
     </form>
 

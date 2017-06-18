@@ -33,39 +33,41 @@
 
                 <div class="panel-collapse collapse" id="collapseOne">
                     <div class="panel-body">
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>C&oacute;digo:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->id }}</div>
-                        </div>
+                        <div class="profile-user-info profile-user-info-striped">
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">C&oacute;digo</div>
+                                <div class="profile-info-value"><span>{{ $reagent->id }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Campus:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->careerCampus->campus->descripcion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Campus</div>
+                                <div class="profile-info-value"><span>{{ $reagent->distributive->matterCareer->careerCampus->campus->descripcion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Carrera:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->careerCampus->career->descripcion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Carrera</div>
+                                <div class="profile-info-value"><span>{{ $reagent->distributive->matterCareer->careerCampus->career->descripcion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Menci&oacute;n:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->mention->descripcion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Menci&oacute;n</div>
+                                <div class="profile-info-value"><span>{{ $reagent->distributive->matterCareer->mention->descripcion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Materia:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->distributive->matterCareer->matter->descripcion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Materia</div>
+                                <div class="profile-info-value"><span>{{ $reagent->distributive->matterCareer->matter->descripcion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Responsable:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->user->FullName }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Responsable</div>
+                                <div class="profile-info-value"><span>{{ $reagent->user->FullName }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Estado:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->state->descripcion }}</div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Estado</div>
+                                <div class="profile-info-value"><span>{{ $reagent->state->descripcion }}</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -211,38 +213,40 @@
 
                 <div class="panel-collapse collapse" id="collapseThree">
                     <div class="panel-body">
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Campo de Conocimiento:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->field->nombre }}</div>
-                        </div>
+                        <div class="profile-user-info profile-user-info-striped">
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Campo de Conocimiento</div>
+                                <div class="profile-info-value"><span>{{ $reagent->field->nombre }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Dificultad:</strong></div>
-                            <div class="col-sm-8">{{ ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta' }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Dificultad</div>
+                                <div class="profile-info-value"><span>{{ ($reagent->dificultad == 'B') ? 'Baja' : ($reagent->dificultad == 'M') ? 'Media' : 'Alta' }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Operacion Cognitiva:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->descripcion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Operaci&oacute;n Cognitiva</div>
+                                <div class="profile-info-value"><span>{{ $reagent->descripcion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Referencia:</strong></div>
-                            <div class="col-sm-8">{{ $reagent->referencia }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Referencia</div>
+                                <div class="profile-info-value"><span>{{ $reagent->referencia }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Creado por:</strong></div>
-                            <div class="col-sm-4">{{ $reagent->user->FullName }}</div>
-                            <div class="col-sm-2"><strong>Fecha de creación:</strong></div>
-                            <div class="col-sm-4">{{ $reagent->fecha_creacion }}</div>
-                        </div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Creado por</div>
+                                <div class="profile-info-value"><span>{{ $reagent->user->FullName }}</span></div>
+                                <div class="profile-info-name">Fecha de creaci&oacute;n</div>
+                                <div class="profile-info-value"><span>{{ $reagent->fecha_creacion }}</span></div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-2"><strong>Modificado por:</strong></div>
-                            <div class="col-sm-4">{{ isset($reagent->updaterUser->FullName) ? $reagent->updaterUser->FullName : '' }}</div>
-                            <div class="col-sm-2"><strong>Fecha de modificación:</strong></div>
-                            <div class="col-sm-4">{{ $reagent->fecha_modificacion }}</div>
+                            <div class="profile-info-row">
+                                <div class="profile-info-name">Modificado por</div>
+                                <div class="profile-info-value"><span>{{ isset($reagent->updaterUser->FullName) ? $reagent->updaterUser->FullName : '' }}</span></div>
+                                <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
+                                <div class="profile-info-value"><span>{{ $reagent->fecha_modificacion }}</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -11,53 +11,29 @@
     <title>Reactivos UPS</title>
 
     <!-- bootstrap & fontawesome -->
-    <link rel="stylesheet" href="{{ asset('ace/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ace/font-awesome/4.2.0/css/font-awesome.min.css') }}" />
+    {!! HTML::style('ace/css/bootstrap.min.css') !!}
+    {!! HTML::style('ace/font-awesome/4.2.0/css/font-awesome.min.css') !!}
 
     <!-- page specific plugin styles -->
     @stack('specific-styles')
 
     <!-- text fonts -->
-    <link rel="stylesheet" href="{{ asset('ace/fonts/fonts.googleapis.com.css') }}" />
+    {!! HTML::style('ace/fonts/fonts.googleapis.com.css') !!}
 
     <!-- ace styles -->
-    <link rel="stylesheet" href="{{ asset('ace/css/select2.min.css') }}" />
-    {{--<link rel="stylesheet" href="{{ asset('ace/css/chosen.min.css') }}" />--}}
+    {!! HTML::style('ace/css/select2.min.css') !!}
     {!! HTML::style('ace/css/chosen.min.css') !!}
-    <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
+    {!! HTML::style('ace/css/ace.min.css', ['class' => 'ace-main-stylesheet', 'id' => 'main-ace-style']) !!}
 
     <!-- datatable styles -->
-    {{--<link rel="stylesheet" href="{{ asset('ace/css/jquery.dataTables.min.css') }}" />--}}
-    <link rel="stylesheet" href="{{ asset('ace/css/buttons.dataTables.min.css') }}" />
+    {!! HTML::style('ace/css/buttons.dataTables.min.css') !!}
 
     <!-- common scripts -->
-    <link rel="stylesheet" href="{{ asset('styles/shared/template.css') }}" />
-
-    <!--[if lte IE 9]>
-    <!--
-    <link rel="stylesheet" href="ace/css/ace-part2.min.css" class="ace-main-stylesheet" />
-    -->
-    <!--[endif]-->
-
-    <!--[if lte IE 9]>
-    <!--
-    <link rel="stylesheet" href="ace/css/ace-ie.min.css" />
-    -->
-    <!--[endif]-->
-
-    <!-- inline styles related to this page -->
+    {!! HTML::style('styles/shared/template.css') !!}
 
     <!-- ace settings handler -->
-    <script src="{{ asset('ace/js/ace-extra.min.js') }}"></script>
+    {!! HTML::script('ace/js/ace-extra.min.js') !!}
 
-    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
-
-    <!--[if lte IE 8]>
-    <!--
-    <script src="ace/js/html5shiv.min.js"></script>
-    <script src="ace/js/respond.min.js"></script>
-    -->
-    <!--[endif]-->
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
@@ -238,38 +214,38 @@
     <script type="text/javascript">
         if('ontouchstart' in document.documentElement) document.write("<script src='ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
-    <script src="{{ asset('ace/js/bootstrap.min.js') }}"></script>
-
-    <script src="{{ asset('ace/js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery-ui.custom.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.ui.touch-punch.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.easypiechart.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.sparkline.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.flot.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.flot.pie.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.flot.resize.min.js') }}"></script>
-    <script src="{{ asset('ace/js/select2.min.js') }}"></script>
+    {!! HTML::script('ace/js/bootstrap.min.js') !!}
+    {!! HTML::script('ace/js/jquery-ui.min.js') !!}
+    {!! HTML::script('ace/js/jquery-ui.custom.min.js') !!}
+    {!! HTML::script('ace/js/jquery.ui.touch-punch.min.js') !!}
+    {!! HTML::script('ace/js/jquery.easypiechart.min.js') !!}
+    {!! HTML::script('ace/js/jquery.sparkline.min.js') !!}
+    {!! HTML::script('ace/js/jquery.flot.min.js') !!}
+    {!! HTML::script('ace/js/jquery.flot.pie.min.js') !!}
+    {!! HTML::script('ace/js/jquery.flot.resize.min.js') !!}
+    {!! HTML::script('ace/js/select2.min.js') !!}
 {{--    <script src="{{ asset('ace/js/chosen.jquery.min.js') }}"></script>--}}
     {!! HTML::script('ace/js/chosen.jquery.min.js') !!}
 
     {{--@stack('datatable-script')--}}
     {{--<script src="{{ asset('ace/js/jquery-1.12.3.js') }}"></script>--}}
-    <script src="{{ asset('ace/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.dataTables.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('ace/js/dataTables.tableTools.min.js') }}"></script>
-    <script src="{{ asset('ace/js/dataTables.colVis.min.js') }}"></script>
-    <script src="{{ asset('ace/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('ace/js/spin.min.js') }}"></script>
-    <script src="{{ asset('ace/js/jquery.validate.min.js') }}"></script>
+    {!! HTML::script('ace/js/jquery.dataTables.min.js') !!}
+    {!! HTML::script('ace/js/jquery.dataTables.bootstrap.min.js') !!}
+    {!! HTML::script('ace/js/dataTables.tableTools.min.js') !!}
+    {!! HTML::script('ace/js/dataTables.colVis.min.js') !!}
+    {!! HTML::script('ace/js/dataTables.buttons.min.js') !!}
+    {!! HTML::script('ace/js/spin.min.js') !!}
+    {!! HTML::script('ace/js/jquery.validate.min.js') !!}
+    {!! HTML::script('ace/js/bootbox.min.js') !!}
     {{--<script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>--}}
 
     <!-- ace scripts -->
-    <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
-    <script src="{{ asset('ace/js/ace.min.js') }}"></script>
+    {!! HTML::script('ace/js/ace-elements.min.js') !!}
+    {!! HTML::script('ace/js/ace.min.js') !!}
 
     <!-- common scripts -->
-    <script src="{{ asset('scripts/shared/index.js') }}"></script>
-    <script src="{{ asset('scripts/shared/CapsLock.compressed.js') }}"></script>
+    {!! HTML::script('scripts/shared/index.js') !!}
+    {!! HTML::script('scripts/shared/CapsLock.compressed.js') !!}
 
     <!-- specific scripts -->
     @stack('specific-script')

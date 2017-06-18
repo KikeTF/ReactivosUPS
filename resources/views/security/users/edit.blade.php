@@ -27,7 +27,7 @@
         {!! Form::label('password', 'Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="clearfix">
-                {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Nueva contrase&ntilde;a', 'required']) !!}
+                {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Nueva contrase&ntilde;a']) !!}
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
         {!! Form::label('password_confirm', 'Verificar Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="clearfix">
-                {!! Form::password('password_confirm', ['class' => 'form-control', 'placeholder' => 'Verificar contrase&ntilde;a', 'required']) !!}
+                {!! Form::password('password_confirm', ['class' => 'form-control', 'placeholder' => 'Verificar contrase&ntilde;a']) !!}
             </div>
         </div>
     </div>
