@@ -26,19 +26,36 @@ class DataSourcesController extends Controller
 
     public function import(Request $request)
     {
-        $isValidFile = false;
-        $destinationPath = public_path()."\\uploads";
-        $fileName = "datos.csv";
         try
         {
-            if( $request->hasFile('csvFile') ){
-                if( $request->file('csvFile')->isValid() ){
-                    $isValidFile = true;
-                }else{
+            $destinationPath = '';
+            $fileName = '';
+            $isValidFile = (bool)false;
+            if ( isset($request['csvFile']) && $request->hasFile('csvFile') )
+            {
+                $file = $request->file('csvFile');
+                if ( $file->isValid() )
+                {
+                    $isValidFile = (bool)true;
+                    if ($request->type == 'D')
+                    {
+                        $destinationPath = storage_path()."/files/distributive";
+                        $fileName = "UPS-DISTRIBUTIVE-".date('Ymd-His').".csv";
+                    }
+                    elseif ($request->type == 'B')
+                    {
+                        $destinationPath = storage_path()."/files/bibliography";
+                        $fileName = "UPS-BIBLIOGRAPHY-".date('Ymd-His').".csv";
+                    }
+                }
+                else
+                {
                     flash("El archivo excede el tamaño m&aacute;ximo permitido!", 'warning')->important();
                     Log::warning("DataSourcesController][import] Reason: El archivo excede el tamanio maximo permitido!");
                 }
-            }else{
+            }
+            else
+            {
                 flash("No se encontro archivo de importaci&oacute;n!", 'warning')->important();
                 Log::warning("DataSourcesController][import] Reason: No se encontro archivo de importacion!");
             }
@@ -48,24 +65,43 @@ class DataSourcesController extends Controller
                 Log::debug("DataSourcesController][import] El archivo existe y es valido.");
 
                 $csvPath = $request->file('csvFile')->move($destinationPath, $fileName);
+                //$request->file('file')->move(base_path().'/storage/files/reagents/', $fileName);
                 Log::debug("DataSourcesController][import] Archivo cargado en la ruta: ".$csvPath);
 
-                //Limpia tabla previo a importacion de datos
-                \DB::statement("TRUNCATE TABLE org_datos");
+                if ($request->type == 'D')
+                {
+                    //Limpia tabla previo a importacion de datos
+                    \DB::statement("TRUNCATE TABLE org_datos");
 
-                //Query de importacion
-                $statement = "LOAD DATA LOCAL INFILE '%s' ".
-                    "INTO TABLE org_datos ".
-                    "CHARACTER SET utf8 ".
-                    "FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ".
-                    "LINES TERMINATED BY '\\r\\n' ".
-                    "IGNORE 1 LINES ".
-                    "(pr_cod_persona, pr_nombre, pr_apellido, email, pr_tipo, pr_cedula, pe_cod_perfil, pe_desc_perfil, ".
-                    "se_cod_sede, se_desc_sede, se_cod_persona_admin, se_cod_persona_acad, cm_cod_campus, cm_desc_campus, ".
-                    "ca_cod_carrera, ca_desc_carrera, ar_cod_area, ar_desc_area, ar_cod_docente, ar_estado, ".
-                    "ma_cod_materia, ma_desc_materia, ma_abrev_materia, mc_nivel, pd_cod_periodo, pd_desc_periodo, ".
-                    "pd_fecha_inicio, pd_fecha_fin, di_cod_distributivo, cn_cod_contenido_cab, ".
-                    "cd_cod_contenido_det, cd_capitulo, cd_tema)";
+                    //Query de importacion
+                    $statement = "LOAD DATA LOCAL INFILE '%s' ".
+                        "INTO TABLE org_datos ".
+                        "CHARACTER SET utf8 ".
+                        "FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ".
+                        "LINES TERMINATED BY '\\r\\n' ".
+                        "IGNORE 1 LINES ".
+                        "(pr_cod_persona, pr_nombre, pr_apellido, email, pr_tipo, pr_cedula, pe_cod_perfil, pe_desc_perfil, ".
+                        "se_cod_sede, se_desc_sede, se_cod_persona_admin, se_cod_persona_acad, cm_cod_campus, cm_desc_campus, ".
+                        "ca_cod_carrera, ca_desc_carrera, ar_cod_area, ar_desc_area, ar_cod_docente, ar_estado, ".
+                        "ma_cod_materia, ma_desc_materia, ma_abrev_materia, mc_nivel, pd_cod_periodo, pd_desc_periodo, ".
+                        "pd_fecha_inicio, pd_fecha_fin, di_cod_distributivo, cn_cod_contenido_cab, ".
+                        "cd_cod_contenido_det, cd_capitulo, cd_tema)";
+                }
+                elseif ($request->type == 'B')
+                {
+                    \DB::statement("TRUNCATE TABLE org_bibliografia");
+
+                    //Query de importacion
+                    $statement = "LOAD DATA LOCAL INFILE '%s' ".
+                        "INTO TABLE org_bibliografia ".
+                        "CHARACTER SET utf8 ".
+                        "FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ".
+                        "LINES TERMINATED BY '\\r\\n' ".
+                        "IGNORE 1 LINES ".
+                        "(cn_cod_contenido_cab, cn_cod_carrera, cn_cod_materia, cn_cod_campus, ".
+                        "cn_bibliografia_base, cn_bibliografia_complementaria)";
+                }
+
                 $query = sprintf($statement, addslashes($csvPath));
 
                 Log::debug("DataSourcesController][import] Inicio de importacion de los datos. Consulta: ".$query);
