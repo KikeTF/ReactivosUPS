@@ -4,7 +4,7 @@
 @section('subtitulo', 'Inicio')
 
 @push('specific-styles')
-    <link rel="stylesheet" href="{{ asset('highcharts/css/highcharts.css') }}" />
+    {!! HTML::style('highcharts/css/highcharts.css') !!}
 @endpush
 
 @section('contenido')
@@ -93,8 +93,8 @@
         });
 
     </script>
-    <script type="text/javascript" src="{{ asset('highcharts/js/highcharts.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('highcharts/js/modules/exporting.js') }}"></script>
+    {!! HTML::script('highcharts/js/highcharts.js') !!}
+    {!! HTML::script('highcharts/js/modules/exporting.js') !!}
     <script type="text/javascript">
         function decodeString (encodedStr){
             //var encodedStr = '';

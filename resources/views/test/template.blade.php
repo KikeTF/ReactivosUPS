@@ -13,14 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
     <!-- bootstrap & fontawesome -->
-    <link rel="stylesheet" href="{{ asset('ace/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ace/font-awesome/4.2.0/css/font-awesome.min.css') }}" />
+    {!! HTML::style('ace/css/bootstrap.min.css') !!}
+    {!! HTML::style('ace/font-awesome/4.2.0/css/font-awesome.min.css') !!}
 
     <!-- text fonts -->
-    <link rel="stylesheet" href="{{ asset('ace/fonts/fonts.googleapis.com.css') }}" />
+    {!! HTML::style('ace/fonts/fonts.googleapis.com.css') !!}
 
     <!-- ace styles -->
-    <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" />
+    {!! HTML::style('ace/css/ace.min.css') !!}
 
     <!-- specific styles -->
     @stack('specific-styles')
@@ -80,13 +80,12 @@
     <script type="text/javascript">
         if('ontouchstart' in document.documentElement) document.write("<script src='ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
-    <script src="{{ asset('ace/js/bootstrap.min.js') }}"></script>
+    {!! HTML::script('ace/js/bootstrap.min.js') !!}
 
     <!-- ace scripts -->
-    <script src="{{ asset('ace/js/ace-elements.min.js') }}"></script>
-    <script src="{{ asset('ace/js/ace.min.js') }}"></script>
-
-    <script src="{{ asset('ace/js/jquery.knob.min.js') }}"></script>
+    {!! HTML::script('ace/js/ace-elements.min.js') !!}
+    {!! HTML::script('ace/js/ace.min.js') !!}
+    {!! HTML::script('ace/js/jquery.knob.min.js') !!}
 
     @stack('specific-script')
 </body>

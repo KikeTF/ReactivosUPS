@@ -71,6 +71,9 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">Creado por</div>
                 <div class="profile-info-value"><span>{{ $format->creado_por }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
                 <div class="profile-info-name">Fecha de creaci&oacute;n</div>
                 <div class="profile-info-value"><span>{{ $format->fecha_creacion }}</span></div>
             </div>
@@ -78,6 +81,9 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">Modificado por</div>
                 <div class="profile-info-value"><span>{{ $format->modificado_por }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
                 <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
                 <div class="profile-info-value"><span>{{ $format->fecha_modificacion }}</span></div>
             </div>

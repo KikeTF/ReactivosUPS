@@ -36,6 +36,9 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">Creado por</div>
                 <div class="profile-info-value"><span>{{ $field->creado_por }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
                 <div class="profile-info-name">Fecha de creaci&oacute;n</div>
                 <div class="profile-info-value"><span>{{ $field->fecha_creacion }}</span></div>
             </div>
@@ -43,6 +46,9 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">Modificado por</div>
                 <div class="profile-info-value"><span>{{ $field->modificado_por }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
                 <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
                 <div class="profile-info-value"><span>{{ $field->fecha_modificacion }}</span></div>
             </div>
