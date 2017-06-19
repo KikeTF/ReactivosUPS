@@ -58,6 +58,8 @@
                     $("#id_contenido_det").chosen().change();
                     $("#listaMaterias").closest('.form-group').removeClass('has-error');
                     $("#id_materia-error").remove();
+                    $("#referencia").closest('div').closest('div').closest('.form-group').removeClass('has-error');
+                    $("#referencia-error").remove();
                 }
             });
         }

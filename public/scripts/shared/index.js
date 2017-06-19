@@ -94,7 +94,7 @@ var validator = $('#formulario').validate({
     submitHandler: function (form) {
         $('#finishMessage').empty();
         $('#finishMessage').append('<h4>Presione <strong class="green">"Finalizar"</strong> para solicitar aprobaci&oacute;n!</h4>');
-        $("#formulario").submit();
+        form.submit();
     },
     invalidHandler: function (event, validator) {
         var errors = validator.numberOfInvalids();
