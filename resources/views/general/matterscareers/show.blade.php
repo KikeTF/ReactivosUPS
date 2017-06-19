@@ -16,14 +16,6 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">C&oacute;digo</div>
                 <div class="profile-info-value"><span>{{ $mattercareer->id }}</span></div>
-                <div class="profile-info-value">
-                    <span>
-                    <button onclick="location.href='{{ route('general.matterscareers.download', $mattercareer->id) }}'; return false;"
-                        class="btn btn-white btn-primary btn-sm" {{ $mattercareer->archivo_contenido == 'S' ? '' : 'disabled' }} >
-                        <i class="ace-icon fa fa-download bigger-110" aria-hidden="true"></i> Descargar Archivo
-                    </button>
-                    </span>
-                </div>
             </div>
 
             <div class="profile-info-row">
@@ -48,7 +40,10 @@
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Materia</div>
-                <div class="profile-info-value"><span>{{ $mattercareer->desc_materia }}</span></div>
+                <div class="profile-info-value">
+                    <span>{{ $mattercareer->desc_materia }}</span>&nbsp;
+                    <a href="{{ route('general.matterscareers.download', $mattercareer->id) }}" class="ace-icon fa fa-download bigger-110" aria-hidden="true"></a>
+                </div>
             </div>
 
             <div class="profile-info-row">
@@ -84,6 +79,9 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">Creado por</div>
                 <div class="profile-info-value"><span>{{ $mattercareer->creado_por }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
                 <div class="profile-info-name">Fecha de creaci&oacute;n</div>
                 <div class="profile-info-value"><span>{{ $mattercareer->fecha_creacion }}</span></div>
             </div>
@@ -91,10 +89,12 @@
             <div class="profile-info-row">
                 <div class="profile-info-name">Modificado por</div>
                 <div class="profile-info-value"><span>{{ $mattercareer->modificado_por }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
                 <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
                 <div class="profile-info-value"><span>{{ $mattercareer->fecha_modificacion }}</span></div>
             </div>
-
         </div>
     </form>
 
