@@ -13,21 +13,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
     <!-- bootstrap & fontawesome -->
-    <link rel="stylesheet" href="{{ asset('ace/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ace/font-awesome/4.2.0/css/font-awesome.min.css') }}" />
+    {!! HTML::style('ace/css/bootstrap.min.css') !!}
+    {!! HTML::style('ace/font-awesome/4.2.0/css/font-awesome.min.css') !!}
 
     <!-- text fonts -->
-    <link rel="stylesheet" href="{{ asset('ace/fonts/fonts.googleapis.com.css') }}" />
+    {!! HTML::style('ace/fonts/fonts.googleapis.com.css') !!}
 
     <!-- ace styles -->
-    <link rel="stylesheet" href="{{ asset('ace/css/ace.min.css') }}" />
+    {!! HTML::style('ace/css/ace.min.css') !!}
 
     <!--[if lte IE 9]>
     <!--
     <link rel="stylesheet" href="ace/css/ace-part2.min.css" />
     -->
     <!--[endif]-->
-    <link rel="stylesheet" href="{{ asset('ace/css/ace-rtl.min.css') }}" />
+    {!! HTML::style('ace/css/ace-rtl.min.css') !!}
 
     <!--[if lte IE 9]>
     <!--
@@ -187,17 +187,17 @@
     </div><!-- /.main-container -->
 
     <!-- basic scripts -->
-    <script src="{{ asset('ace/js/jquery.2.1.1.min.js') }}"></script>
+    {!! HTML::script('ace/js/jquery.2.1.1.min.js') !!}
     <script type="text/javascript">
         window.jQuery || document.write("<script src='ace/js/jquery.min.js'>"+"<"+"/script>");
     </script>
     <script type="text/javascript">
         if('ontouchstart' in document.documentElement) document.write("<script src='ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
-    <script src="{{ asset('ace/js/bootstrap.min.js') }}"></script>
+    {!! HTML::script('ace/js/bootstrap.min.js') !!}
 
     <!-- inline scripts related to this page -->
-    <script src="{{ asset('scripts/login/index.js') }}"></script>
+    {!! HTML::script('scripts/login/index.js') !!}
 
     <script type="text/javascript">
         $("#username").on("focusout", function () {

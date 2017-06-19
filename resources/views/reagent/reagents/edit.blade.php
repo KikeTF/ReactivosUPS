@@ -4,7 +4,7 @@
 @section('subtitulo', 'Editar reactivo')
 
 @push('specific-styles')
-    <link rel="stylesheet" href="{{ asset('ace/css/colorbox.min.css') }}" />
+    {!! HTML::style('ace/css/colorbox.min.css') !!}
 @endpush
 
 @section('contenido')
@@ -227,8 +227,8 @@
 @endsection
 
 @push('specific-script')
-    <script src="{{ asset('ace/js/jquery.colorbox.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
+    {!! HTML::script('ace/js/jquery.colorbox.min.js') !!}
+    {!! HTML::script('scripts/reagent/reagents/common.js') !!}
     <script type="text/javascript">
         $(window).load(function() {
             inputFileLoad();

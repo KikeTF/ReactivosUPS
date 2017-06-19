@@ -143,7 +143,7 @@
 @endsection
 
 @push('specific-script')
-    <script type="text/javascript" src="{{ asset('scripts/exam/exams/common.js') }}"></script>
+    {!! HTML::script('scripts/exam/exams/common.js') !!}
     <script type="text/javascript">
         jQuery(function($) {
             //$('.modal.aside').ace_aside();

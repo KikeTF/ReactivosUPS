@@ -4,7 +4,7 @@
 @section('subtitulo', 'Detalle de reactivo')
 
 @push('specific-styles')
-    <link rel="stylesheet" href="{{ asset('ace/css/colorbox.min.css') }}" />
+    {!! HTML::style('ace/css/colorbox.min.css') !!}
 @endpush
 
 @section('contenido')
@@ -237,6 +237,9 @@
                             <div class="profile-info-row">
                                 <div class="profile-info-name">Creado por</div>
                                 <div class="profile-info-value"><span>{{ $reagent->user->FullName }}</span></div>
+                            </div>
+
+                            <div class="profile-info-row">
                                 <div class="profile-info-name">Fecha de creaci&oacute;n</div>
                                 <div class="profile-info-value"><span>{{ $reagent->fecha_creacion }}</span></div>
                             </div>
@@ -244,6 +247,9 @@
                             <div class="profile-info-row">
                                 <div class="profile-info-name">Modificado por</div>
                                 <div class="profile-info-value"><span>{{ isset($reagent->updaterUser->FullName) ? $reagent->updaterUser->FullName : '' }}</span></div>
+                            </div>
+
+                            <div class="profile-info-row">
                                 <div class="profile-info-name">Fecha de modificaci&oacute;n</div>
                                 <div class="profile-info-value"><span>{{ $reagent->fecha_modificacion }}</span></div>
                             </div>
@@ -296,8 +302,8 @@
 @endsection
 
 @push('specific-script')
-    <script src="{{ asset('ace/js/jquery.colorbox.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script >
+    {!! HTML::script('ace/js/jquery.colorbox.min.js') !!}
+    {!! HTML::script('scripts/reagent/reagents/common.js') !!}
     <script type="text/javascript">
         $(window).load(function() {
             imagePropertiesLoad();

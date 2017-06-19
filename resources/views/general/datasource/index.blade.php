@@ -70,5 +70,5 @@
 @endsection
 
 @push('specific-script')
-    <script type="text/javascript" src="{{ asset('scripts/general/datasource/index.js') }}"></script>
+    {!! HTML::script('scripts/general/datasource/index.js') !!}
 @endpush

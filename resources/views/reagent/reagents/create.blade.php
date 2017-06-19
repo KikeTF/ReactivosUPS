@@ -191,9 +191,9 @@
 @endsection
 
 @push('specific-script')
-    <script src="{{ asset('ace/js/fuelux.wizard.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/create.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('scripts/reagent/reagents/common.js') }}"></script>
+    {!! HTML::script('ace/js/fuelux.wizard.min.js') !!}
+    {!! HTML::script('scripts/reagent/reagents/create.js') !!}
+    {!! HTML::script('scripts/reagent/reagents/common.js') !!}
     <script type="text/javascript">
         $("#id_formato").change(function(){
             url = "{{  route('reagent.reagents.format') }}";

@@ -146,14 +146,14 @@
 @endsection
 
 @push('specific-styles')
-    <link rel="stylesheet" href="{{ asset('countdown/css/jquery.countdown.css') }}" />
+    {!! HTML::style('countdown/css/jquery.countdown.css') !!}
 @endpush
 
 @push('specific-script')
-    <script src="{{ asset('ace/js/bootbox.min.js') }}"></script>
-    <script src="{{ asset('countdown/js/jquery.plugin.min.js') }}"></script>
-    <script src="{{ asset('countdown/js/jquery.countdown.min.js') }}"></script>
-    <script src="{{ asset('countdown/js/jquery.countdown-es.js') }}"></script>
+    {!! HTML::script('ace/js/bootbox.min.js') !!}
+    {!! HTML::script('countdown/js/jquery.plugin.min.js') !!}
+    {!! HTML::script('countdown/js/jquery.countdown.min.js') !!}
+    {!! HTML::script('countdown/js/jquery.countdown-es.js') !!}
     <script type="text/javascript">
         //$.countdown.setDefaults($.countdown.regionalOptions['']);
         $('#l10n').countdown($.countdown.regionalOptions['es']);
