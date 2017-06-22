@@ -9,7 +9,7 @@ class ExamHeader extends Model
     protected $table = "exc_examen_cab";
     public $timestamps = false;
 
-    protected $fillable =["id_periodo_sede", "id_mencion", "descripcion", "cantidad_reactivos", "fecha_activacion",
+    protected $fillable =["id_periodo_sede", "id_carrera_campus", "id_mencion", "descripcion", "cantidad_reactivos", "fecha_activacion",
         "es_prueba", "resolucion", "id_estado", "id_sede", "id_periodo", "id_campus", "id_carrera"];
 
     public function periodLocation(){

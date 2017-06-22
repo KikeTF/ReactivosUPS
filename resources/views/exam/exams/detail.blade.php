@@ -11,6 +11,10 @@
     @section('subtitulo', 'Detalle de Examen')
 @endif
 
+@push('specific-styles')
+    {!! HTML::style('ace/css/colorbox.min.css') !!}
+@endpush
+
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario',
@@ -121,7 +125,7 @@
                 </div>
             </div>
             <div id="my-modal-{{ $reagent->id }}" class="modal fade" tabindex="-1">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -143,18 +147,11 @@
 @endsection
 
 @push('specific-script')
+    {!! HTML::script('ace/js/jquery.colorbox.min.js') !!}
     {!! HTML::script('scripts/exam/exams/common.js') !!}
     <script type="text/javascript">
-        jQuery(function($) {
-            //$('.modal.aside').ace_aside();
-
-            //$('#aside-inside-modal').addClass('aside').ace_aside({container: '#my-modal > .modal-dialog'});
-
-            //$(document).one('ajaxloadstart.page', function(e) {
-                //in ajax mode, remove before leaving page
-            //    $('.modal.aside').remove();
-            //    $(window).off('.aside')
-            //});
-        })
+        $(window).load(function() {
+            imagePropertiesLoad();
+        });
     </script>
 @endpush
