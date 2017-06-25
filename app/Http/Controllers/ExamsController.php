@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use ReactivosUPS\ExamComment;
 use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
+use ReactivosUPS\ExamParameter;
 use ReactivosUPS\ExamPeriod;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Matter;
@@ -255,9 +256,15 @@ class ExamsController extends Controller
         {
             $exam = ExamHeader::find($id);
             $mentionsList = Mention::query()->where('id_carrera', $exam->id_carrera)->where('estado', 'A')->lists('descripcion','id');
+            $parameter = ExamParameter::query()
+                ->where('id_carrera_campus', $exam->id_carrera_campus)
+                ->where('estado', 'A')
+                ->orderBy('id', 'desc')
+                ->first();
             
             return view('exam.exams.show')
                 ->with('mentionsList', $mentionsList)
+                ->with('parameter', $parameter)
                 ->with('exam', $exam);
         }
         catch (\Exception $ex)
@@ -551,11 +558,56 @@ class ExamsController extends Controller
             \DB::rollback();
             $valid = false;
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[ExamsController][comment] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+            Log::error("[ExamsController][comment] id=".$id."; Exception: ".$ex);
         }
 
         \DB::commit();
         return array("valid"=>$valid);
+    }
+
+    public function activate($id)
+    {
+        try
+        {
+            $exam = ExamHeader::find($id);
+
+            $oldParameter = ExamParameter::query()
+                ->where('id_carrera_campus', $exam->id_carrera_campus)
+                ->where('estado', 'A');
+
+            if ($oldParameter->count() > 0)
+            {
+                $oldParameter = $oldParameter->orderBy('id', 'desc')->first();
+                $newParameter = new ExamParameter($oldParameter->toArray());
+                $newParameter->id_examen_test = $id;
+                $newParameter->creado_por = \Auth::id();
+                $newParameter->fecha_creacion = date('Y-m-d H:i:s');
+            }
+            else
+            {
+                $newParameter = new ExamParameter();
+                $newParameter->id_carrera_campus = $exam->id_carrera_campus;
+                $newParameter->duracion_examen = 240;
+                $newParameter->id_examen_real = 0;
+                $newParameter->id_examen_test = $id;
+                $newParameter->editar_respuestas = 'N';
+                $newParameter->estado = 'A';
+                $newParameter->creado_por = \Auth::id();
+                $newParameter->fecha_creacion = date('Y-m-d H:i:s');
+            }
+
+            $newParameter->save();
+            
+            flash('Transacci&oacuten realizada existosamente', 'success');
+        }
+        catch(\Exception $ex)
+        {
+            //failed logic here
+            flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
+            Log::error("[ExamsController][activate] id=".$id."; Exception: ".$ex);
+        }
+
+        return redirect()->route('exam.exams.show', $id);
     }
     
     public function printReport(Request $request, $id)

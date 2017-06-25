@@ -89,19 +89,37 @@ var validator = $('#formulario').validate({
         else {
             error.insertAfter(element.parent());
         }
-        $('#finishMessage').empty();
-        $('#finishMessage').append('<h4 class="red">Registro incompleto. Por favor verificar!</h4>');
-    }//,
 
-    //submitHandler: function (form) {
-    //},
-    //invalidHandler: function (form) {
-    //}
+    },
+    submitHandler: function (form) {
+        $('#finishMessage').empty();
+        $('#finishMessage').append('<h4>Presione <strong class="green">"Finalizar"</strong> para solicitar aprobaci&oacute;n!</h4>');
+        form.submit();
+    },
+    invalidHandler: function (event, validator) {
+        var errors = validator.numberOfInvalids();
+        if (errors) {
+            var message = errors == 1
+                ? 'Por favor ingrese el campo faltante.'
+                : 'Por favor ingrese los ' + errors + ' campos faltantes.';
+            $('#finishMessage').empty();
+            $('#finishMessage').append('<h4 class="red">' + message + '</h4>');
+            bootbox.alert({
+                message: message,
+                buttons: {
+                    'ok': {
+                        label: 'Cerrar',
+                        className: 'btn-danger'
+                    }
+                }
+            });
+        }
+    }
 });
 
 function clearErrors(){
     $('#formulario .form-group').removeClass('has-error');
-    $('#id_campo-error').remove()
+    $("[id$='-error']").remove();
 }
 
 jQuery(function($) {

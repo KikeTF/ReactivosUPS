@@ -278,6 +278,11 @@ Route::group(['prefix' => 'exam','middleware' => ['auth', 'admin']], function ()
         'as'    => 'exam.exams.comment'
     ]);
 
+    Route::get('exams/{id}/activate', [
+        'uses'  => 'ExamsController@activate',
+        'as'    => 'exam.exams.activate'
+    ]);
+
     Route::resource('exams','ExamsController');
 
     Route::get('exams/{id}/destroy', [

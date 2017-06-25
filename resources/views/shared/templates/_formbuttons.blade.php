@@ -1,5 +1,7 @@
 <div class="form-group no-margin">
+
     <div class="pull-left">
+
     @if(isset($btnaprove))
         <button id="btn-aprobado" title="Aprobar" onclick="return false;" class="btn btn-white btn-primary btn-bold">
             <i class='ace-icon fa fa-thumbs-o-up bigger-110 blue' style="margin: 0"></i>
@@ -51,6 +53,15 @@
             <i class='ace-icon fa fa-print bigger-110 blue' style="margin: 0"></i>
         </button>
         <div style="height: 35px; margin: 0 3px -14px 3px; display: inline-block; border: 1px solid #D9D9D9; border-width: 0 1px 0 0"></div>
+    @endif
+
+    @if(isset($btnexamactivate))
+        <button title="Activar para Simulador" onclick="location.href='{{ $btnexamactivate }}'; return false;" class="btn btn-white btn-success btn-bold">
+            <i class="ace-icon fa fa-check bigger-120 green"></i>
+            Activar para Simulador
+        </button>
+    @elseif(isset($btnexamactive))
+        <span class="label label-xlg label-success"><i class="ace-icon fa fa-check bigger-120 white"></i> Activo en Simulador</span>
     @endif
 
     @if(isset($btnsave))

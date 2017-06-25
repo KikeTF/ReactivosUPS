@@ -3,6 +3,10 @@
 @section('titulo', 'Examen Complexivo')
 @section('subtitulo', 'Examen')
 
+@push('specific-styles')
+    {!! HTML::style('ace/css/colorbox.min.css') !!}
+@endpush
+
 @section('contenido')
 
     <form class="form-horizontal" role="form">
@@ -19,6 +23,13 @@
             $btnreply = 1;
             $btnedit = route('exam.exams.edit', $exam->id);
             $btndelete2 = 1;
+        }
+        elseif ($exam->id_estado == 4)
+        {
+            if ($parameter->id_examen_test == $exam->id)
+                $btnexamactive = 1;
+            else
+                $btnexamactivate = route('exam.exams.activate', $exam->id);
         }
 
         $btnhistory = route('exam.exams.history', $exam->id);
@@ -176,7 +187,7 @@
                                 </div>
 
                                 <div id="my-modal-{{ $detail->id }}" class="modal fade" tabindex="-1">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -206,6 +217,7 @@
 @endsection
 
 @push('specific-script')
+    {!! HTML::script('ace/js/jquery.colorbox.min.js') !!}
     {!! HTML::script('scripts/exam/exams/common.js') !!}
     <script type="text/javascript">
         $("#btn-aprobado").on('click', function() {
@@ -452,5 +464,9 @@
 
 
         }
+
+        $(window).load(function() {
+            imagePropertiesLoad();
+        });
     </script>
 @endpush

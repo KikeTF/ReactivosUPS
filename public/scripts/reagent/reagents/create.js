@@ -24,9 +24,8 @@ jQuery(function($) {
                     e.preventDefault();
                 });
             } else if(info.step == 3){
-
-                $('#finishMessage').empty();
-                $('#finishMessage').append('<h4>Presione <strong class="green">"Finalizar"</strong> para solicitar aprobaci&oacute;n!</h4>');
+                //$('#finishMessage').empty();
+                //$('#finishMessage').append('<h4>Presione <strong class="green">"Finalizar"</strong> para solicitar aprobaci&oacute;n!</h4>');
             }
         })
         .on('finished.fu.wizard', function(e) {

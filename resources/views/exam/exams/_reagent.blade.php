@@ -2,6 +2,18 @@
     <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
 </div>
 
+@if($reagent->imagen == 'S')
+
+    <ul class="ace-thumbnails clearfix">
+        <li>
+            <a href="{{ route('reagent.reagents.image', $reagent->id) }}" data-rel="colorbox">
+                <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 300px; width: 100%;" />
+            </a>
+        </li>
+    </ul>
+    <div class="space-6"></div>
+@endif
+
 @if($reagent->format->opciones_pregunta == 'S')
     <div class="form-group">
         <div class="{{ ($reagent->format->concepto_propiedad == 'S') ? 'col-sm-6' : 'col-sm-12' }}">

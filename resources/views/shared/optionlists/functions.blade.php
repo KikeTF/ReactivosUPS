@@ -22,6 +22,9 @@
                 success: function(result){
                     $('#listaMaterias').empty();
                     $('#listaMaterias').append(result['html']);
+                    //$('#listaCarreras').prevUntil("div").removeClass('has-error');
+                    $("#listaCarreras").closest('.form-group').removeClass('has-error');
+                    $("#id_carrera-error").remove();
                 }
             });
         }
@@ -42,15 +45,23 @@
         }
     }
     function getContentsByMatter() {
-        $.ajax({
-            url: "{{  route('general.matterscareers.contents') }}",
-            data: { "id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val(), "id_materia" : $("#id_materia").val() },
-            async: false,
-            success: function(result){
-                $('#listaContenidos').empty();
-                $('#listaContenidos').append(result['html']);
-                $("#id_contenido_det").chosen().change();
-            }
-        });
+        if($("#id_materia").val() > 0)
+        {
+            $.ajax({
+                url: "{{  route('general.matterscareers.contents') }}",
+                data: { "id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val(), "id_materia" : $("#id_materia").val() },
+                async: false,
+                success: function(result){
+                    $('#listaContenidos').empty();
+                    $('#listaContenidos').append(result['html']);
+                    $('#referencia').val(result['bibliografia']);
+                    $("#id_contenido_det").chosen().change();
+                    $("#listaMaterias").closest('.form-group').removeClass('has-error');
+                    $("#id_materia-error").remove();
+                    $("#referencia").closest('div').closest('div').closest('.form-group').removeClass('has-error');
+                    $("#referencia-error").remove();
+                }
+            });
+        }
     }
 </script>

@@ -42,7 +42,8 @@ class Admin
             'general.matterscareers.matters',
             'general.matterscareers.mentions',
             'reagent.approvals.comment',
-            'reagent.reagents.report'
+            'reagent.reagents.report',
+            'exam.exams.activate'
         ];
 
         try

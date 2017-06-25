@@ -456,6 +456,8 @@ class MattersCareersController extends Controller
 
             if($id_content > 0)
             {
+                $contentHeader = ContentHeader::find($id_content);
+                $content = $contentHeader->bibliografia_base."\n".$contentHeader->bibliografia_complementaria;
                 $contentsList = ContentDetail::query()
                     ->where('estado','A')
                     ->where('id_contenido_cab',$id_content)
@@ -466,10 +468,12 @@ class MattersCareersController extends Controller
                 $html = View::make('shared.optionlists._contentslist')->with('contentsList', $contentsList)->render();
             else
                 $html = View::make('shared.optionlists._contentslist')->render();
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex)
+        {
             Log::error("[MattersCareersController][getFormat] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
             $html = View::make('shared.optionlists._contentslist')->render();
         }
-        return \Response::json(['html' => $html]);
+        return \Response::json(['html' => $html, 'bibliografia' => (isset($content) ? $content : "") ]);
     }
 }

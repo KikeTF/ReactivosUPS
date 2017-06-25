@@ -3,6 +3,10 @@
 @section('titulo', 'Reactivos')
 @section('subtitulo', 'Detalle de reactivo')
 
+@push('specific-styles')
+    {!! HTML::style('ace/css/colorbox.min.css') !!}
+@endpush
+
 @section('contenido')
 
     <form class="form-horizontal" role="form">
@@ -299,6 +303,8 @@
 @endsection
 
 @push('specific-script')
+    {!! HTML::script('ace/js/jquery.colorbox.min.js') !!}
+    {!! HTML::script('scripts/reagent/reagents/common.js') !!}
     <script type="text/javascript">
         $("#btn-aprobado").on('click', function() {
             bootbox.prompt({
@@ -431,5 +437,8 @@
         //    alert(arg);
         //    console.log("Ok");
         //}
+        $(window).load(function() {
+            imagePropertiesLoad();
+        });
     </script>
 @endpush

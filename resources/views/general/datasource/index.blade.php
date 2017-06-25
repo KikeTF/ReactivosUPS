@@ -12,10 +12,25 @@
         'method' => 'POST',
         'files' => true]) !!}
 
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        <div class="space-20"></div>
+
+        <div class="form-group">
+            <div class="radio">
+                <label class="col-sm-4 control-label no-padding-right">
+                    {!! Form::radio('type', 'D', true,
+                        ['class' => 'ace', 'id' => 'type-D', 'required' ]) !!}
+                    <span class="lbl"> Distributivo</span>
+                </label>
+                <label class="col-sm-3 control-label no-padding-right">
+                    {!! Form::radio('type', 'B', false,
+                        ['class' => 'ace', 'id' => 'type-B', 'required' ]) !!}
+                    <span class="lbl"> Bibliograf&iacute;a</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="space-20"></div>
+
         <div class="form-group">
             {!! Form::label('csvFile','Subir Archivo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
             <div class="col-sm-7">
