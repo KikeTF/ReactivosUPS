@@ -4,6 +4,8 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\Area;
+use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\PeriodLocation;
@@ -20,18 +22,47 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
+        // Session Data
+        $aprReactivo = \Session::get('ApruebaReactivo');
+        $aprExamen = \Session::get('ApruebaExamen');
+        $id_Sede = (int)\Session::get('idSede');
+
+        // Request Data
         $id_sede = (int)Session::get('idSede');
         $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
         $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
         $ids_periodos_sedes = (isset($request['periodosSede']) ? $request->periodosSede : array());
 
+        // Filters
         $filters = array($id_campus, $id_carrera, 0);
         $filters['periodosSede'] = $ids_periodos_sedes;
 
-        if($id_campus > 0 && $id_carrera > 0)
-            $mattersCareers = $this->getMatterParameters(0, $id_carrera, $id_campus);
+        // ID de Jefe de Area
+        $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
+        $id_area = ($area->count() > 0) ? $area->first()->id : 0;
+
+        if($aprReactivo == 'S')
+        {
+            if($id_campus > 0 && $id_carrera > 0)
+                $mattersCareers = $this->getMatterParameters(0, $id_carrera, $id_campus);
+            else
+                $mattersCareers = $this->getMattersCareers()->where('estado', 'A')->where('aplica_examen', 'S');
+
+            if($id_area)
+                $mattersCareers = $mattersCareers->where('id_area', $id_area);
+        }
         else
-            $mattersCareers = $this->getMattersCareers()->where('aplica_examen', 'S');
+        {
+            $dist = Distributive::query()
+                ->where('estado','A')
+                ->where('id_sede', $id_Sede)
+                ->where('id_usuario', \Auth::id());
+
+            if($id_campus > 0 && $id_carrera > 0)
+                $dist = $dist->where('id_carrera', $id_carrera)->where('id_campus', $id_campus);
+
+            $mattersCareers = $dist->get()->pluck('mattercareer');
+        }
 
         $reagents = Reagent::query()->where('id_sede', $id_sede)->where('id_estado', '!=', '7');
 

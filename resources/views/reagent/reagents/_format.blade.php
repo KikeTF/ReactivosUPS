@@ -151,7 +151,7 @@
                                             ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : $abc[$i]),
                                             ((isset($answers) && $i < $answers->count()) ? (($answers[$i]->opcion_correcta == 'S') ? true : false) : false),
                                             ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i >= $min_resp) ? 'disabled' : '', 'required' ]) !!}
-                                        <span class="lbl"> {{ $abc[$i] }}</span>
+                                        <span class="lbl"> {{ $abc[$i].')' }}</span>
                                     </label>
                                 </div>
                                 {!! Form::text('answers['.$i.'][id]',

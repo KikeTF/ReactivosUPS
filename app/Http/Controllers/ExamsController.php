@@ -19,6 +19,7 @@ use ReactivosUPS\Reagent;
 use ReactivosUPS\Report;
 use Log;
 use Ghidev\Fpdf\Fpdf;
+use Illuminate\Support\Facades\File;
 
 class ExamsController extends Controller
 {
@@ -665,7 +666,8 @@ class ExamsController extends Controller
                 $matter = $matCar->matter;
                 $arrCountRea = array_count_values($exam->examsDetails->pluck('reagent')->pluck('id_materia')->toArray());
                 $pdf->SetFont('Arial', 'B', 14);
-                $pdf->Cell(17, 0.7, utf8_decode($matter->descripcion).' ('.$arrCountRea[$matter->id].')', 0, 1, 'L');
+                $currentReaCount = ($arrCountRea[$matter->id] > $matCar->nro_reactivos_exam) ? $matCar->nro_reactivos_exam : $arrCountRea[$matter->id];
+                $pdf->Cell(17, 0.7, utf8_decode($matter->descripcion).' ('.$currentReaCount.'/'.$matCar->nro_reactivos_exam.')', 0, 1, 'L');
 
                 $pdf->Ln(0.7);
                 $pdf->SetFont('Arial', '', 10);
@@ -691,6 +693,41 @@ class ExamsController extends Controller
                         $pdf->MultiCell(1, 0.5 , $iRea.'.', 0, 'L');
                         $pdf->SetXY($x+0.5,$y);
                         $pdf->MultiCell(16.5, 0.5 , utf8_decode($det->reagent->planteamiento), 0, 'J');
+
+                        $pdf->Ln(0.3);
+
+                        if ($det->reagent->imagen == 'S')
+                        {
+                            if($pdf->GetY()+10 > 26.5)
+                               $pdf->AddPage();
+
+                            $extensionList = array('gif','png','jpg','jpeg','bmp');
+                            $isValidPath = (bool)false;
+
+                            foreach ($extensionList as $ext)
+                            {
+                                $path = storage_path('files/reagents/UPS-REA-'.$det->reagent->id.'.'.$ext);
+                                if ( File::exists($path) ) {
+                                    $isValidPath = (bool)true;
+                                    break;
+                                }
+                            }
+
+                            $posY = $pdf->GetY();
+                            if ($isValidPath)
+                            {
+                                list($w, $h) = getimagesize($path);
+                                $posX = (17-($w*10/$h))/2+2;
+                                $pdf->MultiCell(17, 10, $pdf->Image($path, $posX, $posY, 0, 10), 0, 'C');
+                            }
+
+                            //$pdf->SetXY($pdf->GetX(),$pdf->GetY()-10);
+                        }
+
+                        //$posY = $pdf->GetY();
+                        //if($posY > 26.5)
+                        //    $pdf->AddPage();
+
                         $maxOpPreg = max($det->reagent->questionsConcepts->count(), $det->reagent->questionsProperties->count());
 
                         if($maxOpPreg > 0)
@@ -722,7 +759,7 @@ class ExamsController extends Controller
                                     $prop = $det->reagent->questionsProperties[$i];
                                     $pdf->SetXY(10,$y2);
                                     $x2 = $pdf->GetX();
-                                    $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
+                                    $pdf->MultiCell(1, 0.5, $prop->literal.')', 0, 'R');
                                     $pdf->SetXY($x2+1,$y2);
                                     $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
                                     $y2 = $pdf->GetY();
@@ -740,19 +777,16 @@ class ExamsController extends Controller
                                 $y = $pdf->GetY();
                             }
 
-                            if($answ->opcion_correcta == 'S')
-                            {
-                                $pdf->SetFont('Arial', 'B', 10);
-                                $pdf->SetTextColor(38, 121, 181);
-                            }
-
-                            $pdf->MultiCell(1, 0.5, $answ->numeral.'.', 0, 'R');
+                            $pdf->MultiCell(1, 0.5, $answ->numeral.')', 0, 'R');
                             $pdf->SetXY($x+1,$y);
                             $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
-
-                            $pdf->SetFont('Arial', '', 10);
-                            $pdf->SetTextColor(0, 0, 0);
                         }
+
+                        $pdf->Ln(0.5);
+                        $pdf->SetXY($pdf->GetX()+0.5,$pdf->GetY());
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->MultiCell(15, 0.7, 'RESPUESTA CORRECTA: OPCION '.$det->reagent->answers->where('opcion_correcta', 'S')->first()->numeral, 0, 'L');
+                        $pdf->SetFont('Arial', '', 10);
 
                         if($iRea < $totRea)
                             $pdf->Ln(1);

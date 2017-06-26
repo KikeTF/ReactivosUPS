@@ -147,7 +147,7 @@
                                                         <tbody>
                                                         @foreach($reagent->questionsProperties as $question)
                                                             <tr>
-                                                                <td style="width: 40px;">{{ $question->literal.'.' }}</td>
+                                                                <td style="width: 40px;">{{ $question->literal.')' }}</td>
                                                                 <td>{{ $question->propiedad }}</td>
                                                             </tr>
                                                         @endforeach
@@ -184,7 +184,7 @@
                                                                 <i class="fa fa-check green" aria-hidden="true"></i>
                                                             @endif
                                                         </td>
-                                                        <td style="width: 40px;">{{ $answer->numeral.'.' }}</td>
+                                                        <td style="width: 40px;">{{ $answer->numeral.')' }}</td>
                                                         <td>{{ $answer->descripcion }}</td>
                                                         <td>{{ $answer->argumento }}</td>
                                                     </tr>

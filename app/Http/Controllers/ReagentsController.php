@@ -137,7 +137,7 @@ class ReagentsController extends Controller
                 //$answer['numeral'] = $reqAnswer['numeral'];
                 $answer['descripcion'] = $reqAnswer['descripcion'];
                 $answer['argumento'] = $reqAnswer['argumento'];
-                $answer['opcion_correcta'] = (($i+1) == $request->input('opcion_correcta')) ? 'S' : 'N';
+                $answer['opcion_correcta'] = ($this->abc[$i] == $request->input('opcion_correcta')) ? 'S' : 'N';
                 $answer['creado_por'] = \Auth::id();
                 $reaAnswer = new ReagentAnswer($answer);
                 $reaAnswers[] = $reaAnswer;
@@ -312,9 +312,9 @@ class ReagentsController extends Controller
                         $reaAnswer->descripcion = $reqAnswer['descripcion'];
                         $reaAnswer->argumento = $reqAnswer['argumento'];
                         //$reaAnswer->opcion_correcta = ($reqAnswer['numeral'] == $request->input('opcion_correcta')) ? 'S' : 'N';
-                        $reaAnswer->opcion_correcta = (($i+1) == $request->input('opcion_correcta')) ? 'S' : 'N';
+                        $reaAnswer->opcion_correcta = ($this->abc[$i] == $request->input('opcion_correcta')) ? 'S' : 'N';
                         $reaAnswer->modificado_por = \Auth::id();
-                        $reaAnswer->fecha_modificacion = date('Y-m-d h:i:s');
+                        $reaAnswer->fecha_modificacion = date('Y-m-d H:i:s');
                     }
                     elseif (isset($reqAnswer['descripcion']) && isset($reqAnswer['argumento']))
                     {
@@ -323,10 +323,10 @@ class ReagentsController extends Controller
                         //$answer['numeral'] = $reqAnswer['numeral'];
                         $answer['descripcion'] = $reqAnswer['descripcion'];
                         $answer['argumento'] = $reqAnswer['argumento'];
-                        $answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
-                        $answer['opcion_correcta'] = (($i+1) == $request->input('opcion_correcta')) ? 'S' : 'N';
+                        //$answer['opcion_correcta'] = ($reqAnswer['numeral'] = $request->input('opcion_correcta')) ? 'S' : 'N';
+                        $answer['opcion_correcta'] = ($this->abc[$i] == $request->input('opcion_correcta')) ? 'S' : 'N';
                         $answer['creado_por'] = \Auth::id();
-                        $answer['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $answer['fecha_creacion'] = date('Y-m-d H:i:s');
                         $reaAnswer = new ReagentAnswer($answer);
                     }
 
@@ -670,7 +670,7 @@ class ReagentsController extends Controller
                             $prop = $reagent->questionsProperties[$i];
                             $pdf->SetXY(10,$y2);
                             $x2 = $pdf->GetX();
-                            $pdf->MultiCell(1, 0.5, $prop->literal.'.', 0, 'R');
+                            $pdf->MultiCell(1, 0.5, $prop->literal.')', 0, 'R');
                             $pdf->SetXY($x2+1,$y2);
                             $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
                             $y2 = $pdf->GetY();
@@ -684,7 +684,7 @@ class ReagentsController extends Controller
                 $pdf->Ln(0.5);
 
                 $pdf->SetFont('Arial', 'B', 10);
-                $pdf->MultiCell(17, 0.7, 'RESPUESTA', 1, 'L');
+                $pdf->MultiCell(17, 0.7, 'OPCIONES DE RESPUESTA', 1, 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->Ln(0.2);
 
@@ -698,24 +698,22 @@ class ReagentsController extends Controller
                         $y = $pdf->GetY();
                     }
 
-                    if($answ->opcion_correcta == 'S')
-                    {
-                        $pdf->SetFont('Arial', 'B', 10);
-                        $pdf->SetTextColor(38, 121, 181);
-                    }
-
-                    $pdf->MultiCell(1, 0.5, $answ->numeral.'.', 0, 'R');
+                    $pdf->MultiCell(1, 0.5, $answ->numeral.')', 0, 'R');
                     $pdf->SetXY($x+1,$y);
                     $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
 
-                    $pdf->SetFont('Arial', '', 10);
                     $pdf->SetTextColor(0, 0, 0);
                 }
+
+                $pdf->Ln(0.5);
+                $pdf->SetXY($pdf->GetX()+0.5,$pdf->GetY());
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->MultiCell(15, 0.7, 'RESPUESTA CORRECTA: OPCION '.$reagent->answers->where('opcion_correcta', 'S')->first()->numeral, 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
 
                 //$posY = $pdf->GetY();
                 if($iRea < count($ids)-1)
                     $pdf->AddPage();
-
 
             }
             $pdf->Output();
