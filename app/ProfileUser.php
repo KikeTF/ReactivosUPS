@@ -24,6 +24,6 @@ class ProfileUser extends Model
     }
 
     public function distributives(){
-        return $this->hasMany('ReactivosUPS\Distributive');
+        return $this->hasMany('ReactivosUPS\Distributive', 'id_perfil_usuario');
     }
 }

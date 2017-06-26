@@ -1,8 +1,8 @@
-<div id="bar-chart-container" style="min-width: 400px; height: 400px; margin: 0; padding: 0;"></div>
+<div id="reagents-by-matter-chart" style="min-width: 400px; height: 400px; margin: 0; padding: 0;"></div>
 
-@push('bar-chart-script')
-    <script type="text/javascript">
-        Highcharts.chart('bar-chart-container', {
+<script type="text/javascript">
+    $(document).ready(function() {
+        Highcharts.chart('reagents-by-matter-chart', {
             chart: {
                 type: 'column'
             },
@@ -10,7 +10,7 @@
                 text: 'Reactivos Aprobados por Materia'
             },
             xAxis: {
-                categories: decodeString('{{ '"'.implode('","', $BarChartData['categories']).'"' }}')
+                categories: decodeString('{{ '"'.implode('","', $data['categories']).'"' }}')
             },
             yAxis: [{
                 min: 0,
@@ -44,5 +44,5 @@
                 pointPadding: 0.25
             }]
         });
-    </script>
-@endpush
+    });
+</script>

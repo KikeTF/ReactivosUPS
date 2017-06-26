@@ -8,6 +8,9 @@
 @endpush
 
 @section('contenido')
+    <?php
+    $aprReactivo = \Session::get('ApruebaReactivo');
+    ?>
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form', 'route' => 'dashboard.index', 'method' => 'GET']) !!}
 
@@ -64,7 +67,7 @@
             <div class="widget-box">
                 <div class="widget-body">
                     <div class="widget-main">
-                        @include('dashboard._barchart', ['data' => $BarChartData])
+                        @include('dashboard._reagentsbymatter', ['data' => $MattersChartData])
                     </div>
                 </div>
             </div>
@@ -74,11 +77,23 @@
             <div class="widget-box">
                 <div class="widget-body">
                     <div class="widget-main">
-                        @include('dashboard._piechart', ['data' => $PieChartData])
+                        @include('dashboard._reagentsbystate', ['data' => $StatesChartData])
                     </div>
                 </div>
             </div>
         </div>
+
+        @if($aprReactivo == 'S')
+        <div class="col-md-12" style="margin: 10px auto;" align="center">
+            <div class="widget-box">
+                <div class="widget-body">
+                    <div class="widget-main">
+                        @include('dashboard._reagentsbyteacher', ['data' => $TeachersChartData])
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 
 @endsection

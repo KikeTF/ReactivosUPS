@@ -20,7 +20,7 @@ class Distributive extends Model
     }
 
     public function profileUser(){
-        return $this->belongsTo('ReactivosUPS\ProfileUser');
+        return $this->belongsTo('ReactivosUPS\ProfileUser', 'id_perfil_usuario');
     }
 
     public function reagents(){

@@ -41,6 +41,9 @@ class DashboardController extends Controller
         $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
         $id_area = ($area->count() > 0) ? $area->first()->id : 0;
 
+        $distributive = Distributive::query()->where('estado','A')->where('id_sede', $id_Sede);
+        $reagents = Reagent::query()->where('id_estado', '!=', '7')->where('id_sede', $id_sede);
+
         if($aprReactivo == 'S')
         {
             if($id_campus > 0 && $id_carrera > 0)
@@ -50,27 +53,27 @@ class DashboardController extends Controller
 
             if($id_area)
                 $mattersCareers = $mattersCareers->where('id_area', $id_area);
+
+            $distributive = $distributive->whereIn('id_materia_carrera', $mattersCareers->pluck('id')->toArray())->get();
         }
         else
         {
-            $dist = Distributive::query()
-                ->where('estado','A')
-                ->where('id_sede', $id_Sede)
-                ->where('id_usuario', \Auth::id());
-
-            if($id_campus > 0 && $id_carrera > 0)
-                $dist = $dist->where('id_carrera', $id_carrera)->where('id_campus', $id_campus);
-
-            $mattersCareers = $dist->get()->pluck('mattercareer');
+            $reagents = $reagents->where('creado_por', \Auth::id());
+            $distributive = $distributive->where('id_usuario', \Auth::id())->get();
+            $mattersCareers = $distributive->pluck('mattercareer');
         }
 
-        $reagents = Reagent::query()->where('id_sede', $id_sede)->where('id_estado', '!=', '7');
-
         if($id_campus > 0)
+        {
             $reagents = $reagents->where('id_campus', $id_campus);
+            $distributive = $distributive->where('id_campus', $id_campus);
+        }
 
         if($id_carrera > 0)
+        {
             $reagents = $reagents->where('id_carrera', $id_carrera);
+            $distributive = $distributive->where('id_carrera', $id_carrera);
+        }
 
         if(count($ids_periodos_sedes) > 0)
         {
@@ -78,6 +81,21 @@ class DashboardController extends Controller
             $reagents = $reagents->whereIn('id_periodo', array_unique($periodLoc->pluck('id_periodo')->toArray()));
         }
 
+        $MattersChartData = $this->reagentsByMatterChart($mattersCareers, $reagents);
+        $TeachersChartData = $this->reagentsByTeacherChart($distributive);
+        $StatesChartData = $this->reagentsByStateChart($mattersCareers, $reagents);
+
+        return view('dashboard.index')
+            ->with('filters', $filters)
+            ->with('campusList', $this->getCampuses())
+            ->with('locationPeriodsList', $this->getLocationPeriods())
+            ->with('MattersChartData', $MattersChartData)
+            ->with('TeachersChartData', $TeachersChartData)
+            ->with('StatesChartData', $StatesChartData);
+    }
+
+    public function reagentsByMatterChart($mattersCareers, $reagents)
+    {
         foreach ($mattersCareers->sortBy('id_materia')->pluck('id_materia')->toArray() as $idMat)
         {
             $rea = Reagent::query()->whereIn('id', $reagents->get()->pluck('id')->toArray());
@@ -85,11 +103,32 @@ class DashboardController extends Controller
             $bardata_real[$idMat] = $contRea;
         }
 
-        $BarChartData['categories'] = $mattersCareers->pluck('matter')->sortBy('id')->lists('descripcion','id')->toArray();
-        $BarChartData['target_series'] = $mattersCareers->sortBy('id_materia')->lists('nro_reactivos_mat','id_materia')->toArray();
-        $BarChartData['real_series'] = $bardata_real;
+        $MattersChartData['categories'] = $mattersCareers->pluck('matter')->sortBy('id')->lists('descripcion','id')->toArray();
+        $MattersChartData['target_series'] = $mattersCareers->sortBy('id_materia')->lists('nro_reactivos_mat','id_materia')->toArray();
+        $MattersChartData['real_series'] = $bardata_real;
 
-        $reagents = $reagents->where('id_estado', '!=', '7');
+        return $MattersChartData;
+    }
+
+    public function reagentsByTeacherChart($distributive)
+    {
+        $users = $distributive->pluck('profileUser')->pluck('user')->sortBy('apellidos');
+        foreach (array_unique($users->pluck('id')->toArray()) as $idDocente)
+        {
+            $bardata_categories[$idDocente] = $users->where('id', $idDocente)->first()->FullName;
+            $bardata_target[$idDocente] = $distributive->where('id_usuario', $idDocente)->pluck('matterCareer')->sum('nro_reactivos_mat');
+            $bardata_real[$idDocente] = Reagent::query()->where('id_estado','5')->where('creado_por', $idDocente)->count();
+        }
+
+        $TeachersChartData['categories'] = $bardata_categories;
+        $TeachersChartData['target_series'] = $bardata_target;
+        $TeachersChartData['real_series'] = $bardata_real;
+
+        return $TeachersChartData;
+    }
+
+    public function reagentsByStateChart($mattersCareers, $reagents)
+    {
         $TotalReaReq = $mattersCareers->sum('nro_reactivos_mat');
         $TotalRea = $reagents->count();
         $states = ReagentState::query()->whereIn('id', array_unique($reagents->get()->pluck('id_estado')->toArray()))->get();
@@ -103,7 +142,7 @@ class DashboardController extends Controller
             $piedata['state'] = $state->descripcion;
             $piedata['value'] = $rea->count();
             $piecolor[] = $state->color;
-            $PieChartData['series'][] = $piedata;
+            $StatesChartData['series'][] = $piedata;
         }
 
         if($TotalReaReq > $TotalRea)
@@ -111,17 +150,12 @@ class DashboardController extends Controller
             $piedata['state'] = 'Faltantes';
             $piedata['value'] = ($TotalReaReq - $TotalRea);
             $piecolor[] = '#abbac3';
-            $PieChartData['series'][] = $piedata;
+            $StatesChartData['series'][] = $piedata;
         }
 
-        $PieChartData['colors'] = $piecolor;
+        $StatesChartData['colors'] = $piecolor;
 
-        return view('dashboard.index')
-            ->with('filters', $filters)
-            ->with('campusList', $this->getCampuses())
-            ->with('locationPeriodsList', $this->getLocationPeriods())
-            ->with('BarChartData', $BarChartData)
-            ->with('PieChartData', $PieChartData);
+        return $StatesChartData;
     }
 
 }

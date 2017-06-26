@@ -31,6 +31,9 @@
     <!-- common scripts -->
     {!! HTML::style('styles/shared/template.css') !!}
 
+    <!-- jquery -->
+    {!! HTML::script('ace/js/jquery.2.1.1.min.js') !!}
+
     <!-- ace settings handler -->
     {!! HTML::script('ace/js/ace-extra.min.js') !!}
 
@@ -207,13 +210,13 @@
     </div><!-- /.main-container -->
 
     <!-- basic scripts -->
-    <script src="{{ asset('ace/js/jquery.2.1.1.min.js') }}"></script>
     <script type="text/javascript">
         window.jQuery || document.write("<script src='ace/js/jquery.min.js'>"+"<"+"/script>");
     </script>
     <script type="text/javascript">
         if('ontouchstart' in document.documentElement) document.write("<script src='ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
+
     {!! HTML::script('ace/js/bootstrap.min.js') !!}
     {!! HTML::script('ace/js/jquery-ui.min.js') !!}
     {!! HTML::script('ace/js/jquery-ui.custom.min.js') !!}
@@ -224,7 +227,6 @@
     {!! HTML::script('ace/js/jquery.flot.pie.min.js') !!}
     {!! HTML::script('ace/js/jquery.flot.resize.min.js') !!}
     {!! HTML::script('ace/js/select2.min.js') !!}
-{{--    <script src="{{ asset('ace/js/chosen.jquery.min.js') }}"></script>--}}
     {!! HTML::script('ace/js/chosen.jquery.min.js') !!}
 
     {{--@stack('datatable-script')--}}
@@ -249,8 +251,6 @@
 
     <!-- specific scripts -->
     @stack('specific-script')
-    @stack('bar-chart-script')
-    @stack('pie-chart-script')
 
     @if(isset($usetable))
         <script>
