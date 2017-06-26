@@ -42,7 +42,7 @@
                         <tr>
                             @if($i < $max_conc)
                                 <td style="text-align: right; width: 50px">
-                                    {!! Form::label('', '('.($i+1).')',['class' => 'control-label']) !!}
+                                    {!! Form::label('', ($i+1).'. ',['class' => 'control-label']) !!}
                                     {!! Form::text('questionsConc['.$i.'][id]',
                                         ((isset($questionsConc) && $i < $questionsConc->count()) ? $questionsConc[$i]->id : null),
                                         [   'id' => 'conc_id_preg_'.$i, 'hidden', ($i >= $min_conc) ? 'disabled' : '' ])!!}
@@ -80,12 +80,12 @@
                             @if($format->concepto_propiedad == 'S')
                                 @if($i < $max_prop)
                                     <td style="text-align: right; width: 50px">
-                                        {!! Form::label('', '('.$abc[$i].')',['class' => 'control-label']) !!}
+                                        {!! Form::label('', strtolower($abc[$i]).') ',['class' => 'control-label']) !!}
                                         {!! Form::text('questionsProp['.$i.'][id]',
                                         ((isset($questionsProp) && $i < $questionsProp->count()) ? $questionsProp[$i]->id : null),
                                         [   'id' => 'prop_id_preg_'.$i, 'hidden', ($i >= $min_prop) ? 'disabled' : '' ])!!}
                                         {!! Form::text('questionsProp['.$i.'][literal]',
-                                            ((isset($questionsProp) && $i < $questionsProp->count()) ? $questionsProp[$i]->literal : $abc[$i]),
+                                            ((isset($questionsProp) && $i < $questionsProp->count()) ? $questionsProp[$i]->literal : strtolower($abc[$i])),
                                             [   ($i >= $min_prop) ? 'disabled' : '', 'hidden' ]) !!}
                                     </td>
                                     <td>
@@ -144,21 +144,21 @@
                     ?>
                     @for ($i = 0; $i < $max_resp; $i++)
                         <tr>
-                            <td style="width: 50px">
+                            <td style="width: 70px">
                                 <div class="radio">
                                     <label>
                                         {!! Form::radio('opcion_correcta',
-                                            ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : ($i+1)),
+                                            ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : $abc[$i]),
                                             ((isset($answers) && $i < $answers->count()) ? (($answers[$i]->opcion_correcta == 'S') ? true : false) : false),
                                             ['class' => 'ace', 'id' => 'id_opcion_correcta_'.$i, ($i >= $min_resp) ? 'disabled' : '', 'required' ]) !!}
-                                        <span class="lbl"></span>
+                                        <span class="lbl"> {{ $abc[$i] }}</span>
                                     </label>
                                 </div>
                                 {!! Form::text('answers['.$i.'][id]',
                                     ((isset($answers) && $i < $answers->count()) ? $answers[$i]->id : null),
                                     [   'id' => 'id_resp_'.$i, 'hidden', ($i >= $min_resp) ? 'disabled' : '' ]) !!}
                                 {!! Form::text('answers['.$i.'][numeral]',
-                                    ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : ($i+1)),
+                                    ((isset($answers) && $i < $answers->count()) ? $answers[$i]->numeral : $abc[$i]),
                                     [   ($i >= $min_resp) ? 'disabled' : '', 'hidden' ]) !!}
                             </td>
                             <td>

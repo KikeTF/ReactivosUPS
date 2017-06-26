@@ -156,16 +156,16 @@ class ExamsController extends Controller
             $spVal = \DB::connection()->getpdo()->prepare($valStmt);
             $spVal->execute();
             $spValResult = $spVal->fetchAll(\DB::connection()->getFetchMode());
+            $spVal->closeCursor();
 
             if(strcmp(strtoupper($spValResult[0]->return_message), "OK") !== 0)
             {
-                if(strcmp(strtoupper($spValResult[0]->return_message), "ERROR") == 0)
+                if(strcmp(strtoupper($spValResult[0]->return_message), "ALERTA") == 0)
                 {
                     $msg = "Existen materias que no cumplen con la cantidad de reactivos requeridos, por favor verificar: ";
                     $msg = $msg."<br/><small>".$spValResult[0]->message_detail."</small>";
-                    flash($msg, 'warning')->important();
-                    Log::error("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$msg);
-                    return redirect()->route('exam.exams.create');
+                    Log::info("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$msg);
+                    //return redirect()->route('exam.exams.create');
                 }
                 else
                 {
@@ -213,6 +213,7 @@ class ExamsController extends Controller
                     $sp = \DB::connection()->getpdo()->prepare($stmt);
                     $sp->execute();
                     $spResult = $sp->fetchAll(\DB::connection()->getFetchMode());
+                    $sp->closeCursor();
 
                     if(strcmp(strtoupper($spResult[0]->return_message), "OK") !== 0)
                     {
@@ -227,7 +228,10 @@ class ExamsController extends Controller
                 }
             }
 
-            flash('Transacci&oacuten realizada existosamente', 'success');
+            if (isset($msg))
+                flash('Transacci&oacuten realizada parcialmente. '.$msg, 'warning')->important();
+            else
+                flash('Transacci&oacuten realizada existosamente', 'success');
             return redirect()->route('exam.exams.detail',['id' => $exam->id, 'id_matter' => 0]);
         }
         catch (\Exception $ex)
