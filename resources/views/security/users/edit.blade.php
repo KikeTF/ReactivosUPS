@@ -33,10 +33,10 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('password_confirm', 'Verificar Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('password_confirm', 'Confirmar Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="clearfix">
-                {!! Form::password('password_confirm', ['class' => 'form-control', 'placeholder' => 'Verificar contrase&ntilde;a']) !!}
+                {!! Form::password('password_confirm', ['class' => 'form-control', 'placeholder' => 'Confirmar contrase&ntilde;a']) !!}
             </div>
         </div>
     </div>
