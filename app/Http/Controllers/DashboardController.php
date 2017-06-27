@@ -4,6 +4,8 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\AnswerDetail;
+use ReactivosUPS\AnswerHeader;
 use ReactivosUPS\Area;
 use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
@@ -54,13 +56,13 @@ class DashboardController extends Controller
             if($id_area)
                 $mattersCareers = $mattersCareers->where('id_area', $id_area);
 
-            $distributive = $distributive->whereIn('id_materia_carrera', $mattersCareers->pluck('id')->toArray())->get();
+            $distributive = $distributive->whereIn('id_materia_carrera', $mattersCareers->pluck('id')->toArray());
         }
         else
         {
             $reagents = $reagents->where('creado_por', \Auth::id());
-            $distributive = $distributive->where('id_usuario', \Auth::id())->get();
-            $mattersCareers = $distributive->pluck('mattercareer');
+            $distributive = $distributive->where('id_usuario', \Auth::id());
+            $mattersCareers = $distributive->get()->pluck('mattercareer');
         }
 
         if($id_campus > 0)
@@ -79,11 +81,16 @@ class DashboardController extends Controller
         {
             $periodLoc = PeriodLocation::query()->whereIn('id', $ids_periodos_sedes)->get();
             $reagents = $reagents->whereIn('id_periodo', array_unique($periodLoc->pluck('id_periodo')->toArray()));
+            $distributive = $distributive->whereIn('id_periodo_sede', $ids_periodos_sedes);
         }
 
+        $distributive = $distributive->get();
+
         $MattersChartData = $this->reagentsByMatterChart($mattersCareers, $reagents);
-        $TeachersChartData = $this->reagentsByTeacherChart($distributive);
         $StatesChartData = $this->reagentsByStateChart($mattersCareers, $reagents);
+        $TeachersChartData = ($aprReactivo == 'S') ? $this->reagentsByTeacherChart($distributive) : null;
+        $TestsChartData = ($aprExamen == 'S') ? $this->testsByStateChart() : null;
+        $TestAnswersChartData = ($aprExamen == 'S') ? $this->testAnswersByMatterChart() : null;
 
         return view('dashboard.index')
             ->with('filters', $filters)
@@ -91,6 +98,8 @@ class DashboardController extends Controller
             ->with('locationPeriodsList', $this->getLocationPeriods())
             ->with('MattersChartData', $MattersChartData)
             ->with('TeachersChartData', $TeachersChartData)
+            ->with('TestsChartData', $TestsChartData)
+            ->with('TestAnswersChartData', $TestAnswersChartData)
             ->with('StatesChartData', $StatesChartData);
     }
 
@@ -120,9 +129,9 @@ class DashboardController extends Controller
             $bardata_real[$idDocente] = Reagent::query()->where('id_estado','5')->where('creado_por', $idDocente)->count();
         }
 
-        $TeachersChartData['categories'] = $bardata_categories;
-        $TeachersChartData['target_series'] = $bardata_target;
-        $TeachersChartData['real_series'] = $bardata_real;
+        $TeachersChartData['categories'] = isset($bardata_categories) ? $bardata_categories : array();
+        $TeachersChartData['target_series'] = isset($bardata_target) ? $bardata_target : array();
+        $TeachersChartData['real_series'] = isset($bardata_real) ? $bardata_real : array();
 
         return $TeachersChartData;
     }
@@ -156,6 +165,76 @@ class DashboardController extends Controller
         $StatesChartData['colors'] = $piecolor;
 
         return $StatesChartData;
+    }
+
+    public function testsByStateChart()
+    {
+        $states = ['P', 'R', 'E', 'C', 'A'];
+
+        foreach ($states as $state)
+        {
+            switch ($state) {
+                case "A":
+                    $desc = "En proceso";
+                    $color = "#478fca";
+                    break;
+                case "P":
+                    $desc = "Aprobado";
+                    $color = "#87B87F";
+                    break;
+                case "R":
+                    $desc = "Reprobado";
+                    $color = "#dd5a43";
+                    break;
+                case "C":
+                    $desc = "Cancelado";
+                    $color = "#abbac3";
+                    break;
+                case "E":
+                    $desc = "Tiempo Agotado";
+                    $color = "#f9e7af";
+                    break;
+                default:
+                    $desc = "No definido";
+                    $color = "#848484";
+            }
+
+            $tests = AnswerHeader::query()->where('estado', $state)->get();
+
+            $piedata['id'] = $state;
+            $piedata['state'] = $desc;
+            $piedata['value'] = $tests->count();
+            $piecolor[] = $color;
+            $StatesChartData['series'][] = $piedata;
+        }
+
+        $StatesChartData['colors'] = isset($piecolor) ? $piecolor : array();
+
+        return $StatesChartData;
+    }
+
+    public function testAnswersByMatterChart()
+    {
+        $answers = AnswerDetail::query()->get();
+
+        foreach ($answers as $answer)
+        {
+            $matter = $answer->examDetail->reagent->distributive->matterCareer->matter;
+            $idMat = $matter->id;
+            if (!isset($bardata_categ[$idMat])) $bardata_categ[$idMat] = $matter->descripcion;
+            $bardata_real[$idMat] = ((isset($bardata_real[$idMat])) ? (int)$bardata_real[$idMat] : 0) + (($answer->resp_correcta == "S") ? 1 : 0);
+            $bardata_target[$idMat] = (isset($bardata_target[$idMat]) ? ((int)$bardata_target[$idMat] + 1) : 1);
+        }
+
+        ksort($bardata_categ);
+        ksort($bardata_real);
+        ksort($bardata_target);
+
+        $AnswersChartData['categories'] = isset($bardata_categ) ? $bardata_categ : array();
+        $AnswersChartData['target_series'] = isset($bardata_target) ? $bardata_target : array();
+        $AnswersChartData['real_series'] = isset($bardata_real) ? $bardata_real : array();
+
+        return $AnswersChartData;
     }
 
 }

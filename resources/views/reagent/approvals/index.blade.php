@@ -53,11 +53,9 @@
                         </div>
                     </div>
                     <div class="col-sm-1" style="float:right; position:absolute; bottom:0; right:0;">
-                        <div class="btn btn-white btn-primary btn-bold" style="float:right;">
-                            <a class="blue" href="#" onclick="document.forms[0].submit();">
-                                <i class='ace-icon fa fa-filter bigger-110 blue'></i>
-                            </a>
-                        </div>
+                        <button onclick="document.forms[0].submit();" title="Filtrar" class="btn btn-white btn-primary btn-bold" style="float:right;">
+                            <i class='ace-icon fa fa-filter bigger-110 blue' style="margin: 0"></i>
+                        </button>
                     </div>
                 </div>
             </div>

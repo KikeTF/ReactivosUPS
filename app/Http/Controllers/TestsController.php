@@ -229,11 +229,16 @@ class TestsController extends Controller
 
             if ( $id_nextQuestion == 0 )
             {
-                $question->answerHeader->estado = 'F';
+                $reactivos_acertados = $question->answerHeader->answersDetails()->where('resp_correcta', 'S')->count();
+                $reactivos_errados = $question->answerHeader->answersDetails()->where('resp_correcta', 'N')->count();
+                $puntaje = round(100*$reactivos_acertados/$question->count());
+                $estado = (isset($request['estado']) && ($request['estado'] == 'E')) ? "E" : (($puntaje >= 70) ? "P" : "R");
+                
+                $question->answerHeader->estado = $estado;
+                $question->answerHeader->reactivos_acertados = $reactivos_acertados;
+                $question->answerHeader->reactivos_errados = $reactivos_errados;
                 $question->answerHeader->modificado_por = 0;
                 $question->answerHeader->fecha_modificacion = date('Y-m-d H:i:s');
-                $question->answerHeader->reactivos_acertados = $question->answerHeader->answersDetails()->where('resp_correcta', 'S')->count();
-                $question->answerHeader->reactivos_errados = $question->answerHeader->answersDetails()->where('resp_correcta', 'N')->count();
                 $question->answerHeader->fecha_fin = date('Y-m-d H:i:s');
                 $question->answerHeader->save();
             }
@@ -296,11 +301,11 @@ class TestsController extends Controller
 
             \DB::beginTransaction(); //Start transaction!
 
-            if($test->estado != 'F')
+            if($test->estado != 'P' && $test->estado != 'R')
             {
                 $test->estado = 'C';
                 $test->fecha_fin = date('Y-m-d H:i:s');
-                $test->answersDetails()->delete();
+                //$test->answersDetails()->delete();
             }
 
             $test->modificado_por = 0;

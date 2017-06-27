@@ -10,6 +10,7 @@
 @section('contenido')
     <?php
     $aprReactivo = \Session::get('ApruebaReactivo');
+    $aprExamen = \Session::get('ApruebaExamen');
     ?>
 
     {!! Form::open(['id'=>'formdata', 'class' => 'form-horizontal', 'role' => 'form', 'route' => 'dashboard.index', 'method' => 'GET']) !!}
@@ -25,7 +26,7 @@
             </div>
         </div>
 
-        <div class="widget-body" style="display: block;">
+        <div class="widget-body" style="display: block; padding-top: 5px;">
             <div class="widget-main">
                 <div class="row" style="position: relative;">
                     <div class="col-sm-11">
@@ -49,11 +50,9 @@
                         </div>
                     </div>
                     <div class="col-sm-1" style="float:right; position:absolute; bottom:0; right:0;">
-                        <div class="btn btn-white btn-primary btn-bold" style="float:right;">
-                            <a class="blue" href="#" onclick="document.forms[0].submit();">
-                                <i class='ace-icon fa fa-filter bigger-110 blue'></i>
-                            </a>
-                        </div>
+                        <button onclick="document.forms[0].submit();" title="Filtrar" class="btn btn-white btn-primary btn-bold" style="float:right;">
+                            <i class='ace-icon fa fa-filter bigger-110 blue' style="margin: 0"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -62,39 +61,101 @@
 
     {!! Form::close() !!}
 
-    <div class="row">
-        <div class="col-md-6" style="margin: 10px auto;" align="center">
-            <div class="widget-box">
-                <div class="widget-body">
-                    <div class="widget-main">
-                        @include('dashboard._reagentsbymatter', ['data' => $MattersChartData])
-                    </div>
-                </div>
+    <div class="space-4"></div>
+
+    <div class="widget-box">
+        <div class="widget-header">
+            <h5 class="widget-title">Reactivos</h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="ace-icon fa fa-chevron-up"></i>
+                </a>
             </div>
         </div>
 
-        <div class="col-md-6" style="margin: 10px auto;" align="center">
-            <div class="widget-box">
-                <div class="widget-body">
-                    <div class="widget-main">
-                        @include('dashboard._reagentsbystate', ['data' => $StatesChartData])
+        <div class="widget-body" style="display: block; padding-top: 5px;">
+            <div class="widget-main" style="padding: 5px 12px 10px 12px;">
+                <div class="row" style="position: relative;">
+                    <div class="col-md-8" align="center">
+                        <div class="form-group" align="center">
+                        <div class="widget-box">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    @include('dashboard._reagentsbymatter', ['data' => $MattersChartData])
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        @if($aprReactivo == 'S')
-        <div class="col-md-12" style="margin: 10px auto;" align="center">
-            <div class="widget-box">
-                <div class="widget-body">
-                    <div class="widget-main">
-                        @include('dashboard._reagentsbyteacher', ['data' => $TeachersChartData])
+                    <div class="col-md-4" align="center">
+                        <div class="widget-box">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    @include('dashboard._reagentsbystate', ['data' => $StatesChartData])
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    @if($aprReactivo == 'S')
+                    <div class="col-xs-12" align="center">
+                        <div class="widget-box">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    @include('dashboard._reagentsbyteacher', ['data' => $TeachersChartData])
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
-        @endif
     </div>
+
+    @if($aprExamen == 'S')
+    <div class="space-4"></div>
+
+    <div class="widget-box">
+        <div class="widget-header">
+            <h5 class="widget-title">Simulador</h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="ace-icon fa fa-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body" style="display: block; padding-top: 5px;">
+            <div class="widget-main" style="padding: 5px 12px 10px 12px;">
+                <div class="row" style="position: relative;">
+                    <div class="col-md-4" align="center">
+                        <div class="widget-box">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    @include('dashboard._testsbystate', ['data' => $TestsChartData])
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8" align="center">
+                        <div class="widget-box">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    @include('dashboard._testanswersbymatter', ['data' => $TestAnswersChartData])
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
 @endsection
 

@@ -41,3 +41,15 @@
 .chosen-container-single .chosen-single {
     border: 1px solid #d5d5d5;
 }
+.widget-header {
+    min-height: 25px;
+}
+.widget-header>.widget-title {
+    line-height: 25px;
+}
+.widget-toolbar {
+    line-height: 25px;
+}
+.widget-main {
+    padding: 0px 5px 5px 0px;
+}

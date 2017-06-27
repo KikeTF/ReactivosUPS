@@ -67,6 +67,7 @@
     {!! Form::hidden('id_nextQuestion', $idNext, ['id' => 'id_nextQuestion']) !!}
     {!! Form::hidden('duracion', $test->parameter->duracion_examen, ['id' => 'duracion']) !!}
     {!! Form::hidden('fecha_inicio', $test->fecha_inicio, ['id' => 'fecha_inicio']) !!}
+    {!! Form::hidden('estado', "A", ['id' => 'estado']) !!}
 
     <div class="row form-group">
         <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
@@ -201,7 +202,8 @@
         }
 
         function countDownExpiry(){
-            $("#id_nextQuestion").val(0)
+            $("#id_nextQuestion").val(0);
+            $("#estado").val("E");
             $("#formulario").submit();
         }
 
