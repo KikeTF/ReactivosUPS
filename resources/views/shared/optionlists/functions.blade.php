@@ -1,55 +1,81 @@
 <script type="text/javascript">
-    function getMentionsByCareer(){
-        filtroMencion = "{{ (isset($filters) ? $filters[2] : 0) }}";
-        $.ajax({
-            url: "{{  route('general.matterscareers.mentions') }}",
-            data: { "id_carrera" : $("#id_carrera").val(), "id_mencion" : filtroMencion },
-            async: false,
-            success: function(result){
-                $('#listaMenciones').empty();
-                $('#listaMenciones').append(result['html']);
-            }
-        });
-    }
-    function getMattersByCareer(){
-        filtroMateria = "{{ (isset($filters) ? $filters[2] : 0) }}";
-        if($("#id_campus").val() > 0 && $("#id_carrera").val() > 0)
-        {
+    function getMentionsByCareer(formID, filter) {
+        var formID = formID || document.forms[0].id;
+        var objCarrera = $('#'+formID+' select[id=id_carrera]');
+        var objMencion = $('#'+formID+' select[id=id_mencion]');
+        var filtroMencion = filter || "{{ (isset($filters) ? $filters[2] : 0) }}";
+        if (objCarrera.val() > 0) {
             $.ajax({
-                url: "{{  route('general.matterscareers.matters') }}",
-                data: { "id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val(), "id_materia" : filtroMateria },
+                url: "{{  route('general.matterscareers.mentions') }}",
+                data: { "id_carrera" : objCarrera.val(), "id_mencion" : filtroMencion },
                 async: false,
                 success: function(result){
-                    $('#listaMaterias').empty();
-                    $('#listaMaterias').append(result['html']);
+                    $('#'+formID+' div[id=listaMenciones]').empty();
+                    $('#'+formID+' div[id=listaMenciones]').append(result['html']);
+                }
+            });
+        }
+        else {
+            objMencion.find('option').remove().end()
+                .append('<option value>-- No Aplica --</option>');
+        }
+
+    }
+    function getMattersByCareer(formID){
+        var formID = formID || document.forms[0].id;
+        var objCampus = $('#'+formID+' select[id=id_campus]');
+        var objCarrera = $('#'+formID+' select[id=id_carrera]');
+        var objMateria = $('#'+formID+' select[id=id_materia]');
+        var filtroMateria = "{{ (isset($filters) ? $filters[2] : 0) }}";
+        if(objCampus.val() > 0 && objCarrera.val() > 0) {
+            $.ajax({
+                url: "{{  route('general.matterscareers.matters') }}",
+                data: { "id_campus" : objCampus.val(), "id_carrera" : objCarrera.val(), "id_materia" : filtroMateria },
+                async: false,
+                success: function(result){
+                    $('#'+formID+' div[id=listaMaterias]').empty();
+                    $('#'+formID+' div[id=listaMaterias]').append(result['html']);
                     //$('#listaCarreras').prevUntil("div").removeClass('has-error');
-                    $("#listaCarreras").closest('.form-group').removeClass('has-error');
+                    $('#'+formID+' div[id=listaCarreras]').closest('.form-group').removeClass('has-error');
                     $("#id_carrera-error").remove();
                 }
             });
         }
+        else {
+            objMateria.find('option').remove().end()
+                .append('<option value>-- Seleccione Materia --</option>');
+        }
     }
-    function getCareersByCampus() {
-        filtroCarrera = "{{ (isset($filters) ? $filters[1] : 0) }}";
-        if($("#id_campus").val() > 0)
-        {
+    function getCareersByCampus(formID, filter) {
+        var formID = formID || document.forms[0].id;
+        var objCampus = $('#'+formID+' select[id=id_campus]');
+        var objCarrera = $('#'+formID+' select[id=id_carrera]');
+        var filtroCarrera = filter || "{{ (isset($filters) ? $filters[1] : 0) }}";
+        if(objCampus.val() > 0) {
             $.ajax({
                 url: "{{  route('general.matterscareers.careers') }}",
-                data: { "id_campus" : $("#id_campus").val(), "id_carrera" : filtroCarrera },
+                data: { "id_campus" : objCampus.val(), "id_carrera" : filtroCarrera },
                 async: false,
                 success: function(result){
-                    $('#listaCarreras').empty();
-                    $('#listaCarreras').append(result['html']);
+                    $('#'+formID+' div[id=listaCarreras]').empty();
+                    $('#'+formID+' div[id=listaCarreras]').append(result['html']);
                 }
             });
         }
+        else {
+            objCarrera.find('option').remove().end()
+                .append('<option value>-- Seleccione Carrera --</option>');
+        }
     }
-    function getContentsByMatter() {
-        if($("#id_materia").val() > 0)
-        {
+    function getContentsByMatter(formID) {
+        var formID = formID || document.forms[0].id;
+        var objCampus = $('#'+formID+' select[id=id_campus]');
+        var objCarrera = $('#'+formID+' select[id=id_carrera]');
+        var objMateria = $('#'+formID+' select[id=id_materia]');
+        if(objMateria.val() > 0) {
             $.ajax({
                 url: "{{  route('general.matterscareers.contents') }}",
-                data: { "id_campus" : $("#id_campus").val(), "id_carrera" : $("#id_carrera").val(), "id_materia" : $("#id_materia").val() },
+                data: { "id_campus" : objCampus.val(), "id_carrera" : objCarrera.val(), "id_materia" : objMateria.val() },
                 async: false,
                 success: function(result){
                     $('#listaContenidos').empty();

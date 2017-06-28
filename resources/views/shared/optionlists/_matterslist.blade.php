@@ -3,7 +3,7 @@
             'id' => 'id_materia',
             'class' => 'form-control',
             'placeholder' => '-- Seleccione Materia --',
-            'onchange' => 'getContentsByMatter()',
+            'onchange' => 'getContentsByMatter(this.form.id)',
             ((isset($requerido) && $requerido == 1) ? 'required' : '')
         ])
     !!}

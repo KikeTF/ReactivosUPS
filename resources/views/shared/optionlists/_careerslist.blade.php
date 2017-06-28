@@ -3,7 +3,7 @@
             'id' => 'id_carrera',
             'class' => 'form-control',
             'placeholder' => '-- Seleccione Carrera --',
-            'onchange' => 'getMattersByCareer(); getMentionsByCareer();',
+            'onchange' => 'getMattersByCareer(this.form.id); getMentionsByCareer(this.form.id);',
             ((isset($requerido) && $requerido == 1) ? 'required' : '')
         ])
     !!}

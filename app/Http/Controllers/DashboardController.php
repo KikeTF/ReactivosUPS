@@ -31,13 +31,18 @@ class DashboardController extends Controller
 
         // Request Data
         $id_sede = (int)Session::get('idSede');
-        $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
-        $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
-        $ids_periodos_sedes = (isset($request['periodosSede']) ? $request->periodosSede : array());
+        $id_campus = (isset($request['reaIdCampus']) ? (int)$request->reaIdCampus : 0);
+        $id_carrera = (isset($request['reaIdCarrera']) ? (int)$request->reaIdCarrera : 0);
+        $reaPeriodosSede = (isset($request['reaPeriodosSede']) ? $request->reaPeriodosSede[0] : "");
+        $ids_periodos_sedes = ($reaPeriodosSede == "") ? array() : explode(",", $reaPeriodosSede);
 
+        $id_campus_test = (isset($request['testIdCampus']) ? (int)$request->testIdCampus : 0);
+        $id_carrera_test = (isset($request['testIdCarrera']) ? (int)$request->testIdCarrera : 0);
+        $id_mencion_test = (isset($request['testIdMencion']) ? (int)$request->testIdMencion : 0);
         // Filters
         $filters = array($id_campus, $id_carrera, 0);
         $filters['periodosSede'] = $ids_periodos_sedes;
+        $filters_test = array($id_campus_test, $id_carrera_test, $id_mencion_test);
 
         // ID de Jefe de Area
         $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
@@ -94,6 +99,7 @@ class DashboardController extends Controller
 
         return view('dashboard.index')
             ->with('filters', $filters)
+            ->with('filters_test', $filters_test)
             ->with('campusList', $this->getCampuses())
             ->with('locationPeriodsList', $this->getLocationPeriods())
             ->with('MattersChartData', $MattersChartData)
@@ -162,7 +168,14 @@ class DashboardController extends Controller
             $StatesChartData['series'][] = $piedata;
         }
 
-        $StatesChartData['colors'] = $piecolor;
+        if(!isset($StatesChartData['series']))
+        {
+            $piedata['id'] = 0;
+            $piedata['state'] = '';
+            $piedata['value'] = 0;
+            $StatesChartData['series'][] = $piedata;
+        }
+        $StatesChartData['colors'] = isset($piecolor) ? $piecolor : array();
 
         return $StatesChartData;
     }

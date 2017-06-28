@@ -3,7 +3,7 @@
             'id' => 'id_sede',
             'class' => 'form-control',
             'placeholder' => '--Seleccione Sede--',
-            'onchange' => 'getCampusByLocation()',
+            'onchange' => 'getCampusByLocation(this.form.id)',
             ((isset($requerido) && $requerido == 1) ? 'required' : '')
         ])
     !!}
