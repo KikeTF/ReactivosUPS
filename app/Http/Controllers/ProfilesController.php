@@ -74,7 +74,7 @@ class ProfilesController extends Controller
             $profile->aprueba_reactivos_masivo = !isset( $request['aprueba_reactivos_masivo'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->creado_por = \Auth::id();
-            $profile->fecha_creacion = date('Y-m-d h:i:s');
+            $profile->fecha_creacion = date('Y-m-d H:i:s');
             $profile->save();
 
             $optionsprofiles = array();
@@ -82,7 +82,7 @@ class ProfilesController extends Controller
                 $optionsprofile['id_opcion'] = $option;
                 $optionsprofile['id_perfil'] = $profile->id;
                 $optionsprofile['creado_por'] = \Auth::id();
-                $optionsprofile['fecha_creacion'] = date('Y-m-d h:i:s');
+                $optionsprofile['fecha_creacion'] = date('Y-m-d H:i:s');
                 $optionsprofiles[] = new OptionProfile($optionsprofile);
             }
 
@@ -183,7 +183,7 @@ class ProfilesController extends Controller
                     $optionsprofile['id_opcion'] = $option;
                     $optionsprofile['id_perfil'] = $profile->id;
                     $optionsprofile['creado_por'] = \Auth::id();
-                    $optionsprofile['fecha_creacion'] = date('Y-m-d h:i:s');
+                    $optionsprofile['fecha_creacion'] = date('Y-m-d H:i:s');
                     $optionsprofiles[] = new OptionProfile($optionsprofile);
                 }
             }
@@ -195,7 +195,7 @@ class ProfilesController extends Controller
             $profile->aprueba_examen = !isset( $request['aprueba_examen'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->modificado_por = \Auth::id();
-            $profile->fecha_modificacion = date('Y-m-d h:i:s');
+            $profile->fecha_modificacion = date('Y-m-d H:i:s');
             $profile->save();
 
             Profile::find($profile->id)->optionsProfiles()->saveMany($optionsprofiles);
@@ -229,7 +229,7 @@ class ProfilesController extends Controller
         {
             $profile->estado = 'E';
             $profile->modificado_por = \Auth::id();
-            $profile->fecha_modificacion = date('Y-m-d h:i:s');
+            $profile->fecha_modificacion = date('Y-m-d H:i:s');
             $profile->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');

@@ -58,7 +58,7 @@ class FormatsController extends Controller
             $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
             $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $format->creado_por = \Auth::id();
-            $format->fecha_creacion = date('Y-m-d h:i:s');
+            $format->fecha_creacion = date('Y-m-d H:i:s');
             $format->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
@@ -137,7 +137,7 @@ class FormatsController extends Controller
             $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
             $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $format->modificado_por = \Auth::id();
-            $format->fecha_modificacion = date('Y-m-d h:i:s');
+            $format->fecha_modificacion = date('Y-m-d H:i:s');
             $format->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
@@ -165,7 +165,7 @@ class FormatsController extends Controller
         {
             $format->estado = 'E';
             $format->modificado_por = \Auth::id();
-            $format->fecha_modificacion = date('Y-m-d h:i:s');
+            $format->fecha_modificacion = date('Y-m-d H:i:s');
             $format->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');

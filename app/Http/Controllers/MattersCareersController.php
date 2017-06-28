@@ -205,7 +205,7 @@ class MattersCareersController extends Controller
             $matterCareer->aplica_examen = !isset( $request['aplica_examen'] ) ? 'N' : 'S';
             $matterCareer->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $matterCareer->modificado_por = \Auth::id();
-            $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
+            $matterCareer->fecha_modificacion = date('Y-m-d H:i:s');
 
             $matterCareer->archivo_contenido = 'N';
             $isValidFile = (bool)false;
@@ -257,7 +257,7 @@ class MattersCareersController extends Controller
         {
             $matterCareer->estado = 'I';
             $matterCareer->modificado_por = \Auth::id();
-            $matterCareer->fecha_modificacion = date('Y-m-d h:i:s');
+            $matterCareer->fecha_modificacion = date('Y-m-d H:i:s');
             $matterCareer->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');

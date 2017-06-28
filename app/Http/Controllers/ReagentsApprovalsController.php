@@ -205,12 +205,12 @@ class ReagentsApprovalsController extends Controller
                 $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $reagent->id_estado : (int)$request->id_estado;
                 $comment->comentario = $request->comentario;
                 $comment->creado_por = \Auth::id();
-                $comment->fecha_creacion = date('Y-m-d h:i:s');
+                $comment->fecha_creacion = date('Y-m-d H:i:s');
 
                 if( isset( $request['id_estado'] ) ){
                     $reagent->id_estado = (int)$request->id_estado;
                     $reagent->modificado_por = \Auth::id();
-                    $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+                    $reagent->fecha_modificacion = date('Y-m-d H:i:s');
                 }
 
                 $reagent->save();

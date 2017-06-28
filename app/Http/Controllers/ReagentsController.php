@@ -179,7 +179,7 @@ class ReagentsController extends Controller
                 }
             }
 
-            $reagent->fecha_creacion = date('Y-m-d h:i:s');
+            $reagent->fecha_creacion = date('Y-m-d H:i:s');
 
             \DB::beginTransaction(); //Start transaction!
 
@@ -347,7 +347,7 @@ class ReagentsController extends Controller
                         //$reaQuestion->numeral = $reqQuestion['numeral'];
                         $reaQuestionConc->concepto = $reqQuestion['concepto'];
                         $reaQuestionConc->modificado_por = \Auth::id();
-                        $reaQuestionConc->fecha_modificacion = date('Y-m-d h:i:s');
+                        $reaQuestionConc->fecha_modificacion = date('Y-m-d H:i:s');
                     }
                     elseif (isset($reqQuestion['concepto']))
                     {
@@ -356,7 +356,7 @@ class ReagentsController extends Controller
                         //$question['numeral'] = $reqQuestion['numeral'];
                         $question['concepto'] = $reqQuestion['concepto'];
                         $question['creado_por'] = \Auth::id();
-                        $question['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $question['fecha_creacion'] = date('Y-m-d H:i:s');
                         $reaQuestionConc = new ReagentQuestionConcept($question);
                     }
 
@@ -377,7 +377,7 @@ class ReagentsController extends Controller
                         //$reaQuestion->literal = $reqQuestion['literal'];
                         $reaQuestionProp->propiedad = $reqQuestion['propiedad'];
                         $reaQuestionProp->modificado_por = \Auth::id();
-                        $reaQuestionProp->fecha_modificacion = date('Y-m-d h:i:s');
+                        $reaQuestionProp->fecha_modificacion = date('Y-m-d H:i:s');
                     }
                     elseif (isset($reqQuestion['propiedad']))
                     {
@@ -386,7 +386,7 @@ class ReagentsController extends Controller
                         //$question['literal'] = $reqQuestion['literal'];
                         $question['propiedad'] = $reqQuestion['propiedad'];
                         $question['creado_por'] = \Auth::id();
-                        $question['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $question['fecha_creacion'] = date('Y-m-d H:i:s');
                         $reaQuestionProp = new ReagentQuestionProperty($question);
                     }
 
@@ -407,7 +407,7 @@ class ReagentsController extends Controller
             }
 
             $reagent->modificado_por = \Auth::id();
-            $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+            $reagent->fecha_modificacion = date('Y-m-d H:i:s');
 
             \DB::beginTransaction(); //Start transaction!
 
@@ -487,7 +487,7 @@ class ReagentsController extends Controller
         try {
             $reagent->id_estado = 7;
             $reagent->modificado_por = \Auth::id();
-            $reagent->fecha_modificacion = date('Y-m-d h:i:s');
+            $reagent->fecha_modificacion = date('Y-m-d H:i:s');
             $reagent->save();
         } catch (\Exception $ex) {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
