@@ -96,7 +96,7 @@ class ExamParametersController extends Controller
                 $parameter->id_examen_real = 0;
                 $parameter->estado = 'A';
                 $parameter->creado_por = \Auth::id();
-                $parameter->fecha_creacion = date('Y-m-d h:i:s');
+                $parameter->fecha_creacion = date('Y-m-d H:i:s');
                 $parameter->save();
 
                 flash('Transacci&oacuten realizada existosamente', 'success');

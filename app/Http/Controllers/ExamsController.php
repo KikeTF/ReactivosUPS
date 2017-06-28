@@ -184,7 +184,7 @@ class ExamsController extends Controller
             $exam->id_periodo_sede = $id_periodo_sede;
             $exam->id_carrera_campus = $id_careerCampus;
             $exam->creado_por = \Auth::id();
-            $exam->fecha_creacion = date('Y-m-d h:i:s');
+            $exam->fecha_creacion = date('Y-m-d H:i:s');
 
             $periodsexam = array();
             foreach ($request->periodosSede as $periodLocation) {
@@ -197,7 +197,7 @@ class ExamsController extends Controller
             $comment->id_estado_nuevo = 1;
             $comment->comentario = 'Examen creado: '.(isset($request['es_automatico']) ? 'Proceso Automatico' : 'Proceso Manual');
             $comment->creado_por = \Auth::id();
-            $comment->fecha_creacion = date('Y-m-d h:i:s');
+            $comment->fecha_creacion = date('Y-m-d H:i:s');
 
             \DB::beginTransaction();
 
@@ -336,7 +336,7 @@ class ExamsController extends Controller
             $exam->fecha_activacion = $request->fecha_activacion;
             $exam->es_prueba = !isset( $request['es_prueba'] ) ? 'N' : 'S';
             $exam->modificado_por = \Auth::id();
-            $exam->fecha_modificacion = date('Y-m-d h:i:s');
+            $exam->fecha_modificacion = date('Y-m-d H:i:s');
 
             $comment = new ExamComment();
             $comment->id_examen_cab = $exam->id;
@@ -344,7 +344,7 @@ class ExamsController extends Controller
             $comment->id_estado_nuevo = $exam->id_estado;
             $comment->comentario = 'Examen modificado: Informacion General.';
             $comment->creado_por = \Auth::id();
-            $comment->fecha_creacion = date('Y-m-d h:i:s');
+            $comment->fecha_creacion = date('Y-m-d H:i:s');
 
             \DB::beginTransaction();
 
@@ -407,7 +407,7 @@ class ExamsController extends Controller
                             $examDet = ExamDetail::query()->where('id_examen_cab', $id)->where('id_reactivo', $det)->first();
                             $examDet->estado = 'E';
                             $examDet->modificado_por =  \Auth::id();
-                            $examDet->fecha_modificacion =  date('Y-m-d h:i:s');
+                            $examDet->fecha_modificacion =  date('Y-m-d H:i:s');
                             $examDetails[] = $examDet;
                         }
                     }
@@ -421,7 +421,7 @@ class ExamsController extends Controller
                                 $examDet = ExamDetail::query()->where('id_examen_cab', $id)->where('id_reactivo', $det)->first();
                                 $examDet->estado = 'A';
                                 $examDet->modificado_por =  \Auth::id();
-                                $examDet->fecha_modificacion =  date('Y-m-d h:i:s');
+                                $examDet->fecha_modificacion =  date('Y-m-d H:i:s');
                             }
                             else
                             {
@@ -430,7 +430,7 @@ class ExamsController extends Controller
                                 $detail['estado'] = 'A';
                                 $examDet = new ExamDetail($detail);
                                 $examDet->creado_por =  \Auth::id();
-                                $examDet->fecha_creacion =  date('Y-m-d h:i:s');
+                                $examDet->fecha_creacion =  date('Y-m-d H:i:s');
                             }
                             $examDetails[] = $examDet;
                         }
@@ -447,11 +447,11 @@ class ExamsController extends Controller
                         $comment->id_estado_nuevo = $exam->id_estado;
                         $comment->comentario = 'Examen modificado: Reactivos '.$desc_materia.'. Ids nuevos: '.$rea_nuevos.'; Ids eliminados: '.$rea_eliminados;
                         $comment->creado_por = \Auth::id();
-                        $comment->fecha_creacion = date('Y-m-d h:i:s');
+                        $comment->fecha_creacion = date('Y-m-d H:i:s');
 
                         \DB::beginTransaction();
                         $exam->modificado_por = \Auth::id();
-                        $exam->fecha_modificacion = date('Y-m-d h:i:s');
+                        $exam->fecha_modificacion = date('Y-m-d H:i:s');
                         $exam->save();
                         $exam->examsDetails()->saveMany($examDetails);
                         $comment->save();
@@ -502,11 +502,11 @@ class ExamsController extends Controller
             $comment->id_estado_nuevo = 6;
             $comment->comentario = 'Examen eliminado.';
             $comment->creado_por = \Auth::id();
-            $comment->fecha_creacion = date('Y-m-d h:i:s');
+            $comment->fecha_creacion = date('Y-m-d H:i:s');
 
             $exam->id_estado = 6;
             $exam->modificado_por = \Auth::id();
-            $exam->fecha_modificacion = date('Y-m-d h:i:s');
+            $exam->fecha_modificacion = date('Y-m-d H:i:s');
 
             \DB::beginTransaction();
 
@@ -544,13 +544,13 @@ class ExamsController extends Controller
             $comment->id_estado_nuevo = !isset( $request['id_estado'] ) ? $exam->id_estado : (int)$request->id_estado;
             $comment->comentario = $request->comentario;
             $comment->creado_por = \Auth::id();
-            $comment->fecha_creacion = date('Y-m-d h:i:s');
+            $comment->fecha_creacion = date('Y-m-d H:i:s');
 
             if( isset( $request['id_estado'] ) ){
                 $exam->resolucion = ((int)$request->id_estado == 4) ? strtoupper(trim($request->comentario)) : "";
                 $exam->id_estado = (int)$request->id_estado;
                 $exam->modificado_por = \Auth::id();
-                $exam->fecha_modificacion = date('Y-m-d h:i:s');
+                $exam->fecha_modificacion = date('Y-m-d H:i:s');
             }
 
             $exam->save();

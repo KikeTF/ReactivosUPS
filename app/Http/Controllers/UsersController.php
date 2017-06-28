@@ -136,7 +136,7 @@ class UsersController extends Controller
 
             $user->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $user->modificado_por = \Auth::id();
-            $user->fecha_modificacion = date('Y-m-d h:i:s');
+            $user->fecha_modificacion = date('Y-m-d H:i:s');
             $user->save();
 
             if (isset($request->perfiles))
@@ -147,7 +147,7 @@ class UsersController extends Controller
                         $profile['id_perfil'] = $perfil;
                         $profile['id_usuario'] = $id;
                         $profile['creado_por'] = \Auth::id();
-                        $profile['fecha_creacion'] = date('Y-m-d h:i:s');
+                        $profile['fecha_creacion'] = date('Y-m-d H:i:s');
                         $profiles[] = new ProfileUser($profile);
                     }
                 }
@@ -185,7 +185,7 @@ class UsersController extends Controller
         {
             $user->estado = 'I';
             $user->modificado_por = \Auth::id();
-            $user->fecha_modificacion = date('Y-m-d h:i:s');
+            $user->fecha_modificacion = date('Y-m-d H:i:s');
             $user->save();
             flash('Transacci&oacuten realizada existosamente', 'success');
         }catch (\Exception $ex)

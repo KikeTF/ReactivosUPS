@@ -57,7 +57,7 @@ class FieldsController extends Controller
             $field = new Field($request->all());
             $field->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $field->creado_por = \Auth::id();
-            $field->fecha_creacion = date('Y-m-d h:i:s');
+            $field->fecha_creacion = date('Y-m-d H:i:s');
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
@@ -128,7 +128,7 @@ class FieldsController extends Controller
             $field->nombre = $request->nombre;
             $field->descripcion = $request->descripcion;
             $field->modificado_por = \Auth::id();
-            $field->fecha_modificacion = date('Y-m-d h:i:s');
+            $field->fecha_modificacion = date('Y-m-d H:i:s');
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
@@ -154,7 +154,7 @@ class FieldsController extends Controller
         {
             $field->estado = 'E';
             $field->modificado_por = \Auth::id();
-            $field->fecha_modificacion = date('Y-m-d h:i:s');
+            $field->fecha_modificacion = date('Y-m-d H:i:s');
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
