@@ -269,6 +269,8 @@
                     ],
                     @if( isset($isReagent) )
                         sorting: [[1, 'desc']],
+                    @elseif( isset($isExam) )
+                        sorting: [[0, 'desc']],
                     @endif
                     @if( isset($newurl) ) // Sin botones adicionales
                         dom: '<"clearfix"<"pull-left tableTools-container"<"btn-group btn-overlap"B>><"pull-right tableTools-container"<"btn-group btn-overlap"T>>><"dataTables_wrapper"<"row"<"col-xs-6"l><"col-xs-6"f><r>>t<"row"<"col-xs-6"i><"col-xs-6"p>>>',

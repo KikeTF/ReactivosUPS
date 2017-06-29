@@ -2,7 +2,6 @@
     function getMentionsByCareer(formID, filter) {
         var formID = formID || document.forms[0].id;
         var objCarrera = $('#'+formID+' select[id=id_carrera]');
-        var objMencion = $('#'+formID+' select[id=id_mencion]');
         var filtroMencion = filter || "{{ (isset($filters) ? $filters[2] : 0) }}";
         if (objCarrera.val() > 0) {
             $.ajax({
@@ -16,6 +15,7 @@
             });
         }
         else {
+            var objMencion = $('#'+formID+' select[id=id_mencion]');
             objMencion.find('option').remove().end()
                 .append('<option value>-- No Aplica --</option>');
         }

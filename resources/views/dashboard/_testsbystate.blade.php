@@ -1,4 +1,4 @@
-<div id="tests-by-state-chart" style="min-width: 310px; max-width: 600px; height: 400px; margin: 0; padding: 0;"></div>
+<div id="tests-by-state-chart" style="height: 380px; margin: 0; padding: 0;"></div>
 
 <script type="text/javascript">
     $(document).ready(function() {

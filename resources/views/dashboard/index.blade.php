@@ -25,31 +25,33 @@
                 </div>
             </div>
 
-            <div class="widget-body" style="display: block; padding-top: 5px;">
+            <div class="widget-body" style="display: block;">
                 <div class="widget-main" style="padding: 5px 12px 10px 12px;">
-                    <div class="row" style="position: relative;">
-                        <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-xs-10 col-sm-2" style="padding-top: 5px;">
                             <div id="listaCampus">
                                 @include('shared.optionlists._campuslist')
                             </div>
                         </div>
 
-                        <div class="col-sm-3">
+                        <div class="col-xs-10 col-sm-3" style="padding-top: 5px;">
                             <div id="listaCarreras">
                                 @include('shared.optionlists._careerslist')
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
+                        <div class="col-xs-10 col-sm-6" style="padding-top: 5px;">
                             {!! Form::select('periodosSede[]', $locationPeriodsList, (isset($filters['periodosSede']) ? $filters['periodosSede'] : null ), ['multiple' => '', 'id' => 'periodosSede', 'class' => 'chosen-select form-control tag-input-style', 'data-placeholder' => '-- Seleccione Periodos --', 'style' => 'display: none;'] ) !!}
                         </div>
 
-                        <div class="col-sm-1" style="float:right;">
+                        <div class="col-xs-2 col-sm-1" style="padding-top: 5px;">
                             <button onclick="filtrarData(1); return false;" title="Filtrar" class="btn btn-white btn-primary btn-bold" style="float:right;">
                                 <i class='ace-icon fa fa-filter bigger-110 blue' style="margin: 0"></i>
                             </button>
                         </div>
+                    </div>
 
+                    <div class="row">
                         <div class="col-xs-12">
                             <div class="space-4"></div>
                         </div>
@@ -112,37 +114,44 @@
                 </div>
             </div>
 
-            <div class="widget-body" style="display: block; padding-top: 5px;">
+            <div class="widget-body" style="display: block;">
                 <div class="widget-main" style="padding: 5px 12px 10px 12px;">
-                    <div class="row" style="position: relative;">
-                        <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-xs-10 col-sm-3" style="padding-top: 5px;">
                             <div id="listaCampus">
                                 @include('shared.optionlists._campuslist', ['id_campus_test' => $filters_test[0]])
                             </div>
                         </div>
 
-                        <div class="col-sm-3">
+                        <div class="col-xs-10 col-sm-4" style="padding-top: 5px;">
                             <div id="listaCarreras">
                                 @include('shared.optionlists._careerslist', ['id_carrera_test' => $filters_test[1]])
                             </div>
                         </div>
-                        <div class="col-sm-3">
+
+                        <div class="col-xs-10 col-sm-4" style="padding-top: 5px;">
                             <div id="listaMenciones">
                                 @include('shared.optionlists._mentionslist', ['id_mencion_test' => $filters_test[2]])
                             </div>
                         </div>
 
-                        <div class="col-sm-1" style="float:right;">
+                        <div class="col-xs-10 col-sm-7" style="padding-top: 5px;">
+                            {!! Form::select('periodosSedeTest[]', $locationPeriodsList, (isset($filters_test['periodosSedeTest']) ? $filters_test['periodosSedeTest'] : null ), ['multiple' => '', 'id' => 'periodosSedeTest', 'class' => 'chosen-select form-control tag-input-style', 'data-placeholder' => '-- Seleccione Periodos --', 'style' => 'display: none;'] ) !!}
+                        </div>
+
+                        <div class="col-xs-2 col-sm-5" style="padding-top: 5px;">
                             <button onclick="filtrarData(2); return false;" title="Filtrar" class="btn btn-white btn-primary btn-bold" style="float:right;">
                                 <i class='ace-icon fa fa-filter bigger-110 blue' style="margin: 0"></i>
                             </button>
                         </div>
+                    </div>
 
-                        <div class="col-xs-12">
-                            <div class="space-4"></div>
-                        </div>
-
+                    <div class="row">
                         <div style="padding-right: 7px; padding-left: 7px;">
+                            <div class="col-xs-12">
+                                <div class="space-4"></div>
+                            </div>
+
                             <div class="col-md-4" align="center" style="padding-right: 5px; padding-left: 5px;">
                                 <div class="widget-box">
                                     <div class="widget-body">
@@ -181,6 +190,7 @@
     {!! Form::hidden('testIdCampus', 0, ['id' => 'testIdCampus']) !!}
     {!! Form::hidden('testIdCarrera', 0, ['id' => 'testIdCarrera']) !!}
     {!! Form::hidden('testIdMencion', 0, ['id' => 'testIdMencion']) !!}
+    {!! Form::hidden('testPeriodosSede[]', null, ['id' => 'testPeriodosSede']) !!}
 
     {!! Form::close() !!}
 
@@ -209,17 +219,19 @@
             return jsArray;
         }
         function filtrarData(type) {
+            var aprExam = '{{ ($aprExamen == 'S') ? 'S' : 'N' }}';
             $('#type').val(type);
 
             $('#reaIdCampus').val($('#formdata select[id=id_campus]').val());
             $('#reaIdCarrera').val($('#formdata select[id=id_carrera]').val());
             $('#reaPeriodosSede').val($('#formdata select[id=periodosSede]').val());
 
-            if(type == 2)
+            if(aprExam == 'S')
             {
                 $('#testIdCampus').val($('#formdata2 select[id=id_campus]').val());
                 $('#testIdCarrera').val($('#formdata2 select[id=id_carrera]').val());
                 $('#testIdMencion').val($('#formdata2 select[id=id_mencion]').val());
+                $('#testPeriodosSede').val($('#formdata2 select[id=periodosSedeTest]').val());
             }
 
             document.forms["formulario"].submit();

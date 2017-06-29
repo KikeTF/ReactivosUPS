@@ -36,7 +36,7 @@
 
         <div class="navbar-container" id="navbar-container">
             <div class="navbar-header pull-left">
-                <a href="/" class="navbar-brand">
+                <a href="{{ route('test.create') }}" class="navbar-brand">
                     <small>
                         <i class="fa fa-graduation-cap"></i>
                         Simulador de Examen Complexivo

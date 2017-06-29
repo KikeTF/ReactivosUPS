@@ -6,7 +6,7 @@
 @section('contenido')
     <?php
     $usetable = 1;
-    //$isReagent = 1;
+    $isExam = 1;
     $newurl = route('exam.exams.create');
     $columnas = array("id", "campus", "carrera", "periodo", "resolucion", "fecha_activacion", "es_prueba", "estado");
     ?>

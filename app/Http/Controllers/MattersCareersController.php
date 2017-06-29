@@ -290,7 +290,7 @@ class MattersCareersController extends Controller
                 $html = View::make('shared.optionlists._mentionslist')->render();
         }
         catch (\Exception $ex) {
-            Log::error("[MattersCareersController][getMentionsList] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            Log::error("[MattersCareersController][getMentionsList] Exception: " . $ex);
             $html = View::make('shared.optionlists._mentionslist')->render();
         }
         return \Response::json(['html' => $html]);

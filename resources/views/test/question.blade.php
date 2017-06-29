@@ -62,13 +62,13 @@
         </div>
     </div>
 
-
-
     {!! Form::hidden('id_nextQuestion', $idNext, ['id' => 'id_nextQuestion']) !!}
     {!! Form::hidden('duracion', $test->parameter->duracion_examen, ['id' => 'duracion']) !!}
     {!! Form::hidden('fecha_inicio', $test->fecha_inicio, ['id' => 'fecha_inicio']) !!}
     {!! Form::hidden('estado', "A", ['id' => 'estado']) !!}
 
+    <small class="lighter">{{ $reagent->distributive->matterCareer->matter->descripcion }}</small>
+    
     <div class="row form-group">
         <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
     </div>

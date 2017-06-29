@@ -1,4 +1,4 @@
-<div id="answers-by-matter-chart" style="min-width: 400px; height: 400px; margin: 0; padding: 0;"></div>
+<div id="answers-by-matter-chart" style="height: 380px; margin: 0; padding: 0;"></div>
 
 <script type="text/javascript">
     $(document).ready(function() {
