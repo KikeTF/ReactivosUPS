@@ -166,7 +166,8 @@
                                 {!! Form::textarea('answers['.$i.'][descripcion]',
                                     ((isset($answers) && $i < $answers->count()) ? $answers[$i]->descripcion : null),
                                     [   'id' => 'desc_op_resp_'.$i, 'class' => 'form-control', 'placeholder' => 'Descripción de respuesta.',
-                                        'size' => '100%x2', 'style' => 'resize: vertical;', 'required', ($i >= $min_resp) ? 'disabled' : '' ]) !!}
+                                        'size' => '100%x2', 'style' => 'resize: vertical;', 'required', ($i >= $min_resp) ? 'disabled' : '',
+                                         'onblur' => 'validateAnswer(this)']) !!}
                                 </div>
                             </td>
                             <td>

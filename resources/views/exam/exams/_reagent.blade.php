@@ -3,7 +3,6 @@
 </div>
 
 @if($reagent->imagen == 'S')
-
     <ul class="ace-thumbnails clearfix">
         <li>
             <a href="{{ route('reagent.reagents.image', $reagent->id) }}" data-rel="colorbox">

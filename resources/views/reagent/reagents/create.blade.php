@@ -8,10 +8,8 @@
     {!! Form::open(['id' => 'formulario',
         'class' => 'form-horizontal',
         'role' => 'form',
-        'route' =>
-        'reagent.reagents.store',
-        'method' => 'POST',
-        'files' => true]) !!}
+        'route' => 'reagent.reagents.store',
+        'method' => 'POST', 'files' => true]) !!}
     <?php
     $btnsave = 1;
     $btnrefresh = route('reagent.reagents.create');

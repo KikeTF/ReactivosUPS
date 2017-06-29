@@ -111,3 +111,22 @@ function imagePropertiesLoad()
         });
     })
 }
+
+function validateAnswer(e) {
+    var word = $(e).val();
+    var exceptions = ['NINGUNA', 'NINGUNA DE LAS ANTERIORES', 'TODAS', 'TODAS LAS ANTERIORES',
+                        'NINGUNO', 'NINGUNO DE LOS ANTERIORES', 'TODOS', 'TODOS LOS ANTERIORES'];
+    var found = $.inArray(word.toUpperCase(), exceptions) > -1;
+    
+    if(found)
+    {
+        $(e).closest('.form-group').addClass('has-error');
+        $(e).val('');
+        $("#" + e.id + "-error").text("Palabra restringida: " + word + ".");
+    }
+    else 
+    {
+        $(e).closest('.form-group').removeClass('has-error');
+        $("#" + e.id + "-error").empty();
+    }
+}

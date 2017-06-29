@@ -22,6 +22,10 @@
     </li>
 @endsection
 
+@push('specific-styles')
+    {!! HTML::style('ace/css/colorbox.min.css') !!}
+@endpush
+
 @section('contenido')
 
     {!! Form::open(['id' => 'formulario',
@@ -68,10 +72,21 @@
     {!! Form::hidden('estado', "A", ['id' => 'estado']) !!}
 
     <small class="lighter">{{ $reagent->distributive->matterCareer->matter->descripcion }}</small>
-    
+
     <div class="row form-group">
         <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
     </div>
+
+    @if($reagent->imagen == 'S')
+        <ul class="ace-thumbnails clearfix">
+            <li>
+                <a href="{{ route('reagent.reagents.image', $reagent->id) }}" data-rel="colorbox">
+                    <img class="img-responsive" src="{{ route('reagent.reagents.image', $reagent->id) }}" style="max-width: 300px; width: 100%;" />
+                </a>
+            </li>
+        </ul>
+        <div class="space-6"></div>
+    @endif
 
     @if($reagent->format->opciones_pregunta == 'S')
         <div class="row form-group">
@@ -151,6 +166,7 @@
 @endpush
 
 @push('specific-script')
+    {!! HTML::script('ace/js/jquery.colorbox.min.js') !!}
     {!! HTML::script('ace/js/bootbox.min.js') !!}
     {!! HTML::script('countdown/js/jquery.plugin.min.js') !!}
     {!! HTML::script('countdown/js/jquery.countdown.min.js') !!}
@@ -252,5 +268,42 @@
                 });
             }
         }
+
+        $(window).load(function() {
+            jQuery(function($) {
+                var $overflow = '';
+                var colorbox_params = {
+                    rel: 'colorbox',
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    photo: true,
+                    onOpen:function(){
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
+                    },
+                    onClosed:function(){
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
+                    }
+                };
+
+                $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+                $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");//let's add a custom loading icon
+
+
+                $(document).one('ajaxloadstart.page', function(e) {
+                    $('#colorbox, #cboxOverlay').remove();
+                });
+            })
+        });
     </script>
 @endpush

@@ -40,14 +40,19 @@
             $btnprint =  route("exam.exams.report", $exam->id);
 
         $btnclose = route('exam.exams.index');
+        foreach($mentionsList as $indexKey => $mention)
+        {
+            $firstMentionKey = $indexKey;
+            break;
+        }
         ?>
         @include('shared.templates._formbuttons')
 
-        <div id="accordion" class="accordion-style1 panel-group">
+        <div id="accordion-info" class="accordion-style1 panel-group">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse0">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-info" href="#collapse0">
                             <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
                             &nbsp;Informaci&oacute;n General
                         </a>
@@ -89,7 +94,7 @@
                             </div>
 
                             <div class="profile-info-row">
-                                <div class="profile-info-name">Descripcio&oacute;n</div>
+                                <div class="profile-info-name">Descripci&oacute;n</div>
                                 <div class="profile-info-value"><span>{{ $exam->descripcion }}</span></div>
                             </div>
 
@@ -113,103 +118,118 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            @foreach($mentionsList as $indexKey => $mention)
-                <?php
-                $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');
-                foreach($mattersIds as $id)
-                    $ids[] = $id;
-                $mattersCareers = \ReactivosUPS\MatterCareer::query()
-                        ->whereIn('id_materia', array_unique($ids))
-                        ->where('id_mencion', $indexKey)
-                        ->get();
-                ?>
-
-                @if($mentionsList->count() > 1 and $mattersCareers->count() > 0)
-                    <h3 class="header smaller lighter blue">Mencion: {{ $mention }}</h3>
+        <div id="accordion" class="accordion-style1 panel-group">
+            <div class="tabbable">
+                @if($mentionsList->count() > 1)
+                    <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab">
+                    @foreach($mentionsList as $indexKey => $mention)
+                        <li class="{{ ($firstMentionKey == $indexKey) ? 'active' : '' }}">
+                            <a data-toggle="tab" href="#{{ 'reactivos-'.$indexKey }}">
+                                {{ ($mentionsList->count() > 1) ? $mention : 'Reactivos' }}
+                            </a>
+                        </li>
+                    @endforeach
+                    </ul>
                 @endif
 
-                @foreach($mattersCareers as $matCar)
-                <?php $matter = $matCar->matter; ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $matter->id }}">
-                                <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                &nbsp;Reactivos: {{ $matter->descripcion }}
-                            </a>
-                        </h4>
-                    </div>
+                <div class="tab-content">
+                    @foreach($mentionsList as $indexKey => $mention)
+                        <?php
+                        $mattersIds = $exam->examsDetails->pluck('reagent')->pluck('id_materia');
+                        foreach($mattersIds as $id)
+                            $ids[] = $id;
+                        $mattersCareers = \ReactivosUPS\MatterCareer::query()
+                                ->whereIn('id_materia', array_unique($ids))
+                                ->where('id_mencion', $indexKey)
+                                ->get();
+                        ?>
+                        <div id="{{ 'reactivos-'.$indexKey }}" class="tab-pane{{ ($firstMentionKey == $indexKey) ? ' in active' : '' }}">
+                            @foreach($mattersCareers as $matCar)
+                                <?php $matter = $matCar->matter; ?>
 
-                    <div class="panel-collapse collapse" id="collapse{{ $matter->id }}">
-                        <div class="panel-body">
-                            @foreach($exam->examsDetails as $detail)
-                                @if($detail->reagent->id_materia == $matter->id)
-                                <div class="well" style="padding-bottom: 0;">
-                                    <div class="form-group" style="margin-right: 15px;">
-                                        <div class="col-sm-12">
-                                            <div class="row">
-                                                <div class="pull-left">
-                                                    <h5><strong><span class="blue smaller lighter">Cap&iacute;tulo {{ $detail->reagent->contentDetail->capitulo . ": " . $detail->reagent->contentDetail->tema }}</span></strong></h5>
-                                                </div>
-                                                <div class="pull-right">
-                                                    <a href="#my-modal-{{ $detail->id }}" class="blue" data-toggle="modal">
-                                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="row" style="min-height: 40px; margin-bottom: 10px; text-align: justify;">
-                                                {{ $detail->reagent->planteamiento }}
-                                            </div>
-                                            <div class="row">
-                                                <div class="pull-left">
-                                                    <strong>Creado por: <span class="grey smaller lighter">{{ $detail->reagent->user->FullName }}</span></strong>
-                                                </div>
-                                                <div class="pull-right">
-                                                    <strong>
-                                                        Dificultad:
-                                            <span class="grey smaller lighter">
-                                                {{ ( ( $detail->reagent->dificultad == 'B' ) ? 'Baja' : ( ( $detail->reagent->dificultad == 'M' ) ? 'Media' : 'Alta' ) ) }}
-                                            </span>
-                                                    </strong>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="pull-left">
-                                                    <strong>Periodo: <span class="grey smaller lighter">{{ $detail->reagent->period->descripcion }}</span></strong>
-                                                </div>
-                                                <div class="pull-right">
-                                                    <strong>Formato: <span class="grey smaller lighter">{{ $detail->reagent->format->nombre }}</span></strong>
-                                                </div>
-                                            </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $matter->id }}">
+                                                <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                                                &nbsp;Reactivos: {{ $matter->descripcion }}
+                                            </a>
+                                        </h4>
+                                    </div>
+
+                                    <div class="panel-collapse collapse" id="collapse{{ $matter->id }}">
+                                        <div class="panel-body">
+                                            @foreach($exam->examsDetails as $detail)
+                                                @if($detail->reagent->id_materia == $matter->id)
+                                                    <div class="well" style="padding-bottom: 0;">
+                                                        <div class="form-group" style="margin-right: 15px;">
+                                                            <div class="col-sm-12">
+                                                                <div class="row">
+                                                                    <div class="pull-left">
+                                                                        <h5><strong><span class="blue smaller lighter">Cap&iacute;tulo {{ $detail->reagent->contentDetail->capitulo . ": " . $detail->reagent->contentDetail->tema }}</span></strong></h5>
+                                                                    </div>
+                                                                    <div class="pull-right">
+                                                                        <a href="#my-modal-{{ $detail->id }}" class="blue" data-toggle="modal">
+                                                                            <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row" style="min-height: 40px; margin-bottom: 10px; text-align: justify;">
+                                                                    {{ $detail->reagent->planteamiento }}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="pull-left">
+                                                                        <strong>Creado por: <span class="grey smaller lighter">{{ $detail->reagent->user->FullName }}</span></strong>
+                                                                    </div>
+                                                                    <div class="pull-right">
+                                                                        <strong>
+                                                                            Dificultad:
+                                                            <span class="grey smaller lighter">
+                                                                {{ ( ( $detail->reagent->dificultad == 'B' ) ? 'Baja' : ( ( $detail->reagent->dificultad == 'M' ) ? 'Media' : 'Alta' ) ) }}
+                                                            </span>
+                                                                        </strong>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="pull-left">
+                                                                        <strong>Periodo: <span class="grey smaller lighter">{{ $detail->reagent->period->descripcion }}</span></strong>
+                                                                    </div>
+                                                                    <div class="pull-right">
+                                                                        <strong>Formato: <span class="grey smaller lighter">{{ $detail->reagent->format->nombre }}</span></strong>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="my-modal-{{ $detail->id }}" class="modal fade" tabindex="-1">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                    <h3 class="smaller lighter blue no-margin">
+                                                                        Cap&iacute;tulo {{ $detail->reagent->contentDetail->capitulo . ": " . $detail->reagent->contentDetail->tema }}
+                                                                        <br/><small>{{ $detail->reagent->distributive->matterCareer->matter->descripcion }}</small>
+                                                                    </h3>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    @include('exam.exams._reagent', ['reagent' => $detail->reagent])
+                                                                </div>
+                                                            </div><!-- /.modal-content -->
+                                                        </div><!-- /.modal-dialog -->
+                                                    </div>
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
-
-                                <div id="my-modal-{{ $detail->id }}" class="modal fade" tabindex="-1">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h3 class="smaller lighter blue no-margin">
-                                                Cap&iacute;tulo {{ $detail->reagent->contentDetail->capitulo . ": " . $detail->reagent->contentDetail->tema }}
-                                                <br/><small>{{ $detail->reagent->distributive->matterCareer->matter->descripcion }}</small>
-                                            </h3>
-                                        </div>
-                                        <div class="modal-body">
-                                            @include('exam.exams._reagent', ['reagent' => $detail->reagent])
-                                        </div>
-                                    </div><!-- /.modal-content -->
-                                </div><!-- /.modal-dialog -->
-                            </div>
-                                @endif
                             @endforeach
                         </div>
-                    </div>
+                    @endforeach
                 </div>
-                @endforeach
-
-            @endforeach
+            </div>
         </div>
 
     </form>
