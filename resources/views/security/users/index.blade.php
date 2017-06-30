@@ -25,9 +25,9 @@
             @foreach($users as $user)
                 <?php
                 $urls = array(
-                        'showurl' => route('security.users.show', $user->id),
-                        'editurl' => route('security.users.edit', $user->id),
-                        'destroyurl' => route('security.users.destroy', $user->id)
+                    'showurl' => route('security.users.show', $user->id),
+                    'editurl' => route('security.users.edit', $user->id),
+                    'destroyurl' => route('security.users.destroy', $user->id)
                 );
                 ?>
                 <tr>

@@ -82,6 +82,13 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <div class="col-sm-2 col-sm-offset-3">
+                                        <button onclick="downloadContent(); return false;" class="btn btn-sm btn-primary pull-left">
+                                            <i class="ace-icon fa fa-download bigger-110" aria-hidden="true"></i> Descargar Contenido
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -201,6 +208,10 @@
                 inputFileLoad();
             });
         });
+
+        function downloadContent() {
+            location.href='http://localhost:8000/general/matterscareers/' + $('#id_materia').val() + '/download';
+        }
     </script>
     @include('shared.optionlists.functions')
 @endpush

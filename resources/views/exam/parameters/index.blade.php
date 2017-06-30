@@ -82,7 +82,7 @@
 
                         <div class="profile-info-row">
                             <div class="profile-info-name">Duraci&oacute;n de Examen</div>
-                            <div class="profile-info-value"><span>{{ $parameter->duracion_examen }}</span></div>
+                            <div class="profile-info-value"><span>{{ $parameter->duracion_examen }} Minutos</span></div>
                         </div>
 
                         <div class="profile-info-row">

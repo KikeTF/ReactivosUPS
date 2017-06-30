@@ -14,6 +14,7 @@ use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\ReagentState;
 use Session;
+use Log;
 
 class DashboardController extends Controller
 {
@@ -71,7 +72,6 @@ class DashboardController extends Controller
         {
             $reagents = $reagents->where('creado_por', \Auth::id());
             $distributive = $distributive->where('id_usuario', \Auth::id());
-            $mattersCareers = $distributive->get()->pluck('mattercareer');
         }
 
         if($id_campus > 0)
@@ -93,6 +93,7 @@ class DashboardController extends Controller
             $distributive = $distributive->whereIn('id_periodo_sede', $ids_periodos_sedes);
         }
 
+        $mattersCareers = $distributive->get()->pluck('mattercareer');
         $distributive = $distributive->get();
 
         $MattersChartData = $this->reagentsByMatterChart($mattersCareers, $reagents);

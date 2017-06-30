@@ -20,6 +20,11 @@
             </div>
 
             <div class="profile-info-row">
+                <div class="profile-info-name">C&eacute;dula</div>
+                <div class="profile-info-value"><span>{{ $user->cod_usuario }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
                 <div class="profile-info-name">Usuario</div>
                 <div class="profile-info-value"><span>{{ $user->username }}</span></div>
             </div>

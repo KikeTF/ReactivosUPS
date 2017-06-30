@@ -34,7 +34,7 @@
     <div class="form-group">
         {!! Form::label('duracion_examen', 'Duraci&oacute;n de examen:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-2">
-            {!! Form::input('number','duracion_examen', null, ['class' => 'form-control', 'placeholder' => 'Ingrese duraci&oacute;n del examen']) !!}
+            {!! Form::input('number','duracion_examen', null, ['class' => 'form-control', 'placeholder' => 'Minutos']) !!}
         </div>
     </div>
 
