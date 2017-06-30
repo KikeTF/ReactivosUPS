@@ -24,7 +24,7 @@
             $btnedit = route('exam.exams.edit', $exam->id);
             $btndelete2 = 1;
         }
-        elseif ($exam->id_estado == 4)
+        elseif ($exam->id_estado == 4 && $exam->es_prueba == 'S')
         {
             if ($parameter->id_examen_test == $exam->id)
                 $btnexamactive = 1;

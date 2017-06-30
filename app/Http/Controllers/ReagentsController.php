@@ -256,6 +256,13 @@ class ReagentsController extends Controller
     {
         try {
             $reagent = Reagent::find($id);
+
+            if ( !in_array($reagent->id_estado, array(1, 4)) )
+            {
+                flash("Este reactivo no puede ser modificado!", 'warning');
+                return redirect()->route('reagent.reagents.show', $reagent->id);
+            }
+
             $matterContent = ContentHeader::query()
                 ->where('estado','A')
                 ->where('id_materia_carrera', $reagent->distributive->id_materia_carrera)
@@ -483,19 +490,67 @@ class ReagentsController extends Controller
      */
     public function destroy($id)
     {
-        $reagent = Reagent::find($id);
-        try {
+
+        try
+        {
+            $reagent = Reagent::find($id);
+
+            if ( !in_array($reagent->id_estado, array(1, 4)) )
+            {
+                flash("Este reactivo no puede ser eliminado!", 'warning');
+                return redirect()->route('reagent.reagents.show', $reagent->id);
+            }
+
             $reagent->id_estado = 7;
             $reagent->modificado_por = \Auth::id();
             $reagent->fecha_modificacion = date('Y-m-d H:i:s');
             $reagent->save();
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex)
+        {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[ReagentsController][destroy] Datos: id=" . $id . ". Exception: " . $ex);
         }
+
         return redirect()->route('reagent.reagents.index');
     }
 
+    public function matterContent(Request $request)
+    {
+        try
+        {
+            $id_campus = isset($request['id_campus']) ? (int)$request->id_campus : 0; 
+            $id_carrera = isset($request['id_carrera']) ? (int)$request->id_carrera : 0;
+            $id_materia = isset($request['id_materia']) ? (int)$request->id_materia : 0;
+            
+            if($id_materia > 0 && $id_carrera > 0 && $id_campus > 0)
+            {
+                $matterCareer = MatterCareer::with('careerCampus')
+                    ->where('id_materia', $id_materia)
+                    ->whereHas('careerCampus', function($query) use($id_carrera, $id_campus){
+                        $query->where('id_campus', $id_campus);
+                        $query->where('id_carrera', $id_carrera);
+                    })->first();
+
+                $file = storage_path().'/files/matters/UPS-MAT-'.$matterCareer->id.'.pdf';
+
+                if ( file_exists($file) )
+                    $message = 'OK';
+                else
+                    $message = 'Archivo no encontrado o no existe!';
+            }
+            else
+                $message = 'Debe seleccionar una materia para continuar!';
+        }
+        catch(\Exception $ex)
+        {
+            Log::error("[ReagentsController][matterContent] Exception: ".$ex);
+            $message = 'Problemas al descargar el archivo. Consulte con el administrador!';
+        }
+
+        $headers = array('Content-Type: application/json',);
+        return \Response::json(['message' => $message], 200, $headers);
+    }
 
     public function getFormat(Request $request)
     {
@@ -615,9 +670,14 @@ class ReagentsController extends Controller
                     $posY = $pdf->GetY();
                     if ($isValidPath)
                     {
+                        //dd(getimagesize($path));
                         list($w, $h) = getimagesize($path);
                         $posX = (17-($w*10/$h))/2+2;
-                        $pdf->MultiCell(17, 10, $pdf->Image($path, $posX, $posY, 0, 10), 0, 'C');
+                        $whDiff = $w/$h-1;
+                        if ($whDiff > 0.7)
+                            $pdf->MultiCell(17, 10, $pdf->Image($path, $posX+0.9, $posY, 16, 0), 0, 'C');
+                        else
+                            $pdf->MultiCell(17, 10, $pdf->Image($path, $posX, $posY, 0, 10), 0, 'C');
                     }
                 }
 

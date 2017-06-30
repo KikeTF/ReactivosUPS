@@ -183,6 +183,33 @@ Route::group(['prefix' => 'reagent', 'middleware' => ['auth', 'admin']], functio
         'as'    => 'reagent.reagents.format'
     ]);
 
+    Route::get('reagent/mattercontent/download', function (\Illuminate\Http\Request $request) {
+
+        $id_campus = isset($request['id_campus']) ? (int)$request->id_campus : 0;
+        $id_carrera = isset($request['id_carrera']) ? (int)$request->id_carrera : 0;
+        $id_materia = isset($request['id_materia']) ? (int)$request->id_materia : 0;
+        
+        $matterCareer = \ReactivosUPS\MatterCareer::with('careerCampus')
+            ->where('id_materia', $id_materia)
+            ->whereHas('careerCampus', function($query) use($id_carrera, $id_campus){
+                $query->where('id_campus', $id_campus);
+                $query->where('id_carrera', $id_carrera);
+            })->first();
+
+        $file = storage_path().'/files/matters/UPS-MAT-'.$matterCareer->id.'.pdf';
+        
+        $filename = 'UPS-'.$matterCareer->matter->descripcion.'-'.$matterCareer->id.'.pdf';
+        $headers = array('Content-Type: application/pdf',);
+        
+        return \Response::download($file, $filename, $headers);
+
+    })->name('reagent.reagents.mattercontentdownload');
+
+    Route::get('reagents/mattercontent', [
+        'uses'  => 'ReagentsController@matterContent',
+        'as'    => 'reagent.reagents.mattercontent'
+    ]);
+
     Route::resource('reagents','ReagentsController');
 
     Route::get('reagents/{id}/report', [

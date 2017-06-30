@@ -75,6 +75,12 @@ class ExamsController extends Controller
             $id_materia = (int)$id_matter;
             $exam = ExamHeader::find($id);
 
+            if ( !in_array($exam->id_estado, array(1, 3)) )
+            {
+                flash("Este examen no puede ser modificado!", 'warning');
+                return redirect()->route('exam.exams.show', $exam->id);
+            }
+
             $periodLoc = PeriodLocation::query()->whereIn('id', $exam->examPeriods->pluck('id_periodo_sede')->toArray())->get();
 
             $reagents = Reagent::query()
@@ -309,6 +315,12 @@ class ExamsController extends Controller
         try {
             $exam = ExamHeader::find($id);
 
+            if ( !in_array($exam->id_estado, array(1, 3)) )
+            {
+                flash("Este examen no puede ser modificado!", 'warning');
+                return redirect()->route('exam.exams.show', $exam->id);
+            }
+
             return view('exam.exams.edit')
                 ->with('exam', $exam);
 
@@ -495,6 +507,13 @@ class ExamsController extends Controller
         try
         {
             $exam = ExamHeader::find($id);
+
+            if ( !in_array($exam->id_estado, array(1, 3)) )
+            {
+                flash("Este examen no puede ser eliminado!", 'warning');
+                return redirect()->route('exam.exams.show', $exam->id);
+            }
+
             $comment = new ExamComment();
 
             $comment->id_examen_cab = $exam->id;
@@ -538,6 +557,12 @@ class ExamsController extends Controller
         {
             $exam = ExamHeader::find($id);
 
+            if ( $exam->id_estado == 4 )
+            {
+                flash("Este examen no puede ser modificado!", 'warning');
+                return redirect()->route('exam.exams.show', $exam->id);
+            }
+
             $comment = new ExamComment();
             $comment->id_examen_cab = $id;
             $comment->id_estado_anterior = $exam->id_estado;
@@ -575,6 +600,17 @@ class ExamsController extends Controller
         try
         {
             $exam = ExamHeader::find($id);
+
+            if ( !($exam->id_estado == 4) )
+            {
+                flash("El examen debe estar aprobado para poder ser activado para el simulador!", 'warning');
+                return redirect()->route('exam.exams.show', $exam->id);
+            } elseif ( !($exam->es_prueba == 'S') )
+            {
+                flash("El examen debe ser de prueba para poder ser activado para el simulador!", 'warning');
+                return redirect()->route('exam.exams.show', $exam->id);
+            }
+
 
             $oldParameter = ExamParameter::query()
                 ->where('id_carrera_campus', $exam->id_carrera_campus)
@@ -718,7 +754,11 @@ class ExamsController extends Controller
                             {
                                 list($w, $h) = getimagesize($path);
                                 $posX = (17-($w*10/$h))/2+2;
-                                $pdf->MultiCell(17, 10, $pdf->Image($path, $posX, $posY, 0, 10), 0, 'C');
+                                $whDiff = $w/$h-1;
+                                if ($whDiff > 0.7)
+                                    $pdf->MultiCell(17, 10, $pdf->Image($path, $posX+0.9, $posY, 16, 0), 0, 'C');
+                                else
+                                    $pdf->MultiCell(17, 10, $pdf->Image($path, $posX, $posY, 0, 10), 0, 'C');
                             }
 
                             //$pdf->SetXY($pdf->GetX(),$pdf->GetY()-10);
