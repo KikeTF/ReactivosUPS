@@ -84,7 +84,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-2 col-sm-offset-3">
-                                        <button onclick="downloadContent(); return false;" class="btn btn-sm btn-primary pull-left">
+                                        <button onclick="downloadContent('{{  route('reagent.reagents.mattercontent') }}', '{{ route('reagent.reagents.mattercontentdownload') }}'); return false;" class="btn btn-sm btn-primary pull-left">
                                             <i class="ace-icon fa fa-download bigger-110" aria-hidden="true"></i> Descargar Contenido
                                         </button>
                                     </div>
@@ -208,48 +208,6 @@
                 inputFileLoad();
             });
         });
-
-        function downloadContent() {
-            var idCam = $('#id_campus').val();
-            var idCar = $('#id_carrera').val();
-            var idMat = $('#id_materia').val();
-            var fileExist = false;
-            var message = 'No se pudo descargar contenido!';
-
-            if (eval(idCam) > 0 && eval(idCar) > 0 && eval(idMat) > 0) {
-                $.ajax({
-                    url: "{{  route('reagent.reagents.mattercontent') }}",
-                    data: { "id_materia" : idMat, "id_carrera" : idCar, "id_campus" : idCam },
-                    async: false,
-                    success: function(result){
-                        if (result.message == 'OK')
-                        {
-                            fileExist = true;
-                            var request = '?id_materia=' + idMat + '&id_carrera=' + idCar + '&id_campus=' + idCam;
-                            location.href='{{ route('reagent.reagents.mattercontentdownload') }}' + request;
-                        }
-                        else
-                            message = result.message;
-                    },
-                    error: function () {
-                        message = 'Problemas al descargar el archivo. Consulte con el administrador!';
-                    }
-                });
-            }
-
-            if ( !fileExist ) {
-                bootbox.alert({
-                    message: message,
-                    buttons: {
-                        'ok': {
-                            label: 'Cerrar',
-                            className: 'btn-danger'
-                        }
-                    }
-                });
-            }
-
-        }
     </script>
     @include('shared.optionlists.functions')
 @endpush

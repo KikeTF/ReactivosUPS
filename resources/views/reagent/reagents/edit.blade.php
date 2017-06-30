@@ -66,6 +66,17 @@
                         </div>
                     </div>
 
+                    {!! Form::hidden('id_campus', $reagent->distributive->matterCareer->careerCampus->campus->id, ['id' => 'id_campus']) !!}
+                    {!! Form::hidden('id_carrera', $reagent->distributive->matterCareer->careerCampus->career->id, ['id' => 'id_carrera']) !!}
+                    {!! Form::hidden('id_materia', $reagent->distributive->matterCareer->matter->id, ['id' => 'id_materia']) !!}
+                    <div class="form-group">
+                        <div class="col-sm-2 col-sm-offset-3">
+                            <button onclick="downloadContent('{{  route('reagent.reagents.mattercontent') }}', '{{ route('reagent.reagents.mattercontentdownload') }}'); return false;" class="btn btn-sm btn-primary pull-left">
+                                <i class="ace-icon fa fa-download bigger-110" aria-hidden="true"></i> Descargar Contenido
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         {!! Form::label('usr_responsable', 'Responsable:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
