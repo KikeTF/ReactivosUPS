@@ -40,7 +40,11 @@
                 <div class="profile-info-value">
                     <span>
                         @foreach(\Auth::user()->profilesUsers->pluck('profile') as $profile)
-                            {{ $profile->nombre }}<br/>
+                            {{ $profile->nombre }}
+                            @if($profile->id == \Session::get('idPerfil'))
+                                &nbsp;<i class="fa fa-check green"></i>
+                            @endif
+                            <br/>
                         @endforeach
                     </span>
                 </div>

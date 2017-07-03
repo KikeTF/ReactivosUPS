@@ -252,7 +252,8 @@ abstract class Controller extends BaseController
 
     public function loadSessionData($idPerfil, $idUsuario){
         $result = false;
-        try{
+        try
+        {
             Log::debug("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil);
 
             $idSede = (int)User::find($idUsuario)->id_sede;
@@ -275,11 +276,14 @@ abstract class Controller extends BaseController
                 ->first()->id;
 
             $perfil = Profile::find($idPerfil);
+            $idsCarreras = $perfil->careersProfiles->pluck('id_carrera')->toArray();
             $aprReactivo = $perfil->aprueba_reactivo;
             $aprReactivosMasivo = $perfil->aprueba_reactivos_masivo;
             $aprExamen = $perfil->aprueba_examen;
             $resetPassword = $perfil->restablece_password;
             $dashboard = $perfil->dashboard;
+
+            $idsJefeAreas = ($aprExamen == 'S') ? [] : Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id())->get()->pluck('id')->toArray();
 
             Session::put('idUsuario', $idUsuario);
             Session::put('idSede', $idSede);
@@ -288,6 +292,9 @@ abstract class Controller extends BaseController
             Session::put('descPeriodo', $periodo->descripcion);
             Session::put('idPeriodoSede', $idPeriodoSede);
             Session::put('idPerfil', $idPerfil);
+            Session::put('descPerfil', $perfil->nombre);
+            Session::put('idsCarreras', $idsCarreras);
+            Session::put('idsJefeAreas', $idsJefeAreas);
             Session::put('idPerfilUsuario', $idPerfilUsuario);
             Session::put('ApruebaReactivo', $aprReactivo);
             Session::put('ApruebaReactivosMasivos', $aprReactivosMasivo);
@@ -295,7 +302,8 @@ abstract class Controller extends BaseController
             Session::put('RestablecePassword', $resetPassword);
             Session::put('Dashboard', $dashboard);
             $result = true;
-        }catch (\Exception $ex){
+        }
+        catch (\Exception $ex){
             Log::error("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil.". Exception: ".$ex);
         }
 

@@ -166,6 +166,13 @@
                 </a>
             </div>
 
+            <div class="navbar-header pull-right">
+                <a class="navbar-brand" style="" >
+                    <small style="font-size: 70%">
+                        {{ \Session::get('descPerfil') }}
+                    </small>
+                </a>
+            </div>
         </div><!-- /.navbar-container -->
     </div>
 

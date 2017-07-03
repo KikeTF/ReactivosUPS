@@ -120,17 +120,20 @@ class UsersController extends Controller
 
             \DB::beginTransaction(); //Start transaction!
 
-            if ( !($request->password === '' && $request->password_confirm === '') )
+            if ( isset($request['password']) )
             {
-                if ($request->password === $request->password_confirm)
+                if ( !($request->password === '' && $request->password_confirm === '') )
                 {
-                    $user->cambiar_password = 'S';
-                    $user->setPasswordAttribute($request->password);
-                }
-                else
-                {
-                    flash("La contrase&ntilde;a no coincide! Por favor verifique.", 'danger')->important();
-                    return redirect()->route('security.users.edit', $id);
+                    if ($request->password === $request->password_confirm)
+                    {
+                        $user->cambiar_password = 'S';
+                        $user->setPasswordAttribute($request->password);
+                    }
+                    else
+                    {
+                        flash("La contrase&ntilde;a no coincide! Por favor verifique.", 'danger')->important();
+                        return redirect()->route('security.users.edit', $id);
+                    }
                 }
             }
 

@@ -37,41 +37,48 @@ class ReagentsController extends Controller
     {
         try
         {
+            $id_Sede = (int)\Session::get('idSede');
+            $ids_carreras = \Session::get('idsCarreras');
+            $aprReactivo = \Session::get('ApruebaReactivo');
+
+            if( ($aprReactivo == 'S') )
+            {
+                flash("Su perfil no esta autorizado para esta opci&oacute;n!", 'warning')->important();
+                return redirect()->route('index');
+            }
+            
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
             $id_estado = (isset($request['id_estado']) ? (int)$request->id_estado : 0);
 
-            $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
+            $reagents = Reagent::with('distributive')
+                ->where('id_estado', '!=', 7)
+                ->where('creado_por', \Auth::id())
+                ->whereHas('distributive', function($query) use($id_Sede, $id_campus, $id_carrera, $ids_carreras, $id_materia){
+                    $query->where('id_Sede', $id_Sede);
+                    if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                    if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
+                    elseif (sizeof($ids_carreras) > 0) $query->whereIn('id_carrera', $ids_carreras);
+                    if ($id_materia > 0) $query->where('id_materia', $id_materia);
+                });
 
-            if ($id_campus > 0 && $id_carrera > 0 && $id_materia > 0)
-            {
-                $ids[] = $this->getDistributive($id_materia, $id_carrera, $id_campus)->first()->id;
-                if ($id_estado == 0)
-                    $reagents = Reagent::filter($ids)->where('id_estado', '!=', 7);
-                else
-                    $reagents = Reagent::filter2($ids, $id_estado)->where('id_estado', '!=', 7);
-            }
-            else
-            {
-                $idsDist = Distributive::query()->where('id_usuario', \Auth::id())->where('estado', 'A')->get()->pluck('id')->toArray();
-                $reagents = Reagent::query()
-                    ->where('id_estado', '!=', 7)
-                    ->whereIn('id_distributivo', array_unique($idsDist));
-            }
+            if ($id_estado > 0)
+                $reagents = $reagents->where('id_estado', $id_estado);
 
             $reagents = $reagents->orderBy('id', 'desc')->get();
+
+            $filters = array($id_campus, $id_carrera, $id_materia, $id_estado);
 
             return view('reagent.reagents.index')
                 ->with('reagents', $reagents)
                 ->with('campusList', $this->getCampuses())
-                //->with('careersList', $this->getCareers())
-                //->with('matters', $this->getMatters($id_campus, $id_carrera, 0, 0))
                 ->with('states', $this->getReagentsStates())
                 ->with('statesLabels', $this->getReagentsStatesLabel())
                 ->with('filters', $filters);
         }
-        catch (\Exception $ex) {
+        catch (\Exception $ex)
+        {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsController][index] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
             return redirect()->route('index');

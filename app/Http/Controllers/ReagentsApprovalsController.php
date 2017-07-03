@@ -4,6 +4,7 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Area;
@@ -29,60 +30,53 @@ class ReagentsApprovalsController extends Controller
     {
         try
         {
+            $id_Sede = (int)\Session::get('idSede');
+            $ids_carreras = \Session::get('idsCarreras');
+            $ids_JefeAreas = \Session::get('idsJefeAreas');
             $aprReactivo = \Session::get('ApruebaReactivo');
-            if($aprReactivo == 'S')
-            {
-                $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
-                $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
-                $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
-                $id_careerCampus = 0;
-                $filters = array($id_campus, $id_carrera, $id_materia);
-                $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
-                $id_area = ($area->count() > 0) ? $area->first()->id : 0;
 
-                if($id_campus > 0 && $id_carrera > 0 && $id_materia > 0)
-                {
-                    $distributivo = $this->getDistributive($id_materia, $id_carrera, $id_campus);
-                    $idsDist = array_unique($distributivo->pluck('id')->toArray());
-                    $reagents = Reagent::filter($idsDist)->where('id_estado', '!=', 7);
-                }
-                else
-                {
-                    if($id_campus > 0 && $id_carrera > 0)
-                        $id_careerCampus = CareerCampus::query()
-                            ->where('estado','A')
-                            ->where('id_carrera', $id_carrera)
-                            ->where('id_campus', $id_campus)->first()->id;
-
-                    $matters = MatterCareer::filter($id_careerCampus, 0, $id_area)->get();
-                    $idsMat = array_unique($matters->pluck('id_materia')->ToArray());
-                    $reagents = Reagent::query()->where('id_estado','!=',7)->whereIn('id_materia', $idsMat);
-                }
-            }
-            else
+            if( !($aprReactivo == 'S') )
             {
                 flash("Su perfil no esta autorizado para esta opci&oacute;n!", 'warning')->important();
-                return redirect()->route('dashboard.index');
+                return redirect()->route('index');
             }
 
-            if(isset($reagents))
-            {
-                $reagents = $reagents->orderBy('id', 'asc')->get();
-                
-                if($reagents->count() == 0)
-                    flash("No se encontro informaci&oacute;n!", 'warning');
-                
-                return view('reagent.approvals.index')
-                    ->with('reagents', $reagents)
-                    ->with('campusList', $this->getCampuses())
-                    ->with('filters', $filters);
-            }
-            else
-                return view('reagent.approvals.index')
-                    ->with('campusList', $this->getCampuses())
-                    ->with('filters', $filters);
+            $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
+            $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
+            $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
+            $ids_areas = (sizeof($ids_JefeAreas) > 0) ? $ids_JefeAreas : (isset($request['id_area']) ? [(int)$request->id_area] : []);
 
-        }catch(\Exception $ex)
+            $mattersCareers = MatterCareer::with('careerCampus')
+                ->whereHas('careerCampus', function($query) use($id_campus, $id_carrera, $ids_carreras){
+                    if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                    if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
+                    if (sizeof($ids_carreras) > 0) $query->whereIn('id_carrera', $ids_carreras);
+                });
+
+            if (sizeof($ids_areas) > 0)
+                $mattersCareers = $mattersCareers->whereIn('id_area', $ids_areas);
+
+            $ids_materias_carreras = $mattersCareers->get()->pluck('id')->toArray();
+
+            $reagents = Reagent::with('distributive')
+                ->where('id_estado', '!=', 7)
+                ->whereHas('distributive', function($query) use($id_Sede, $id_campus, $id_carrera, $ids_carreras, $id_materia, $ids_materias_carreras){
+                    $query->where('id_Sede', $id_Sede);
+                    if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                    if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
+                    elseif (sizeof($ids_carreras) > 0) $query->whereIn('id_carrera', $ids_carreras);
+                    if ($id_materia > 0) $query->where('id_materia', $id_materia);
+                    elseif (sizeof($ids_materias_carreras) > 0) $query->whereIn('id_materia_carrera', $ids_materias_carreras);
+                })->orderBy('id', 'desc')->get();
+
+            $filters = array($id_campus, $id_carrera, $id_materia);
+
+            return view('reagent.approvals.index')
+                ->with('reagents', $reagents)
+                ->with('campusList', $this->getCampuses())
+                ->with('filters', $filters);
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsApprovalsController][index] Exception: ".$ex);

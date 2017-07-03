@@ -30,7 +30,8 @@ class ExamsController extends Controller
      */
     public function index(Request $request)
     {
-        try {
+        try
+        {
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
@@ -42,9 +43,11 @@ class ExamsController extends Controller
 
             return view('exam.exams.index')
                 ->with('exams', $exams);
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex)
+        {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
-            Log::error("[ExamsController][index] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+            Log::error("[ExamsController][index] Exception: " . $ex);
             return redirect()->route('index');
         }
     }

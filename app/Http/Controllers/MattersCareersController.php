@@ -30,49 +30,37 @@ class MattersCareersController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try
+        {
+            $ids_carreras = \Session::get('idsCarreras');
+            $ids_JefeAreas = \Session::get('idsJefeAreas');
+
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
-            $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
-            $id_careerCampus = 0;
+            $ids_areas = (sizeof($ids_JefeAreas) > 0) ? $ids_JefeAreas : (isset($request['id_area']) ? [(int)$request->id_area] : []);
 
-            $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
-            $idJefeArea = ($area->count() > 0) ? $area->first()->id : 0;
+            $mattersCareers = MatterCareer::with('careerCampus')
+                ->whereHas('careerCampus', function($query) use($id_campus, $id_carrera, $ids_carreras){
+                    if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                    if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
+                    if (sizeof($ids_carreras) > 0) $query->whereIn('id_carrera', $ids_carreras);
+                });
 
-            if($id_carrera > 0 && $id_campus > 0)
-            {
-                $id_careerCampus = $this->getCareersCampuses()
-                    ->where('id_carrera', $id_carrera)
-                    ->where('id_campus', $id_campus)
-                    ->first()->id;
-            }
+            if ($id_mencion > 0)
+                $mattersCareers = $mattersCareers->where('id_mencion', $id_mencion);
 
-            if( $idJefeArea > 0 )
-                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $idJefeArea);
-            else
-                $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area);
+            if (sizeof($ids_areas) > 0)
+                $mattersCareers = $mattersCareers->whereIn('id_area', $ids_areas);
 
-            //$id_perfil = (int)Session::get('idPerfil');
-            //$profile = Profile::find($id_perfil);
+            $mattersCareers = $mattersCareers->get();
 
-            //if($profile->careersProfiles->count() > 0)
-            //    $mattersCareers = $mattersCareers->whereIn('id_carrera', array_unique($profile->careersProfiles->pluck('id_carrera')->toArray()));
-
-            $mattersCareers = $mattersCareers->orderBy('id', 'desc')->get();
-
-            if($mattersCareers->count() == 0)
-                flash("No se encontro informaci&oacute;n!", 'warning');
-
-            $filters = array($id_campus, $id_carrera, $id_mencion, (($idJefeArea > 0) ? -1 :$id_area));
+            $filters = array($id_campus, $id_carrera, $id_mencion, ((sizeof($ids_areas) > 0 && !(sizeof($ids_JefeAreas) > 0)) ? $ids_areas[0] : -1));
 
             return view('general.matterscareers.index')
                 ->with('campusList', $this->getCampuses())
                 ->with('mattersCareers', $mattersCareers)
-                //->with('campuses', $this->getCampuses())
-                //->with('careers', $this->getCareers())
                 ->with('areasList', $this->getAreas())
-                //->with('mentions', $this->getMentions())
                 ->with('filters', $filters);
         }catch(\Exception $ex)
         {
@@ -310,24 +298,29 @@ class MattersCareersController extends Controller
             $aprReactivo = \Session::get('ApruebaReactivo');
             $aprExamen = \Session::get('ApruebaExamen');
             $id_Sede = (int)\Session::get('idSede');
+            $ids_carreras = \Session::get('idsCarreras');
+            $ids_JefeAreas = \Session::get('idsJefeAreas');
 
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
             $id_careerCampus = 0;
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
-            $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+            $ids_areas = (sizeof($ids_JefeAreas) > 0) ? $ids_JefeAreas : (isset($request['id_area']) ? [(int)$request->id_area] : []);
 
-            if($aprReactivo == 'S')
+            if($aprReactivo == 'S' && $aprExamen == 'S')
             {
-                $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
-                $id_area = ($area->count() > 0) ? $area->first()->id : 0;
+                $mattersCareers = MatterCareer::with('careerCampus')
+                    ->whereHas('careerCampus', function($query) use($id_campus, $id_carrera, $ids_carreras){
+                        if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                        if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
+                        elseif (sizeof($ids_carreras) > 0) $query->whereIn('id_carrera', $ids_carreras);
+                    });
 
-                if($id_carrera > 0 && $id_campus > 0)
-                {
-                    $id_careerCampus = $this->getCareersCampuses()->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
-                    $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
-                }
+                if(sizeof($ids_areas) > 0)
+                    $mattersCareers = $mattersCareers->whereIn('id_area', $ids_areas);
+
+                $dist = $mattersCareers->get();
             }
             else
             {

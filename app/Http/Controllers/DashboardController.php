@@ -10,6 +10,7 @@ use ReactivosUPS\Area;
 use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
+use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\Profile;
@@ -31,9 +32,8 @@ class DashboardController extends Controller
         $aprReactivo = \Session::get('ApruebaReactivo');
         $aprExamen = \Session::get('ApruebaExamen');
         $id_Sede = (int)\Session::get('idSede');
-        $id_sede = (int)Session::get('idSede');
-        $id_perfil = (int)Session::get('idPerfil');
-        $profile = Profile::find($id_perfil);
+        $ids_carreras = \Session::get('idsCarreras');
+        $ids_areas = \Session::get('idsJefeAreas');
 
         // Request Data
         $id_campus = (isset($request['reaIdCampus']) ? (int)$request->reaIdCampus : 0);
@@ -53,26 +53,26 @@ class DashboardController extends Controller
         $filters_test = array($id_campus_test, $id_carrera_test, $id_mencion_test);
         $filters_test['periodosSedeTest'] = $ids_periodos_sedes_test;
 
-        // ID de Jefe de Area
-        $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
-        $id_area = ($area->count() > 0) ? $area->first()->id : 0;
-
         $distributive = Distributive::query()->where('estado','A')->where('id_sede', $id_Sede);
 
-        if($profile->careersProfiles->count() > 0)
-            $distributive = $distributive->whereIn('id_carrera', array_unique($profile->careersProfiles->pluck('id_carrera')->toArray()));
+        if(sizeof($ids_carreras) > 0)
+            $distributive = $distributive->whereIn('id_carrera', $ids_carreras);
 
-        if($aprReactivo == 'S')
+        if($aprReactivo == 'S' && $aprExamen == 'S')
         {
-            if($id_campus > 0 && $id_carrera > 0)
-                $mattersCareers = $this->getMatterParameters(0, $id_carrera, $id_campus);
-            else
-                $mattersCareers = $this->getMattersCareers()->where('estado', 'A')->where('aplica_examen', 'S');
+            $mattersCareers = MatterCareer::with('careerCampus')
+                ->where('estado', 'A')
+                ->where('aplica_examen', 'S')
+                ->whereHas('careerCampus', function($query) use($id_campus, $id_carrera, $ids_carreras){
+                    if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                    if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
+                    elseif (sizeof($ids_carreras) > 0) $query->whereIn('id_carrera', $ids_carreras);
+                });
 
-            if($id_area)
-                $mattersCareers = $mattersCareers->where('id_area', $id_area);
+            if(sizeof($ids_areas) > 0)
+                $mattersCareers = $mattersCareers->whereIn('id_area', $ids_areas);
 
-            $distributive = $distributive->whereIn('id_materia_carrera', $mattersCareers->pluck('id')->toArray());
+            $distributive = $distributive->whereIn('id_materia_carrera', $mattersCareers->get()->pluck('id')->toArray());
         }
         else
         {

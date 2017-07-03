@@ -6,15 +6,15 @@
 @section('contenido')
     <?php
     $usetable = 1;
-    $columnas = array("username", "nombres", "email", "tipo", "estado");
+    $columnas = array("nombres", "username", "email", "tipo", "estado");
     ?>
 
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
         <table id="_dataTable" class="table table-striped table-bordered table-hover responsive no-wrap" width="100%">
             <thead>
             <tr>
+                <th style="text-align:center">Nombre Completo</th>
                 <th style="text-align:center">Usuario</th>
-                <th style="text-align:center">Nombres y Apellidos</th>
                 <th style="text-align:center">Email</th>
                 <th style="text-align:center">Tipo</th>
                 <th style="text-align:center">Estado</th>
@@ -31,8 +31,8 @@
                 );
                 ?>
                 <tr>
+                    <td>{{ $user->FullName }}</td>
                     <td>{{ $user->username }}</td>
-                    <td>{{ $user->nombres.' '.$user->apellidos }}</td>
                     <td>{{ $user->email }}</td>
                     <td align="center">{{ $user->tipo == 'D' ? 'Docente' : 'Estudiante'  }}</td>
                     <td align="center">
