@@ -130,7 +130,7 @@
                                         <div>
                                             <a href="#" data-target="#forgot-box" class="forgot-password-link">
                                                 <i class="ace-icon fa fa-arrow-left"></i>
-                                                Olvide mi contrase&ntilde;a
+                                                Olvid&eacute; mi contrase&ntilde;a
                                             </a>
                                         </div>
                                     </div>
@@ -209,6 +209,7 @@
                 async: true,
                 cache: false,
                 error: function (e) {
+                    console.log('Error:');
                     console.log(e);
                 },
                 success: function (r) {

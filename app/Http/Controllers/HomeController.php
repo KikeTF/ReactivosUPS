@@ -17,15 +17,20 @@ class HomeController extends Controller
      */
     public function index()
     {
-        try{
+        try
+        {
             if($this->isSessionExpire())
                 return redirect()->guest('auth/login');
 
             if(\Auth::user()->cambiar_password == 'S')
                 return redirect()->route('account.changePassword');
 
-            return redirect()->route('dashboard.index');
-        }catch(\Exception $ex)
+            if(\Session::get('Dashboard') == 'S')
+                return redirect()->route('dashboard.index');
+
+            return view('index');
+        }
+        catch(\Exception $ex)
         {
             Log::error("[HomeController][index] Exception: ".$ex);
             return redirect()->guest('auth/login');

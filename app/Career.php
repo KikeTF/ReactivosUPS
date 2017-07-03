@@ -18,4 +18,8 @@ class Career extends Model
     public function careersCampuses(){
         return $this->hasMany('ReactivosUPS\CareerCampus', 'id_carrera');
     }
+
+    public function careersProfiles(){
+        return $this->hasMany('ReactivosUPS\CareerProfile', 'id_carrera');
+    }
 }

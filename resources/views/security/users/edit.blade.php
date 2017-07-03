@@ -32,6 +32,7 @@
         </div>
     </div>
 
+    @if(\Session::get('RestablecePassword') == 'S');
     <div class="form-group">
         {!! Form::label('password', 'Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
@@ -61,6 +62,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <div class="form-group">
         {!! Form::label('tipo', 'Sede:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
@@ -86,7 +88,7 @@
     <div class="form-group">
         {!! Form::label('perfiles', 'Perfiles de Acceso:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select multiple="" name="perfiles[]" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Perfiles --" style="display: none;" required>
+            <select multiple="" name="perfiles[]" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Perfiles --" style="display: none;">
                 <option value=""></option>
                 @foreach($profilesList as $profile)
                     <option value="{{ $profile->id }}" {!! ($userProfiles->where('id_perfil', $profile->id)->count() > 0) ? "selected" : "" !!}>{{ $profile->nombre }}</option>

@@ -257,10 +257,12 @@ abstract class Controller extends BaseController
 
             $idSede = (int)User::find($idUsuario)->id_sede;
 
-            $idPeriodo = (int)Period::query()
+            $periodo = Period::query()
                 ->where('estado', 'A')
                 ->orderBy('fecha_inicio', 'desc')
-                ->first()->id;
+                ->first();
+
+            $idPeriodo = (int)$periodo->id;
 
             $idPerfilUsuario = (int)ProfileUser::query()
                 ->where('id_perfil', $idPerfil)
@@ -276,16 +278,22 @@ abstract class Controller extends BaseController
             $aprReactivo = $perfil->aprueba_reactivo;
             $aprReactivosMasivo = $perfil->aprueba_reactivos_masivo;
             $aprExamen = $perfil->aprueba_examen;
+            $resetPassword = $perfil->restablece_password;
+            $dashboard = $perfil->dashboard;
 
             Session::put('idUsuario', $idUsuario);
             Session::put('idSede', $idSede);
             Session::put('idPeriodo', $idPeriodo);
+            Session::put('codPeriodo', $periodo->cod_periodo);
+            Session::put('descPeriodo', $periodo->descripcion);
             Session::put('idPeriodoSede', $idPeriodoSede);
             Session::put('idPerfil', $idPerfil);
             Session::put('idPerfilUsuario', $idPerfilUsuario);
             Session::put('ApruebaReactivo', $aprReactivo);
             Session::put('ApruebaReactivosMasivos', $aprReactivosMasivo);
             Session::put('ApruebaExamen', $aprExamen);
+            Session::put('RestablecePassword', $resetPassword);
+            Session::put('Dashboard', $dashboard);
             $result = true;
         }catch (\Exception $ex){
             Log::error("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil.". Exception: ".$ex);

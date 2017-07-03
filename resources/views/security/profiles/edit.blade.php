@@ -31,50 +31,80 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('aprueba_reactivo', '¿Aprueba Reactivo?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('careersprofile', 'Carrera:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <div class="checkbox">
-                <label>
-                    {!! Form::checkbox('aprueba_reactivo', $profile->aprueba_reactivo, ($profile->aprueba_reactivo == 'S') ? true : false, ['class' => 'ace']) !!}
-                    <span class="lbl"></span>
-                </label>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('aprueba_reactivos_masivo', '¿Aprobaci&oacute;n Masiva de Reactivos?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            <div class="checkbox">
-                <label>
-                    {!! Form::checkbox('aprueba_reactivos_masivo', $profile->aprueba_reactivos_masivo, ($profile->aprueba_reactivos_masivo == 'S') ? true : false, ['class' => 'ace']) !!}
-                    <span class="lbl"></span>
-                </label>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        {!! Form::label('aprueba_examen', '¿Aprueba Examen?', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
-        <div class="col-sm-10">
-            <div class="checkbox">
-                <label>
-                    {!! Form::checkbox('aprueba_examen', $profile->aprueba_examen, ($profile->aprueba_examen == 'S') ? true : false, ['class' => 'ace']) !!}
-                    <span class="lbl"></span>
-                </label>
-            </div>
+            <select multiple="" name="careersprofile[]" id="careersprofile" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Carreras --" style="display: none;">
+                <option value=""></option>
+                @foreach($careersList as $career)
+                    <option value="{{ $career->id }}" {!! ($profile->careersProfiles->where('id_carrera', $career->id)->count() > 0) ? "selected" : "" !!}>{{ $career->descripcion }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('optionsprofile', 'Accesos:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
-            <select multiple="" name="optionsprofile[]" id="optionsprofile" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Accesos --" style="display: none;" required>
+            <select multiple="" name="optionsprofile[]" id="optionsprofile" class="chosen-select form-control tag-input-style" data-placeholder="-- Seleccione Accesos --" style="display: none;">
                 <option value=""></option>
                 @foreach($optionsList as $option)
-                    <option value="{{ $option->id }}" {!! ($optionsProfiles->where('id_opcion', $option->id)->count() > 0) ? "selected" : "" !!}>{{ $option->descripcion }}</option>
+                    <option value="{{ $option->id }}" {!! ($profile->optionsProfiles->where('id_opcion', $option->id)->count() > 0) ? "selected" : "" !!}>{{ $option->descripcion }}</option>
                 @endforeach
             </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('', 'Permisos:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="well well-sm" style="margin: 0">
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('aprueba_reactivo', $profile->aprueba_reactivo, ($profile->aprueba_reactivo == 'S') ? true : false, ['class' => 'ace']) !!}
+                                <span class="lbl">&nbsp;Aprueba Reactivo</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('aprueba_reactivos_masivo', $profile->aprueba_reactivos_masivo, ($profile->aprueba_reactivos_masivo == 'S') ? true : false, ['class' => 'ace']) !!}
+                                <span class="lbl">&nbsp;Aprobaci&oacute;n Masiva de Reactivos</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('aprueba_examen', $profile->aprueba_examen, ($profile->aprueba_examen == 'S') ? true : false, ['class' => 'ace']) !!}
+                                <span class="lbl">&nbsp;Aprueba Examen</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('restablece_password', $profile->restablece_password, ($profile->restablece_password == 'S') ? true : false, ['class' => 'ace']) !!}
+                                <span class="lbl">&nbsp;Restablece Contrase&ntilde;a</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('dashboard', $profile->dashboard, ($profile->dashboard == 'S') ? true : false, ['class' => 'ace']) !!}
+                                <span class="lbl">&nbsp;Dashboard</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

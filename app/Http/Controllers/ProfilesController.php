@@ -4,6 +4,8 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\Career;
+use ReactivosUPS\CareerProfile;
 use ReactivosUPS\Profile;
 use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Http\Controllers\Controller;
@@ -47,8 +49,14 @@ class ProfilesController extends Controller
                 ->orderBy('descripcion', 'asc')
                 ->get();
 
+            $careersList = Career::query()
+                ->where('estado','A')
+                ->orderBy('descripcion', 'asc')
+                ->get();
+
             return view('security.profiles.create')
-                ->with('optionsList', $optionsList);
+                ->with('optionsList', $optionsList)
+                ->with('careersList', $careersList);
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
@@ -72,21 +80,38 @@ class ProfilesController extends Controller
             $profile->aprueba_reactivo = !isset( $request['aprueba_reactivo'] ) ? 'N' : 'S';
             $profile->aprueba_examen = !isset( $request['aprueba_examen'] ) ? 'N' : 'S';
             $profile->aprueba_reactivos_masivo = !isset( $request['aprueba_reactivos_masivo'] ) ? 'N' : 'S';
+            $profile->restablece_password = !isset( $request['restablece_password'] ) ? 'N' : 'S';
+            $profile->dashboard = !isset( $request['dashboard'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->creado_por = \Auth::id();
             $profile->fecha_creacion = date('Y-m-d H:i:s');
             $profile->save();
 
-            $optionsprofiles = array();
-            foreach ($request->optionsprofile as $option) {
-                $optionsprofile['id_opcion'] = $option;
-                $optionsprofile['id_perfil'] = $profile->id;
-                $optionsprofile['creado_por'] = \Auth::id();
-                $optionsprofile['fecha_creacion'] = date('Y-m-d H:i:s');
-                $optionsprofiles[] = new OptionProfile($optionsprofile);
+            if (isset($request->careersprofile))
+            {
+                $careersprofiles = array();
+                foreach ($request->careersprofile as $career) {
+                    $careersprofile['id_carrera'] = $career;
+                    $careersprofile['id_perfil'] = $profile->id;
+                    $careersprofile['creado_por'] = \Auth::id();
+                    $careersprofile['fecha_creacion'] = date('Y-m-d H:i:s');
+                    $careersprofiles[] = new CareerProfile($careersprofile);
+                }
+                $profile->careersProfiles()->saveMany($careersprofiles);
             }
 
-            Profile::find($profile->id)->optionsProfiles()->saveMany($optionsprofiles);
+            if (isset($request->optionsprofile))
+            {
+                $optionsprofiles = array();
+                foreach ($request->optionsprofile as $option) {
+                    $optionsprofile['id_opcion'] = $option;
+                    $optionsprofile['id_perfil'] = $profile->id;
+                    $optionsprofile['creado_por'] = \Auth::id();
+                    $optionsprofile['fecha_creacion'] = date('Y-m-d H:i:s');
+                    $optionsprofiles[] = new OptionProfile($optionsprofile);
+                }
+                $profile->optionsProfiles()->saveMany($optionsprofiles);
+            }
 
             flash('Transacci&oacuten realizada existosamente', 'success');
         }catch (\Exception $ex)
@@ -142,7 +167,6 @@ class ProfilesController extends Controller
     {
         try{
             $profile = Profile::find($id);
-            $optionsProfiles = OptionProfile::query()->where('id_perfil', $id)->get();
 
             $optionsList = Option::query()
                 ->where('estado','A')
@@ -150,10 +174,15 @@ class ProfilesController extends Controller
                 ->orderBy('descripcion', 'asc')
                 ->get();
 
+            $careersList = Career::query()
+                ->where('estado','A')
+                ->orderBy('descripcion', 'asc')
+                ->get();
+
             return view('security.profiles.edit')
                 ->with('profile', $profile)
-                ->with('optionsProfiles', $optionsProfiles)
-                ->with('optionsList', $optionsList);
+                ->with('optionsList', $optionsList)
+                ->with('careersList', $careersList);
         }catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
@@ -177,29 +206,57 @@ class ProfilesController extends Controller
 
         try
         {
-            $optionsprofiles = array();
-            foreach ($request->optionsprofile as $option) {
-                if(Profile::find($profile->id)->optionsProfiles()->where('id_opcion', $option)->count() == 0){
-                    $optionsprofile['id_opcion'] = $option;
-                    $optionsprofile['id_perfil'] = $profile->id;
-                    $optionsprofile['creado_por'] = \Auth::id();
-                    $optionsprofile['fecha_creacion'] = date('Y-m-d H:i:s');
-                    $optionsprofiles[] = new OptionProfile($optionsprofile);
-                }
-            }
-
             $profile->nombre = $request->nombre;
             $profile->descripcion = $request->descripcion;
             $profile->aprueba_reactivo = !isset( $request['aprueba_reactivo'] ) ? 'N' : 'S';
             $profile->aprueba_reactivos_masivo = !isset( $request['aprueba_reactivos_masivo'] ) ? 'N' : 'S';
             $profile->aprueba_examen = !isset( $request['aprueba_examen'] ) ? 'N' : 'S';
+            $profile->restablece_password = !isset( $request['restablece_password'] ) ? 'N' : 'S';
+            $profile->dashboard = !isset( $request['dashboard'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->modificado_por = \Auth::id();
             $profile->fecha_modificacion = date('Y-m-d H:i:s');
             $profile->save();
 
-            Profile::find($profile->id)->optionsProfiles()->saveMany($optionsprofiles);
-            Profile::find($profile->id)->optionsProfiles()->whereNotIn('id_opcion', $request->optionsprofile)->delete();
+            if (isset($request->careersprofile))
+            {
+                $careersprofiles = array();
+                foreach ($request->careersprofile as $career) {
+                    if($profile->careersProfiles()->where('id_carrera', $career)->count() == 0){
+                        $careersprofile['id_carrera'] = $career;
+                        $careersprofile['id_perfil'] = $profile->id;
+                        $careersprofile['creado_por'] = \Auth::id();
+                        $careersprofile['fecha_creacion'] = date('Y-m-d H:i:s');
+                        $careersprofiles[] = new CareerProfile($careersprofile);
+                    }
+                }
+                $profile->careersProfiles()->saveMany($careersprofiles);
+                $profile->careersProfiles()->whereNotIn('id_carrera', $request->careersprofile)->delete();
+            }
+            else
+            {
+                $profile->careersProfiles()->whereNotIn('id_carrera', [0])->delete();
+            }
+
+            if (isset($request->optionsprofile))
+            {
+                $optionsprofiles = array();
+                foreach ($request->optionsprofile as $option) {
+                    if($profile->optionsProfiles()->where('id_opcion', $option)->count() == 0){
+                        $optionsprofile['id_opcion'] = $option;
+                        $optionsprofile['id_perfil'] = $profile->id;
+                        $optionsprofile['creado_por'] = \Auth::id();
+                        $optionsprofile['fecha_creacion'] = date('Y-m-d H:i:s');
+                        $optionsprofiles[] = new OptionProfile($optionsprofile);
+                    }
+                }
+                $profile->optionsProfiles()->saveMany($optionsprofiles);
+                $profile->optionsProfiles()->whereNotIn('id_opcion', $request->optionsprofile)->delete();
+            }
+            else
+            {
+                $profile->optionsProfiles()->whereNotIn('id_opcion', [0])->delete();
+            }
 
             flash('Transacci&oacuten realizada existosamente', 'success');
         }
@@ -210,9 +267,12 @@ class ProfilesController extends Controller
             Log::error("[ProfilesController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
             return redirect()->route('security.profiles.edit', $id);
         }
+        finally
+        {
+            \DB::commit();
+        }
 
-        \DB::commit();
-        return redirect()->route('security.profiles.index');
+        return redirect()->route('security.profiles.show', $id);
     }
 
     /**

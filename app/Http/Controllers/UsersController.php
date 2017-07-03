@@ -154,6 +154,10 @@ class UsersController extends Controller
                 $user->profilesUsers()->saveMany($profiles);
                 $user->profilesUsers()->whereNotIn('id_perfil', $request->perfiles)->delete();
             }
+            else
+            {
+                $user->profilesUsers()->whereNotIn('id_perfil', [0])->delete();
+            }
 
             flash('Transacci&oacuten realizada existosamente', 'success');
         }

@@ -70,7 +70,6 @@
 
             <div class="navbar-buttons navbar-header pull-right" role="navigation">
                 <ul class="nav ace-nav">
-
                     <li class="light-blue">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <i class="ace-icon fa fa-bell icon-animated-bell"></i>
@@ -154,6 +153,19 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="navbar-header pull-right">
+                <a class="navbar-brand" style="line-height: 10px; padding-top: 6px; padding-bottom: 7px;" >
+                    <small style="font-size: 50%">
+                        Periodo {{ \Session::get('codPeriodo') }}
+                    </small>
+                    <br/>
+                    <small style="font-size: 40%">
+                    {{ \Session::get('descPeriodo') }}
+                    </small>
+                </a>
+            </div>
+
         </div><!-- /.navbar-container -->
     </div>
 

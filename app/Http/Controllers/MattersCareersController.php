@@ -18,6 +18,7 @@ use ReactivosUPS\CareerCampus;
 use Datatables;
 use Log;
 use ReactivosUPS\Mention;
+use ReactivosUPS\Profile;
 use View;
 
 class MattersCareersController extends Controller
@@ -51,6 +52,12 @@ class MattersCareersController extends Controller
                 $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $idJefeArea);
             else
                 $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area);
+
+            //$id_perfil = (int)Session::get('idPerfil');
+            //$profile = Profile::find($id_perfil);
+
+            //if($profile->careersProfiles->count() > 0)
+            //    $mattersCareers = $mattersCareers->whereIn('id_carrera', array_unique($profile->careersProfiles->pluck('id_carrera')->toArray()));
 
             $mattersCareers = $mattersCareers->orderBy('id', 'desc')->get();
 
@@ -351,10 +358,13 @@ class MattersCareersController extends Controller
 
     public function getCareersList(Request $request)
     {
-        try {
+        try
+        {
             $aprReactivo = \Session::get('ApruebaReactivo');
             $aprExamen = \Session::get('ApruebaExamen');
             $id_Sede = (int)\Session::get('idSede');
+            $id_Perfil = (int)\Session::get('idPerfil');
+            $profile = Profile::find($id_Perfil);
 
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
@@ -363,7 +373,7 @@ class MattersCareersController extends Controller
 
             if ($aprExamen == 'S')
             {
-                $careersList = Career::query();
+                $id_area = 0;
             }
             elseif ($aprReactivo == 'S')
             {
@@ -406,6 +416,9 @@ class MattersCareersController extends Controller
 
             if(isset($ids))
                 $careersList = $careersList->whereIn('id',$ids);
+
+            if($profile->careersProfiles->count() > 0)
+                $careersList = $careersList->whereIn('id', $profile->careersProfiles->pluck('id_carrera')->toArray());
 
             $careersList = $careersList->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
 

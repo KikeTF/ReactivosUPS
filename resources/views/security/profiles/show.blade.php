@@ -29,27 +29,46 @@
             </div>
 
             <div class="profile-info-row">
-                <div class="profile-info-name">¿Aprueba Reactivo?</div>
-                <div class="profile-info-value"><span>{{ $profile->aprueba_reactivo == 'S' ? 'Si' : 'No' }}</span></div>
-            </div>
-
-            <div class="profile-info-row">
-                <div class="profile-info-name">¿Aprueba Reactivos Masivamente?</div>
-                <div class="profile-info-value"><span>{{ $profile->aprueba_reactivos_masivo == 'S' ? 'Si' : 'No' }}</span></div>
-            </div>
-
-            <div class="profile-info-row">
-                <div class="profile-info-name">¿Aprueba Examen?</div>
-                <div class="profile-info-value"><span>{{ $profile->aprueba_examen == 'S' ? 'Si' : 'No' }}</span></div>
+                <div class="profile-info-name">Carreras</div>
+                <div class="profile-info-value">
+                    <span>
+                        @foreach($profile->careersProfiles as $career)
+                            {{$career->career->descripcion}}<br/>
+                        @endforeach
+                    </span>
+                </div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Accesos</div>
                 <div class="profile-info-value">
                     <span>
-                        @foreach($optionsProfiles as $option)
-                            {{$option->descripcion}}<br/>
+                        @foreach($profile->optionsProfiles as $option)
+                            {{$option->option->descripcion}}<br/>
                         @endforeach
+                    </span>
+                </div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">Permisos</div>
+                <div class="profile-info-value">
+                    <span>
+                        @if($profile->aprueba_reactivo == 'S')
+                            Aprueba Reactivos<br/>
+                        @endif
+                        @if($profile->aprueba_reactivos_masivo == 'S')
+                            Aprobaci&oacute;n Masiva de Reactivos<br/>
+                        @endif
+                        @if($profile->aprueba_examen == 'S')
+                            Aprueba Examen<br/>
+                        @endif
+                        @if($profile->restablece_password == 'S')
+                            Restablece Contrase&ntilde;a<br/>
+                        @endif
+                        @if($profile->aprueba_examen == 'S')
+                            Dashboard
+                        @endif
                     </span>
                 </div>
             </div>
