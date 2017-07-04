@@ -31,15 +31,15 @@
             'method' => 'POST']) !!}
 
         <div class="page-header">
-            <h4 style="padding: 0; margin: 0;">Instrucciones:</h4>
+            <h4 style="padding: 0; margin: 0;">Disposiciones Generales</h4>
         </div>
 
         {!! Form::hidden('id', $test->id) !!}
 
         <div class="form-group">
-            <div class="col-md-1" ></div>
-            <div class="col-md-10" >
-                {!! nl2br(e($test->parameter->instrucciones)) !!}
+            <div class="col-md-6 col-md-offset-3" style="text-align: justify; line-height: 24px; font-size: 14px;">
+                {{--{!! nl2br(e($test->parameter->instrucciones)) !!}--}}
+                {!! htmlspecialchars_decode($test->parameter->instrucciones) !!}
             </div>
         </div>
 

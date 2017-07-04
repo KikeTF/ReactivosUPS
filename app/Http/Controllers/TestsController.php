@@ -224,8 +224,15 @@ class TestsController extends Controller
             {
                 $question->id_opcion_resp = $id_opcion_resp;
                 $question->resp_correcta = ($question->examDetail->reagent->id_opcion_correcta == $id_opcion_resp) ? 'S' : 'N';
-                $question->save();
+                $question->estado = 'A';
             }
+            else
+            {
+                $question->id_opcion_resp = 0;
+                $question->resp_correcta = 'N';
+                $question->estado = 'P';
+            }
+            $question->save();
 
             if ( $id_nextQuestion == 0 )
             {

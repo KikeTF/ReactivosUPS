@@ -155,23 +155,27 @@
             </div>
 
             <div class="navbar-header pull-right">
-                <a class="navbar-brand" style="line-height: 10px; padding-top: 6px; padding-bottom: 7px;" >
-                    <small style="font-size: 50%">
-                        Periodo {{ \Session::get('codPeriodo') }}
-                    </small>
-                    <br/>
-                    <small style="font-size: 40%">
-                    {{ \Session::get('descPeriodo') }}
-                    </small>
-                </a>
-            </div>
+                <div class="form-group">
+                    <div class="col-xs-6" align="center">
+                        <a class="navbar-brand" style="" >
+                            <small style="font-size: 70%">
+                                {{ \Session::get('descPerfil') }}
+                            </small>
+                        </a>
+                    </div>
 
-            <div class="navbar-header pull-right">
-                <a class="navbar-brand" style="" >
-                    <small style="font-size: 70%">
-                        {{ \Session::get('descPerfil') }}
-                    </small>
-                </a>
+                    <div class="col-xs-6">
+                        <a class="navbar-brand" style="line-height: 10px; padding-top: 6px; padding-bottom: 7px;" >
+                            <small style="font-size: 50%">
+                                Periodo {{ \Session::get('codPeriodo') }}
+                            </small>
+                            <br/>
+                            <small style="font-size: 40%">
+                            {{ \Session::get('descPeriodo') }}
+                            </small>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div><!-- /.navbar-container -->
     </div>

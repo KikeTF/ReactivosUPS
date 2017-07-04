@@ -41,9 +41,9 @@
                 <?php $indexNext = 0; ?>
                 @foreach($test->answersDetails->sortBy('id') as $index => $det)
                     <?php if($question->id == $det->id) $indexNext = $index+1; ?>
-                    <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : 'btn btn-light') }}"
+                    <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : (($det->estado == 'P') ? 'btn btn-yellow' : 'btn btn-light')) }}"
                             onclick="processAnswer({{ $det->id }}); return false;"
-                                {{ (($question->id != $det->id && $det->id_opcion_resp == 0) || $test->parameter->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
+                                {{ (($question->id != $det->id && $det->id_opcion_resp == 0 && $det->estado == 'A') || $test->parameter->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
                 @endforeach
             </div>
 
@@ -53,7 +53,7 @@
                 if($indexNext < $test->answersDetails->count())
                     $idNext = $test->answersDetails[$indexNext]->id;
                 ?>
-                <button class="btn btn-success pull-right" onclick="processAnswer({{ $idNext }}); return false;">
+                <button class="btn btn-danger pull-right" onclick="processAnswer({{ $idNext }}); return false;">
                     @if($idNext > 0)
                         Siguiente<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                     @else
@@ -213,7 +213,7 @@
         }
 
         function finalCountDown(time){
-            if (time[5] < 4)
+            if (time[4] == 0 && time[5] < 5)
                 $('#countdown-format').addClass('red');
         }
 
@@ -237,36 +237,37 @@
                 answerIsChecked = false;
             }
 
+            var message = "No ha seleccionado una respuesta. Desea continuar?";
             if( answerIsChecked ){
                 if( $("#id_nextQuestion").val() > 0 )
                     $("#formulario").submit();
-                else {
-                    bootbox.confirm({
-                        message: "Desea finalizar su examen?",
-                        buttons: {
-                            confirm: {
-                                label: 'Yes',
-                                className: 'btn-success'
-                            },
-                            cancel: {
-                                label: 'No',
-                                className: 'btn-danger'
-                            }
-                        }
-                    });
-                }
+                else
+                    confirmSubmit("Desea finalizar su examen?");
             }
-            else {
-                bootbox.alert({
-                    message: "Seleccione una respuesta para continuar!",
-                    buttons: {
-                        'ok': {
-                            label: 'Cerrar',
-                            className: 'btn-danger'
-                        }
+            else if( $("#id_nextQuestion").val() > 0 )
+                confirmSubmit("No ha seleccionado una respuesta. Desea continuar?");
+            else
+                confirmSubmit("No ha seleccionado una respuesta. Desea finalizar su examen?");
+        }
+
+        function confirmSubmit(message) {
+            bootbox.confirm({
+                message: message,
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
                     }
-                });
-            }
+                },
+                callback: function (result) {
+                    if (result)
+                        $("#formulario").submit();
+                }
+            });
         }
 
         $(window).load(function() {

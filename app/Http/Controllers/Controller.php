@@ -254,7 +254,7 @@ abstract class Controller extends BaseController
         $result = false;
         try
         {
-            Log::debug("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil);
+            Log::info("[Controller][loadSessionData] Datos: Usuario=".$idUsuario."; Perfil=".$idPerfil);
 
             $idSede = (int)User::find($idUsuario)->id_sede;
 
