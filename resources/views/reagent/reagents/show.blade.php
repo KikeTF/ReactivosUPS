@@ -231,7 +231,7 @@
 
                             <div class="profile-info-row">
                                 <div class="profile-info-name">Referencia</div>
-                                <div class="profile-info-value"><span>{{ $reagent->referencia }}</span></div>
+                                <div class="profile-info-value"><span>{!! nl2br(e($reagent->referencia)) !!}</span></div>
                             </div>
 
                             <div class="profile-info-row">

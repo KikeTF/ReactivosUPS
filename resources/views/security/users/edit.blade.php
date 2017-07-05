@@ -72,7 +72,7 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('email', 'Email:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        {!! Form::label('email', 'Correo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             {!! Form::text('email', $user->email, ['class' => 'form-control', 'placeholder' => 'Correo Electr&oacute;nico', 'readonly']) !!}
         </div>

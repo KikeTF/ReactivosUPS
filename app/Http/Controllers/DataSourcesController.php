@@ -86,6 +86,17 @@ class DataSourcesController extends Controller
                         "ma_cod_materia, ma_desc_materia, ma_abrev_materia, mc_nivel, pd_cod_periodo, pd_desc_periodo, ".
                         "pd_fecha_inicio, pd_fecha_fin, di_cod_distributivo, cn_cod_contenido_cab, ".
                         "cd_cod_contenido_det, cd_capitulo, cd_tema)";
+
+                    $query = sprintf($statement, addslashes($csvPath));
+
+                    Log::debug("DataSourcesController][import] Inicio de importacion de distributivo. Consulta: ".$query);
+
+                    //Importacion de datos
+                    $rows = \DB::connection()->getpdo()->exec($query);
+
+                    Log::debug("DataSourcesController][import] Distributivo importado correctamente. Registros cargados: ".$rows);
+
+                    $this->loadDistributive();
                 }
                 elseif ($request->type == 'B')
                 {
@@ -100,16 +111,18 @@ class DataSourcesController extends Controller
                         "IGNORE 1 LINES ".
                         "(cn_cod_contenido_cab, cn_cod_carrera, cn_cod_materia, cn_cod_campus, ".
                         "cn_bibliografia_base, cn_bibliografia_complementaria)";
+
+                    $query = sprintf($statement, addslashes($csvPath));
+
+                    Log::debug("DataSourcesController][import] Inicio de importacion de bibliografia. Consulta: ".$query);
+
+                    //Importacion de datos
+                    $rows = \DB::connection()->getpdo()->exec($query);
+
+                    Log::debug("DataSourcesController][import] Bibliografia importada correctamente. Registros cargados: ".$rows);
+
+                    $this->loadBibliography();
                 }
-
-                $query = sprintf($statement, addslashes($csvPath));
-
-                Log::debug("DataSourcesController][import] Inicio de importacion de los datos. Consulta: ".$query);
-
-                //Importacion de datos
-                $rows = \DB::connection()->getpdo()->exec($query);
-
-                Log::debug("DataSourcesController][import] Datos importados correctamente. Registros cargados: ".$rows);
 
                 //Limpia tabla al finalizar el proceso de importacion
                 //\DB::statement("TRUNCATE TABLE org_datos");
@@ -131,8 +144,36 @@ class DataSourcesController extends Controller
         return redirect()->route('general.datasource.index');
     }
 
-    public function importContent(Request $request)
+    public function loadDistributive()
     {
+        $stmt = 'call sp_org_carga_datos('.\Auth::id().')';
+        \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+        $sp = \DB::connection()->getpdo()->prepare($stmt);
+        $sp->execute();
+        $result = $sp->fetchAll(\DB::connection()->getFetchMode());
+        $sp->closeCursor();
 
+        if(strcmp(strtoupper($result[0]->return_message), "OK") !== 0) {
+            Log::error("[DataSourceController][loadDistributive] Procedure=" . $result[0]->procedure . "; Error=" . $result[0]->return_message);
+            flash('No fue posible completar la transaccion. Proceso: (' . $result[0]->procedure . ')', 'danger')->important();
+            return redirect()->route('general.datasource.index');
+        }
     }
+
+    public function loadBibliography()
+    {
+        $stmt = 'call sp_gen_carga_bibliografia('.\Auth::id().')';
+        \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+        $sp = \DB::connection()->getpdo()->prepare($stmt);
+        $sp->execute();
+        $result = $sp->fetchAll(\DB::connection()->getFetchMode());
+        $sp->closeCursor();
+
+        if(strcmp(strtoupper($result[0]->return_message), "OK") !== 0) {
+            Log::error("[DataSourceController][loadDistributive] Procedure=" . $result[0]->procedure . "; Error=" . $result[0]->return_message);
+            flash('No fue posible completar la transaccion. Proceso: (' . $result[0]->procedure . ')', 'danger')->important();
+            return redirect()->route('general.datasource.index');
+        }
+    }
+
 }
