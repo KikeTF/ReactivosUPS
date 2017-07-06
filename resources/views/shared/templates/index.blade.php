@@ -70,61 +70,33 @@
 
             <div class="navbar-buttons navbar-header pull-right" role="navigation">
                 <ul class="nav ace-nav">
-                    <li class="light-blue">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="ace-icon fa fa-bell icon-animated-bell"></i>
-                            <span class="badge badge-important">8</span>
+
+                    @include('shared.templates._notifications')
+
+                    <li class="transparent">
+                        <a>
+                            <span class="user-info-no-collapse">
+                                Periodo {{ \Session::get('codPeriodo') }}
+                                <small>{{ \Session::get('descPeriodo') }}</small>
+                            </span>
                         </a>
+                    </li>
 
-                        <ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
-                            <li class="dropdown-header">
-                                <i class="ace-icon fa fa-exclamation-triangle"></i>
-                                8 Notifications
-                            </li>
-
-                            <li class="dropdown-content">
-                                <ul class="dropdown-menu dropdown-navbar navbar-pink">
-                                    <li>
-                                        <a href="#">
-                                            <div class="clearfix">
-                                                        <span class="pull-left">
-                                                            <i class="btn btn-xs no-hover btn-pink fa fa-comment"></i>
-                                                            New Comments
-                                                        </span>
-                                                <span class="pull-right badge badge-info">+12</span>
-                                            </div>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            <div class="clearfix">
-                                                        <span class="pull-left">
-                                                            <i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
-                                                            New Orders
-                                                        </span>
-                                                <span class="pull-right badge badge-success">+8</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li class="dropdown-footer">
-                                <a href="#">
-                                    See all notifications
-                                    <i class="ace-icon fa fa-arrow-right"></i>
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="transparent">
+                        <a>
+                            <span class="user-info-no-collapse">
+                                <small>Perfil</small>
+                                {{ \Session::get('descPerfil') }}
+                            </span>
+                        </a>
                     </li>
 
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <span class="user-info">
-                                        <small>Bienvenido,</small>
-                                        {{ Auth::user()->nombres }}
-                                    </span>
+                                <small>Bienvenido,</small>
+                                {{ Auth::user()->nombres }}
+                            </span>
 
                             <i class="ace-icon fa fa-caret-down"></i>
                         </a>
@@ -152,30 +124,6 @@
                         </ul>
                     </li>
                 </ul>
-            </div>
-
-            <div class="navbar-header pull-right">
-                <div class="form-group">
-                    <div class="col-xs-6" align="center">
-                        <a class="navbar-brand" style="" >
-                            <small style="font-size: 70%">
-                                {{ \Session::get('descPerfil') }}
-                            </small>
-                        </a>
-                    </div>
-
-                    <div class="col-xs-6">
-                        <a class="navbar-brand" style="line-height: 10px; padding-top: 6px; padding-bottom: 7px;" >
-                            <small style="font-size: 50%">
-                                Periodo {{ \Session::get('codPeriodo') }}
-                            </small>
-                            <br/>
-                            <small style="font-size: 40%">
-                            {{ \Session::get('descPeriodo') }}
-                            </small>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div><!-- /.navbar-container -->
     </div>

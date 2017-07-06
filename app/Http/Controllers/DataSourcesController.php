@@ -96,7 +96,7 @@ class DataSourcesController extends Controller
 
                     Log::debug("DataSourcesController][import] Distributivo importado correctamente. Registros cargados: ".$rows);
 
-                    $this->loadDistributive();
+                    $result = $this->loadDistributive();
                 }
                 elseif ($request->type == 'B')
                 {
@@ -121,31 +121,31 @@ class DataSourcesController extends Controller
 
                     Log::debug("DataSourcesController][import] Bibliografia importada correctamente. Registros cargados: ".$rows);
 
-                    $this->loadBibliography();
+                    $result = $this->loadBibliography();
                 }
 
-                //Limpia tabla al finalizar el proceso de importacion
-                //\DB::statement("TRUNCATE TABLE org_datos");
+                if(isset($result) && strcmp(strtoupper($result[0]->return_message), "OK") !== 0) {
+                    Log::error("[DataSourceController][import] Procedure=" . $result[0]->procedure . "; Error=" . $result[0]->return_message);
+                    flash('No fue posible completar la transaccion. Proceso: ' . $result[0]->procedure, 'danger')->important();
+                }
+                else
+                    flash('Proceso ejecutado correctamente. Registros importados: '.$rows, 'success');
 
-                flash('Proceso ejecutado correctamente. Registros importados: '.$rows, 'success');
             }
         }
         catch (\Exception $ex)
         {
             flash("No se pudo importar los datos!", 'danger')->important();
             Log::error("DataSourcesController][import] Exception: ".$ex);
-
         }
-
-        //Elimina archivo de public folder si existe
-        if( \Storage::disk('uploads')->exists($fileName) )
-            \Storage::disk('uploads')->delete($fileName);
 
         return redirect()->route('general.datasource.index');
     }
 
     public function loadDistributive()
     {
+        Log::debug("DataSourcesController][loadDistributive] call sp_org_carga_datos(".\Auth::id().")");
+
         $stmt = 'call sp_org_carga_datos('.\Auth::id().')';
         \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
         $sp = \DB::connection()->getpdo()->prepare($stmt);
@@ -153,15 +153,13 @@ class DataSourcesController extends Controller
         $result = $sp->fetchAll(\DB::connection()->getFetchMode());
         $sp->closeCursor();
 
-        if(strcmp(strtoupper($result[0]->return_message), "OK") !== 0) {
-            Log::error("[DataSourceController][loadDistributive] Procedure=" . $result[0]->procedure . "; Error=" . $result[0]->return_message);
-            flash('No fue posible completar la transaccion. Proceso: (' . $result[0]->procedure . ')', 'danger')->important();
-            return redirect()->route('general.datasource.index');
-        }
+        return $result;
     }
 
     public function loadBibliography()
     {
+        Log::debug("DataSourcesController][loadBibliography] call sp_gen_carga_bibliografia(".\Auth::id().")");
+
         $stmt = 'call sp_gen_carga_bibliografia('.\Auth::id().')';
         \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
         $sp = \DB::connection()->getpdo()->prepare($stmt);
@@ -169,11 +167,7 @@ class DataSourcesController extends Controller
         $result = $sp->fetchAll(\DB::connection()->getFetchMode());
         $sp->closeCursor();
 
-        if(strcmp(strtoupper($result[0]->return_message), "OK") !== 0) {
-            Log::error("[DataSourceController][loadDistributive] Procedure=" . $result[0]->procedure . "; Error=" . $result[0]->return_message);
-            flash('No fue posible completar la transaccion. Proceso: (' . $result[0]->procedure . ')', 'danger')->important();
-            return redirect()->route('general.datasource.index');
-        }
+        return $result;
     }
 
 }

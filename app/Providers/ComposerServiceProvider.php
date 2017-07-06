@@ -19,6 +19,8 @@ class ComposerServiceProvider extends ServiceProvider
         });
 
         View::composer('*', 'ReactivosUPS\Http\ViewComposers\OptionsComposer');
+
+        View::composer('*', 'ReactivosUPS\Http\ViewComposers\NotificationsComposer');
     }
 
     /**

@@ -1,3 +1,39 @@
+.navbar-container {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.ace-nav > li.transparent > a:hover {
+    background-color: transparent;
+}
+.nav.ace-nav > li > a > span.user-info-no-collapse  {
+    max-width: 100px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: top;
+    line-height: 15px;
+    position: relative;
+    top: 6px;
+}
+.nav.ace-nav > li > a > span.user-info-no-collapse > small{
+    display: block;
+}
+@media (max-width: 540px) and (min-width: 480px), (max-width: 360px) {
+    .navbar:not(.navbar-collapse) .navbar-buttons .user-info {
+        width: 185.48px;
+        max-width: 185.48px;
+        height: 56px;
+        text-align: left;
+    }
+    .navbar:not(.navbar-collapse) .navbar-buttons .user-info > small {
+        display: block !important;
+    }
+    .navbar:not(.navbar-collapse) .navbar-buttons .user-menu {
+        padding-top: 64px!important;
+    }
+}
 .chosen-container-multi .chosen-choices {
     border:1px solid #d5d5d5;
 }

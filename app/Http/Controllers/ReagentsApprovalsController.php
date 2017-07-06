@@ -60,13 +60,13 @@ class ReagentsApprovalsController extends Controller
 
             $reagents = Reagent::with('distributive')
                 ->where('id_estado', '!=', 7)
-                ->whereHas('distributive', function($query) use($id_Sede, $id_campus, $id_carrera, $ids_carreras, $id_materia, $ids_materias_carreras){
+                ->whereHas('distributive', function($query) use($id_Sede, $id_campus, $id_carrera, $ids_carreras, $id_materia, $ids_materias_carreras, $ids_areas){
                     $query->where('id_Sede', $id_Sede);
                     if ($id_campus > 0) $query->where('id_campus', $id_campus);
                     if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
                     elseif (sizeof($ids_carreras) > 0) $query->whereIn('id_carrera', $ids_carreras);
                     if ($id_materia > 0) $query->where('id_materia', $id_materia);
-                    elseif (sizeof($ids_materias_carreras) > 0) $query->whereIn('id_materia_carrera', $ids_materias_carreras);
+                    elseif (sizeof($ids_areas) > 0) $query->whereIn('id_materia_carrera', $ids_materias_carreras);
                 })->orderBy('id', 'desc')->get();
 
             $filters = array($id_campus, $id_carrera, $id_materia);
