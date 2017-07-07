@@ -11,7 +11,7 @@ class Notification extends Model
 
     protected $fillable =["id_usuario", "fecha", "tipo", "estado", "veces"];
 
-    public function users(){
-        return $this->hasMany('ReactivosUPS\User', 'id_usuario');
+    public function user(){
+        return $this->belongsTo('ReactivosUPS\User', 'id_usuario');
     }
 }

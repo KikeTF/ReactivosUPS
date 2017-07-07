@@ -43,7 +43,9 @@ class Admin
             'general.matterscareers.mentions',
             'reagent.approvals.comment',
             'reagent.reagents.report',
-            'exam.exams.activate'
+            'exam.exams.activate',
+            'general.notifications.index',
+            'general.notifications.update'
         ];
 
         try

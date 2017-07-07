@@ -274,6 +274,16 @@ Route::group(['prefix' => 'general','middleware' => ['auth', 'admin']], function
         'uses'  => 'DataSourcesController@import',
         'as'    => 'general.datasource.import'
     ]);
+
+    Route::get('notifications', [
+        'uses'  => 'NotificationsController@index',
+        'as'    => 'general.notifications.index'
+    ]);
+
+    Route::get('notifications/{id}/update', [
+        'uses'  => 'NotificationsController@update',
+        'as'    => 'general.notifications.update'
+    ]);
 });
 
 Route::group(['prefix' => 'exam','middleware' => ['auth', 'admin']], function () {

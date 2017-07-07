@@ -38,7 +38,12 @@ class NotificationsComposer extends Controller
 
                 if ($passwordRecovery > 0)
                 {
-                    $NotificationsDetail[] = ['Name' => 'Cambios de Contrase&ntilde;a', 'Count' => $passwordRecovery];
+                    $NotificationsDetail[] = [
+                        'name' => 'Cambios de Contrase&ntilde;a', 
+                        'count' => $passwordRecovery,
+                        'route' => 'general.notifications.index',
+                        'icon' => 'fa-key'
+                    ];
                     $NotificationsCount = $NotificationsCount + $passwordRecovery;
                 }
             }
@@ -63,7 +68,11 @@ class NotificationsComposer extends Controller
 
                 if ($reagents > 0)
                 {
-                    $NotificationsDetail[] = ['Name' => 'Reactivos por Aprobar', 'Count' => $reagents];
+                    $NotificationsDetail[] = [
+                        'name' => 'Reactivos por Aprobar', 
+                        'count' => $reagents,
+                        'route' => 'reagent.approvals.index',
+                        'icon' => 'fa-thumbs-o-up'];
                     $NotificationsCount = $NotificationsCount + $reagents;
                 }
 
@@ -71,7 +80,12 @@ class NotificationsComposer extends Controller
 
                 if ($exams > 0)
                 {
-                    $NotificationsDetail[] = ['Name' => 'Examenes por Revisar', 'Count' => $exams];
+                    $NotificationsDetail[] = [
+                        'name' => 'Examenes por Revisar',
+                        'count' => $exams,
+                        'route' => 'exam.exams.index',
+                        'icon' => 'fa-comment-o'
+                    ];
                     $NotificationsCount = $NotificationsCount + $exams;
                 }
             }
@@ -87,7 +101,12 @@ class NotificationsComposer extends Controller
 
                 if ($reagents > 0)
                 {
-                    $NotificationsDetail[] = ['Name' => 'Reactivos por Revisar', 'Count' => $reagents];
+                    $NotificationsDetail[] = [
+                        'name' => 'Reactivos por Revisar',
+                        'count' => $reagents,
+                        'route' => 'reagent.reagents.index',
+                        'icon' => 'fa-comment-o'
+                    ];
                     $NotificationsCount = $NotificationsCount + $reagents;
                 }
             }
@@ -95,14 +114,18 @@ class NotificationsComposer extends Controller
             if ($aprExamen == 'S')
             {
                 $exams = ExamHeader::query()->where('id_estado', 2)->count();
-                $NotificationsDetail[] = ['Name' => 'Examenes por Aprobar', 'Count' => $exams];
+                $NotificationsDetail[] = [
+                    'name' => 'Examenes por Aprobar', 
+                    'count' => $exams,
+                    'route' => 'exam.exams.index',
+                    'icon' => 'fa-thumbs-o-up'];
                 $NotificationsCount = $NotificationsCount + $exams;
             }
 
             if ($NotificationsCount > 0)
             {
-                $notifications['Count'] = $NotificationsCount;
-                $notifications['Detail'] = $NotificationsDetail;
+                $notifications['count'] = $NotificationsCount;
+                $notifications['detail'] = $NotificationsDetail;
             }
 
             //dd($notifications);
