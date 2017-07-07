@@ -69,7 +69,10 @@ class Admin
                     return $next($request);
                 }
                 else
+                {
+                    flash("Su perfil no esta autorizado para esta opci&oacute;n!", 'warning');
                     return redirect()->route('index');
+                }
             }
             else
                 return redirect()->route('account.changePassword');
