@@ -1,22 +1,29 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   ReagentsApprovalsController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta y aprobación reactivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
-use ReactivosUPS\Area;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\Career;
-use ReactivosUPS\ReagentQuestion;
-use ReactivosUPS\ReagentAnswer;
 use ReactivosUPS\ReagentComment;
-use ReactivosUPS\CareerCampus;
-use Datatables;
 use Log;
 
 class ReagentsApprovalsController extends Controller
@@ -85,7 +92,8 @@ class ReagentsApprovalsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Aprobacion de Reactivos.
      *
      * @return \Illuminate\Http\Response
      */
@@ -95,7 +103,8 @@ class ReagentsApprovalsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Aprobacion de Reactivos.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -113,7 +122,8 @@ class ReagentsApprovalsController extends Controller
      */
     public function show($id)
     {
-        try{
+        try
+        {
             $reagent = Reagent::find($id);
             $mattercareer = MatterCareer::find($reagent->distributive->id_materia_carrera);
 
@@ -132,13 +142,10 @@ class ReagentsApprovalsController extends Controller
 
             return view('reagent.approvals.show')
                 ->with('reagent', $reagent)
-                //->with('questions', $reagentQuestions)
-                //->with('answers', $reagentAnswers)
-                //->with('comments', $reagentComments)
                 ->with('states', $this->getReagentsStates())
                 ->with('users', $this->getUsers());
-                //->with('formatParam', $reagent->format);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsApprovalsController][show] Datos: id=".$id.". Exception: ".$ex);
@@ -147,7 +154,8 @@ class ReagentsApprovalsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Aprobacion de Reactivos.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -158,7 +166,8 @@ class ReagentsApprovalsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Aprobacion de Reactivos.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -170,7 +179,8 @@ class ReagentsApprovalsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Aprobacion de Reactivos.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -180,6 +190,13 @@ class ReagentsApprovalsController extends Controller
         return redirect()->route('reagent.approvals.index');
     }
 
+    /**
+     * Registra las observaciones y gestiona los cambios de estado de los reactivos.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function comment(Request $request, $id)
     {
         $valid = true;

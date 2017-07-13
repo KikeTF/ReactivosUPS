@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   PeriodLocation.php
+ *
+ * TIPO                 Modelo
+ *
+ * DESCRIPCIÓN          Gestiona el acceso a la información de
+ *                      periodos por sedes.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;

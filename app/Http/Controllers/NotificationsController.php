@@ -1,12 +1,27 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   NotificationsController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Responde a las peticiones de información necesaria
+ *                      para desplegar las notificaciones en la cabecera 
+ *                      de la aplicación.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use Log;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Notification;
 
 class NotificationsController extends Controller
@@ -38,6 +53,13 @@ class NotificationsController extends Controller
 
     }
 
+    /**
+     * Actualiza el estado de las notificacion seleccionada y 
+     * redirige a la pagina para gestionar el requerimiento.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update($id)
     {
         try

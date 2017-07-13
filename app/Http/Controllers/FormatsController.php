@@ -1,14 +1,26 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   FormatsController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta, creación, modificación,
+ *                      y eliminación de formatos de reactivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use ReactivosUPS\Format;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
-use Datatables;
-use Laracasts\Flash\Flash;
 use Log;
 
 class FormatsController extends Controller
@@ -20,11 +32,13 @@ class FormatsController extends Controller
      */
     public function index()
     {
-        try{
+        try
+        {
             $formats = Format::query()->where('estado','!=','E')->get();
             return view('reagent.formats.index')
                 ->with('formats', $formats);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[FormatsController][index] Exception: ".$ex);
@@ -62,10 +76,11 @@ class FormatsController extends Controller
             $format->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FormatsController][store] Request=". implode(", ", $request->all()) ."; Exception: ".$ex);
+            Log::error("[FormatsController][store] Exception: ".$ex);
             return view('reagent.formats.create');
         }
 
@@ -80,13 +95,15 @@ class FormatsController extends Controller
      */
     public function show($id)
     {
-        try{
+        try
+        {
             $format = Format::find($id);
             $format->creado_por = $this->getUserName($format->creado_por);
             $format->modificado_por = $this->getUserName($format->modificado_por);
 
             return view('reagent.formats.show')->with('format', $format);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[FormatsController][show] Datos: id=".$id.". Exception: ".$ex);
@@ -102,10 +119,12 @@ class FormatsController extends Controller
      */
     public function edit($id)
     {
-        try{
+        try
+        {
             $format = Format::find($id);
             return view('reagent.formats.edit')->with('format', $format);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[FormatsController][edit] Datos: id=".$id.". Exception: ".$ex);
@@ -141,7 +160,8 @@ class FormatsController extends Controller
             $format->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[FormatsController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
@@ -169,7 +189,8 @@ class FormatsController extends Controller
             $format->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[FormatsController][destroy] Datos: id=".$id.". Exception: ".$ex);

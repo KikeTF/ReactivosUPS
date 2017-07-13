@@ -1,13 +1,26 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   FieldsController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta, creación, modificación,
+ *                      y eliminación de campos de conocimiento de reactivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use ReactivosUPS\Field;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
-use Datatables;
 use Log;
 
 class FieldsController extends Controller
@@ -19,14 +32,13 @@ class FieldsController extends Controller
      */
     public function index()
     {
-        try{
-            //if($this->isSessionExpire())
-            //    return redirect()->guest('auth/login');
-
+        try
+        {
             $fields = Field::query()->where('estado','!=','E')->get();
             return view('reagent.fields.index')
                 ->with('fields', $fields);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[FieldsController][index] Exception: ".$ex);
@@ -61,10 +73,11 @@ class FieldsController extends Controller
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FieldsController][store] Request=". implode(", ", $request->all()) ."; Exception: ".$ex);
+            Log::error("[FieldsController][store] Exception: ".$ex);
             return view('reagent.fields.create');
         }
         return redirect()->route('reagent.fields.index');
@@ -78,13 +91,15 @@ class FieldsController extends Controller
      */
     public function show($id)
     {
-        try{
+        try
+        {
             $field = Field::find($id);
             $field->creado_por = $this->getUserName($field->creado_por);
             $field->modificado_por = $this->getUserName($field->modificado_por);
 
             return view('reagent.fields.show')->with('field', $field);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[FieldsController][show] Datos: id=".$id.". Exception: ".$ex);
@@ -100,10 +115,12 @@ class FieldsController extends Controller
      */
     public function edit($id)
     {
-        try{
+        try
+        {
             $field = Field::find($id);
             return view('reagent.fields.edit')->with('field', $field);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[FieldsController][edit] Datos: id=".$id.". Exception: ".$ex);
@@ -132,10 +149,11 @@ class FieldsController extends Controller
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
-            Log::error("[FieldsController][update] Request=". implode(", ", $request->all()) ."; id=".$id."; Exception: ".$ex);
+            Log::error("[FieldsController][update] id=".$id."; Exception: ".$ex);
             return view('reagent.$field.edit')->with('$field', $field);
         }
         return redirect()->route('reagent.fields.index');
@@ -158,7 +176,8 @@ class FieldsController extends Controller
             $field->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[FieldsController][destroy] Datos: id=".$id.". Exception: ".$ex);

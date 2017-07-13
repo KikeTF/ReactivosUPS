@@ -39,7 +39,7 @@ Route::get('auth/userprofiles', [
     'as'    => 'auth.userprofiles'
 ]);
 
-
+// Rutas de Visitantes
 Route::group(['middleware' => 'guest'], function () {
 
     Route::get('test/lists', [
@@ -68,25 +68,6 @@ Route::group(['middleware' => 'guest'], function () {
         'uses'  => 'TestsController@destroy',
         'as'    => 'test.destroy'
     ]);
-});
-
-Route::group(['middleware' => 'auth'], function () {
-
-    Route::get('/', [
-        'uses'  => 'HomeController@index',
-        'as'    => 'index'
-    ]);
-
-    Route::get('home', [
-        'uses'  => 'HomeController@index',
-        'as'    => 'index'
-    ]);
-
-    Route::get('dashboard', [
-        'uses'  => 'DashboardController@index',
-        'as'    => 'dashboard.index'
-    ]);
-
 });
 
 Route::get('reagent/reagents/{id}/image', function ($id) {
@@ -124,6 +105,26 @@ Route::get('reagent/reagents/{id}/image', function ($id) {
     return $response;
 
 })->name('reagent.reagents.image');
+
+// Rutas Seguras
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/', [
+        'uses'  => 'HomeController@index',
+        'as'    => 'index'
+    ]);
+
+    Route::get('home', [
+        'uses'  => 'HomeController@index',
+        'as'    => 'index'
+    ]);
+
+    Route::get('dashboard', [
+        'uses'  => 'DashboardController@index',
+        'as'    => 'dashboard.index'
+    ]);
+
+});
 
 Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
 
@@ -231,7 +232,7 @@ Route::group(['prefix' => 'reagent', 'middleware' => ['auth', 'admin']], functio
 
 });
 
-Route::group(['prefix' => 'general','middleware' => ['auth', 'admin']], function () {
+Route::group(['prefix' => 'general', 'middleware' => ['auth', 'admin']], function () {
 
     Route::get('matterscareers/matters', [
         'uses'  => 'MattersCareersController@getMattersList',
@@ -286,7 +287,7 @@ Route::group(['prefix' => 'general','middleware' => ['auth', 'admin']], function
     ]);
 });
 
-Route::group(['prefix' => 'exam','middleware' => ['auth', 'admin']], function () {
+Route::group(['prefix' => 'exam', 'middleware' => ['auth', 'admin']], function () {
 
     Route::get('parameters/history', [
         'uses'  => 'ExamParametersController@history',

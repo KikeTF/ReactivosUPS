@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   OptionUser.php
+ *
+ * TIPO                 Modelo
+ *
+ * DESCRIPCIÓN          Gestiona el acceso a la información de
+ *                      menu de opciones por usuario.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;

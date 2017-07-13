@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   ReagentComment.php
+ *
+ * TIPO                 Modelo
+ *
+ * DESCRIPCIÓN          Gestiona el acceso a la información de
+ *                      observaciones de reactivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;

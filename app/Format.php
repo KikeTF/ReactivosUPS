@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   Format.php
+ *
+ * TIPO                 Modelo
+ *
+ * DESCRIPCIÓN          Gestiona el acceso a la información de
+ *                      formatos de reactivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;

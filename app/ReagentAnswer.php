@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   ReagentAnswer.php
+ *
+ * TIPO                 Modelo
+ *
+ * DESCRIPCIÓN          Gestiona el acceso a la información de
+ *                      respuestas de reactivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
 class ReagentAnswer extends Model
 {
     protected $table = "rea_respuestas";
-    //public $timestamps = false;
 
     const CREATED_AT = 'fecha_creacion';
     const UPDATED_AT = 'fecha_modificacion';

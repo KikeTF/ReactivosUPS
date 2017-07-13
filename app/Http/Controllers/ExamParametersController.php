@@ -1,13 +1,27 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   ExamParametersController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta y modificación de 
+ *                      los parámetros para el funcionamiento 
+ *                      del simulador de examen complexivo.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
-use Datatables;
 
 class ExamParametersController extends Controller
 {
@@ -36,8 +50,6 @@ class ExamParametersController extends Controller
             }
 
             $parameter = $parameter->orderBy('id', 'desc');
-
-            //dd($parameter);
 
             if( $parameter->orderBy('id', 'desc')->get()->count() == 0 )
                 return redirect()->route('exam.parameters.create');
@@ -116,29 +128,32 @@ class ExamParametersController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Parametros.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return redirect()->route('index');
+        return redirect()->route('exam.parameters.index');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Parametros.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        return redirect()->route('index');
+        return redirect()->route('exam.parameters.index');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Parametros.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -146,17 +161,18 @@ class ExamParametersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return redirect()->route('index');
+        return redirect()->route('exam.parameters.index');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Parametros.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        return redirect()->route('index');
+        return redirect()->route('exam.parameters.index');
     }
 }

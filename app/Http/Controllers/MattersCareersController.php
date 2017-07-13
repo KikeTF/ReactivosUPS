@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   MattersCareersController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta y modificación de
+ *                      las materias por carrera.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,13 +24,11 @@ use ReactivosUPS\ContentDetail;
 use ReactivosUPS\ContentHeader;
 use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\Matter;
 use ReactivosUPS\Campus;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Area;
 use ReactivosUPS\CareerCampus;
-use Datatables;
 use Log;
 use ReactivosUPS\Mention;
 use ReactivosUPS\Profile;
@@ -71,7 +84,8 @@ class MattersCareersController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Materias.
      *
      * @return \Illuminate\Http\Response
      */
@@ -81,7 +95,8 @@ class MattersCareersController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina index de Materias.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -99,7 +114,8 @@ class MattersCareersController extends Controller
      */
     public function show($id)
     {
-        try{
+        try
+        {
             $mattercareer = MatterCareer::find($id);
             $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
             $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
@@ -113,7 +129,8 @@ class MattersCareersController extends Controller
             $mattercareer->modificado_por = $this->getUserName($mattercareer->modificado_por);
 
             return view('general.matterscareers.show')->with('mattercareer', $mattercareer);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[MattersCareersController][show] Datos: id=".$id.". Exception: ".$ex);
@@ -149,6 +166,12 @@ class MattersCareersController extends Controller
         }
     }
 
+    /**
+     * Descarga archivo de contenidos de la materias solicitada.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function download($id)
     {
         try
@@ -265,6 +288,12 @@ class MattersCareersController extends Controller
         return redirect()->route('general.matterscareers.index');
     }
 
+    /**
+     * Obtiene listado de Menciones y retorna el codigo html en una vista parcial.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function getMentionsList(Request $request)
     {
         try
@@ -291,6 +320,12 @@ class MattersCareersController extends Controller
         return \Response::json(['html' => $html]);
     }
 
+    /**
+     * Obtiene listado de Materias y retorna el codigo html en una vista parcial.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function getMattersList(Request $request)
     {
         try
@@ -349,6 +384,12 @@ class MattersCareersController extends Controller
         return \Response::json(['html' => $html]);
     }
 
+    /**
+     * Obtiene listado de Carreras y retorna el codigo html en una vista parcial.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function getCareersList(Request $request)
     {
         try
@@ -426,6 +467,12 @@ class MattersCareersController extends Controller
         return \Response::json(['html' => $html]);
     }
 
+    /**
+     * Obtiene listado de Contenidos por Materia y retorna el codigo html en una vista parcial.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function getContentsList(Request $request)
     {
         try 

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   ExamsController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta, creación, modificación, 
+ *                      aprobación, activación para el simulador y 
+ *                      eliminación de exámenes complexivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -13,12 +29,10 @@ use ReactivosUPS\Http\Requests;
 use ReactivosUPS\Matter;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Mention;
-use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\Report;
 use Log;
-use Ghidev\Fpdf\Fpdf;
 use Illuminate\Support\Facades\File;
 
 class ExamsController extends Controller
@@ -59,19 +73,28 @@ class ExamsController extends Controller
      */
     public function create()
     {
-        try {
+        try 
+        {
             return view('exam.exams.create')
                 ->with('campusList', $this->getCampuses())
                 ->with('locationPeriodsList', $this->getLocationPeriods());
 
-        } catch (\Exception $ex) {
+        } 
+        catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ExamsController][create] Exception: " . $ex);
             return redirect()->route('exam.exams.index');
         }
     }
 
-    public function detail(Request $request, $id, $id_matter)
+    /**
+     * Muestra el detalle de los reactivos seleccionados para el examen.
+     *
+     * @param  int  $id
+     * @param  int  $id_matter
+     * @return \Illuminate\Http\Response
+     */
+    public function detail($id, $id_matter)
     {
         try
         {
@@ -289,6 +312,12 @@ class ExamsController extends Controller
         }
     }
 
+    /**
+     * Muestra el historial de cambios de estado del examen.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function history($id)
     {
         try
@@ -315,7 +344,8 @@ class ExamsController extends Controller
      */
     public function edit($id)
     {
-        try {
+        try 
+        {
             $exam = ExamHeader::find($id);
 
             if ( !in_array($exam->id_estado, array(1, 3)) )
@@ -327,7 +357,9 @@ class ExamsController extends Controller
             return view('exam.exams.edit')
                 ->with('exam', $exam);
 
-        } catch (\Exception $ex) {
+        } 
+        catch (\Exception $ex) 
+        {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ExamsController][edit] Datos: [id: $id] Exception: " . $ex);
             return redirect()->route('exam.exams.index');
@@ -382,6 +414,13 @@ class ExamsController extends Controller
         return redirect()->route('exam.exams.show', $id);
     }
 
+    /**
+     * Actualiza los reactvos seleccionados para el examen.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function updateDetail(Request $request, $id)
     {
         $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
@@ -550,6 +589,13 @@ class ExamsController extends Controller
         
     }
 
+    /**
+     * Registra las observaciones y gestiona los cambios de estado de los reactivos.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function comment(Request $request, $id)
     {
         $valid = true;
@@ -598,6 +644,12 @@ class ExamsController extends Controller
         return array("valid"=>$valid);
     }
 
+    /**
+     * Activa examen para el simulador.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function activate($id)
     {
         try
@@ -653,7 +705,14 @@ class ExamsController extends Controller
 
         return redirect()->route('exam.exams.show', $id);
     }
-    
+
+    /**
+     * Imprime reporte de examen en PDF.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function printReport(Request $request, $id)
     {
         try

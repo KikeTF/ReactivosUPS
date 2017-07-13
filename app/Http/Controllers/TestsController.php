@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   TestsController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona las peticiones de información 
+ *                      del simulador de examen complexivo.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,25 +23,24 @@ use ReactivosUPS\AnswerDetail;
 use ReactivosUPS\AnswerHeader;
 use ReactivosUPS\Campus;
 use ReactivosUPS\CareerCampus;
-use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
 use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use Log;
-use ReactivosUPS\Location;
 use ReactivosUPS\Mention;
 use View;
 
 class TestsController extends Controller
 {
-
+    
     public function __construct()
     {
+        // Define el acceso solo para visitantes
         $this->middleware('guest');
     }
+    
     /**
-     * Display a listing of the resource.
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -47,6 +61,12 @@ class TestsController extends Controller
             ->with('locationsList', $this->getLocations());
     }
 
+    /**
+     * Muestra la pagina de instrucciones el Test.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function instruction($id)
     {
         $test = AnswerHeader::find($id);
@@ -69,6 +89,9 @@ class TestsController extends Controller
         {
             \DB::beginTransaction(); //Start transaction!
 
+            // Si es un Test nuevo crea la cabecera y redirige a la pagina de instrucciones.
+            // Caso contrario genera el detalle del Test de manera aleatorea y
+            // redirige a la primera pregunta del Test.
             if ($isNewTest)
             {
                 $id_campus = isset($request['id_campus']) ? $request['id_campus'] : 0;
@@ -150,18 +173,27 @@ class TestsController extends Controller
             return redirect()->route('test.question', $id);
     }
 
-    public function question($id, Request $request)
+    /**
+     * Muestra la pregunta seleccionada.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function question($id)
     {
         try
         {
             $question = AnswerDetail::find($id);
             $test = AnswerHeader::find($question->id_resultado_cab);
 
+            // Calcula el tiempo transcurrido desde el inicio del examen
             $limitTime = (float)$test->parameter->duracion_examen;
             $startTime = strtotime($test->fecha_inicio);
             $currentTime = strtotime(date('Y-m-d H:i:s'));
             $time = round(($currentTime - $startTime)/60, 2);
 
+            // Si el examen no esta activo o el tiempo esta expirado
+            // redirecciona a la pagina de inicio de los Test
             if($test->estado != 'A' || $time > $limitTime)
                 return redirect()->route('test.index');
 
@@ -180,27 +212,28 @@ class TestsController extends Controller
         }
     }
 
-
     /**
-     * Display the specified resource.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina de inicio del Test.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        
+        return redirect()->route('test.index');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Funcionalidad no requerida.
+     * Redirecciona a la pagina de inicio del Test.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        return redirect()->route('test.index');
     }
 
     /**
@@ -269,7 +302,13 @@ class TestsController extends Controller
             return redirect()->route('test.result', $question->answerHeader->id);
     }
 
-
+    /**
+     * Muestra los resultados del Test.
+     * Si han pasado mas de 10 minutos redirecciona a la pagina de inicio del Test.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function result($id)
     {
         try
@@ -304,10 +343,12 @@ class TestsController extends Controller
     {
         try
         {
-            $test = AnswerHeader::find($id);
-
             \DB::beginTransaction(); //Start transaction!
 
+            $test = AnswerHeader::find($id);
+
+            // Si el estado del test es distinto de Aprobado (P) o Reprobado (R)
+            // el test se da de baja y entra en estado Cancelado (C)
             if($test->estado != 'P' && $test->estado != 'R')
             {
                 $test->estado = 'C';
@@ -334,20 +375,31 @@ class TestsController extends Controller
         return redirect()->route('test.index');
     }
 
+    /**
+     * Obtiene listado de informacion requerida y retorna el codigo html en vista parciales.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function getLists(Request $request)
     {
-        //dd($request->all());
         try
         {
+            // Obtiene parametros del enviados desde la vista en el $request
             $lista = (isset($request['lista']) ? $request->lista : "");
             $id_sede = (isset($request['id_sede']) ? (int)$request->id_sede : 0);
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
 
-            //$locations = Location::find($id_sede);
-
-
+            /**
+             * Determina el tipo de lista requerida ($lista) y realiza los siguientes pasos:
+             *  1.- Define la ruta de la vista parcial a la cual se retorna la lista ($route)
+             *  2.- Obtiene la lista da datos a retornar ($...List)
+             *  3.- Genera el codigo html a retornar ($html)
+             *
+             * En caso de no determinar el tipo de lista o algun error, retorna lista vacia
+             */
             if ($lista == "campus")
             {
                 $route = 'shared.optionlists._campuslist';
@@ -398,13 +450,16 @@ class TestsController extends Controller
                     $html = View::make($route)->render();
             }
 
-        } catch (\Exception $ex) {
-            Log::error("[TestsController][getList] Request=" . implode(", ", $request->all()) . "; Exception: " . $ex);
+        }
+        catch (\Exception $ex)
+        {
+            Log::error("[TestsController][getList] Exception: " . $ex);
             if (isset($route))
                 $html = View::make($route)->render();
             else
                 $html = '<select></select>';
         }
+
         return \Response::json(['html' => $html]);
     }
 }

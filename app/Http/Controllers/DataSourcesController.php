@@ -1,29 +1,48 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   DataSourcesController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la importación de los datos que 
+ *                      alimentan la aplicación cada periodo.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
-use ReactivosUPS\DataSource;
-use Maatwebsite\Excel\Facades\Excel;
 use Log;
-use Input;
 
 class DataSourcesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra pagina para la importacion de datos del distributivo y bibliografia al aplicativo.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
         return view('general.datasource.index');
     }
 
+    /**
+     * Importa data del distributivo y bibliografia para alimentar el aplicativo en cada periodo.
+     *  1.- Los archivos son copiados a la carpeta storage/files/... con fecha y hora.
+     *  2.- La data del archivo es importada a una tabla temporal en la base de datos.
+     *  3.- Se ejecuta SP de a base de datos que alimenta la diferentes tablas del sistema.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function import(Request $request)
     {
         try
@@ -142,6 +161,12 @@ class DataSourcesController extends Controller
         return redirect()->route('general.datasource.index');
     }
 
+    /**
+     * Ejecuta SP de la base de datos que alimenta la diferentes tablas del sistema 
+     * con la informacion del distributivo.
+     *
+     * @return $result
+     */
     public function loadDistributive()
     {
         Log::debug("DataSourcesController][loadDistributive] call sp_org_carga_datos(".\Auth::id().")");
@@ -156,6 +181,11 @@ class DataSourcesController extends Controller
         return $result;
     }
 
+    /**
+     * Ejecuta SP de la base de datos que alimenta la bibliografia base del contenido de las materias.
+     *
+     * @return $result
+     */
     public function loadBibliography()
     {
         Log::debug("DataSourcesController][loadBibliography] call sp_gen_carga_bibliografia(".\Auth::id().")");

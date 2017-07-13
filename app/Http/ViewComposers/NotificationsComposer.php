@@ -1,9 +1,16 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Neptali Torres F
- * Date: 30/12/2016
- * Time: 2:19
+ * NOMBRE DEL ARCHIVO   NotificationsComposer.php
+ *
+ * TIPO                 ViewComposers
+ *
+ * DESCRIPCIÓN          Gestiona las notificaciones del usuario.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
  */
 
 namespace ReactivosUPS\Http\ViewComposers;

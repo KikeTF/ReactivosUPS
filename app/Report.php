@@ -1,9 +1,19 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Neptali Torres F
- * Date: 01/05/2017
- * Time: 14:42
+ * NOMBRE DEL ARCHIVO   Report.php
+ *
+ * TIPO                 Clase (Fpdf)
+ *
+ * DESCRIPCIÓN          Estandariza cabecera y pie de página
+ *                      de los reportes PDF de reactivos y
+ *                      exámenes complexivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
  */
 
 namespace ReactivosUPS;

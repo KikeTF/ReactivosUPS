@@ -1,19 +1,30 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   DashboardController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Responde a las peticiones de información necesaria
+ *                      para desplegar los indicadores en la página de
+ *                      inicio de la aplicación.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use ReactivosUPS\AnswerDetail;
 use ReactivosUPS\AnswerHeader;
-use ReactivosUPS\Area;
 use ReactivosUPS\Distributive;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\MatterCareer;
-use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
-use ReactivosUPS\Profile;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\ReagentState;
 use Session;
@@ -22,8 +33,9 @@ use Log;
 class DashboardController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra pagina Dashboard.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -121,6 +133,14 @@ class DashboardController extends Controller
             ->with('StatesChartData', $StatesChartData);
     }
 
+    /**
+     * Retorna objeto con la data para generar indicador de barras
+     * de Reactivos por Materia.
+     *
+     * @param  \ReactivosUPS\MatterCareer  $mattersCareers
+     * @param  \ReactivosUPS\Reagent  $reagents
+     * @return \Illuminate\Http\Response
+     */
     public function reagentsByMatterChart($mattersCareers, $reagents)
     {
         try
@@ -147,6 +167,13 @@ class DashboardController extends Controller
         return $MattersChartData;
     }
 
+    /**
+     * Retorna objeto con la data para generar indicador de barras
+     * de Reactivos por Docente.
+     *
+     * @param  \ReactivosUPS\Distributive  $distributive
+     * @return \Illuminate\Http\Response
+     */
     public function reagentsByTeacherChart($distributive)
     {
         try
@@ -174,6 +201,14 @@ class DashboardController extends Controller
         return $TeachersChartData;
     }
 
+    /**
+     * Retorna objeto con la data para generar indicador de pie
+     * de Reactivos por Estado.
+     *
+     * @param  \ReactivosUPS\MatterCareer  $mattersCareers
+     * @param  \ReactivosUPS\Reagent  $reagents
+     * @return \Illuminate\Http\Response
+     */
     public function reagentsByStateChart($mattersCareers, $reagents)
     {
         try
@@ -224,6 +259,16 @@ class DashboardController extends Controller
         return $StatesChartData;
     }
 
+    /**
+     * Retorna objeto con la data para generar indicador de pie
+     * de Tests por Estado.
+     *
+     * @param  int  $id_campus
+     * @param  int  $id_carrera
+     * @param  int  $id_mencion
+     * @param  int[]  $ids_periodos_sedes
+     * @return \Illuminate\Http\Response
+     */
     public function testsByStateChart($id_campus, $id_carrera, $id_mencion, $ids_periodos_sedes)
     {
         try
@@ -302,6 +347,16 @@ class DashboardController extends Controller
         return $StatesChartData;
     }
 
+    /**
+     * Retorna objeto con la data para generar indicador de barras
+     * de Respuestas de Tests por Materia.
+     *
+     * @param  int  $id_campus
+     * @param  int  $id_carrera
+     * @param  int  $id_mencion
+     * @param  int[]  $ids_periodos_sedes
+     * @return \Illuminate\Http\Response
+     */
     public function testAnswersByMatterChart($id_campus, $id_carrera, $id_mencion, $ids_periodos_sedes)
     {
         try

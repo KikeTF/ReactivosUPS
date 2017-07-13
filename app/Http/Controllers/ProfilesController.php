@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   ProfilesController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta, creación, modificación,
+ *                      y eliminación de los perfiles de acceso de la
+ *                      aplicación.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,10 +24,8 @@ use ReactivosUPS\Career;
 use ReactivosUPS\CareerProfile;
 use ReactivosUPS\Profile;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\OptionProfile;
 use ReactivosUPS\Option;
-use Datatables;
 use Log;
 
 class ProfilesController extends Controller
@@ -23,11 +37,13 @@ class ProfilesController extends Controller
      */
     public function index()
     {
-        try{
+        try
+        {
             $profiles = Profile::query()->where('estado','!=','E')->orderBy('nombre','asc')->get();
             return view('security.profiles.index')
                 ->with('profiles', $profiles);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ProfilesController][index] Exception: ".$ex);
@@ -42,7 +58,8 @@ class ProfilesController extends Controller
      */
     public function create()
     {
-        try{
+        try
+        {
             $optionsList = Option::query()
                 ->where('estado','A')
                 ->where('id_padre','!=',0)
@@ -57,7 +74,8 @@ class ProfilesController extends Controller
             return view('security.profiles.create')
                 ->with('optionsList', $optionsList)
                 ->with('careersList', $careersList);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ProfilesController][create] Exception: ".$ex);
@@ -114,7 +132,8 @@ class ProfilesController extends Controller
             }
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             \DB::rollback();
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
@@ -134,7 +153,8 @@ class ProfilesController extends Controller
      */
     public function show($id)
     {
-        try{
+        try
+        {
             $profile = Profile::find($id);
             $profile->creado_por = $this->getUserName($profile->creado_por);
             $profile->modificado_por = $this->getUserName($profile->modificado_por);
@@ -149,7 +169,8 @@ class ProfilesController extends Controller
             return view('security.profiles.show')
                 ->with('profile', $profile)
                 ->with('optionsProfiles', $options);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ProfilesController][show] Datos: id=".$id.". Exception: ".$ex);
@@ -165,7 +186,8 @@ class ProfilesController extends Controller
      */
     public function edit($id)
     {
-        try{
+        try
+        {
             $profile = Profile::find($id);
 
             $optionsList = Option::query()
@@ -183,7 +205,8 @@ class ProfilesController extends Controller
                 ->with('profile', $profile)
                 ->with('optionsList', $optionsList)
                 ->with('careersList', $careersList);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ProfilesController][edit] Datos: id=".$id.". Exception: ".$ex);
@@ -293,11 +316,13 @@ class ProfilesController extends Controller
             $profile->save();
 
             flash('Transacci&oacuten realizada existosamente', 'success');
-        }catch (\Exception $ex)
+        }
+        catch (\Exception $ex)
         {
             flash("No se pudo realizar la transacci&oacuten", 'danger')->important();
             Log::error("[ProfilesController][destroy] Datos: id=".$id.". Exception: ".$ex);
         }
+        
         return redirect()->route('security.profiles.index');
     }
 }

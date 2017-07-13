@@ -1,27 +1,36 @@
 <?php
 
+/**
+ * NOMBRE DEL ARCHIVO   ReagentsController.php
+ *
+ * TIPO                 Controlador
+ *
+ * DESCRIPCIÓN          Gestiona la consulta, creación, modificación
+ *                      y eliminación de reactivos.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
+ */
+
 namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use ReactivosUPS\Career;
-use ReactivosUPS\Campus;
-use ReactivosUPS\ContentDetail;
 use ReactivosUPS\ContentHeader;
 use ReactivosUPS\Format;
 use ReactivosUPS\Http\Requests;
-use ReactivosUPS\Http\Controllers\Controller;
 use ReactivosUPS\MatterCareer;
 use ReactivosUPS\Reagent;
 use ReactivosUPS\ReagentAnswer;
 use ReactivosUPS\Distributive;
-use ReactivosUPS\ReagentComment;
 use ReactivosUPS\Report;
 use Log;
 use ReactivosUPS\ReagentQuestionConcept;
 use ReactivosUPS\ReagentQuestionProperty;
 use View;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Session;
 
@@ -37,16 +46,19 @@ class ReagentsController extends Controller
     {
         try
         {
+            // Variables de Session
             $id_Sede = (int)\Session::get('idSede');
             $ids_carreras = \Session::get('idsCarreras');
             $aprReactivo = \Session::get('ApruebaReactivo');
 
+            // Valida si tiene acceso a la pagina
             if( ($aprReactivo == 'S') )
             {
                 flash("Su perfil no esta autorizado para esta opci&oacute;n!", 'warning')->important();
                 return redirect()->route('index');
             }
-            
+
+            // Datos del $request enviado desde la vista
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_materia = (isset($request['id_materia']) ? (int)$request->id_materia : 0);
@@ -92,16 +104,15 @@ class ReagentsController extends Controller
      */
     public function create()
     {
-        try {
+        try 
+        {
             return view('reagent.reagents.create')
                 ->with('campusList', $this->getCampuses())
-                //->with('careers', $this->getCareers())
-                //->with('matters', $this->getMatters(0, 0, 0, 0))
-                //->with('mentions', $this->getMentions())
-                //->with('contents', $this->getContentsModel())
                 ->with('fields', $this->getFields())
                 ->with('formats', $this->getFormats());
-        } catch (\Exception $ex) {
+        } 
+        catch (\Exception $ex) 
+        {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsController][create] Exception: " . $ex);
             return redirect()->route('reagent.reagents.index');
@@ -118,12 +129,13 @@ class ReagentsController extends Controller
     {
         try
         {
+            // Variables de Session
             $id_periodo = (int)Session::get('idPeriodo');
             $id_sede = (int)Session::get('idSede');
 
             $reagent = new Reagent($request->all());
-            $reagent->id_periodo = (int)Session::get('idPeriodo');
-            $reagent->id_sede = (int)Session::get('idSede');
+            $reagent->id_periodo = $id_periodo;
+            $reagent->id_sede = $id_sede;
             $reagent->creado_por = \Auth::id();
 
             $reagent->id_distributivo = Distributive::query()
@@ -240,13 +252,15 @@ class ReagentsController extends Controller
      */
     public function show($id)
     {
-        try {
+        try 
+        {
             $reagent = Reagent::find($id);
 
             return view('reagent.reagents.show')
                 ->with('reagent', $reagent);
             
-        } catch (\Exception $ex) {
+        } 
+        catch (\Exception $ex) {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[ReagentsController][show] id=" . $id . ". Exception: " . $ex);
             return redirect()->route('reagent.reagents.index');
@@ -261,7 +275,8 @@ class ReagentsController extends Controller
      */
     public function edit($id)
     {
-        try {
+        try 
+        {
             $reagent = Reagent::find($id);
 
             if ( !in_array($reagent->id_estado, array(1, 4)) )
@@ -522,10 +537,17 @@ class ReagentsController extends Controller
         return redirect()->route('reagent.reagents.index');
     }
 
+    /**
+     * Valida si existe archivo de contenidos de la materia.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function matterContent(Request $request)
     {
         try
         {
+            // Obtiene datos enviados desde la pagina
             $id_campus = isset($request['id_campus']) ? (int)$request->id_campus : 0; 
             $id_carrera = isset($request['id_carrera']) ? (int)$request->id_carrera : 0;
             $id_materia = isset($request['id_materia']) ? (int)$request->id_materia : 0;
@@ -559,6 +581,12 @@ class ReagentsController extends Controller
         return \Response::json(['message' => $message], 200, $headers);
     }
 
+    /**
+     * Obtiene la seccion de registro de reactivo de acuerdo al formato seleccionado.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function getFormat(Request $request)
     {
         try {
@@ -574,6 +602,13 @@ class ReagentsController extends Controller
         return \Response::json(['html' => $html]);
     }
 
+    /**
+     * Imprime reporte de reactivos en PDF.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
     public function printReport(Request $request, $id)
     {
         try

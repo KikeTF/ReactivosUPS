@@ -1,9 +1,17 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Neptali Torres F
- * Date: 30/12/2016
- * Time: 2:19
+ * NOMBRE DEL ARCHIVO   OptionsComposer.php
+ *
+ * TIPO                 ViewComposers
+ *
+ * DESCRIPCIÓN          Gestiona las opciones del menu a las 
+ *                      cuales el usuario tiene acceso.
+ *
+ * AUTORES              Neptalí Torres Farfán
+ *                      Fátima Villalva Cabrera
+ *
+ * FECHA DE CREACIÓN    Julio 2017
+ *
  */
 
 namespace ReactivosUPS\Http\ViewComposers;

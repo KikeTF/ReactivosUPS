@@ -4,7 +4,6 @@ namespace ReactivosUPS\Http\Controllers;
 
 use ReactivosUPS\ExamState;
 use ReactivosUPS\Location;
-use ReactivosUPS\Option;
 use ReactivosUPS\Period;
 use ReactivosUPS\PeriodLocation;
 use ReactivosUPS\ReagentState;
@@ -14,22 +13,14 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use ReactivosUPS\Area;
 use ReactivosUPS\CareerCampus;
-use ReactivosUPS\ContentDetail;
-use ReactivosUPS\Distributive;
 use ReactivosUPS\Field;
 use ReactivosUPS\MatterCareer;
-use ReactivosUPS\Mention;
 use ReactivosUPS\Profile;
 use ReactivosUPS\ProfileUser;
-use ReactivosUPS\ReagentParameter;
 use ReactivosUPS\User;
 use ReactivosUPS\Campus;
-use ReactivosUPS\Career;
-use ReactivosUPS\Matter;
 use ReactivosUPS\Format;
 use Log;
-
-
 
 abstract class Controller extends BaseController
 {
@@ -37,6 +28,12 @@ abstract class Controller extends BaseController
 
     var $abc = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
 
+    /**
+     * Retorna nombre completo del usuario.
+     *
+     * @param  int  $id
+     * @return string $userName
+     */
     public function getUserName($id){
         $userName = "";
         if( !is_null($id) ){
@@ -46,12 +43,18 @@ abstract class Controller extends BaseController
         return $userName;
     }
 
+    /**
+     * Retorna listado de usuarios.
+     */
     public function getUsers(){
         $contents = User::query()->orderBy('nombres', 'asc')->get();
         $contents = $contents->lists('FullName', 'id');
         return $contents;
     }
 
+    /**
+     * Retorna listado de ubicaciones por periodo.
+     */
     public function getLocationPeriods(){
         $id_sede = (int)Session::get('idSede');
         $periodsLocations = PeriodLocation::query()->where('id_sede', $id_sede)->where('estado','A')->get();
@@ -62,92 +65,65 @@ abstract class Controller extends BaseController
         return (isset($periods) ? $periods : array());
     }
 
+    /**
+     * Retorna listado de sedes.
+     */
     public function getLocations(){
         $locations = Location::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $locations;
     }
-    
+
+    /**
+     * Retorna listado de campus.
+     */
     public function getCampuses(){
         $campus = Campus::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $campus;
     }
 
+    /**
+     * Retorna listado de formatos de reactivos.
+     */
     public function getFormats(){
         $formats = Format::query()->where('estado','A')->orderBy('id', 'asc')->lists('nombre','id');
         return $formats;
     }
 
+    /**
+     * Retorna listado de campos de conocimiento de reactivos.
+     */
     public function getFields(){
         $fields = Field::query()->where('estado','A')->orderBy('nombre', 'asc')->lists('nombre','id');
         return $fields;
     }
 
-    public function getMatters($id_campus, $id_carrera, $id_mencion, $id_area){
-        //$matters = Matter::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
-
-        if($id_carrera > 0 && $id_campus > 0)
-        {
-            $id_careerCampus = $this->getCareersCampuses()
-                ->where('id_carrera', $id_carrera)
-                ->where('id_campus', $id_campus)
-                ->first()->id;
-        }
-        else
-            $id_careerCampus = 0;
-
-        $mattersCareers = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
-
-        foreach ($mattersCareers as $matterCareer)
-        {
-            $ids[] = $matterCareer->id_materia;
-        }
-
-        $matters = Matter::query()->whereIn('id',$ids)->where('estado','A')->orderBy('descripcion','asc')->lists('descripcion','id');
-
-        return $matters;
-    }
-
+    /**
+     * Retorna listado de areas.
+     */
     public function getAreas(){
         $areas = Area::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
         return $areas;
     }
 
-    public function getCareers(){
-        $careers = Career::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
-        return $careers;
-    }
-
-    public function getMentions(){
-        $mentions = Mention::query()->where('estado','A')->orderBy('descripcion', 'asc')->lists('descripcion','id');
-        return $mentions;
-    }
-
-    public function getContents(){
-        $contents = ContentDetail::query()->where('estado','A')->orderBy('capitulo', 'asc')->get();
-        $contents = $contents->lists('ContentDescription', 'id');
-        return $contents;
-    }
-
-    public function getContentsModel(){
-        $contents = ContentDetail::query()->where('estado','A')->orderBy('capitulo', 'asc')->get();
-        return $contents;
-    }
-
+    /**
+     * Retorna listado de carreras por campus.
+     */
     public function getCareersCampuses(){
         $careersCampuses = CareerCampus::query()->where('estado','A')->orderBy('id', 'asc')->get();
         return $careersCampuses;
     }
 
+    /**
+     * Retorna listado de materias por carreras.
+     */
     public function getMattersCareers(){
         $mattersCareers = MatterCareer::query()->where('estado','A')->orderBy('id', 'asc')->get();
         return $mattersCareers;
     }
 
-    public function getProfilesUsers(){
-        $profilesUsers = ProfileUser::query()->where('estado','A')->orderBy('id', 'asc')->get();
-        return $profilesUsers;
-    }
-
+    /**
+     * Retorna listado de estados de reactivos.
+     */
     public function getReagentsStates(){
         $reagentsStates = ReagentState::query()
             ->where('estado','A')
@@ -156,6 +132,9 @@ abstract class Controller extends BaseController
         return $reagentsStates;
     }
 
+    /**
+     * Retorna listado de formato de etiquetas (colores) de estados de reactivos.
+     */
     public function getReagentsStatesLabel(){
         $statesLabel = ReagentState::query()
             ->where('estado','A')
@@ -164,6 +143,9 @@ abstract class Controller extends BaseController
         return $statesLabel;
     }
 
+    /**
+     * Retorna listado de estados de examenes.
+     */
     public function getExamsStates(){
         $examsStates = ExamState::query()
             ->where('estado','A')
@@ -172,53 +154,14 @@ abstract class Controller extends BaseController
         return $examsStates;
     }
 
-    public function getDistributive($id_materia, $id_carrera, $id_campus){
-        $id_profileUser = (int)Session::get('idPerfilUsuario');
-        $id_periodLocation = (int)Session::get('idPeriodoSede');
-        $aprReactivo = Session::get('ApruebaReactivo');
-        $aprExamen = Session::get('ApruebaExamen');
-        
-        $id_careerCampus = $this->getCareersCampuses()
-            ->where('id_carrera', $id_carrera)
-            ->where('id_campus', $id_campus)
-            ->first()->id;
-
-        $id_matterCareer = $this->getMattersCareers()
-            ->where('id_materia', $id_materia)
-            ->where('id_carrera_campus', $id_careerCampus)
-            ->first()->id;
-
-        $distributives = Distributive::query()->where('estado','A')->orderBy('id', 'asc')->get();
-
-        $distributive = $distributives
-            ->where('id_periodo_sede', $id_periodLocation)
-            ->where('id_materia_carrera', $id_matterCareer);
-
-        if ($aprReactivo == 'N')
-        {
-            $distributive = $distributives
-                ->where('id_periodo_sede', $id_periodLocation)
-                ->where('id_materia_carrera', $id_matterCareer)
-                ->where('id_perfil_usuario', $id_profileUser);
-        }
-
-        return $distributive;
-    }
-
-    public function getCareersByCampus($id_campus){
-        $careerByCampus = CareerCampus::query()->where('id_campus',$id_campus)->get();
-        $career = new Career();
-        foreach($careerByCampus as $carByCamp){
-            $career = Career::find($carByCamp->id_carrera)->where('estado','A')->get();
-        }
-        return $career;
-    }
-
-    public function getFormatParameters($id_formato){
-        $parameters = Format::find($id_formato)->where('estado', 'A')->get();
-        return $parameters;
-    }
-
+    /**
+     * Retorna parametros por materia.
+     *
+     * @param  int  $id_materia
+     * @param  int  $id_carrera
+     * @param  int  $id_campus
+     * @return \ReactivosUPS\MatterCareer;  
+     */
     public function getMatterParameters($id_materia, $id_carrera, $id_campus)
     {
         $id_careerCampus = $this->getCareersCampuses()
@@ -237,6 +180,11 @@ abstract class Controller extends BaseController
         return $matterCareer;
     }
 
+    /**
+     * Valida si la sesion esta expirada.
+     * 
+     * @return bool;
+     */
     public function isSessionExpire(){
         $result = false;
         try{
@@ -250,6 +198,13 @@ abstract class Controller extends BaseController
         return $result;
     }
 
+    /**
+     * Carga variables de sesion.
+     *
+     * @param  int  $idPerfil
+     * @param  int  $idUsuario
+     * @return bool;
+     */
     public function loadSessionData($idPerfil, $idUsuario){
         $result = false;
         try
