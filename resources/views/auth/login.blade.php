@@ -203,7 +203,7 @@
         $("#username").on("focusout", function () {
             $.ajax({
                 type: 'GET',
-                url: "http://localhost:8000/auth/userprofiles",
+                url: "{{ route('auth.userprofiles') }}",
                 data: { username: $("#username").val() },
                 dataType: "json",
                 async: true,
