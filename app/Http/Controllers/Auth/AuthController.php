@@ -56,7 +56,8 @@ class AuthController extends Controller
     {
         $errMessage = "";
         $valid = false;
-        try{
+        try
+        {
             $user = User::query()->where('username', $request->username)->first();
             if(!is_null($user)){
                 if($user->estado == "A"){
@@ -72,7 +73,9 @@ class AuthController extends Controller
                     $errMessage = "El usuario no se encuentra activo!";
             }else
                 $errMessage = "El usuario es incorrecto!";
-        }catch (Exception $e){
+        }
+        catch (Exception $e)
+        {
             $errMessage = "El usuario es incorrecto!";
         }
 
@@ -81,22 +84,30 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-        $username = $request->username;
-        $password = $request->password;
-        $idProfile = (int)$request->profile;
-        $rememberMe = (bool)(isset( $request['rememberMe'] ) ? true : false);
-        $errMessage = "";
-        //dd(\Hash::make($password));
-
-        if (Auth::attempt(['username' => $username, 'password' => $password, 'estado' => 'A'], $rememberMe)) {
-            if($this->loadSessionData($idProfile, Auth::id())){
-                return redirect()->guest('home');
+        try
+        {
+            $username = $request->username;
+            $password = $request->password;
+            $idProfile = (int)$request->profile;
+            $rememberMe = (bool)(isset( $request['rememberMe'] ) ? true : false);
+            $errMessage = "";
+            //dd(\Hash::make($password));
+        
+            if (Auth::attempt(['username' => $username, 'password' => $password, 'estado' => 'A'], $rememberMe)) {
+                if($this->loadSessionData($idProfile, Auth::id())){
+                    return redirect()->guest('home');
+                }else
+                    $errMessage = "Perfil del usuario no encontrado!";
             }else
-                $errMessage = "Perfil del usuario no encontrado!";
-        }else
-            $errMessage = "El usuario o contraseña son incorrectos!";
+                $errMessage = "El usuario o contraseña son incorrectos!";
 
-
+        }
+        catch (\Exception $ex)
+        {
+            flash("No se pudo iniciar sesion. Por favor contacte al administrador!", "danger")->important();
+            Log::error("[AuthController][postLogin] username=".$request->username."; Exception: ".$ex);
+        }
+        
         return view("auth.login")
             ->with("message", $errMessage);
     }

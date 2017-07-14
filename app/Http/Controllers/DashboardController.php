@@ -118,8 +118,17 @@ class DashboardController extends Controller
         $MattersChartData = $this->reagentsByMatterChart($mattersCareers, $reagents);
         $StatesChartData = $this->reagentsByStateChart($mattersCareers, $reagents);
         $TeachersChartData = ($aprReactivo == 'S') ? $this->reagentsByTeacherChart($distributive) : null;
-        $TestsChartData = ($aprExamen == 'S') ? $this->testsByStateChart($id_campus_test, $id_carrera_test, $id_mencion_test, $ids_periodos_sedes_test) : null;
-        $TestAnswersChartData = ($aprExamen == 'S') ? $this->testAnswersByMatterChart($id_campus_test, $id_carrera_test, $id_mencion_test, $ids_periodos_sedes_test) : null;
+        if ($aprExamen == 'S')
+        {
+            $this->validateExpiredTests();
+            $TestsChartData = $this->testsByStateChart($id_campus_test, $id_carrera_test, $id_mencion_test, $ids_periodos_sedes_test);
+            $TestAnswersChartData = $this->testAnswersByMatterChart($id_campus_test, $id_carrera_test, $id_mencion_test, $ids_periodos_sedes_test);
+        }
+        else
+        {
+            $TestsChartData = null;
+            $TestAnswersChartData = null;
+        }
 
         return view('dashboard.index')
             ->with('filters', $filters)
@@ -404,4 +413,41 @@ class DashboardController extends Controller
         return $AnswersChartData;
     }
 
+    /**
+     * Valida y actualiza los Test que se encuentren en estado
+     * "En Proceso" y con tiempo expirado.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function validateExpiredTests()
+    {
+        try
+        {
+            $tests = AnswerHeader::query()->where('estado', 'A')->get();
+            if ($tests->count() > 0)
+            {
+                foreach ($tests as $test)
+                {
+                    $limitTime = (float)$test->parameter->duracion_examen;
+                    $startTime = strtotime($test->fecha_inicio);
+                    $currentTime = strtotime(date('Y-m-d H:i:s'));
+                    $time = round(($currentTime - $startTime)/60, 2);
+
+                    // Valida si tiempo esta expirado
+                    if($time > $limitTime)
+                        $expiredIds[] = $test->id;
+                }
+
+                if (isset($expiredIds))
+                {
+                    AnswerHeader::whereIn('id', $expiredIds)
+                        ->update(['estado' => 'E', 'modificado_por' => 0, 'fecha_modificacion' => date('Y-m-d H:i:s')]);
+                }
+            }
+        }
+        catch (\Exception $ex)
+        {
+            Log::error("[DashboardController][validateExpiredTests] Exception: ".$ex);
+        }
+    }
 }
