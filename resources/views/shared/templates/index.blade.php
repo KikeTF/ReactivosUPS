@@ -169,7 +169,7 @@
                 <div class="footer-content">
                     <span class="bigger-120">
                         <span class="blue bolder">Universidad Polit&eacute;cnica Salesiana</span>
-                        &copy; 2016
+                        &copy; 2017
                     </span>
                 </div>
             </div>

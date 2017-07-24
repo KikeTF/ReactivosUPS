@@ -69,6 +69,17 @@
 
             </div>
         </div>
+
+        <div class="footer">
+            <div class="footer-inner">
+                <div class="footer-content">
+                    <span class="bigger-120">
+                        <span class="blue bolder">Universidad Polit&eacute;cnica Salesiana</span>
+                        &copy; 2017
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="{{ asset('ace/js/jquery.2.1.1.min.js') }}"></script>

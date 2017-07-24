@@ -200,6 +200,13 @@ class ExamsController extends Controller
                     Log::info("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$msg);
                     //return redirect()->route('exam.exams.create');
                 }
+                elseif(strcmp(strtoupper($spValResult[0]->return_message), "ERR-NR") == 0)
+                {
+                    $msg = "No exiten reactivos para los periodos seleccionados";
+                    Log::error("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$msg);
+                    flash($msg, 'danger')->important();
+                    return redirect()->route('exam.exams.create');
+                }
                 else
                 {
                     Log::error("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$spValResult[0]->return_message);

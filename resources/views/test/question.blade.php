@@ -42,7 +42,7 @@
                 @foreach($test->answersDetails->sortBy('id') as $index => $det)
                     <?php if($question->id == $det->id) $indexNext = $index+1; ?>
                     <button class="{{ ($question->id == $det->id) ? 'btn btn-success' : (($det->id_opcion_resp > 0) ? 'btn btn-info' : (($det->estado == 'P') ? 'btn btn-yellow' : 'btn btn-light')) }}"
-                            onclick="processAnswer({{ $det->id }}); return false;"
+                            onclick="processAnswer('{{ $det->id }}', '{{ $test->parameter->editar_respuestas }}'); return false;"
                                 {{ (($question->id != $det->id && $det->id_opcion_resp == 0 && $det->estado == 'A') || $test->parameter->editar_respuestas == 'N') ? 'disabled' : '' }}>{{ $index+1 }}</button>
                 @endforeach
             </div>
@@ -53,13 +53,15 @@
                 if($indexNext < $test->answersDetails->count())
                     $idNext = $test->answersDetails[$indexNext]->id;
                 ?>
-                <button class="btn btn-danger pull-right" onclick="processAnswer({{ $idNext }}); return false;">
-                    @if($idNext > 0)
+                @if($idNext > 0)
+                    <button class="btn btn-success pull-right" onclick="processAnswer('{{ $idNext }}', '{{ $test->parameter->editar_respuestas }}'); return false;">
                         Siguiente<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                    @else
+                    </button>
+                @else
+                    <button class="btn btn-danger pull-right" onclick="processAnswer('{{ $idNext }}', '{{ $test->parameter->editar_respuestas }}'); return false;">
                         Finalizar
-                    @endif
-                </button>
+                    </button>
+                @endif
             </div>
 
             <div id="countdown" class="btn-group pull-right" style="padding: 6px 12px; font-size: 16px;"></div>
@@ -223,7 +225,7 @@
             $("#formulario").submit();
         }
 
-        function processAnswer(idQuestion) {
+        function processAnswer(idQuestion, editAnswer) {
             if (idQuestion > 0)
                 $("#id_nextQuestion").val(idQuestion);
 
@@ -244,6 +246,18 @@
                 else
                     confirmSubmit("Desea finalizar su examen?");
             }
+            else if(editAnswer == 'N')
+            {
+                bootbox.alert({
+                    message: "Seleccione una respuesta para continuar!",
+                    buttons: {
+                        'ok': {
+                            label: 'Cerrar',
+                            className: 'btn-info'
+                        }
+                    }
+                });
+            }
             else if( $("#id_nextQuestion").val() > 0 )
                 confirmSubmit("No ha seleccionado una respuesta. Desea continuar?");
             else
@@ -260,7 +274,7 @@
                     },
                     cancel: {
                         label: 'No',
-                        className: 'btn-danger'
+                        className: 'btn-gray'
                     }
                 },
                 callback: function (result) {
