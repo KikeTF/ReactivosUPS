@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\Http\Requests;
 use Log;
+use ReactivosUPS\User;
 
 class DataSourcesController extends Controller
 {
@@ -143,12 +144,19 @@ class DataSourcesController extends Controller
                     $result = $this->loadBibliography();
                 }
 
-                if(isset($result) && strcmp(strtoupper($result[0]->return_message), "OK") !== 0) {
+                if(isset($result) && strcmp(strtoupper($result[0]->return_message), "OK") !== 0)
+                {
                     Log::error("[DataSourceController][import] Procedure=" . $result[0]->procedure . "; Error=" . $result[0]->return_message);
                     flash('No fue posible completar la transaccion. Proceso: ' . $result[0]->procedure, 'danger')->important();
                 }
-                else
+                elseif($request->type == 'B' || ($request->type == 'D' && $this->setDefaultPassword()))
+                {
                     flash('Proceso ejecutado correctamente. Registros importados: '.$rows, 'success');
+                }
+                else
+                {
+                    flash("Problemas al setear contrase&ntilde;a por defecto!", 'warning')->important();
+                }
 
             }
         }
@@ -169,16 +177,24 @@ class DataSourcesController extends Controller
      */
     public function loadDistributive()
     {
-        Log::debug("DataSourcesController][loadDistributive] call sp_org_carga_datos(".\Auth::id().")");
+        try
+        {
+            Log::debug("DataSourcesController][loadDistributive] call sp_org_carga_datos(".\Auth::id().")");
 
-        $stmt = 'call sp_org_carga_datos('.\Auth::id().')';
-        \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-        $sp = \DB::connection()->getpdo()->prepare($stmt);
-        $sp->execute();
-        $result = $sp->fetchAll(\DB::connection()->getFetchMode());
-        $sp->closeCursor();
+            $stmt = 'call sp_org_carga_datos('.\Auth::id().')';
+            \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+            $sp = \DB::connection()->getpdo()->prepare($stmt);
+            $sp->execute();
+            $result = $sp->fetchAll(\DB::connection()->getFetchMode());
+            $sp->closeCursor();
 
-        return $result;
+            return $result;
+        }
+        catch (\Exception $ex)
+        {
+            flash("Problemas al cargar datos de distributivo!", 'danger')->important();
+            Log::error("DataSourcesController][loadDistributive] Exception: ".$ex);
+        }
     }
 
     /**
@@ -188,16 +204,57 @@ class DataSourcesController extends Controller
      */
     public function loadBibliography()
     {
-        Log::debug("DataSourcesController][loadBibliography] call sp_gen_carga_bibliografia(".\Auth::id().")");
+        try
+        {
+            Log::debug("DataSourcesController][loadBibliography] call sp_gen_carga_bibliografia(".\Auth::id().")");
 
-        $stmt = 'call sp_gen_carga_bibliografia('.\Auth::id().')';
-        \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-        $sp = \DB::connection()->getpdo()->prepare($stmt);
-        $sp->execute();
-        $result = $sp->fetchAll(\DB::connection()->getFetchMode());
-        $sp->closeCursor();
+            $stmt = 'call sp_gen_carga_bibliografia('.\Auth::id().')';
+            \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+            $sp = \DB::connection()->getpdo()->prepare($stmt);
+            $sp->execute();
+            $result = $sp->fetchAll(\DB::connection()->getFetchMode());
+            $sp->closeCursor();
 
-        return $result;
+            return $result;
+        }
+        catch (\Exception $ex)
+        {
+            flash("Problemas al cargar datos de bibliografia!", 'danger')->important();
+            Log::error("DataSourcesController][loadBibliography] Exception: ".$ex);
+        }
+    }
+
+    /**
+     * Setea a los usuarios nuevos la cedula como contraseña por defecto.
+     *
+     * @return $result
+     */
+    public function setDefaultPassword()
+    {
+        $retval = (bool)false;
+        try
+        {
+            Log::debug("DataSourcesController][setDefaultPassword] UserID:".\Auth::id());
+
+            $users = User::query()
+                ->where('estado', 'A')
+                ->where('cambiar_password', 'S')
+                ->where('password', '')->get();
+
+            foreach ($users as $user)
+            {
+                $user->setPasswordAttribute($user->cedula);
+                $user->save();
+            }
+
+            $retval = (bool)true;
+        }
+        catch (\Exception $ex)
+        {
+            Log::error("DataSourcesController][setDefaultPassword] Exception: ".$ex);
+        }
+
+        return $retval;
     }
 
 }

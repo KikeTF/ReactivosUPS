@@ -204,7 +204,7 @@ class ExamsController extends Controller
                 {
                     $msg = "No exiten reactivos para los periodos seleccionados";
                     Log::error("[ExamsController][store][Generacion Automatica de Examen] id_carrera_campus=".$id_careerCampus."; id_periodo_sede=".implode(",", $request->periodosSede)."; Error=".$msg);
-                    flash($msg, 'danger')->important();
+                    flash($msg  , 'danger')->important();
                     return redirect()->route('exam.exams.create');
                 }
                 else
