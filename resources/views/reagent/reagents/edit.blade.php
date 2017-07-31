@@ -178,7 +178,7 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('descripcion', 'Operaci&oacute;n Cognitiva:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+                        {!! Form::label('descripcion', 'Descripci&oacute;n:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
                         <div class="col-sm-8">
                             {!! Form::textarea('descripcion', $reagent->descripcion, ['class' => 'form-control', 'size' => '100%x5', 'style' => 'resize: vertical;'])!!}
                         </div>

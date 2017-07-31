@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Administraci&oacute;n')
-@section('subtitulo', 'Editar par&aacute;metros de materia')
+@section('subtitulo', 'Editar par&aacute;metros de materia: '.$mattercareer->matter->descripcion)
 
 @section('contenido')
 

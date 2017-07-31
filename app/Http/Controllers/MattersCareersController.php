@@ -117,14 +117,6 @@ class MattersCareersController extends Controller
         try
         {
             $mattercareer = MatterCareer::find($id);
-            $mattercareer->desc_campus = Campus::find($mattercareer->careerCampus->id_campus)->descripcion;
-            $mattercareer->desc_carrera = Career::find($mattercareer->careerCampus->id_carrera)->descripcion;
-            $mattercareer->desc_mencion = $mattercareer->mention->descripcion;
-            $mattercareer->desc_area = $mattercareer->area->descripcion;
-            $mattercareer->desc_materia = $mattercareer->matter->descripcion;
-            $mattercareer->usr_responsable = $this->getUserName($mattercareer->id_usr_responsable);
-            $mattercareer->estado = ($mattercareer->estado == 'A') ? 'Activo' : 'Inactivo';
-            $mattercareer->aplica_examen = ($mattercareer->aplica_examen == 'S') ? 'Si' : 'No';
             $mattercareer->creado_por = $this->getUserName($mattercareer->creado_por);
             $mattercareer->modificado_por = $this->getUserName($mattercareer->modificado_por);
 
@@ -346,6 +338,7 @@ class MattersCareersController extends Controller
             if($aprReactivo == 'S' && $aprExamen == 'S')
             {
                 $mattersCareers = MatterCareer::with('careerCampus')
+                    ->where('estado', 'A')
                     ->whereHas('careerCampus', function($query) use($id_campus, $id_carrera, $ids_carreras){
                         if ($id_campus > 0) $query->where('id_campus', $id_campus);
                         if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
@@ -419,7 +412,7 @@ class MattersCareersController extends Controller
                         ->where('estado','A')
                         ->where('id_campus', $id_campus)->first()->id;
 
-                $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->get();
+                $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->where('estado', 'A')->get();
 
                 if($dist->count() > 0)
                 {

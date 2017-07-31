@@ -96,13 +96,18 @@
                         </div>
 
                         <div class="profile-info-row">
+                            <div class="profile-info-name">Instrucciones</div>
+                            <div class="profile-info-value"><span>{!! htmlspecialchars_decode($parameter->instrucciones) !!}</span></div>
+                        </div>
+
+                        <div class="profile-info-row">
                             <div class="profile-info-name">Estado</div>
                             <div class="profile-info-value"><span>{{ ($parameter->estado == 'A' ? 'Activo' : 'Inactivo') }}</span></div>
                         </div>
 
                         <div class="profile-info-row">
                             <div class="profile-info-name">Creado por</div>
-                            <div class="profile-info-value"><span>{{ $parameter->creado_por }}</span></div>
+                            <div class="profile-info-value"><span>{{ $creado_por }}</span></div>
                         </div>
 
                         <div class="profile-info-row">

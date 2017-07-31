@@ -121,12 +121,16 @@ class NotificationsComposer extends Controller
             if ($aprExamen == 'S')
             {
                 $exams = ExamHeader::query()->where('id_estado', 2)->count();
-                $NotificationsDetail[] = [
-                    'name' => 'Examenes por Aprobar', 
-                    'count' => $exams,
-                    'route' => 'exam.exams.index',
-                    'icon' => 'fa-thumbs-o-up'];
-                $NotificationsCount = $NotificationsCount + $exams;
+
+                if ($exams > 0)
+                {
+                    $NotificationsDetail[] = [
+                        'name' => 'Examenes por Aprobar',
+                        'count' => $exams,
+                        'route' => 'exam.exams.index',
+                        'icon' => 'fa-thumbs-o-up'];
+                    $NotificationsCount = $NotificationsCount + $exams;
+                }
             }
 
             if ($NotificationsCount > 0)

@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 
 use ReactivosUPS\ExamParameter;
 use ReactivosUPS\Http\Requests;
+use Log;
 
 class ExamParametersController extends Controller
 {
@@ -57,9 +58,9 @@ class ExamParametersController extends Controller
                 return view('exam.parameters.index')
                     ->with('history', $parameter->get())
                     ->with('parameter', $parameter->first())
+                    ->with('creado_por', $this->getUserName($parameter->first()->creado_por))
                     ->with('campusList', $this->getCampuses())
                     ->with('filters', $filters);
-
         }
         catch(\Exception $ex)
         {

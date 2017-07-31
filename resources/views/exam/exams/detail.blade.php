@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <div class="row" align="justify" style="min-height: 40px; margin-bottom: 10px;">
-                            {{ $reagent->planteamiento }}
+                            {!! nl2br(e($reagent->planteamiento)) !!}
                         </div>
                         <div class="row">
                             <div class="pull-left">

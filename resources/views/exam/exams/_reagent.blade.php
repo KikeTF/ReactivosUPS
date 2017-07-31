@@ -1,5 +1,5 @@
 <div class="form-group">
-    <div class="col-sm-12" align="justify">{{ $reagent->planteamiento }}</div>
+    <div class="col-sm-12" align="justify">{!! nl2br(e($reagent->planteamiento)) !!}</div>
 </div>
 
 @if($reagent->imagen == 'S')

@@ -146,7 +146,7 @@
                                 ->get();
                         ?>
                         <div id="{{ 'reactivos-'.$indexKey }}" class="tab-pane{{ ($firstMentionKey == $indexKey) ? ' in active' : '' }}">
-                            @foreach($mattersCareers as $matCar)
+                            @foreach($mattersCareers->sortBy('MatterDescription') as $matCar)
                                 <?php $matter = $matCar->matter; ?>
 
                                 <div class="panel panel-default">
@@ -154,7 +154,7 @@
                                         <h4 class="panel-title">
                                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $matter->id }}">
                                                 <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-                                                &nbsp;Reactivos: {{ $matter->descripcion }}
+                                                &nbsp;{{ $matter->descripcion }}
                                             </a>
                                         </h4>
                                     </div>
@@ -177,7 +177,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row" style="min-height: 40px; margin-bottom: 10px; text-align: justify;">
-                                                                    {{ $detail->reagent->planteamiento }}
+                                                                    {!! nl2br(e($detail->reagent->planteamiento)) !!}
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="pull-left">
@@ -455,7 +455,7 @@
         {
             var element = '<select id="reportMencionID" class="form-control">';
             @foreach($mentionsList as $indexKey => $mention)
-                @if($indexKey > 1)
+                @if($indexKey != $firstMentionKey)
                     element += '<option value="{{ $indexKey }}">{{ $mention }}</option>';
                 @endif
             @endforeach

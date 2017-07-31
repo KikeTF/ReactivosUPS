@@ -299,7 +299,12 @@ class ExamsController extends Controller
         try
         {
             $exam = ExamHeader::find($id);
-            $mentionsList = Mention::query()->where('id_carrera', $exam->id_carrera)->where('estado', 'A')->lists('descripcion','id');
+
+            $mentionsList = Mention::query()
+                ->where('id_carrera', $exam->id_carrera)
+                ->where('estado', 'A')->lists('descripcion','id');
+                //->where('cod_mencion', '!=', 'COMUN-'.$exam->id_carrera);
+
             $parameter = ExamParameter::query()
                 ->where('id_carrera_campus', $exam->id_carrera_campus)
                 ->where('estado', 'A')
@@ -724,8 +729,10 @@ class ExamsController extends Controller
     {
         try
         {
+
             $id_mencion = (isset($request['mencion']) ? (int)$request->mencion : 0);
             $exam = ExamHeader::find($id);
+            $id_mencion_comun = (int)Mention::query()->where('cod_mencion', 'COMUN-'.$exam->id_carrera)->first()->id;
 
             $pdf = new Report();
             $pdf->headerTitle = utf8_decode('EXAMEN COMPLEXIVO');
@@ -743,10 +750,10 @@ class ExamsController extends Controller
             $pdf->SetXY($pdf->GetX()+4, $posY);
             $pdf->MultiCell(13, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 1, 'L');
 
-            $posY = $pdf->GetY();
-            $pdf->MultiCell(4, 0.7, utf8_decode('RESOLUCIÓN'), 1, 'L');
             if(trim($exam->resolucion) != '')
             {
+                $posY = $pdf->GetY();
+                $pdf->MultiCell(4, 0.7, utf8_decode('RESOLUCIÓN'), 1, 'L');
                 $pdf->SetXY($pdf->GetX()+4, $posY);
                 $pdf->MultiCell(13, 0.7, utf8_decode($exam->resolucion), 1, 'L');
             }
@@ -758,13 +765,13 @@ class ExamsController extends Controller
             $mattersCareers = MatterCareer::query();
 
             if($id_mencion > 0)
-                $mattersCareers = $mattersCareers->whereIn('id_mencion', array(1, $id_mencion));
+                $mattersCareers = $mattersCareers->whereIn('id_mencion', array($id_mencion_comun, $id_mencion));
 
             $mattersCareers = $mattersCareers->whereIn('id_materia', array_unique($idsMat))->get();
 
             $iRea = 0;
             $iMat = 0;
-            foreach($mattersCareers as $matCar)
+            foreach($mattersCareers->sortBy('MatterDescription') as $matCar)
             {
                 $iMat++;
 
@@ -780,7 +787,7 @@ class ExamsController extends Controller
                 if($id_mencion == 0)
                     $totRea = $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->count();
                 else
-                    $totRea = $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->where('id_mencion', 1)->count()
+                    $totRea = $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->where('id_mencion', $id_mencion_comun)->count()
                         + $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->where('id_mencion', $id_mencion)->count();
 
                 foreach ($exam->examsDetails as $det)
@@ -822,12 +829,13 @@ class ExamsController extends Controller
                             if ($isValidPath)
                             {
                                 list($w, $h) = getimagesize($path);
-                                $posX = (17-($w*10/$h))/2+2;
+                                $posX = (($w*9/$h) < 17) ? (17-($w*9/$h))/2+1 : 2;
                                 $whDiff = $w/$h-1;
+                                $pdf->Image($path, $posX+0.9, $posY, 16, 0);
                                 if ($whDiff > 0.7)
-                                    $pdf->MultiCell(17, 10, $pdf->Image($path, $posX+0.9, $posY, 16, 0), 0, 'C');
+                                    $pdf->MultiCell(17, 9, $pdf->Image($path, $posX+0.9, $posY, 16, 0), 0, 'C');
                                 else
-                                    $pdf->MultiCell(17, 10, $pdf->Image($path, $posX, $posY, 0, 10), 0, 'C');
+                                    $pdf->MultiCell(17, 9, $pdf->Image($path, $posX, $posY, 0, 9), 0, 'C');
                             }
 
                             //$pdf->SetXY($pdf->GetX(),$pdf->GetY()-10);

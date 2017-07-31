@@ -99,7 +99,7 @@
                             <div class="profile-info-row">
                                 <div class="profile-info-name">Planteamiento</div>
                                 <div class="profile-info-value" style="text-align: justify;">
-                                    <span >{{ $reagent->planteamiento }}</span>
+                                    <span >{!! nl2br(e($reagent->planteamiento)) !!}</span>
 
                                     @if($reagent->imagen == 'S')
                                         <div class="space-6"></div>
@@ -225,8 +225,8 @@
                             </div>
 
                             <div class="profile-info-row">
-                                <div class="profile-info-name">Operaci&oacute;n Cognitiva</div>
-                                <div class="profile-info-value"><span>{{ $reagent->descripcion }}</span></div>
+                                <div class="profile-info-name">Descripci&oacute;n</div>
+                                <div class="profile-info-value"><span>{!! nl2br(e($reagent->descripcion)) !!}</span></div>
                             </div>
 
                             <div class="profile-info-row">

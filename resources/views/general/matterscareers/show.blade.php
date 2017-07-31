@@ -1,7 +1,7 @@
 @extends('shared.templates.index')
 
 @section('titulo', 'Administraci&oacute;n')
-@section('subtitulo', 'Detalle de par&aacute;metros por materia')
+@section('subtitulo', 'Detalle de par&aacute;metros por materia: '.$mattercareer->matter->descripcion)
 
 @section('contenido')
 
@@ -20,28 +20,28 @@
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Campus</div>
-                <div class="profile-info-value"><span>{{ $mattercareer->desc_campus }}</span></div>
+                <div class="profile-info-value"><span>{{ $mattercareer->careerCampus->campus->descripcion }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Carrera</div>
-                <div class="profile-info-value"><span>{{ $mattercareer->desc_carrera }}</span></div>
+                <div class="profile-info-value"><span>{{ $mattercareer->careerCampus->career->descripcion }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Menci&oacute;n</div>
-                <div class="profile-info-value"><span>{{ $mattercareer->desc_mencion }}</span></div>
+                <div class="profile-info-value"><span>{{ $mattercareer->mention->descripcion }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">&Aacute;rea</div>
-                <div class="profile-info-value"><span>{{ $mattercareer->desc_area }}</span></div>
+                <div class="profile-info-value"><span>{{ $mattercareer->area->descripcion }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">Materia</div>
                 <div class="profile-info-value">
-                    <span>{{ $mattercareer->desc_materia }}</span>&nbsp;
+                    <span>{{ $mattercareer->matter->descripcion }}</span>&nbsp;
                     <a href="{{ route('general.matterscareers.download', $mattercareer->id) }}" class="ace-icon fa fa-download bigger-110" aria-hidden="true"></a>
                 </div>
             </div>
@@ -58,17 +58,12 @@
 
             <div class="profile-info-row">
                 <div class="profile-info-name">¿Aplica a Examen?</div>
-                <div class="profile-info-value"><span>{{ $mattercareer->aplica_examen }}</span></div>
+                <div class="profile-info-value"><span>{{ ($mattercareer->aplica_examen == 'S') ? 'Si' : 'No' }}</span></div>
             </div>
 
             <div class="profile-info-row">
                 <div class="profile-info-name">No. Reactvos en Examen</div>
                 <div class="profile-info-value"><span>{{ $mattercareer->nro_reactivos_exam }}</span></div>
-            </div>
-
-            <div class="profile-info-row">
-                <div class="profile-info-name">Responsable</div>
-                <div class="profile-info-value"><span>{{ $mattercareer->usr_responsable }}</span></div>
             </div>
 
             <div class="profile-info-row">
