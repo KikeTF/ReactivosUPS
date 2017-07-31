@@ -4,7 +4,7 @@
     @endif
 
     <div style="columns: {{ $col }};">
-    @foreach($matterParameters->where('id_mencion', $indexKey) as $matter)
+    @foreach($matterParameters->where('id_mencion', $indexKey)->sortBy('MatterDescription') as $matter)
         <?php
         $reaCount = 0;
         $reaTotal = $matter->nro_reactivos_exam;
