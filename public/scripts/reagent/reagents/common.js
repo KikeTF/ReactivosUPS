@@ -20,8 +20,8 @@ function inputFileLoad(){
         droppable:false,
         onchange:null,
         thumbnail:false, //| true | large
-        whitelist:'gif|png|jpg|jpeg|bmp',
-        allowExt: ["jpeg","jpg","png","gif","bmp"]
+        whitelist:'jpg',
+        allowExt: ["jpg"]
         //blacklist:'exe|php'
         //onchange:''
         //
