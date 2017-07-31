@@ -110,6 +110,7 @@ class TestsController extends Controller
                     ->where('estado', 'A')
                     ->orderBy('id', 'desc')->first();
 
+                $test->id_mencion = ($request['id_mencion'] == '') ? '0' : $request['id_mencion'];
                 $test->id_examen_cab = $parameters->id_examen_test;
                 $test->id_parametro = $parameters->id;
                 $test->fecha_inicio = date('Y-m-d H:i:s');
@@ -124,6 +125,7 @@ class TestsController extends Controller
             {
                 $id = isset($request['id']) ? $request['id'] : 0;
                 $test = AnswerHeader::find($id);
+                $id_mencion_comun = (int)Mention::query()->where('cod_mencion', 'COMUN-'.$test->examHeader->careerCampus->id_carrera)->first()->id;
 
                 $ExamDet = ExamHeader::find($test->parameter->id_examen_test)
                     ->examsDetails()->orderByRaw("RAND()")->get();//->pluck('id')->toArray();
@@ -131,7 +133,7 @@ class TestsController extends Controller
                 foreach ($ExamDet as $exDet)
                 {
                     $idMenc = $exDet->reagent->distributive->mattercareer->id_mencion;
-                    if ($idMenc == $test->id_mencion || $idMenc == 1)
+                    if ($idMenc == $test->id_mencion || $idMenc == $id_mencion_comun)
                     {
                         $det["id_examen_det"] = $exDet->id;
                         $det["creado_por"] = 0;
@@ -437,7 +439,7 @@ class TestsController extends Controller
 
                 $mentionsList = Mention::query()
                     ->where('id_carrera', $id_carrera)
-                    ->where('id', '!=', 1)
+                    ->where('cod_mencion', '!=', 'COMUN-'.$id_carrera)
                     ->where('estado', 'A')
                     ->lists('descripcion','id');
 
