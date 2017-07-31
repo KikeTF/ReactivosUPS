@@ -76,18 +76,7 @@
             </div>
         </div>
     </div>
-
-    <div class="form-group">
-        {!! Form::label('estado', '¿Activo?', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-        <div class="col-sm-7">
-            <div class="checkbox">
-                <label>
-                    {!! Form::checkbox('estado', 'A', (($exam->estado == 'A') ? true : false), ['class' => 'ace']) !!}
-                    <span class="lbl"></span>
-                </label>
-            </div>
-        </div>
-    </div>
+    
 
     {!! Form::close() !!}
 
