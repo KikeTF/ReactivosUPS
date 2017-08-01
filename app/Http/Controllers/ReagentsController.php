@@ -616,9 +616,9 @@ class ReagentsController extends Controller
             $ids = ($id > 0) ? array($id) : (isset($request->ids) ? explode(",", substr($request->ids,1,strlen($request->ids)-2)) : array());
 
             $pdf = new Report();
-            $pdf->headerTitle = utf8_decode('REACTIVOS');
-            $pdf->headerSubtitle = utf8_decode('');
-            $pdf->headerSubtitle2 = utf8_decode('');
+            $pdf->headerTitle = 'REACTIVOS';
+            $pdf->headerSubtitle = '';
+            $pdf->headerSubtitle2 = '';
             $pdf->SetTitle('Reactivos');
             $pdf->AliasNbPages();
             $pdf->SetMargins(2,3);
@@ -638,7 +638,7 @@ class ReagentsController extends Controller
                 }
 
                 //$pdf->SetFont('Arial', 'B', 14);
-                //$pdf->Cell(17, 0.7, utf8_decode("REACTIVO NO. ".$reagent->id), 0, 1, 'L');
+                //$pdf->Cell(17, 0.7, "REACTIVO NO. ".$reagent->id, 0, 1, 'L');
 
                 //$pdf->Ln(0.3);
 
@@ -651,47 +651,50 @@ class ReagentsController extends Controller
                 $pdf->MultiCell($AnchoCol1, 0.7, 'MATERIA', 1, 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->SetXY($posX+$AnchoCol1, $posY);
-                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->distributive->matterCareer->matter->descripcion), 1, 'L');
+                $pdf->MultiCell($AnchoCol2, 0.7, $reagent->distributive->matterCareer->matter->descripcion, 1, 'L');
 
                 $pdf->SetFont('Arial', 'B', 10);
                 $posX = $pdf->GetX();
                 $posY = $pdf->GetY();
-                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('RESPONSABLE'), 1, 'L');
+                $pdf->MultiCell($AnchoCol1, 0.7, 'RESPONSABLE', 1, 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->SetXY($posX+$AnchoCol1, $posY);
-                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->user->FullName), 1, 'L');
+                $pdf->MultiCell($AnchoCol2, 0.7, $reagent->user->FullName, 1, 'L');
 
                 $pdf->SetFont('Arial', 'B', 10);
                 $posX = $pdf->GetX();
                 $posY = $pdf->GetY();
-                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('ESTADO'), 1, 'L');
+                $pdf->MultiCell($AnchoCol1, 0.7, 'ESTADO', 1, 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->SetXY($posX+$AnchoCol1, $posY);
-                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->state->descripcion), 1, 'L');
+                $pdf->MultiCell($AnchoCol2, 0.7, $reagent->state->descripcion, 1, 'L');
 
                 $pdf->SetFont('Arial', 'B', 10);
                 $posX = $pdf->GetX();
                 $posY = $pdf->GetY();
-                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('FORMATO'), 1, 'L');
+                $pdf->MultiCell($AnchoCol1, 0.7, 'FORMATO', 1, 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->SetXY($posX+$AnchoCol1, $posY);
-                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->format->nombre), 1, 'L');
+                $pdf->MultiCell($AnchoCol2, 0.7, $reagent->format->nombre, 1, 'L');
 
-                $pdf->SetFont('Arial', 'B', 10);
                 $posX = $pdf->GetX();
                 $posY = $pdf->GetY();
-                $pdf->MultiCell($AnchoCol1, 0.7, utf8_decode('CONTENIDO'), 1, 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->SetXY($posX+$AnchoCol1, $posY);
-                $pdf->MultiCell($AnchoCol2, 0.7, utf8_decode($reagent->contentDetail->ContentDescription), 1, 'L');
+                $pdf->MultiCell($AnchoCol2, 0.7, $reagent->contentDetail->ContentDescription, 1, 'L');
+                $newAncho = $pdf->GetY()-$posY;
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->SetXY($posX, $posY);
+                $pdf->MultiCell($AnchoCol1, $newAncho, 'CONTENIDO', 1, 'L');
 
+                $pdf->SetFont('Arial', '', 10);
                 $pdf->Ln(0.5);
 
                 $pdf->SetFont('Arial', 'B', 10);
                 $pdf->MultiCell(17, 0.7, 'PLANTEAMIENTO', 1, 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->Ln(0.2);
-                $pdf->MultiCell(17, 0.5, utf8_decode($reagent->planteamiento), 0, 'J');
+                $pdf->MultiCell(17, 0.5, $reagent->planteamiento, 0, 'J');
 
                 $pdf->Ln(0.3);
 
@@ -723,11 +726,6 @@ class ReagentsController extends Controller
                     }
                 }
 
-                //$pdf->Cell(17, 0.7, utf8_decode($reagent->field->nombre), 0, 1, 'L');
-                //$pdf->Cell(17, 0.7, utf8_decode($reagent->dificultad), 0, 1, 'L');
-                //$pdf->Cell(17, 0.7, utf8_decode($reagent->descripcion), 0, 1, 'L');
-                //$pdf->Cell(17, 0.7, utf8_decode($reagent->referencia), 0, 1, 'L');
-
                 $posY = $pdf->GetY();
                 if($posY > 26.5)
                     $pdf->AddPage();
@@ -757,7 +755,7 @@ class ReagentsController extends Controller
                             $pdf->SetXY($x1,$y1);
                             $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
                             $pdf->SetXY($x1+1,$y1);
-                            $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
+                            $pdf->MultiCell(6.5, 0.5, $conc->concepto, 0, 'J');
                             $y1 = $pdf->GetY();
                         }
 
@@ -774,7 +772,7 @@ class ReagentsController extends Controller
                             $x2 = $pdf->GetX();
                             $pdf->MultiCell(1, 0.5, $prop->literal.')', 0, 'R');
                             $pdf->SetXY($x2+1,$y2);
-                            $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
+                            $pdf->MultiCell(6.5, 0.5, $prop->propiedad, 0, 'J');
                             $y2 = $pdf->GetY();
                         }
 
@@ -802,7 +800,7 @@ class ReagentsController extends Controller
 
                     $pdf->MultiCell(1, 0.5, $answ->numeral.')', 0, 'R');
                     $pdf->SetXY($x+1,$y);
-                    $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
+                    $pdf->MultiCell(15, 0.5, $answ->descripcion, 0, 'J');
 
                     $pdf->SetTextColor(0, 0, 0);
                 }
@@ -810,7 +808,7 @@ class ReagentsController extends Controller
                 $pdf->Ln(0.5);
                 $pdf->SetXY($pdf->GetX()+0.5,$pdf->GetY());
                 $pdf->SetFont('Arial', 'B', 10);
-                $pdf->MultiCell(15, 0.7, 'RESPUESTA CORRECTA: OPCION '.$reagent->answers->where('opcion_correcta', 'S')->first()->numeral, 0, 'L');
+                $pdf->MultiCell(15, 0.7, 'RESPUESTA CORRECTA: OPCIÓN '.$reagent->answers->where('opcion_correcta', 'S')->first()->numeral, 0, 'L');
                 $pdf->SetFont('Arial', '', 10);
 
                 //$posY = $pdf->GetY();

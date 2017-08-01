@@ -15,7 +15,7 @@
         <div class="profile-user-info profile-user-info-striped">
             <div class="profile-info-row">
                 <div class="profile-info-name">C&oacute;digo</div>
-                <div class="profile-info-value"><span>{{ $profile->id }}</span></div>
+                <div class="profile-info-value"><span>{{ $profile->cod_perfil }}</span></div>
             </div>
 
             <div class="profile-info-row">

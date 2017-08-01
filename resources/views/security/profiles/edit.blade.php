@@ -15,6 +15,15 @@
     @include('shared.templates._formbuttons')
 
     <div class="form-group">
+        {!! Form::label('cod_perfil', 'C&oacute;digo:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
+        <div class="col-sm-10">
+            <div class="clearfix">
+                {!! Form::text('cod_perfil', $profile->cod_perfil, ['class' => 'form-control', 'placeholder' => 'Código', 'readonly']) !!}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
         {!! Form::label('nombre', 'Nombre:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">
             <div class="clearfix">

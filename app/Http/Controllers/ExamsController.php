@@ -624,6 +624,12 @@ class ExamsController extends Controller
                 return redirect()->route('exam.exams.show', $exam->id);
             }
 
+            if ($exam->es_prueba == 'N' && $request->comentario == '')
+            {
+                flash("Debe ingresar la Resoluci&oacute;n para continuar!", 'warning');
+                return redirect()->route('exam.exams.show', $exam->id);
+            }
+
             $comment = new ExamComment();
             $comment->id_examen_cab = $id;
             $comment->id_estado_anterior = $exam->id_estado;
@@ -735,9 +741,9 @@ class ExamsController extends Controller
             $id_mencion_comun = (int)Mention::query()->where('cod_mencion', 'COMUN-'.$exam->id_carrera)->first()->id;
 
             $pdf = new Report();
-            $pdf->headerTitle = utf8_decode('EXAMEN COMPLEXIVO');
-            $pdf->headerSubtitle = utf8_decode($exam->careerCampus->career->descripcion);
-            $pdf->headerSubtitle2 = utf8_decode((($id_mencion == 0) ? '' : Mention::find($id_mencion)->descripcion));
+            $pdf->headerTitle = 'EXAMEN COMPLEXIVO';
+            $pdf->headerSubtitle = $exam->careerCampus->career->descripcion;
+            $pdf->headerSubtitle2 = (($id_mencion == 0) ? '' : Mention::find($id_mencion)->descripcion);
             $pdf->SetTitle('Examen Complexivo');
             $pdf->AliasNbPages();
             $pdf->SetMargins(2,3);
@@ -748,14 +754,14 @@ class ExamsController extends Controller
             $posY = $pdf->GetY();
             $pdf->MultiCell(4, 0.7, 'PERIODO', 1, 'L');
             $pdf->SetXY($pdf->GetX()+4, $posY);
-            $pdf->MultiCell(13, 0.7, utf8_decode($exam->periodLocation->period->descripcion), 1, 'L');
+            $pdf->MultiCell(13, 0.7, $exam->periodLocation->period->descripcion, 1, 'L');
 
             if(trim($exam->resolucion) != '')
             {
                 $posY = $pdf->GetY();
-                $pdf->MultiCell(4, 0.7, utf8_decode('RESOLUCIÓN'), 1, 'L');
+                $pdf->MultiCell(4, 0.7, 'RESOLUCIÓN', 1, 'L');
                 $pdf->SetXY($pdf->GetX()+4, $posY);
-                $pdf->MultiCell(13, 0.7, utf8_decode($exam->resolucion), 1, 'L');
+                $pdf->MultiCell(13, 0.7, $exam->resolucion, 1, 'L');
             }
 
             $pdf->Ln(1);
@@ -779,7 +785,7 @@ class ExamsController extends Controller
                 $arrCountRea = array_count_values($exam->examsDetails->pluck('reagent')->pluck('id_materia')->toArray());
                 $pdf->SetFont('Arial', 'B', 14);
                 $currentReaCount = ($arrCountRea[$matter->id] > $matCar->nro_reactivos_exam) ? $matCar->nro_reactivos_exam : $arrCountRea[$matter->id];
-                $pdf->Cell(17, 0.7, utf8_decode($matter->descripcion).' ('.$currentReaCount.'/'.$matCar->nro_reactivos_exam.')', 0, 1, 'L');
+                $pdf->Cell(17, 0.7, $matter->descripcion.' ('.$currentReaCount.'/'.$matCar->nro_reactivos_exam.')', 0, 1, 'L');
 
                 $pdf->Ln(0.7);
                 $pdf->SetFont('Arial', '', 10);
@@ -803,8 +809,8 @@ class ExamsController extends Controller
                         $x = $pdf->GetX();
                         $y = $pdf->GetY();
                         $pdf->MultiCell(1, 0.5 , $iRea.'.', 0, 'L');
-                        $pdf->SetXY($x+0.5,$y);
-                        $pdf->MultiCell(16.5, 0.5 , utf8_decode($det->reagent->planteamiento), 0, 'J');
+                        $pdf->SetXY($x+0.7,$y);
+                        $pdf->MultiCell(16.5, 0.5 , $det->reagent->planteamiento, 0, 'J');
 
                         $pdf->Ln(0.3);
 
@@ -829,13 +835,13 @@ class ExamsController extends Controller
                             if ($isValidPath)
                             {
                                 list($w, $h) = getimagesize($path);
-                                $posX = (($w*9/$h) < 17) ? (17-($w*9/$h))/2+1 : 2;
+                                $posX = (($w*9/$h) < 15.5) ? (15.5-($w*9/$h))/2+1.3 : 2;
                                 $whDiff = $w/$h-1;
-                                $pdf->Image($path, $posX+0.9, $posY, 16, 0);
+
                                 if ($whDiff > 0.7)
-                                    $pdf->MultiCell(17, 9, $pdf->Image($path, $posX+0.9, $posY, 16, 0), 0, 'C');
+                                    $pdf->MultiCell(15.5, 9, $pdf->Image($path, $posX+0.9, $posY, 15.5, 0), 0, 'C');
                                 else
-                                    $pdf->MultiCell(17, 9, $pdf->Image($path, $posX, $posY, 0, 9), 0, 'C');
+                                    $pdf->MultiCell(15.5, 9, $pdf->Image($path, $posX, $posY, 0, 9), 0, 'C');
                             }
 
                             //$pdf->SetXY($pdf->GetX(),$pdf->GetY()-10);
@@ -852,10 +858,23 @@ class ExamsController extends Controller
                             $pdf->Ln(0.5);
                             $y1 = $pdf->GetY();
                             $y2 = $pdf->GetY();
+                            $pn1 = 0;
+                            $pn2 = 0;
+                            $anchoConcept = ($det->reagent->questionsProperties->count() > 0) ? 6.5 : 15;
+
                             for($i = 0; $i < $maxOpPreg; $i++)
                             {
-                                if($y1 > 27 || $y2 > 27){
+                                //if ($iRea == 62 && $i == 1)
+                                //    dd($y1.'-'.$y2.'  '.$pn1.'-'.$pn2.'  '.$pdf->GetY());
+
+                                if ($y1 > 27 && $y2 > 27)
+                                {
                                     $pdf->AddPage();
+                                    $y1 = $pdf->GetY();
+                                    $y2 = $pdf->GetY();
+                                }
+                                elseif ($y1 > 27 || $y2 > 27)
+                                {
                                     $y1 = $pdf->GetY();
                                     $y2 = $pdf->GetY();
                                 }
@@ -865,10 +884,11 @@ class ExamsController extends Controller
                                     $conc = $det->reagent->questionsConcepts[$i];
                                     $x1 = $pdf->GetX();
                                     $pdf->SetXY($x1,$y1);
-                                    $pdf->MultiCell(1, 0.5, $conc->numeral.'.', 0, 'R');
-                                    $pdf->SetXY($x1+1,$y1);
-                                    $pdf->MultiCell(6.5, 0.5, utf8_decode($conc->concepto), 0, 'J');
+                                    $pdf->MultiCell(1.3, 0.5, $conc->numeral.'.', 0, 'R');
+                                    $pdf->SetXY($x1+1.3,$y1);
+                                    $pdf->MultiCell($anchoConcept, 0.5, $conc->concepto, 0, 'J');
                                     $y1 = $pdf->GetY();
+                                    $pn1 = $pdf->PageNo();
                                 }
 
                                 if($det->reagent->questionsProperties->count() > $i)
@@ -878,10 +898,24 @@ class ExamsController extends Controller
                                     $x2 = $pdf->GetX();
                                     $pdf->MultiCell(1, 0.5, $prop->literal.')', 0, 'R');
                                     $pdf->SetXY($x2+1,$y2);
-                                    $pdf->MultiCell(6.5, 0.5, utf8_decode($prop->propiedad), 0, 'J');
+                                    $pdf->MultiCell(7.5, 0.5, $prop->propiedad, 0, 'J');
+                                    $y2 = $pdf->GetY();
+                                    $pn2 = $pdf->PageNo();
+                                }
+                                elseif($det->reagent->questionsProperties->count() == 0)
+                                    $y2 = $y1;
+
+                                if ($pn1 != $pn2)
+                                {
+                                    $pdf->SetXY($pdf->GetX(), min($y1, $y2));
+                                    $y1 = $pdf->GetY();
                                     $y2 = $pdf->GetY();
                                 }
+
                             }
+
+                            if ($pn1 == $pn2)
+                                $pdf->SetXY($pdf->GetX(), max($y1, $y2));
                         }
 
                         $pdf->Ln(0.5);
@@ -894,15 +928,15 @@ class ExamsController extends Controller
                                 $y = $pdf->GetY();
                             }
 
-                            $pdf->MultiCell(1, 0.5, $answ->numeral.')', 0, 'R');
-                            $pdf->SetXY($x+1,$y);
-                            $pdf->MultiCell(15, 0.5, utf8_decode($answ->descripcion), 0, 'J');
+                            $pdf->MultiCell(1.3, 0.5, $answ->numeral.')', 0, 'R');
+                            $pdf->SetXY($x+1.3,$y);
+                            $pdf->MultiCell(15, 0.5, $answ->descripcion, 0, 'J');
                         }
 
                         $pdf->Ln(0.5);
-                        $pdf->SetXY($pdf->GetX()+0.5,$pdf->GetY());
+                        $pdf->SetXY($pdf->GetX()+0.7,$pdf->GetY());
                         $pdf->SetFont('Arial', 'B', 10);
-                        $pdf->MultiCell(15, 0.7, 'RESPUESTA CORRECTA: OPCION '.$det->reagent->answers->where('opcion_correcta', 'S')->first()->numeral, 0, 'L');
+                        $pdf->MultiCell(15, 0.7, 'RESPUESTA CORRECTA: OPCIÓN '.$det->reagent->answers->where('opcion_correcta', 'S')->first()->numeral, 0, 'L');
                         $pdf->SetFont('Arial', '', 10);
 
                         if($iRea < $totRea)
