@@ -22,6 +22,9 @@
     <!-- ace styles -->
     {!! HTML::style('ace/css/ace.min.css') !!}
 
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+
     <!-- specific styles -->
     @stack('specific-styles')
 

@@ -37,8 +37,8 @@
     <!-- ace settings handler -->
     {!! HTML::script('ace/js/ace-extra.min.js') !!}
 
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
 </head>
 
