@@ -70,7 +70,7 @@ class DashboardController extends Controller
         if(sizeof($ids_carreras) > 0)
             $distributive = $distributive->whereIn('id_carrera', $ids_carreras);
 
-        if($aprReactivo == 'S' && $aprExamen == 'S')
+        if($aprReactivo == 'S' || $aprExamen == 'S')
         {
             $mattersCareers = MatterCareer::with('careerCampus')
                 ->where('estado', 'A')
