@@ -117,7 +117,7 @@ class DashboardController extends Controller
 
         $MattersChartData = $this->reagentsByMatterChart($mattersCareers, $reagents);
         $StatesChartData = $this->reagentsByStateChart($mattersCareers, $reagents);
-        $TeachersChartData = ($aprReactivo == 'S') ? $this->reagentsByTeacherChart($distributive) : null;
+        $TeachersChartData = ($aprReactivo == 'S') ? $this->reagentsByTeacherChart($distributive, $id_campus, $id_carrera, $ids_periodos_sedes) : null;
         if ($aprExamen == 'S')
         {
             $this->validateExpiredTests();
@@ -183,7 +183,7 @@ class DashboardController extends Controller
      * @param  \ReactivosUPS\Distributive  $distributive
      * @return \Illuminate\Http\Response
      */
-    public function reagentsByTeacherChart($distributive)
+    public function reagentsByTeacherChart($distributive, $id_campus, $id_carrera, $ids_periodos_sedes)
     {
         try
         {
@@ -192,7 +192,14 @@ class DashboardController extends Controller
             {
                 $bardata_categories[$idDocente] = $users->where('id', $idDocente)->first()->FullName;
                 $bardata_target[$idDocente] = $distributive->where('id_usuario', $idDocente)->pluck('matterCareer')->unique()->sum('nro_reactivos_mat');
-                $bardata_real[$idDocente] = Reagent::query()->where('id_estado','5')->where('creado_por', $idDocente)->count();
+                $bardata_real[$idDocente] = Reagent::with('distributive')
+                    ->where('id_estado', 5)
+                    ->where('creado_por', $idDocente)
+                    ->whereHas('distributive', function($query) use($id_campus, $id_carrera, $ids_periodos_sedes){
+                        if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                        if ($id_carrera > 0) $query->where('id_carrera', $id_carrera);
+                        if (sizeof($ids_periodos_sedes) > 0) $query->whereIn('id_periodo_sede', $ids_periodos_sedes);
+                    })->count();
             }
 
             $TeachersChartData['categories'] = isset($bardata_categories) ? $bardata_categories : array();
