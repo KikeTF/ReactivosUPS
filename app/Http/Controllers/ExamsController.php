@@ -20,6 +20,7 @@ namespace ReactivosUPS\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use ReactivosUPS\CareerCampus;
 use ReactivosUPS\ExamComment;
 use ReactivosUPS\ExamDetail;
 use ReactivosUPS\ExamHeader;
@@ -152,12 +153,26 @@ class ExamsController extends Controller
                 $selectedMatter->id_materia = 0;
             }
 
+
+            $id_careerCampus = $this->getCareersCampuses()
+                ->where('id_carrera', $exam->id_carrera)
+                ->where('id_campus', $exam->id_campus)
+                ->first()->id;
+
+            $examParameters = ExamParameter::query()
+                ->where('estado', 'A')
+                ->where('id_carrera_campus', $id_careerCampus)
+                ->orderBy('id', 'desc')->first();
+
+            $idExamSimulador = ($examParameters == null) ? 0 : $examParameters->id_examen_test;
+
             return view('exam.exams.detail')
                 ->with('selectedMatter', $selectedMatter)
                 ->with('reagents', $reagents)
                 ->with('exam', $exam)
                 ->with('mentionsList', $mentionsList)
-                ->with('matterParameters', $matterParameters);
+                ->with('matterParameters', $matterParameters)
+                ->with('idExamSimulador', $idExamSimulador);
 
         }
         catch (\Exception $ex)
@@ -182,7 +197,7 @@ class ExamsController extends Controller
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_periodo_sede = (isset($request['id_periodo_sede']) ? (int)$request->id_periodo_sede : 0);
-            $id_careerCampus = $this->getCareersCampuses()->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
+            $id_careerCampus = CareerCampus::query()->where('estado', 'A')->where('id_carrera', $id_carrera)->where('id_campus', $id_campus)->first()->id;
 
             $valStmt = 'CALL sp_exc_valida_reactivos('.$id_careerCampus.', '."'".implode(",", $request->periodosSede)."'".')';
             \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);

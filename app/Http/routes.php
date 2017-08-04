@@ -199,7 +199,7 @@ Route::group(['prefix' => 'reagent', 'middleware' => ['auth', 'admin']], functio
 
         $file = storage_path().'/files/matters/UPS-MAT-'.$matterCareer->id.'.pdf';
         
-        $filename = 'UPS-'.$matterCareer->matter->descripcion.'-'.$matterCareer->id.'.pdf';
+        $filename = 'UPS-'.preg_replace("/[^a-zA-Z0-9.]/", "", $matterCareer->matter->descripcion).'-'.$matterCareer->id.'.pdf';
         $headers = array('Content-Type: application/pdf',);
         
         return \Response::download($file, $filename, $headers);

@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    @if(\Session::get('RestablecePassword') == 'S');
+    @if(\Session::get('RestablecePassword') == 'S')
     <div class="form-group">
         {!! Form::label('password', 'Contrase&ntilde;a:', ['class' => 'col-sm-2 control-label no-padding-right']) !!}
         <div class="col-sm-10">

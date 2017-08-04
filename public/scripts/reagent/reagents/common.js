@@ -14,7 +14,7 @@ $('#planteamiento').keyup(function(){
 
 function inputFileLoad(){
     $('.input-file').ace_file_input({
-        no_file:'Sin imagen...',
+        no_file:'Seleccione imagen en formato jpg...',
         btn_choose:'Seleccionar',
         btn_change:'Cambiar',
         droppable:false,

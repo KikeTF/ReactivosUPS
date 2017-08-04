@@ -174,7 +174,7 @@ class MattersCareersController extends Controller
 
             if ( file_exists($file) )
             {
-                $filename = 'UPS-'.$matterCareer->matter->descripcion.'-'.$id.'.pdf';
+                $filename = 'UPS-'.preg_replace("/[^a-zA-Z0-9.]/", "", $matterCareer->matter->descripcion).'-'.$id.'.pdf';
                 $headers = array('Content-Type: application/pdf',);
                 return \Response::download($file, $filename, $headers);
             }
@@ -324,6 +324,7 @@ class MattersCareersController extends Controller
         {
             $aprReactivo = \Session::get('ApruebaReactivo');
             $aprExamen = \Session::get('ApruebaExamen');
+            $id_periodo = (int)\Session::get('idPeriodo');
             $id_Sede = (int)\Session::get('idSede');
             $ids_carreras = \Session::get('idsCarreras');
             $ids_JefeAreas = \Session::get('idsJefeAreas');
@@ -335,7 +336,7 @@ class MattersCareersController extends Controller
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
             $ids_areas = (sizeof($ids_JefeAreas) > 0) ? $ids_JefeAreas : (isset($request['id_area']) ? [(int)$request->id_area] : []);
 
-            if($aprReactivo == 'S' && $aprExamen == 'S')
+            if($aprReactivo == 'S' || $aprExamen == 'S')
             {
                 $mattersCareers = MatterCareer::with('careerCampus')
                     ->where('estado', 'A')
@@ -354,6 +355,7 @@ class MattersCareersController extends Controller
             {
                 $dist = Distributive::query()
                     ->where('estado','A')
+                    ->where('id_periodo', $id_periodo)
                     ->where('id_carrera', $id_carrera)
                     ->where('id_campus', $id_campus)
                     ->where('id_sede', $id_Sede)
@@ -389,54 +391,49 @@ class MattersCareersController extends Controller
         {
             $aprReactivo = \Session::get('ApruebaReactivo');
             $aprExamen = \Session::get('ApruebaExamen');
+            $id_periodo = (int)\Session::get('idPeriodo');
             $id_Sede = (int)\Session::get('idSede');
             $id_Perfil = (int)\Session::get('idPerfil');
+            $ids_JefeAreas = \Session::get('idsJefeAreas');
             $profile = Profile::find($id_Perfil);
 
             $id_campus = (isset($request['id_campus']) ? (int)$request->id_campus : 0);
             $id_carrera = (isset($request['id_carrera']) ? (int)$request->id_carrera : 0);
             $id_mencion = (isset($request['id_mencion']) ? (int)$request->id_mencion : 0);
-            $id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+            //$id_area = (isset($request['id_area']) ? (int)$request->id_area : 0);
+            $ids_areas = (sizeof($ids_JefeAreas) > 0) ? $ids_JefeAreas : (isset($request['id_area']) ? [(int)$request->id_area] : []);
 
-            if ($aprExamen == 'S')
+
+            if($aprReactivo == 'S' || $aprExamen == 'S')
             {
-                $id_area = 0;
-            }
-            elseif ($aprReactivo == 'S')
-            {
-                $area = Area::query()->where('estado','A')->where('id_usuario_resp',\Auth::id());
-                $id_area = ($area->count() > 0) ? $area->first()->id : 0;
+                $mattersCareers = MatterCareer::with('careerCampus')
+                    ->where('estado', 'A')
+                    ->whereHas('careerCampus', function($query) use($id_campus){
+                        if ($id_campus > 0) $query->where('id_campus', $id_campus);
+                    });
 
-                if($id_campus > 0)
-                    $id_careerCampus = CareerCampus::query()
-                        ->where('estado','A')
-                        ->where('id_campus', $id_campus)->first()->id;
+                if($id_mencion > 0)
+                    $mattersCareers = $mattersCareers->where('id_mencion', $id_mencion);
 
-                $dist = MatterCareer::filter($id_careerCampus, $id_mencion, $id_area)->where('estado', 'A')->get();
+                if(sizeof($ids_areas) > 0)
+                    $mattersCareers = $mattersCareers->whereIn('id_area', $ids_areas);
+
+                $dist = $mattersCareers->get();
 
                 if($dist->count() > 0)
-                {
-                    foreach ($dist as $car)
-                    {
-                        $ids[] = $car->careerCampus->id_carrera;
-                    }
-                }
+                    $ids = array_unique($dist->pluck('careerCampus')->pluck('id_carrera')->toArray());
             }
             else
             {
                 $dist = Distributive::query()
                     ->where('estado','A')
+                    ->where('id_periodo', $id_periodo)
                     ->where('id_campus', $id_campus)
                     ->where('id_sede', $id_Sede)
                     ->where('id_usuario', \Auth::id())->get();
 
                 if($dist->count() > 0)
-                {
-                    foreach ($dist as $car)
-                    {
-                        $ids[] = $car->id_carrera;
-                    }
-                }
+                    $ids = array_unique($dist->pluck('id_carrera')->toArray());
             }
 
             $careersList = Career::query();

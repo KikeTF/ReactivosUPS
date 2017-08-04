@@ -91,6 +91,25 @@
                             <div class="pull-left">
                                 <h5><strong><span class="blue smaller lighter">Cap&iacute;tulo {{ $reagent->contentDetail->capitulo . ": " . $reagent->contentDetail->tema }}</span></strong></h5>
                             </div>
+
+                            @if(in_array('S', $reagent->examsDetails->pluck('examHeader')->where('id_estado', 4)->pluck('es_prueba')->toArray()))
+                                <div class="pull-left">
+                                    &nbsp;&nbsp;
+                                    <span class="label label-warning label-white label-sm">
+                                        En Examen de Prueba
+                                    </span>
+                                </div>
+                            @endif
+
+                            @if(in_array($idExamSimulador, $reagent->examsDetails->pluck('examHeader')->where('id_estado', 4)->pluck('id')->toArray()))
+                                <div class="pull-left">
+                                    &nbsp;&nbsp;
+                                    <span class="label label-danger label-white label-sm">
+                                        Activo en Simulador
+                                    </span>
+                                </div>
+                            @endif
+
                             <div class="pull-right">
                                 <a href="#my-modal-{{ $reagent->id }}" class="blue" data-toggle="modal">
                                     <i class="ace-icon fa fa-search-plus bigger-130"></i>
