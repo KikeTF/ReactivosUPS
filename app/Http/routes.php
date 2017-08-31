@@ -266,6 +266,13 @@ Route::group(['prefix' => 'general', 'middleware' => ['auth', 'admin']], functio
         'as'    => 'general.matterscareers.destroy'
     ]);
 
+    Route::resource('areas','AreasController');
+
+    Route::get('areas/{id}/destroy', [
+        'uses'  => 'AreasController@destroy',
+        'as'    => 'general.areas.destroy'
+    ]);
+
     Route::get('datasource', [
         'uses'  => 'DataSourcesController@index',
         'as'    => 'general.datasource.index'

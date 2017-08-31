@@ -234,6 +234,7 @@ abstract class Controller extends BaseController
             $idsCarreras = $perfil->careersProfiles->pluck('id_carrera')->toArray();
             $aprReactivo = $perfil->aprueba_reactivo;
             $aprReactivosMasivo = $perfil->aprueba_reactivos_masivo;
+            $desReactivos = $perfil->desbloquea_reactivos;
             $aprExamen = $perfil->aprueba_examen;
             $resetPassword = $perfil->restablece_password;
             $dashboard = $perfil->dashboard;
@@ -253,6 +254,7 @@ abstract class Controller extends BaseController
             Session::put('idPerfilUsuario', $idPerfilUsuario);
             Session::put('ApruebaReactivo', $aprReactivo);
             Session::put('ApruebaReactivosMasivos', $aprReactivosMasivo);
+            Session::put('DesbloqueaReactivo', $desReactivos);
             Session::put('ApruebaExamen', $aprExamen);
             Session::put('RestablecePassword', $resetPassword);
             Session::put('Dashboard', $dashboard);

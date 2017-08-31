@@ -150,6 +150,13 @@
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h3 class="smaller lighter blue no-margin">
                                 Cap&iacute;tulo {{ $reagent->contentDetail->capitulo . ": " . $reagent->contentDetail->tema }}
+                                @if(\Session::get('DesbloqueaReactivo') == 'S')
+                                    <small>
+                                        <a class="green" href="{{ route('reagent.approvals.show', $reagent->id) }}">
+                                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                        </a>
+                                    </small>
+                                @endif
                                 <br/><small>{{ $selectedMatter->matter->descripcion }}</small>
                             </h3>
                         </div>

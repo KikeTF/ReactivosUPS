@@ -29,9 +29,9 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('desc_area', '&Aacute;rea:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+        {!! Form::label('id_area', '&Aacute;rea:', ['class' => 'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-8">
-            {!! Form::text('desc_area', $mattercareer->area->descripcion, ['class' => 'form-control', 'readonly']) !!}
+            {!! Form::select('id_area', $areasList, $mattercareer->id_area, ['class' => 'form-control']) !!}
         </div>
     </div>
 

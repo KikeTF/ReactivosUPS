@@ -89,6 +89,15 @@
                     <div class="col-sm-4">
                         <div class="checkbox">
                             <label>
+                                {!! Form::checkbox('desbloquea_reactivos', $profile->desbloquea_reactivos, ($profile->desbloquea_reactivos == 'S') ? true : false, ['class' => 'ace']) !!}
+                                <span class="lbl">&nbsp;Desbloquea Reactivos Aprobados</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
                                 {!! Form::checkbox('aprueba_examen', $profile->aprueba_examen, ($profile->aprueba_examen == 'S') ? true : false, ['class' => 'ace']) !!}
                                 <span class="lbl">&nbsp;Aprueba Examen</span>
                             </label>

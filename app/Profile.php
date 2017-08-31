@@ -24,7 +24,7 @@ class Profile extends Model
     protected $table = "seg_perfiles";
     public $timestamps = false;
 
-    protected $fillable =["cod_perfil", "nombre", "descripcion", "aprueba_reactivo", "aprueba_reactivos_masivo", "aprueba_examen", "restablece_password", "dashboard", "estado"];
+    protected $fillable =["cod_perfil", "nombre", "descripcion", "aprueba_reactivo", "aprueba_reactivos_masivo", "desbloquea_reactivos", "aprueba_examen", "restablece_password", "dashboard", "estado"];
 
     public function profilesUsers(){
         return $this->hasMany('ReactivosUPS\ProfileUser', 'id_perfil');

@@ -60,6 +60,9 @@
                         @if($profile->aprueba_reactivos_masivo == 'S')
                             Aprobaci&oacute;n Masiva de Reactivos<br/>
                         @endif
+                        @if($profile->desbloquea_reactivos == 'S')
+                            Desbloquea Reactivos Aprobados<br/>
+                        @endif
                         @if($profile->aprueba_examen == 'S')
                             Aprueba Examen<br/>
                         @endif

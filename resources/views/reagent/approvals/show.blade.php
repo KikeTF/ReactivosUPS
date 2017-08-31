@@ -11,12 +11,18 @@
 
     <form class="form-horizontal" role="form">
         <?php
-        if($reagent->id_estado == 2)
+        if ($reagent->id_estado == 2)
         {
             $btnaprove = 1;
             $btnreject = 1;
             $btncomment = 1;
         }
+        elseif ($reagent->id_estado == 5 && \Session::get('DesbloqueaReactivo') == 'S')
+        {
+            $btnreject = 1;
+            $btncomment = 1;
+        }
+
         $btnprint =  route("reagent.reagents.report", $reagent->id);
         $btnclose = route('reagent.approvals.index');
         ?>

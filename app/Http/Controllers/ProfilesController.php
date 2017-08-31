@@ -100,6 +100,7 @@ class ProfilesController extends Controller
             $profile->aprueba_reactivos_masivo = !isset( $request['aprueba_reactivos_masivo'] ) ? 'N' : 'S';
             $profile->restablece_password = !isset( $request['restablece_password'] ) ? 'N' : 'S';
             $profile->dashboard = !isset( $request['dashboard'] ) ? 'N' : 'S';
+            $profile->desbloquea_reactivos = !isset( $request['desbloquea_reactivos'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->creado_por = \Auth::id();
             $profile->fecha_creacion = date('Y-m-d H:i:s');
@@ -236,6 +237,7 @@ class ProfilesController extends Controller
             $profile->aprueba_examen = !isset( $request['aprueba_examen'] ) ? 'N' : 'S';
             $profile->restablece_password = !isset( $request['restablece_password'] ) ? 'N' : 'S';
             $profile->dashboard = !isset( $request['dashboard'] ) ? 'N' : 'S';
+            $profile->desbloquea_reactivos = !isset( $request['desbloquea_reactivos'] ) ? 'N' : 'S';
             $profile->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $profile->modificado_por = \Auth::id();
             $profile->fecha_modificacion = date('Y-m-d H:i:s');

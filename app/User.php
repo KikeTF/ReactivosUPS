@@ -90,4 +90,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function notifications(){
         return $this->hasMany('ReactivosUPS\Notification', 'id_usuario');
     }
+
+    public function areas(){
+        return $this->hasMany('ReactivosUPS\Area', 'id_usuario_resp');
+    }
 }

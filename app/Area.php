@@ -29,4 +29,8 @@ class Area extends Model
     public function mattersCareers(){
         return $this->hasMany('ReactivosUPS\MatterCareer', 'id_area');
     }
+
+    public function user(){
+        return $this->belongsTo('ReactivosUPS\User', 'id_usuario_resp');
+    }
 }

@@ -69,13 +69,14 @@ class MattersCareersController extends Controller
             $mattersCareers = $mattersCareers->get();
 
             $filters = array($id_campus, $id_carrera, $id_mencion, ((sizeof($ids_areas) > 0 && !(sizeof($ids_JefeAreas) > 0)) ? $ids_areas[0] : -1));
-
+            
             return view('general.matterscareers.index')
                 ->with('campusList', $this->getCampuses())
                 ->with('mattersCareers', $mattersCareers)
                 ->with('areasList', $this->getAreas())
                 ->with('filters', $filters);
-        }catch(\Exception $ex)
+        }
+        catch(\Exception $ex)
         {
             flash("No se pudo cargar la opci&oacute;n seleccionada!", 'danger')->important();
             Log::error("[MattersCareersController][index] Exception: ".$ex);
@@ -148,7 +149,8 @@ class MattersCareersController extends Controller
 
             return view('general.matterscareers.edit')
                 ->with('mattercareer', $mattercareer)
-                ->with('mentionsList', $mentionsList);
+                ->with('mentionsList', $mentionsList)
+                ->with('areasList', $this->getAreas());
         }
         catch(\Exception $ex)
         {
@@ -209,6 +211,7 @@ class MattersCareersController extends Controller
 
             \DB::beginTransaction(); //Start transaction!
 
+            $matterCareer->id_area = $request->id_area;
             $matterCareer->id_mencion = $request->id_mencion;
             $matterCareer->nro_reactivos_mat = $request->nro_reactivos_mat;
             $matterCareer->nro_reactivos_exam = $request->nro_reactivos_exam;
