@@ -29,12 +29,12 @@
             </div>
 
             <div class="profile-info-row">
-                <div class="profile-info-name">No. de respuesta m&iacute;nimo:</div>
+                <div class="profile-info-name">No. Respuesta M&iacute;nimo:</div>
                 <div class="profile-info-value"><span>{{ $format->opciones_resp_min }}</span></div>
             </div>
 
             <div class="profile-info-row">
-                <div class="profile-info-name">No. de respuesta m&aacute;ximo</div>
+                <div class="profile-info-name">No. Respuesta M&aacute;ximo</div>
                 <div class="profile-info-value"><span>{{ $format->opciones_resp_max }}</span></div>
             </div>
 
@@ -49,13 +49,23 @@
             </div>
 
             <div class="profile-info-row">
-                <div class="profile-info-name">No. de preguntas m&iacute;nimo</div>
+                <div class="profile-info-name">No. Conceptos M&iacute;nimo</div>
                 <div class="profile-info-value"><span>{{ $format->opciones_preg_min }}</span></div>
             </div>
 
             <div class="profile-info-row">
-                <div class="profile-info-name">No. de preguntas m&aacute;ximo</div>
+                <div class="profile-info-name">No. Conceptos M&aacute;ximo</div>
                 <div class="profile-info-value"><span>{{ $format->opciones_preg_max }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. Propiedades M&iacute;nimo</div>
+                <div class="profile-info-value"><span>{{ $format->opciones_prop_min }}</span></div>
+            </div>
+
+            <div class="profile-info-row">
+                <div class="profile-info-name">No. Propiedades M&aacute;ximo</div>
+                <div class="profile-info-value"><span>{{ $format->opciones_prop_max }}</span></div>
             </div>
 
             <div class="profile-info-row">

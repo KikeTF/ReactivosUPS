@@ -7,7 +7,7 @@
     <?php
     $usetable = 1;
     $newurl = route('reagent.formats.create');
-    $columnas = array("nombre", "opciones_resp_min", "opciones_resp_max", "opciones_pregunta", "concepto_propiedad", "opciones_preg_min", "opciones_preg_max",  "imagenes", "estado");
+    $columnas = array("nombre", "opciones_resp_min", "opciones_resp_max", "opciones_pregunta", "concepto_propiedad", "opciones_preg_min", "opciones_preg_max", "opciones_prop_min", "opciones_prop_max",  "imagenes", "estado");
     ?>
 
     <div class="table-responsive" style="padding: 1px 1px 1px 1px;">
@@ -15,12 +15,14 @@
             <thead>
                 <tr>
                     <th style="text-align: center">Nombre</th>
-                    <th style="text-align: center">No. respuestas m&iacute;nimo</th>
-                    <th style="text-align: center">No. respuestas m&aacute;ximo</th>
-                    <th style="text-align: center">Opci&oacuten pregunta</th>
-                    <th style="text-align: center">Concepto propiedad</th>
-                    <th style="text-align: center">No. preguntas m&iacute;nimo</th>
-                    <th style="text-align: center">No. preguntas m&aacute;ximo</th>
+                    <th style="text-align: center">No. Respuestas<br/>M&iacute;nimo</th>
+                    <th style="text-align: center">No. Respuestas<br/>M&aacute;ximo</th>
+                    <th style="text-align: center">Opciones<br/>Pregunta</th>
+                    <th style="text-align: center">Concepto/<br/>Propiedad</th>
+                    <th style="text-align: center">No. Conceptos<br/>M&iacute;nimo</th>
+                    <th style="text-align: center">No. Conceptos<br/>M&aacute;ximo</th>
+                    <th style="text-align: center">No. Propiedades<br/>M&iacute;nimo</th>
+                    <th style="text-align: center">No. Propiedades<br/>M&aacute;ximo</th>
                     <th style="text-align: center">Im&aacute;genes</th>
                     <th style="text-align: center">Estado</th>
                     <th></th>
@@ -63,6 +65,8 @@
                     </td>
                     <td align="center">{{ $format->opciones_preg_min }}</td>
                     <td align="center">{{ $format->opciones_preg_max }}</td>
+                    <td align="center">{{ $format->opciones_prop_min }}</td>
+                    <td align="center">{{ $format->opciones_prop_max }}</td>
                     <td align="center">
                         @if($format->imagenes == 'S')
                             <a class="btn btn-xs btn-success" style="padding: 0px 3px 0px 3px">

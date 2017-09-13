@@ -153,6 +153,8 @@ class FormatsController extends Controller
             $format->concepto_propiedad = !isset( $request['concepto_propiedad'] ) ? 'N' : 'S';
             $format->opciones_preg_min = $request->opciones_preg_min;
             $format->opciones_preg_max = $request->opciones_preg_max;
+            $format->opciones_prop_min = $request->opciones_prop_min;
+            $format->opciones_prop_max = $request->opciones_prop_max;
             $format->imagenes = !isset( $request['imagenes'] ) ? 'N' : 'S';
             $format->estado = !isset( $request['estado'] ) ? 'I' : 'A';
             $format->modificado_por = \Auth::id();
