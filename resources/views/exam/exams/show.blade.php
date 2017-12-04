@@ -161,7 +161,7 @@
 
                                     <div class="panel-collapse collapse" id="collapse{{ $matter->id }}">
                                         <div class="panel-body">
-                                            @foreach($exam->examsDetails as $detail)
+                                            @foreach($exam->examsDetails->where('estado','A') as $detail)
                                                 @if($detail->reagent->id_materia == $matter->id)
                                                     <div class="well" style="padding-bottom: 0;">
                                                         <div class="form-group" style="margin-right: 15px;">

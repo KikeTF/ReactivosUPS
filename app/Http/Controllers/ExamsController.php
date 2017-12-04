@@ -811,7 +811,7 @@ class ExamsController extends Controller
                     $totRea = $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->where('id_mencion', $id_mencion_comun)->count()
                         + $exam->examsDetails->pluck('reagent')->pluck('distributive')->pluck('matterCareer')->where('id_mencion', $id_mencion)->count();
 
-                foreach ($exam->examsDetails as $det)
+                foreach ($exam->examsDetails->where('estado','A')  as $det)
                 {
                     $posY = $pdf->GetY();
                     if($posY > 27)
